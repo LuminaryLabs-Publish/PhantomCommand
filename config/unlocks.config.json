@@ -1,0 +1,60 @@
+{
+  "schema": "phantom-command.unlocks.v1",
+  "version": "0.1.0",
+  "unlocks": {
+    "grave_harvester": {
+      "type": "building",
+      "requirements": { "rankAtLeast": 1 }
+    },
+    "bone_pit": {
+      "type": "building",
+      "requirements": {
+        "rankAtLeast": 1,
+        "buildings": ["crypt_core"],
+        "resourcesAvailable": { "souls": 120, "bone": 60 }
+      }
+    },
+    "black_chapel": {
+      "type": "building",
+      "requirements": {
+        "rankAtLeast": 2,
+        "buildings": ["crypt_core", "bone_pit"],
+        "resourcesEverCollected": { "souls": 300 }
+      }
+    },
+    "ghoul": {
+      "type": "unit",
+      "requirements": {
+        "rankAtLeast": 2,
+        "buildings": ["black_chapel"]
+      }
+    },
+    "wight": {
+      "type": "unit",
+      "requirements": {
+        "rankAtLeast": 3,
+        "buildings": ["black_chapel"]
+      }
+    },
+    "grave_discipline": {
+      "type": "upgrade",
+      "requirements": {
+        "rankAtLeast": 2,
+        "buildings": ["black_chapel"],
+        "masteryPointsAvailable": 1
+      }
+    },
+    "bone_reinforcement": {
+      "type": "upgrade",
+      "requirements": {
+        "rankAtLeast": 2,
+        "buildings": ["black_chapel"],
+        "resourcesAvailable": { "bone": 120 }
+      }
+    }
+  },
+  "idempotency": {
+    "unlockKey": "unlockClaimId",
+    "ledger": "processedUnlockClaims"
+  }
+}
