@@ -1,0 +1,70 @@
+{
+  "schema": "phantom-command.units.v1",
+  "version": "0.1.0",
+  "units": {
+    "skeleton": {
+      "label": "Skeleton",
+      "role": "fast_swarm",
+      "description": "Fast, cheap, one-shot fragile swarm unit.",
+      "cost": { "souls": 8, "bone": 4, "command": 1 },
+      "upkeep": { "soulsPerMinute": 1 },
+      "stats": {
+        "speed": 8,
+        "health": 1,
+        "damage": 4,
+        "attackRate": 1.2,
+        "range": 18
+      },
+      "producedBy": ["bone_pit"],
+      "unlockedByDefault": true
+    },
+    "zombie": {
+      "label": "Zombie",
+      "role": "mainline_body",
+      "description": "Slow, stronger, average mainline undead.",
+      "cost": { "souls": 14, "bone": 8, "command": 2 },
+      "upkeep": { "soulsPerMinute": 2 },
+      "stats": {
+        "speed": 3,
+        "health": 8,
+        "damage": 5,
+        "attackRate": 0.7,
+        "range": 18
+      },
+      "producedBy": ["bone_pit"],
+      "unlockedByDefault": true
+    },
+    "ghoul": {
+      "label": "Ghoul",
+      "role": "raider",
+      "description": "Very fast, low-health backline killer.",
+      "cost": { "souls": 28, "bone": 10, "command": 3 },
+      "upkeep": { "soulsPerMinute": 4 },
+      "stats": {
+        "speed": 10,
+        "health": 4,
+        "damage": 10,
+        "attackRate": 1.5,
+        "range": 18
+      },
+      "producedBy": ["black_chapel"],
+      "requiresUnlock": "ghoul"
+    },
+    "wight": {
+      "label": "Wight",
+      "role": "elite_linebreaker",
+      "description": "Expensive elite undead used to break defended positions.",
+      "cost": { "souls": 55, "bone": 30, "command": 6 },
+      "upkeep": { "soulsPerMinute": 7 },
+      "stats": {
+        "speed": 5,
+        "health": 18,
+        "damage": 14,
+        "attackRate": 0.9,
+        "range": 22
+      },
+      "producedBy": ["black_chapel"],
+      "requiresUnlock": "wight"
+    }
+  }
+}
