@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: camera default 20m high, scroll zoom 10m to 200m, WASD pan</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: inner circle radius 10m, adaptive wedge count, capped wedge size</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -53,10 +53,13 @@ fill.position.set(2200,1400,-1700);
 scene.add(fill);
 
 const RING_COUNT=20;
-const PARTS_PER_RING=5;
-const FIRST_INNER_RADIUS=25;
+const MIN_PARTS_PER_RING=5;
+const MAX_PARTS_PER_RING=32;
+const TARGET_MAX_WEDGE_ARC=70;
+const FIRST_INNER_RADIUS=10;
 const FIRST_RING_WIDTH=7;
 const RING_WIDTH_GROWTH=1.5;
+const MAX_RING_WIDTH=120;
 const SLAB_HEIGHT=1.18;
 const CENTER_PLATFORM_HEIGHT=1.18;
 const MOVE_SECONDS=2;
@@ -77,6 +80,11 @@ function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
 function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
+function getPartsForRing(innerR,outerR){
+  const midR=(innerR+outerR)*.5;
+  const arcCount=Math.ceil((Math.PI*2*midR)/TARGET_MAX_WEDGE_ARC);
+  return clamp(arcCount,MIN_PARTS_PER_RING,MAX_PARTS_PER_RING);
+}
 
 canvas.addEventListener("wheel",e=>{
   e.preventDefault();
@@ -232,7 +240,7 @@ function addSupports(parent,innerR,outerR,span,seamInset,ringIndex,height){
   }
 }
 
-function makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,finalAngle}){
+function makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle}){
   const seed=ringIndex*100+partIndex*13;
   const group=new THREE.Group();
   const midR=(innerR+outerR)*.5;
@@ -249,7 +257,7 @@ function makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,fina
   group.position.copy(startPosition);
   group.rotation.set(0,finalRotationY,0);
   scene.add(group);
-  parts.push({group,ringIndex,partIndex,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
+  parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
 }
 
 function addTotem(){
@@ -268,7 +276,7 @@ function addTotem(){
 }
 
 const totem=addTotem();
-const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.8,FIRST_INNER_RADIUS-.8,CENTER_PLATFORM_HEIGHT,96),stoneMats[1]);
+const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.35,FIRST_INNER_RADIUS-.35,CENTER_PLATFORM_HEIGHT,96),stoneMats[1]);
 centerDisc.position.y=CENTER_PLATFORM_HEIGHT*.5;
 centerDisc.castShadow=true;
 centerDisc.receiveShadow=true;
@@ -278,24 +286,25 @@ scene.add(centerDisc);
   let currentInner=FIRST_INNER_RADIUS;
   let ringWidth=FIRST_RING_WIDTH;
   for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-    if(ringIndex>0) ringWidth*=RING_WIDTH_GROWTH;
+    if(ringIndex>0) ringWidth=Math.min(MAX_RING_WIDTH,ringWidth*RING_WIDTH_GROWTH);
     const innerR=currentInner;
     const outerR=innerR+ringWidth;
     const height=SLAB_HEIGHT;
     const clearance=Math.max(.18,ringWidth*.0007);
-    ringSpecs.push({innerR,outerR,height,ringWidth});
+    const partsPerRing=getPartsForRing(innerR,outerR);
+    ringSpecs.push({innerR,outerR,height,ringWidth,partsPerRing});
     currentInner=outerR+clearance;
   }
 }
 
 for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-  const {innerR,outerR,height}=ringSpecs[ringIndex];
-  const span=(Math.PI*2)/PARTS_PER_RING;
+  const {innerR,outerR,height,partsPerRing}=ringSpecs[ringIndex];
+  const span=(Math.PI*2)/partsPerRing;
   const seamInset=.0015;
   const ringOffset=ringIndex%2===0?0:span*.5;
-  for(let partIndex=0;partIndex<PARTS_PER_RING;partIndex++){
+  for(let partIndex=0;partIndex<partsPerRing;partIndex++){
     const finalAngle=ringOffset+partIndex*span;
-    makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,finalAngle});
+    makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle});
   }
 }
 
@@ -304,7 +313,8 @@ cloudPlane.rotation.x=-Math.PI/2;
 cloudPlane.position.y=-500;
 scene.add(cloudPlane);
 
-const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
+const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));
+const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(maxPartsInAnyRing-1)*PART_STAGGER+MOVE_SECONDS;
 let lastTime=0;
 
 function animate(nowMs){
@@ -333,7 +343,7 @@ function animate(nowMs){
   requestAnimationFrame(animate);
 }
 
-window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.8,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"camera hovers 20m by default and scroll zooms 10m to 200m"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"inner circle radius 10m; adaptive wedge counts prevent oversized outer pieces"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
   </script>
