@@ -1,0 +1,31 @@
+{
+  "schema": "phantom-command.resources.v1",
+  "version": "0.1.0",
+  "resources": {
+    "souls": {
+      "label": "Souls",
+      "startingAmount": 120,
+      "max": 500,
+      "tags": ["spiritual", "upkeep", "ritual"],
+      "visible": true
+    },
+    "bone": {
+      "label": "Bone",
+      "startingAmount": 80,
+      "max": 400,
+      "tags": ["material", "construction", "undead"],
+      "visible": true
+    },
+    "command": {
+      "label": "Command",
+      "startingAmount": 20,
+      "max": 100,
+      "tags": ["army-cap", "control"],
+      "visible": true
+    }
+  },
+  "migrations": {
+    "soul": "souls",
+    "bones": "bone"
+  }
+}
