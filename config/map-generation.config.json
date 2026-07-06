@@ -1,0 +1,95 @@
+{
+  "schema": "phantom-command.map-generation.v1",
+  "version": "0.1.0",
+  "seed": "reaper-valley-001",
+  "map": {
+    "width": 2400,
+    "height": 2400,
+    "centerObjective": "grim_reaper_totem",
+    "ringModel": "radial_center_pressure"
+  },
+  "rings": {
+    "outer": {
+      "radiusMin": 850,
+      "radiusMax": 1200,
+      "danger": 1,
+      "resourceMultiplier": 1.0,
+      "corruption": false
+    },
+    "middle": {
+      "radiusMin": 500,
+      "radiusMax": 850,
+      "danger": 2,
+      "resourceMultiplier": 1.35,
+      "corruption": false
+    },
+    "inner": {
+      "radiusMin": 180,
+      "radiusMax": 500,
+      "danger": 3,
+      "resourceMultiplier": 1.75,
+      "corruption": true
+    },
+    "center": {
+      "radiusMin": 0,
+      "radiusMax": 180,
+      "danger": 4,
+      "resourceMultiplier": 2.0,
+      "corruption": true
+    }
+  },
+  "playerStart": {
+    "placement": "outer_ring_farthest_from_totem",
+    "minimumSafeRadius": 220,
+    "startingNodes": ["grave_field", "bone_yard"]
+  },
+  "centerTotem": {
+    "id": "grim_reaper_totem",
+    "label": "Grim Reaper Totem",
+    "auraRadius": 420,
+    "shieldSeals": 3,
+    "waveSource": true,
+    "position": "center"
+  },
+  "resourceNodes": {
+    "grave_field": {
+      "count": { "outer": 4, "middle": 4, "inner": 2 },
+      "generates": { "souls": 2 },
+      "intervalSeconds": 4,
+      "placement": "clustered"
+    },
+    "bone_yard": {
+      "count": { "outer": 3, "middle": 3, "inner": 1 },
+      "generates": { "bone": 3 },
+      "intervalSeconds": 6,
+      "placement": "near_ruins"
+    },
+    "soul_well": {
+      "count": { "outer": 0, "middle": 2, "inner": 2 },
+      "generates": { "souls": 8 },
+      "intervalSeconds": 5,
+      "placement": "contested"
+    }
+  },
+  "enemyCamps": {
+    "militia_camp": {
+      "count": { "outer": 2, "middle": 3, "inner": 0 },
+      "guards": ["militia", "hunter"]
+    },
+    "cleric_shrine": {
+      "count": { "outer": 0, "middle": 2, "inner": 2 },
+      "guards": ["cleric", "knight"]
+    },
+    "totem_guard_post": {
+      "count": { "outer": 0, "middle": 0, "inner": 4 },
+      "guards": ["knight", "pyre_engine", "cleric"]
+    }
+  },
+  "waveLanes": {
+    "count": 3,
+    "start": "grim_reaper_totem",
+    "end": "outer_ring_edges",
+    "avoidPlayerStartDirectRush": true,
+    "placeWarningShrines": true
+  }
+}
