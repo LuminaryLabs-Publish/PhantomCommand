@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: 0.25x construct animation, drop starts after 1s, camera starts 80m</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: 10 rows, proportional radial intro, 0.25x construct animation</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -52,7 +52,7 @@ const fill=new THREE.DirectionalLight(0xc9ddff,.42);
 fill.position.set(2200,1400,-1700);
 scene.add(fill);
 
-const RING_COUNT=20;
+const RING_COUNT=10;
 const MIN_PARTS_PER_RING=5;
 const MAX_PARTS_PER_RING=32;
 const TARGET_MAX_WEDGE_ARC=70;
@@ -66,7 +66,7 @@ const MOVE_SECONDS=8;
 const DROP_START_SECONDS=1;
 const RING_STAGGER=.40;
 const PART_STAGGER=.12;
-const OFFSCREEN_EXTRA=12000;
+const START_RADIUS_MULTIPLIER=2;
 const STONE_DETAIL={seamGrooveWidth:.18,seamGrooveDepth:.035,bevelScale:.13,chipAmountMin:.12,chipAmountMax:1.8,crackCountMin:2,crackCountMax:5,crackWidthMin:.06,crackWidthMax:.22,aoStripOpacity:.32,aoCrackOpacity:.48,aoUndersideOpacity:.24};
 const parts=[];
 const ringSpecs=[];
@@ -179,7 +179,7 @@ function makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInse
   const seed=ringIndex*100+partIndex*13;const group=new THREE.Group();const midR=(innerR+outerR)*.5;
   const stone=new THREE.Mesh(chiseledStoneSectionKit.createGeometry(innerR,outerR,span,seamInset,height,seed),stoneMats[(ringIndex+partIndex)%stoneMats.length]);stone.castShadow=true;stone.receiveShadow=true;group.add(stone);
   chiseledStoneSectionKit.addUndersideAo(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addSeamAo(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addBevelLips(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addCracks(group,innerR,outerR,span,seamInset,seed,height*.55);addSupports(group,innerR,outerR,span,seamInset,ringIndex,height);
-  const finalPosition=polar(midR,finalAngle);const startPosition=polar(midR+OFFSCREEN_EXTRA+ringIndex*800,finalAngle);startPosition.y=1400+ringIndex*60;const finalRotationY=-finalAngle;group.position.copy(startPosition);group.rotation.set(0,finalRotationY,0);scene.add(group);parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
+  const finalPosition=polar(midR,finalAngle);const startPosition=polar(midR*START_RADIUS_MULTIPLIER,finalAngle);startPosition.y=1400+ringIndex*60;const finalRotationY=-finalAngle;group.position.copy(startPosition);group.rotation.set(0,finalRotationY,0);scene.add(group);parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
 }
 
 function addTotem(){const group=new THREE.Group();group.position.y=CENTER_PLATFORM_HEIGHT;const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),darkStone);base.position.y=.3;base.castShadow=true;base.receiveShadow=true;group.add(base);const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));tower.position.y=2.3;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),darkStone);top.position.y=4.35;top.castShadow=true;top.receiveShadow=true;group.add(top);const core=new THREE.Mesh(new THREE.SphereGeometry(.45,20,20),glowMat);core.position.y=2.9;group.add(core);scene.add(group);return{group,core,size:{height:4.7,width:11.6,platformTop:CENTER_PLATFORM_HEIGHT}};}
@@ -196,7 +196,7 @@ const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));cons
 
 function animate(nowMs){const time=nowMs*.001;const dt=Math.min(.05,lastTime?time-lastTime:1/60);lastTime=time;totem.group.rotation.y=Math.sin(time*.18)*.025;totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);grimReaperKit.update(dt,time);for(const item of parts){const local=clamp01((time-item.delay)/MOVE_SECONDS);const radialEase=easeOutCubic(local);const descend=smoothstep((local*MOVE_SECONDS-DROP_START_SECONDS)/(MOVE_SECONDS-DROP_START_SECONDS));const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*18;item.group.position.copy(pos);item.group.rotation.set(0,item.finalRotationY,0);}cameraZoom+=(cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));const pan=wasdPanKit.update(dt);const cameraOffset=new THREE.Vector3(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);camera.position.copy(pan).add(cameraOffset);camera.lookAt(pan.clone().add(targetOffset));renderer.render(scene,camera);requestAnimationFrame(animate);}
 
-window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,animation:{speedScale:.25,moveSeconds:MOVE_SECONDS,dropStartSeconds:DROP_START_SECONDS,ringStagger:RING_STAGGER,partStagger:PART_STAGGER},centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},fog:{color:"dark grey",near:9000,far:30000},note:"same 0.25x animation time; ground drop starts after 1 second"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,startRadiusMultiplier:START_RADIUS_MULTIPLIER,slabHeight:SLAB_HEIGHT,animation:{speedScale:.25,moveSeconds:MOVE_SECONDS,dropStartSeconds:DROP_START_SECONDS,ringStagger:RING_STAGGER,partStagger:PART_STAGGER},centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},fog:{color:"dark grey",near:9000,far:30000},note:"10 rows; each piece starts at double its final center radius"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
 </script>
