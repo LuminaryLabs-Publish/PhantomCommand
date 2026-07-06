@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Phantom Command - Opening Scene</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#dfe8ef;font-family:system-ui,sans-serif}#game{display:block;width:100vw;height:100vh}.hud{position:fixed;top:14px;left:14px;padding:10px 12px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.9);border-radius:10px;pointer-events:none;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.1)}.hud h1{margin:0 0 4px;font-size:14px;letter-spacing:.08em;text-transform:uppercase}.hud p{margin:0;font-size:12px;opacity:.74}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening construct scene: 20 rings, 5 wedges, 1.5x layer growth</p></aside>
+<script type="module">
+import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
+
+const canvas=document.getElementById("game");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,logarithmicDepthBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.setClearColor(0xdfe8ef,1);
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xdfe8ef);
+scene.fog=new THREE.FogExp2(0xdfe8ef,.00018);
+
+const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,10,500000);
+const lookTarget=new THREE.Vector3(0,120,0);
+const nearCameraPos=new THREE.Vector3(0,1600,950);
+const farCameraPos=nearCameraPos.clone().multiplyScalar(5);
+camera.position.copy(farCameraPos);
+camera.lookAt(lookTarget);
+
+scene.add(new THREE.AmbientLight(0xffffff,.82));
+const sun=new THREE.DirectionalLight(0xffffff,1.35);
+sun.position.set(-1200,2600,1400);
+sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);
+sun.shadow.camera.left=-12000;
+sun.shadow.camera.right=12000;
+sun.shadow.camera.top=12000;
+sun.shadow.camera.bottom=-12000;
+scene.add(sun);
+const fill=new THREE.DirectionalLight(0xc9ddff,.42);
+fill.position.set(2200,1400,-1700);
+scene.add(fill);
+
+const RING_COUNT=20;
+const PARTS_PER_RING=5;
+const MOVE_SECONDS=2;
+const RING_STAGGER=.10;
+const PART_STAGGER=.03;
+const OFFSCREEN_EXTRA=12000;
+const parts=[];
+const ringSpecs=[];
+
+const mkMat=color=>new THREE.MeshStandardMaterial({color,roughness:.95,metalness:.02,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
+const stoneMats=[0x6f6f6b,0x85847e,0x5d5e5c,0x97958d,0x74746f].map(mkMat);
+const darkStone=mkMat(0x4f5050);
+const glowMat=new THREE.MeshStandardMaterial({color:0xf6fbff,emissive:0xb8d2ff,emissiveIntensity:.65,roughness:.45,metalness:.05});
+
+function clamp01(v){return Math.max(0,Math.min(1,v));}
+function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
+function easeOutCubic(t){return 1-Math.pow(1-t,3);}
+function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
+function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
+
+function createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
+  const localA0=-span*.5+seamInset;
+  const localA1=span*.5-seamInset;
+  const midR=(innerR+outerR)*.5;
+  const shape=new THREE.Shape();
+  const steps=40;
+  const edgeRadius=(base,i,amount)=>base+(roughValue(seed,i)-.5)*amount;
+  const localPoint=(radius,angle)=>({x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius});
+  let p=localPoint(outerR,localA0);
+  shape.moveTo(p.x,p.y);
+  for(let i=1;i<=steps;i++){
+    const t=i/steps;
+    const a=localA0+(localA1-localA0)*t;
+    const r=edgeRadius(outerR,i,Math.max(6,outerR*.0022));
+    p=localPoint(r,a);
+    shape.lineTo(p.x,p.y);
+  }
+  for(let i=steps;i>=0;i--){
+    const t=i/steps;
+    const a=localA0+(localA1-localA0)*t;
+    const r=edgeRadius(innerR,i+100,Math.max(4,innerR*.0016));
+    p=localPoint(r,a);
+    shape.lineTo(p.x,p.y);
+  }
+  shape.closePath();
+  const geo=new THREE.ExtrudeGeometry(shape,{depth:height,bevelEnabled:true,bevelSegments:2,bevelSize:Math.max(2.5,height*.03),bevelThickness:Math.max(2.8,height*.035),steps:1});
+  geo.rotateX(-Math.PI/2);
+  geo.translate(0,height*.5,0);
+  return geo;
+}
+
+function addMarks(parent,innerR,outerR,span,seamInset,seed,topY){
+  const localA0=-span*.5+seamInset;
+  const localA1=span*.5-seamInset;
+  const midR=(innerR+outerR)*.5;
+  const mat=new THREE.MeshStandardMaterial({color:0x3d3e3d,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+  for(let i=0;i<5;i++){
+    const t=(i+1)/6;
+    const a=localA0+(localA1-localA0)*t;
+    const r=innerR+(outerR-innerR)*(.2+roughValue(seed,i+30)*.6);
+    const dot=new THREE.Mesh(new THREE.CylinderGeometry(4.6,4.6,1.3,16),mat);
+    dot.position.set(Math.cos(a)*r-midR,topY+2,Math.sin(a)*r);
+    dot.rotation.x=Math.PI/2;
+    parent.add(dot);
+  }
+}
+
+function addSupports(parent,innerR,outerR,span,seamInset,ringIndex,height){
+  const localA0=-span*.5+seamInset;
+  const localA1=span*.5-seamInset;
+  const midR=(innerR+outerR)*.5;
+  for(let i=0;i<3;i++){
+    const t=(i+1)/4;
+    const a=localA0+(localA1-localA0)*t;
+    const r=outerR-Math.max(10,outerR*.02);
+    const pillarHeight=Math.max(180,height*2.3+ringIndex*35);
+    const w=Math.max(20,height*.18);
+    const pillar=new THREE.Mesh(new THREE.BoxGeometry(w,pillarHeight,w),darkStone);
+    pillar.position.set(Math.cos(a)*r-midR,-pillarHeight*.5,Math.sin(a)*r);
+    pillar.castShadow=true;
+    pillar.receiveShadow=true;
+    parent.add(pillar);
+  }
+}
+
+function makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,finalAngle}){
+  const seed=ringIndex*100+partIndex*13;
+  const group=new THREE.Group();
+  const midR=(innerR+outerR)*.5;
+  const stone=new THREE.Mesh(createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed),stoneMats[(ringIndex+partIndex)%stoneMats.length]);
+  stone.castShadow=true;
+  stone.receiveShadow=true;
+  group.add(stone);
+  addMarks(group,innerR,outerR,span,seamInset,seed,height*.55);
+  addSupports(group,innerR,outerR,span,seamInset,ringIndex,height);
+  const finalPosition=polar(midR,finalAngle);
+  const startPosition=polar(midR+OFFSCREEN_EXTRA+ringIndex*800,finalAngle);
+  startPosition.y=1400+ringIndex*60;
+  const finalRotationY=-finalAngle;
+  group.position.copy(startPosition);
+  group.rotation.set(0,finalRotationY,0);
+  scene.add(group);
+  parts.push({group,ringIndex,partIndex,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
+}
+
+function addTotem(){
+  const group=new THREE.Group();
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(130,170,42,8),darkStone);
+  base.position.y=21;base.castShadow=true;base.receiveShadow=true;group.add(base);
+  const tower=new THREE.Mesh(new THREE.BoxGeometry(100,520,100),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));
+  tower.position.y=270;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);
+  const top=new THREE.Mesh(new THREE.BoxGeometry(170,48,170),darkStone);
+  top.position.y=540;top.castShadow=true;top.receiveShadow=true;group.add(top);
+  const core=new THREE.Mesh(new THREE.SphereGeometry(26,24,24),glowMat);
+  core.position.y=360;group.add(core);
+  scene.add(group);
+  return {group,core};
+}
+
+const totem=addTotem();
+const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(110,110,24,64),stoneMats[1]);
+centerDisc.position.y=12;centerDisc.castShadow=true;centerDisc.receiveShadow=true;scene.add(centerDisc);
+
+{
+  let currentInner=130;
+  let thickness=8;
+  for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
+    if(ringIndex>0) thickness*=1.5;
+    const innerR=currentInner;
+    const outerR=innerR+thickness;
+    const height=28+thickness*.18;
+    const clearance=Math.max(1,thickness*.0025);
+    ringSpecs.push({innerR,outerR,height});
+    currentInner=outerR+clearance;
+  }
+}
+
+for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
+  const {innerR,outerR,height}=ringSpecs[ringIndex];
+  const span=(Math.PI*2)/PARTS_PER_RING;
+  const seamInset=.0015;
+  const ringOffset=ringIndex%2===0?0:span*.5;
+  for(let partIndex=0;partIndex<PARTS_PER_RING;partIndex++){
+    const finalAngle=ringOffset+partIndex*span;
+    makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,finalAngle});
+  }
+}
+
+const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0xf7f9fb,transparent:true,opacity:.72}));
+cloudPlane.rotation.x=-Math.PI/2;
+cloudPlane.position.y=-500;
+scene.add(cloudPlane);
+
+const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
+const tenLayerFinishTime=9*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
+const zoomDuration=3;
+
+function animate(nowMs){
+  const time=nowMs*.001;
+  totem.group.rotation.y=Math.sin(time*.18)*.025;
+  totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);
+  for(const item of parts){
+    const local=clamp01((time-item.delay)/MOVE_SECONDS);
+    const radialEase=easeOutCubic(local);
+    const descend=smoothstep((local-.60)/.40);
+    const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);
+    pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*18;
+    item.group.position.copy(pos);
+    item.group.rotation.set(0,item.finalRotationY,0);
+  }
+  const zoomProgress=smoothstep((time-tenLayerFinishTime)/zoomDuration);
+  const camPos=new THREE.Vector3().lerpVectors(farCameraPos,nearCameraPos,zoomProgress);
+  camera.position.copy(camPos);
+  camera.lookAt(lookTarget);
+  renderer.render(scene,camera);
+  requestAnimationFrame(animate);
+}
+
+window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,note:"opening scene active"};}};
+window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
+requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
