@@ -16,23 +16,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build static site
+  deploy:
+    name: Build and deploy static site
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build static site
-        run: npm run build
+      - name: Prepare static artifact
+        shell: bash
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          cp index.html dist/index.html
+          cp game.html dist/game.html
+          if [ -d docs ]; then cp -R docs dist/docs; fi
+          if [ -d config ]; then cp -R config dist/config; fi
+          touch dist/.nojekyll
+          test -f dist/index.html
+          test -f dist/game.html
+          find dist -maxdepth 2 -type f | sort
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -42,14 +48,6 @@ jobs:
         with:
           path: dist
 
-  deploy:
-    name: Deploy Pages
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
