@@ -1,0 +1,45 @@
+{
+  "schema": "phantom-command.enemy-waves.v1",
+  "version": "0.1.0",
+  "director": {
+    "source": "grim_reaper_totem",
+    "laneCount": 3,
+    "attackTargets": ["grave_harvester", "crypt_core"],
+    "escalationTriggers": ["time", "rank", "totem_seal_destroyed"]
+  },
+  "waves": [
+    {
+      "id": "wave_001_scouts",
+      "timeSeconds": 180,
+      "lane": "nearest_safe_lane",
+      "units": { "militia": 5 },
+      "objective": "harass"
+    },
+    {
+      "id": "wave_002_hunters",
+      "timeSeconds": 360,
+      "lane": "random_outer_lane",
+      "units": { "militia": 8, "hunter": 3 },
+      "objective": "attack_economy"
+    },
+    {
+      "id": "wave_003_cleric_escort",
+      "timeSeconds": 600,
+      "lane": "random_outer_lane",
+      "units": { "militia": 10, "hunter": 4, "cleric": 1 },
+      "objective": "attack_base"
+    },
+    {
+      "id": "wave_004_inner_pressure",
+      "timeSeconds": 900,
+      "lane": "strongest_lane",
+      "units": { "knight": 4, "cleric": 2, "pyre_engine": 1 },
+      "objective": "break_army"
+    }
+  ],
+  "totemPhaseWaves": {
+    "dormant": ["wave_001_scouts"],
+    "awakening": ["wave_002_hunters", "wave_003_cleric_escort"],
+    "enraged": ["wave_004_inner_pressure"]
+  }
+}
