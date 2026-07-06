@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: filled center, first ring radius 25, widening wedges, stable slab thickness</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: camera default 20m high, scroll zoom 10m to 200m, WASD pan</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -26,11 +26,16 @@ const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x51565a);
 scene.fog=new THREE.Fog(0x51565a,9000,30000);
 
-const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,10,500000);
-const lookTarget=new THREE.Vector3(0,120,0);
-const nearCameraPos=new THREE.Vector3(0,1600,950);
-const farCameraPos=nearCameraPos.clone().multiplyScalar(5);
-camera.position.copy(farCameraPos);
+const CAMERA_MIN_ZOOM=10;
+const CAMERA_MAX_ZOOM=200;
+const CAMERA_DEFAULT_ZOOM=20;
+const CAMERA_PITCH_Z_RATIO=.62;
+let cameraZoom=CAMERA_DEFAULT_ZOOM;
+let cameraZoomTarget=CAMERA_DEFAULT_ZOOM;
+
+const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,500000);
+const lookTarget=new THREE.Vector3(0,0,0);
+camera.position.set(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);
 camera.lookAt(lookTarget);
 
 scene.add(new THREE.AmbientLight(0xffffff,.82));
@@ -67,10 +72,16 @@ const darkStone=mkMat(0x4f5050);
 const glowMat=new THREE.MeshStandardMaterial({color:0xf6fbff,emissive:0xb8d2ff,emissiveIntensity:.65,roughness:.45,metalness:.05});
 
 function clamp01(v){return Math.max(0,Math.min(1,v));}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
 function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
+
+canvas.addEventListener("wheel",e=>{
+  e.preventDefault();
+  cameraZoomTarget=clamp(cameraZoomTarget+e.deltaY*.06,CAMERA_MIN_ZOOM,CAMERA_MAX_ZOOM);
+},{passive:false});
 
 function createWasdPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing=10,pullbackForce=4.8}={}){
   const keys=new Set();
@@ -294,8 +305,6 @@ cloudPlane.position.y=-500;
 scene.add(cloudPlane);
 
 const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
-const tenLayerFinishTime=9*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
-const zoomDuration=3;
 let lastTime=0;
 
 function animate(nowMs){
@@ -314,16 +323,17 @@ function animate(nowMs){
     item.group.position.copy(pos);
     item.group.rotation.set(0,item.finalRotationY,0);
   }
-  const zoomProgress=smoothstep((time-tenLayerFinishTime)/zoomDuration);
-  const baseCamPos=new THREE.Vector3().lerpVectors(farCameraPos,nearCameraPos,zoomProgress);
+  cameraZoom+= (cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));
   const pan=wasdPanKit.update(dt);
-  camera.position.copy(baseCamPos).add(pan);
-  camera.lookAt(lookTarget.clone().add(pan));
+  const cameraOffset=new THREE.Vector3(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);
+  const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);
+  camera.position.copy(pan).add(cameraOffset);
+  camera.lookAt(pan.clone().add(targetOffset));
   renderer.render(scene,camera);
   requestAnimationFrame(animate);
 }
 
-window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.8,height:CENTER_PLATFORM_HEIGHT},buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"center filled, first inner ring starts near 25, wedges widen without vertical thickening"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.8,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"camera hovers 20m by default and scroll zooms 10m to 200m"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
   </script>
