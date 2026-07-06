@@ -1,0 +1,52 @@
+{
+  "schema": "phantom-command.scenario.v1",
+  "version": "0.1.0",
+  "id": "scenario_001_raise_the_host",
+  "label": "Raise the Host",
+  "map": "map-generation.config.json",
+  "startingFaction": "hollow_host",
+  "enemyFaction": "dawnward",
+  "startingState": {
+    "resources": { "souls": 120, "bone": 80, "command": 20 },
+    "buildings": [
+      { "id": "player_crypt_core", "type": "crypt_core", "placement": "player_start" }
+    ],
+    "units": [
+      { "type": "skeleton", "count": 6, "placement": "near_crypt_core" },
+      { "type": "zombie", "count": 2, "placement": "near_crypt_core" }
+    ]
+  },
+  "objectives": [
+    {
+      "id": "build_grave_harvester",
+      "type": "build",
+      "target": "grave_harvester",
+      "label": "Build a Grave Harvester"
+    },
+    {
+      "id": "build_bone_pit",
+      "type": "build",
+      "target": "bone_pit",
+      "label": "Build a Bone Pit"
+    },
+    {
+      "id": "clear_first_camp",
+      "type": "destroy_camp",
+      "target": "outer_militia_camp_01",
+      "label": "Clear the outer enemy camp"
+    }
+  ],
+  "winCondition": {
+    "type": "allObjectivesComplete",
+    "objectives": ["build_grave_harvester", "build_bone_pit", "clear_first_camp"]
+  },
+  "loseCondition": {
+    "type": "buildingDestroyed",
+    "target": "player_crypt_core"
+  },
+  "futureMainObjective": {
+    "type": "destroy",
+    "target": "grim_reaper_totem",
+    "enabledInFirstSlice": false
+  }
+}
