@@ -1,0 +1,43 @@
+{
+  "schema": "phantom-command.buildings.v1",
+  "version": "0.1.0",
+  "buildings": {
+    "crypt_core": {
+      "label": "Crypt Core",
+      "role": "main_base",
+      "description": "Main HQ, storage, command anchor, and default lose condition.",
+      "cost": {},
+      "buildTimeSeconds": 0,
+      "storage": { "souls": 500, "bone": 400, "command": 100 },
+      "produces": { "builders": ["necromancer_initiate"] },
+      "unlockedByDefault": true
+    },
+    "grave_harvester": {
+      "label": "Grave Harvester",
+      "role": "economy_extractor",
+      "description": "Extracts resources from grave fields, bone yards, and configured nodes.",
+      "cost": { "souls": 80, "bone": 30 },
+      "buildTimeSeconds": 18,
+      "requiresUnlock": "grave_harvester",
+      "validNodes": ["grave_field", "bone_yard", "soul_well"]
+    },
+    "bone_pit": {
+      "label": "Bone Pit",
+      "role": "basic_production",
+      "description": "Produces Skeletons and Zombies.",
+      "cost": { "souls": 120, "bone": 60 },
+      "buildTimeSeconds": 24,
+      "requiresUnlock": "bone_pit",
+      "produces": { "units": ["skeleton", "zombie"] }
+    },
+    "black_chapel": {
+      "label": "Black Chapel",
+      "role": "tech_elite_production",
+      "description": "Unlocks Ghouls, Wights, and first upgrades.",
+      "cost": { "souls": 220, "bone": 120 },
+      "buildTimeSeconds": 38,
+      "requiresUnlock": "black_chapel",
+      "produces": { "units": ["ghoul", "wight"], "upgrades": ["grave_discipline", "bone_reinforcement"] }
+    }
+  }
+}
