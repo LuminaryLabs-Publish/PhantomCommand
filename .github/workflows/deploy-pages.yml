@@ -33,11 +33,23 @@ jobs:
           mkdir -p dist
           cp index.html dist/index.html
           cp game.html dist/game.html
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('dist/game.html')
+          text = path.read_text()
+          text = text.replace('Opening scene: chiseled stone sections, cracks, bevel lips, local AO', 'Opening scene: chiseled stone sections, camera starts 40m, scroll zoom 10m to 500m')
+          text = text.replace('const CAMERA_MAX_ZOOM=200;', 'const CAMERA_MAX_ZOOM=500;')
+          text = text.replace('const CAMERA_DEFAULT_ZOOM=20;', 'const CAMERA_DEFAULT_ZOOM=40;')
+          text = text.replace('camera hovers 20m by default and scroll zooms 10m to 200m', 'camera starts 40m high and scroll zooms 10m to 500m')
+          path.write_text(text)
+          PY
           if [ -d docs ]; then cp -R docs dist/docs; fi
           if [ -d config ]; then cp -R config dist/config; fi
           touch dist/.nojekyll
           test -f dist/index.html
           test -f dist/game.html
+          grep -q 'const CAMERA_MAX_ZOOM=500;' dist/game.html
+          grep -q 'const CAMERA_DEFAULT_ZOOM=40;' dist/game.html
           find dist -maxdepth 2 -type f | sort
 
       - name: Configure Pages
