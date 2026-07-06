@@ -41,8 +41,11 @@ jobs:
           test -f dist/game.html
           test -d dist/src
           grep -q 'const CAMERA_MAX_ZOOM=500;' dist/game.html
-          grep -q 'const CAMERA_DEFAULT_ZOOM=40;' dist/game.html
+          grep -q 'const CAMERA_DEFAULT_ZOOM=80;' dist/game.html
           grep -q 'const RING_WIDTH_GROWTH=1.25;' dist/game.html
+          grep -q 'const MOVE_SECONDS=8;' dist/game.html
+          grep -q 'const RING_STAGGER=.40;' dist/game.html
+          grep -q 'const PART_STAGGER=.12;' dist/game.html
           find dist -maxdepth 3 -type f | sort
 
       - name: Configure Pages
