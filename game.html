@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: inner circle radius 10m, adaptive wedge count, capped wedge size</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: chiseled stone sections, cracks, bevel lips, local AO</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -66,12 +66,17 @@ const MOVE_SECONDS=2;
 const RING_STAGGER=.10;
 const PART_STAGGER=.03;
 const OFFSCREEN_EXTRA=12000;
+const STONE_DETAIL={seamGrooveWidth:.18,seamGrooveDepth:.035,bevelScale:.13,chipAmountMin:.12,chipAmountMax:1.8,crackCountMin:2,crackCountMax:5,crackWidthMin:.06,crackWidthMax:.22,aoStripOpacity:.32,aoCrackOpacity:.48,aoUndersideOpacity:.24};
 const parts=[];
 const ringSpecs=[];
 
 const mkMat=color=>new THREE.MeshStandardMaterial({color,roughness:.95,metalness:.02,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
 const stoneMats=[0x6f6f6b,0x85847e,0x5d5e5c,0x97958d,0x74746f].map(mkMat);
 const darkStone=mkMat(0x4f5050);
+const lipMat=new THREE.MeshStandardMaterial({color:0x9a9890,roughness:.92,metalness:.01,polygonOffset:true,polygonOffsetFactor:-.5,polygonOffsetUnits:-.5});
+const seamAoMat=new THREE.MeshBasicMaterial({color:0x151718,transparent:true,opacity:STONE_DETAIL.aoStripOpacity,depthWrite:false});
+const crackAoMat=new THREE.MeshBasicMaterial({color:0x101112,transparent:true,opacity:STONE_DETAIL.aoCrackOpacity,depthWrite:false});
+const undersideAoMat=new THREE.MeshBasicMaterial({color:0x0d0f10,transparent:true,opacity:STONE_DETAIL.aoUndersideOpacity,depthWrite:false,side:THREE.DoubleSide});
 const glowMat=new THREE.MeshStandardMaterial({color:0xf6fbff,emissive:0xb8d2ff,emissiveIntensity:.65,roughness:.45,metalness:.05});
 
 function clamp01(v){return Math.max(0,Math.min(1,v));}
@@ -80,272 +85,119 @@ function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
 function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
-function getPartsForRing(innerR,outerR){
-  const midR=(innerR+outerR)*.5;
-  const arcCount=Math.ceil((Math.PI*2*midR)/TARGET_MAX_WEDGE_ARC);
-  return clamp(arcCount,MIN_PARTS_PER_RING,MAX_PARTS_PER_RING);
-}
+function getPartsForRing(innerR,outerR){const midR=(innerR+outerR)*.5;const arcCount=Math.ceil((Math.PI*2*midR)/TARGET_MAX_WEDGE_ARC);return clamp(arcCount,MIN_PARTS_PER_RING,MAX_PARTS_PER_RING);}
+function localPolarPoint(radius,angle,midR,y=0){return new THREE.Vector3(Math.cos(angle)*radius-midR,y,Math.sin(angle)*radius);}
+function addOrientedBox(parent,center,length,thickness,width,angle,mat){const mesh=new THREE.Mesh(new THREE.BoxGeometry(length,thickness,width),mat);mesh.position.copy(center);mesh.rotation.y=-angle;parent.add(mesh);return mesh;}
 
-canvas.addEventListener("wheel",e=>{
-  e.preventDefault();
-  cameraZoomTarget=clamp(cameraZoomTarget+e.deltaY*.06,CAMERA_MIN_ZOOM,CAMERA_MAX_ZOOM);
-},{passive:false});
+canvas.addEventListener("wheel",e=>{e.preventDefault();cameraZoomTarget=clamp(cameraZoomTarget+e.deltaY*.06,CAMERA_MIN_ZOOM,CAMERA_MAX_ZOOM);},{passive:false});
 
 function createWasdPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing=10,pullbackForce=4.8}={}){
-  const keys=new Set();
-  const target=new THREE.Vector3();
-  const current=new THREE.Vector3();
-  const velocity=new THREE.Vector3();
+  const keys=new Set();const target=new THREE.Vector3();const current=new THREE.Vector3();const velocity=new THREE.Vector3();
   addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright"].includes(k)){keys.add(k);e.preventDefault();}});
-  addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
-  addEventListener("blur",()=>keys.clear());
+  addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));addEventListener("blur",()=>keys.clear());
   function signedPull(v){const over=Math.abs(v)-softLimit;if(over<=0)return 0;return -Math.sign(v)*over*pullbackForce;}
   function clampHard(v){return Math.max(-hardLimit,Math.min(hardLimit,v));}
-  return {
-    id:"wasd-pan-kit",
-    update(dt){
-      const x=(keys.has("d")||keys.has("arrowright")?1:0)-(keys.has("a")||keys.has("arrowleft")?1:0);
-      const z=(keys.has("s")||keys.has("arrowdown")?1:0)-(keys.has("w")||keys.has("arrowup")?1:0);
-      const input=new THREE.Vector3(x,0,z);
-      if(input.lengthSq()>1) input.normalize();
-      velocity.x+=input.x*panSpeed*dt+signedPull(target.x)*dt;
-      velocity.z+=input.z*panSpeed*dt+signedPull(target.z)*dt;
-      velocity.multiplyScalar(Math.pow(.06,dt));
-      target.x=clampHard(target.x+velocity.x*dt);
-      target.z=clampHard(target.z+velocity.z*dt);
-      if(!keys.size){target.x+=signedPull(target.x)*dt*.12;target.z+=signedPull(target.z)*dt*.12;}
-      const alpha=1-Math.exp(-smoothing*dt);
-      current.lerp(target,alpha);
-      return current;
-    },
-    getState(){return{target:{x:target.x,z:target.z},current:{x:current.x,z:current.z},softLimit,hardLimit,pullbackForce};}
-  };
+  return {id:"wasd-pan-kit",update(dt){const x=(keys.has("d")||keys.has("arrowright")?1:0)-(keys.has("a")||keys.has("arrowleft")?1:0);const z=(keys.has("s")||keys.has("arrowdown")?1:0)-(keys.has("w")||keys.has("arrowup")?1:0);const input=new THREE.Vector3(x,0,z);if(input.lengthSq()>1)input.normalize();velocity.x+=input.x*panSpeed*dt+signedPull(target.x)*dt;velocity.z+=input.z*panSpeed*dt+signedPull(target.z)*dt;velocity.multiplyScalar(Math.pow(.06,dt));target.x=clampHard(target.x+velocity.x*dt);target.z=clampHard(target.z+velocity.z*dt);if(!keys.size){target.x+=signedPull(target.x)*dt*.12;target.z+=signedPull(target.z)*dt*.12;}const alpha=1-Math.exp(-smoothing*dt);current.lerp(target,alpha);return current;},getState(){return{target:{x:target.x,z:target.z},current:{x:current.x,z:current.z},softLimit,hardLimit,pullbackForce};}};
 }
 
 function createGrimReaperKit({position=new THREE.Vector3(12,CENTER_PLATFORM_HEIGHT,10),particleCount=90}={}){
-  const group=new THREE.Group();
-  group.position.copy(position);
-  const anchor=new THREE.Mesh(new THREE.CylinderGeometry(.45,.65,1.8,10),new THREE.MeshStandardMaterial({color:0x111214,roughness:.9,metalness:.02}));
-  anchor.position.y=.9;
-  anchor.castShadow=true;
-  anchor.receiveShadow=true;
-  group.add(anchor);
-  const hood=new THREE.Mesh(new THREE.SphereGeometry(.7,14,14),new THREE.MeshStandardMaterial({color:0x090a0b,roughness:.96,metalness:.01}));
-  hood.scale.set(1,.75,1);
-  hood.position.y=2.05;
-  hood.castShadow=true;
-  group.add(hood);
-  const smokeGeometry=new THREE.BufferGeometry();
-  const positions=new Float32Array(particleCount*3);
-  const seeds=[];
+  const group=new THREE.Group();group.position.copy(position);
+  const anchor=new THREE.Mesh(new THREE.CylinderGeometry(.45,.65,1.8,10),new THREE.MeshStandardMaterial({color:0x111214,roughness:.9,metalness:.02}));anchor.position.y=.9;anchor.castShadow=true;anchor.receiveShadow=true;group.add(anchor);
+  const hood=new THREE.Mesh(new THREE.SphereGeometry(.7,14,14),new THREE.MeshStandardMaterial({color:0x090a0b,roughness:.96,metalness:.01}));hood.scale.set(1,.75,1);hood.position.y=2.05;hood.castShadow=true;group.add(hood);
+  const smokeGeometry=new THREE.BufferGeometry();const positions=new Float32Array(particleCount*3);const seeds=[];
   for(let i=0;i<particleCount;i++){seeds.push({angle:Math.random()*Math.PI*2,radius:.35+Math.random()*1.1,height:Math.random()*4,speed:.35+Math.random()*.8,phase:Math.random()*10});}
   smokeGeometry.setAttribute("position",new THREE.BufferAttribute(positions,3));
   const smokeMaterial=new THREE.PointsMaterial({color:0x1f2325,size:1.9,transparent:true,opacity:.62,depthWrite:false,sizeAttenuation:true});
-  const smoke=new THREE.Points(smokeGeometry,smokeMaterial);
-  smoke.position.y=.8;
-  group.add(smoke);
-  scene.add(group);
-  return {
-    id:"grim-reaper-kit",
-    entityId:"grim-reaper-placeholder",
-    group,
-    update(dt,time){
-      for(let i=0;i<particleCount;i++){
-        const s=seeds[i];
-        const y=(s.height+time*s.speed)%4.4;
-        const drift=Math.sin(time*.8+s.phase)*.35;
-        const radius=s.radius+y*.18;
-        const angle=s.angle+Math.sin(time*.25+s.phase)*.4;
-        positions[i*3]=Math.cos(angle)*radius+drift;
-        positions[i*3+1]=y;
-        positions[i*3+2]=Math.sin(angle)*radius;
-      }
-      smokeGeometry.attributes.position.needsUpdate=true;
-      smokeMaterial.opacity=.45+Math.sin(time*1.6)*.1;
-      group.rotation.y=Math.sin(time*.45)*.18;
-    },
-    getState(){return{entityId:"grim-reaper-placeholder",position:{x:group.position.x,y:group.position.y,z:group.position.z},particleCount};}
-  };
+  const smoke=new THREE.Points(smokeGeometry,smokeMaterial);smoke.position.y=.8;group.add(smoke);scene.add(group);
+  return {id:"grim-reaper-kit",entityId:"grim-reaper-placeholder",group,update(dt,time){for(let i=0;i<particleCount;i++){const s=seeds[i];const y=(s.height+time*s.speed)%4.4;const drift=Math.sin(time*.8+s.phase)*.35;const radius=s.radius+y*.18;const angle=s.angle+Math.sin(time*.25+s.phase)*.4;positions[i*3]=Math.cos(angle)*radius+drift;positions[i*3+1]=y;positions[i*3+2]=Math.sin(angle)*radius;}smokeGeometry.attributes.position.needsUpdate=true;smokeMaterial.opacity=.45+Math.sin(time*1.6)*.1;group.rotation.y=Math.sin(time*.45)*.18;},getState(){return{entityId:"grim-reaper-placeholder",position:{x:group.position.x,y:group.position.y,z:group.position.z},particleCount};}};
 }
 
 const wasdPanKit=createWasdPanKit();
 const grimReaperKit=createGrimReaperKit();
 
-function createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
-  const localA0=-span*.5+seamInset;
-  const localA1=span*.5-seamInset;
-  const midR=(innerR+outerR)*.5;
-  const ringWidth=outerR-innerR;
-  const shape=new THREE.Shape();
-  const steps=40;
-  const edgeRadius=(base,i,amount)=>base+(roughValue(seed,i)-.5)*amount;
-  const localPoint=(radius,angle)=>({x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius});
-  let p=localPoint(outerR,localA0);
-  shape.moveTo(p.x,p.y);
-  for(let i=1;i<=steps;i++){
-    const t=i/steps;
-    const a=localA0+(localA1-localA0)*t;
-    const r=edgeRadius(outerR,i,Math.min(6,Math.max(.22,ringWidth*.04)));
-    p=localPoint(r,a);
-    shape.lineTo(p.x,p.y);
-  }
-  for(let i=steps;i>=0;i--){
-    const t=i/steps;
-    const a=localA0+(localA1-localA0)*t;
-    const r=edgeRadius(innerR,i+100,Math.min(4,Math.max(.16,ringWidth*.03)));
-    p=localPoint(r,a);
-    shape.lineTo(p.x,p.y);
-  }
+function createChiseledStoneWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;const shape=new THREE.Shape();const steps=48;
+  const chipAmount=Math.min(STONE_DETAIL.chipAmountMax,Math.max(STONE_DETAIL.chipAmountMin,ringWidth*.035));
+  function edgeChipRadius(base,i,amount,edgeKind){const n=roughValue(seed+(edgeKind==="outer"?13:31),i);const jag=(n-.5)*amount;const cut=(n>.78?-amount*.42:0);return base+jag+cut;}
+  function localPoint(radius,angle){return {x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius};}
+  let p=localPoint(outerR,localA0);shape.moveTo(p.x,p.y);
+  for(let i=1;i<=steps;i++){const t=i/steps;const a=localA0+(localA1-localA0)*t;const r=edgeChipRadius(outerR,i,chipAmount,"outer");p=localPoint(r,a);shape.lineTo(p.x,p.y);}
+  for(let i=steps;i>=0;i--){const t=i/steps;const a=localA0+(localA1-localA0)*t;const r=edgeChipRadius(innerR,i+100,chipAmount*.55,"inner");p=localPoint(r,a);shape.lineTo(p.x,p.y);}
   shape.closePath();
-  const geo=new THREE.ExtrudeGeometry(shape,{depth:height,bevelEnabled:true,bevelSegments:2,bevelSize:height*.13,bevelThickness:height*.14,steps:1});
-  geo.rotateX(-Math.PI/2);
-  geo.translate(0,height*.5,0);
-  return geo;
+  const geo=new THREE.ExtrudeGeometry(shape,{depth:height,bevelEnabled:true,bevelSegments:2,bevelSize:height*STONE_DETAIL.bevelScale,bevelThickness:height*(STONE_DETAIL.bevelScale+.02),steps:1});
+  geo.rotateX(-Math.PI/2);geo.translate(0,height*.5,0);return geo;
 }
 
-function addMarks(parent,innerR,outerR,span,seamInset,seed,topY){
-  const localA0=-span*.5+seamInset;
-  const localA1=span*.5-seamInset;
-  const midR=(innerR+outerR)*.5;
-  const ringWidth=outerR-innerR;
-  const markRadius=Math.min(4.6,Math.max(.16,ringWidth*.035));
-  const mat=new THREE.MeshStandardMaterial({color:0x3d3e3d,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
-  for(let i=0;i<5;i++){
-    const t=(i+1)/6;
-    const a=localA0+(localA1-localA0)*t;
-    const r=innerR+ringWidth*(.2+roughValue(seed,i+30)*.6);
-    const dot=new THREE.Mesh(new THREE.CylinderGeometry(markRadius,markRadius,Math.max(.05,markRadius*.28),16),mat);
-    dot.position.set(Math.cos(a)*r-midR,topY+Math.max(.04,markRadius*.12),Math.sin(a)*r);
-    dot.rotation.x=Math.PI/2;
-    parent.add(dot);
+function addCrackGrooves(parent,innerR,outerR,span,seamInset,seed,topY){
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;
+  const crackCount=Math.floor(STONE_DETAIL.crackCountMin+roughValue(seed,500)*(STONE_DETAIL.crackCountMax-STONE_DETAIL.crackCountMin+1));
+  for(let i=0;i<crackCount;i++){
+    const a=localA0+(localA1-localA0)*(0.18+roughValue(seed,i+40)*.64);
+    const r=innerR+ringWidth*(.22+roughValue(seed,i+70)*.56);
+    const len=Math.min(ringWidth*.45,4+roughValue(seed,i+90)*10);
+    const w=STONE_DETAIL.crackWidthMin+roughValue(seed,i+110)*(STONE_DETAIL.crackWidthMax-STONE_DETAIL.crackWidthMin);
+    const center=localPolarPoint(r,a,midR,topY+.055);
+    addOrientedBox(parent,center,len,.035,w,a+(roughValue(seed,i+130)-.5)*1.1,crackAoMat);
+    if(roughValue(seed,i+150)>.58){const branchCenter=localPolarPoint(r+len*.18,a+.025,midR,topY+.06);addOrientedBox(parent,branchCenter,len*.42,.03,w*.72,a+.75,crackAoMat);}
   }
+}
+
+function addSeamOcclusion(parent,innerR,outerR,span,seamInset,height){
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const midLen=outerR-innerR;const y=height+.035;
+  for(const a of [localA0,localA1]){const center=localPolarPoint((innerR+outerR)*.5,a,midR,y);addOrientedBox(parent,center,midLen,.035,STONE_DETAIL.seamGrooveWidth,a,seamAoMat);}
+  addRimOcclusion(parent,innerR,outerR,localA0,localA1,midR,y);
+}
+
+function addRimOcclusion(parent,innerR,outerR,a0,a1,midR,y){
+  const segments=8;for(const radius of [innerR,outerR]){for(let i=0;i<segments;i++){const t0=i/segments;const t1=(i+1)/segments;const a=(a0+(a1-a0)*(t0+t1)*.5);const len=Math.abs(a1-a0)*radius/segments*.92;const center=localPolarPoint(radius,a,midR,y);addOrientedBox(parent,center,len,.03,STONE_DETAIL.seamGrooveWidth,a+Math.PI*.5,seamAoMat);}}
+}
+
+function addConnectionBevelLips(parent,innerR,outerR,span,seamInset,height){
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const len=outerR-innerR;const y=height+.075;
+  for(const a of [localA0,localA1]){const center=localPolarPoint((innerR+outerR)*.5,a,midR,y);const lip=addOrientedBox(parent,center,len,.08,STONE_DETAIL.seamGrooveWidth*.72,a,lipMat);lip.rotation.z=.08;}
+}
+
+function addUndersideOcclusion(parent,innerR,outerR,span,seamInset,height){
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const shape=new THREE.Shape();const steps=24;
+  function lp(radius,angle){return {x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius};}
+  let p=lp(outerR+.12,localA0-.006);shape.moveTo(p.x,p.y);
+  for(let i=1;i<=steps;i++){const a=(localA0-.006)+(localA1-localA0+.012)*i/steps;p=lp(outerR+.12,a);shape.lineTo(p.x,p.y);}
+  for(let i=steps;i>=0;i--){const a=(localA0-.006)+(localA1-localA0+.012)*i/steps;p=lp(innerR-.12,a);shape.lineTo(p.x,p.y);}
+  shape.closePath();const geo=new THREE.ShapeGeometry(shape);geo.rotateX(-Math.PI/2);const mesh=new THREE.Mesh(geo,undersideAoMat);mesh.position.y=-.025;parent.add(mesh);
 }
 
 function addSupports(parent,innerR,outerR,span,seamInset,ringIndex,height){
-  const localA0=-span*.5+seamInset;
-  const localA1=span*.5-seamInset;
-  const midR=(innerR+outerR)*.5;
-  const ringWidth=outerR-innerR;
-  for(let i=0;i<3;i++){
-    const t=(i+1)/4;
-    const a=localA0+(localA1-localA0)*t;
-    const r=outerR-Math.max(1,ringWidth*.04);
-    const pillarHeight=5+ringIndex*.85;
-    const w=Math.min(10,Math.max(.7,ringWidth*.035));
-    const pillar=new THREE.Mesh(new THREE.BoxGeometry(w,pillarHeight,w),darkStone);
-    pillar.position.set(Math.cos(a)*r-midR,-pillarHeight*.5,Math.sin(a)*r);
-    pillar.castShadow=true;
-    pillar.receiveShadow=true;
-    parent.add(pillar);
-  }
+  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;
+  for(let i=0;i<3;i++){const t=(i+1)/4;const a=localA0+(localA1-localA0)*t;const r=outerR-Math.max(1,ringWidth*.04);const pillarHeight=5+ringIndex*.85;const w=Math.min(10,Math.max(.7,ringWidth*.035));const pillar=new THREE.Mesh(new THREE.BoxGeometry(w,pillarHeight,w),darkStone);pillar.position.set(Math.cos(a)*r-midR,-pillarHeight*.5,Math.sin(a)*r);pillar.castShadow=true;pillar.receiveShadow=true;parent.add(pillar);}
 }
+
+function createChiseledStoneSectionKit(){return{id:"chiseled-stone-section-kit",createGeometry:createChiseledStoneWedgeGeometry,addCracks:addCrackGrooves,addSeamAo:addSeamOcclusion,addBevelLips:addConnectionBevelLips,addUndersideAo:addUndersideOcclusion};}
+const chiseledStoneSectionKit=createChiseledStoneSectionKit();
 
 function makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle}){
-  const seed=ringIndex*100+partIndex*13;
-  const group=new THREE.Group();
-  const midR=(innerR+outerR)*.5;
-  const stone=new THREE.Mesh(createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed),stoneMats[(ringIndex+partIndex)%stoneMats.length]);
-  stone.castShadow=true;
-  stone.receiveShadow=true;
-  group.add(stone);
-  addMarks(group,innerR,outerR,span,seamInset,seed,height*.55);
-  addSupports(group,innerR,outerR,span,seamInset,ringIndex,height);
-  const finalPosition=polar(midR,finalAngle);
-  const startPosition=polar(midR+OFFSCREEN_EXTRA+ringIndex*800,finalAngle);
-  startPosition.y=1400+ringIndex*60;
-  const finalRotationY=-finalAngle;
-  group.position.copy(startPosition);
-  group.rotation.set(0,finalRotationY,0);
-  scene.add(group);
-  parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
+  const seed=ringIndex*100+partIndex*13;const group=new THREE.Group();const midR=(innerR+outerR)*.5;
+  const stone=new THREE.Mesh(chiseledStoneSectionKit.createGeometry(innerR,outerR,span,seamInset,height,seed),stoneMats[(ringIndex+partIndex)%stoneMats.length]);stone.castShadow=true;stone.receiveShadow=true;group.add(stone);
+  chiseledStoneSectionKit.addUndersideAo(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addSeamAo(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addBevelLips(group,innerR,outerR,span,seamInset,height);chiseledStoneSectionKit.addCracks(group,innerR,outerR,span,seamInset,seed,height*.55);addSupports(group,innerR,outerR,span,seamInset,ringIndex,height);
+  const finalPosition=polar(midR,finalAngle);const startPosition=polar(midR+OFFSCREEN_EXTRA+ringIndex*800,finalAngle);startPosition.y=1400+ringIndex*60;const finalRotationY=-finalAngle;group.position.copy(startPosition);group.rotation.set(0,finalRotationY,0);scene.add(group);parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY});
 }
 
-function addTotem(){
-  const group=new THREE.Group();
-  group.position.y=CENTER_PLATFORM_HEIGHT;
-  const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),darkStone);
-  base.position.y=.3;base.castShadow=true;base.receiveShadow=true;group.add(base);
-  const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));
-  tower.position.y=2.3;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);
-  const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),darkStone);
-  top.position.y=4.35;top.castShadow=true;top.receiveShadow=true;group.add(top);
-  const core=new THREE.Mesh(new THREE.SphereGeometry(.45,20,20),glowMat);
-  core.position.y=2.9;group.add(core);
-  scene.add(group);
-  return {group,core,size:{height:4.7,width:11.6,platformTop:CENTER_PLATFORM_HEIGHT}};
-}
+function addTotem(){const group=new THREE.Group();group.position.y=CENTER_PLATFORM_HEIGHT;const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),darkStone);base.position.y=.3;base.castShadow=true;base.receiveShadow=true;group.add(base);const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));tower.position.y=2.3;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),darkStone);top.position.y=4.35;top.castShadow=true;top.receiveShadow=true;group.add(top);const core=new THREE.Mesh(new THREE.SphereGeometry(.45,20,20),glowMat);core.position.y=2.9;group.add(core);scene.add(group);return{group,core,size:{height:4.7,width:11.6,platformTop:CENTER_PLATFORM_HEIGHT}};}
 
 const totem=addTotem();
-const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.35,FIRST_INNER_RADIUS-.35,CENTER_PLATFORM_HEIGHT,96),stoneMats[1]);
-centerDisc.position.y=CENTER_PLATFORM_HEIGHT*.5;
-centerDisc.castShadow=true;
-centerDisc.receiveShadow=true;
-scene.add(centerDisc);
+const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.35,FIRST_INNER_RADIUS-.35,CENTER_PLATFORM_HEIGHT,96),stoneMats[1]);centerDisc.position.y=CENTER_PLATFORM_HEIGHT*.5;centerDisc.castShadow=true;centerDisc.receiveShadow=true;scene.add(centerDisc);
 
-{
-  let currentInner=FIRST_INNER_RADIUS;
-  let ringWidth=FIRST_RING_WIDTH;
-  for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-    if(ringIndex>0) ringWidth=Math.min(MAX_RING_WIDTH,ringWidth*RING_WIDTH_GROWTH);
-    const innerR=currentInner;
-    const outerR=innerR+ringWidth;
-    const height=SLAB_HEIGHT;
-    const clearance=Math.max(.18,ringWidth*.0007);
-    const partsPerRing=getPartsForRing(innerR,outerR);
-    ringSpecs.push({innerR,outerR,height,ringWidth,partsPerRing});
-    currentInner=outerR+clearance;
-  }
-}
+{let currentInner=FIRST_INNER_RADIUS;let ringWidth=FIRST_RING_WIDTH;for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){if(ringIndex>0)ringWidth=Math.min(MAX_RING_WIDTH,ringWidth*RING_WIDTH_GROWTH);const innerR=currentInner;const outerR=innerR+ringWidth;const height=SLAB_HEIGHT;const clearance=Math.max(.18,ringWidth*.0007);const partsPerRing=getPartsForRing(innerR,outerR);ringSpecs.push({innerR,outerR,height,ringWidth,partsPerRing});currentInner=outerR+clearance;}}
 
-for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-  const {innerR,outerR,height,partsPerRing}=ringSpecs[ringIndex];
-  const span=(Math.PI*2)/partsPerRing;
-  const seamInset=.0015;
-  const ringOffset=ringIndex%2===0?0:span*.5;
-  for(let partIndex=0;partIndex<partsPerRing;partIndex++){
-    const finalAngle=ringOffset+partIndex*span;
-    makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle});
-  }
-}
+for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){const{innerR,outerR,height,partsPerRing}=ringSpecs[ringIndex];const span=(Math.PI*2)/partsPerRing;const seamInset=.0015;const ringOffset=ringIndex%2===0?0:span*.5;for(let partIndex=0;partIndex<partsPerRing;partIndex++){const finalAngle=ringOffset+partIndex*span;makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle});}}
 
-const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0x5d6266,transparent:true,opacity:.46}));
-cloudPlane.rotation.x=-Math.PI/2;
-cloudPlane.position.y=-500;
-scene.add(cloudPlane);
+const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0x5d6266,transparent:true,opacity:.46}));cloudPlane.rotation.x=-Math.PI/2;cloudPlane.position.y=-500;scene.add(cloudPlane);
+const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(maxPartsInAnyRing-1)*PART_STAGGER+MOVE_SECONDS;let lastTime=0;
 
-const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));
-const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(maxPartsInAnyRing-1)*PART_STAGGER+MOVE_SECONDS;
-let lastTime=0;
+function animate(nowMs){const time=nowMs*.001;const dt=Math.min(.05,lastTime?time-lastTime:1/60);lastTime=time;totem.group.rotation.y=Math.sin(time*.18)*.025;totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);grimReaperKit.update(dt,time);for(const item of parts){const local=clamp01((time-item.delay)/MOVE_SECONDS);const radialEase=easeOutCubic(local);const descend=smoothstep((local-.60)/.40);const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*18;item.group.position.copy(pos);item.group.rotation.set(0,item.finalRotationY,0);}cameraZoom+=(cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));const pan=wasdPanKit.update(dt);const cameraOffset=new THREE.Vector3(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);camera.position.copy(pan).add(cameraOffset);camera.lookAt(pan.clone().add(targetOffset));renderer.render(scene,camera);requestAnimationFrame(animate);}
 
-function animate(nowMs){
-  const time=nowMs*.001;
-  const dt=Math.min(.05,lastTime?time-lastTime:1/60);
-  lastTime=time;
-  totem.group.rotation.y=Math.sin(time*.18)*.025;
-  totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);
-  grimReaperKit.update(dt,time);
-  for(const item of parts){
-    const local=clamp01((time-item.delay)/MOVE_SECONDS);
-    const radialEase=easeOutCubic(local);
-    const descend=smoothstep((local-.60)/.40);
-    const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);
-    pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*18;
-    item.group.position.copy(pos);
-    item.group.rotation.set(0,item.finalRotationY,0);
-  }
-  cameraZoom+= (cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));
-  const pan=wasdPanKit.update(dt);
-  const cameraOffset=new THREE.Vector3(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);
-  const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);
-  camera.position.copy(pan).add(cameraOffset);
-  camera.lookAt(pan.clone().add(targetOffset));
-  renderer.render(scene,camera);
-  requestAnimationFrame(animate);
-}
-
-window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"inner circle radius 10m; adaptive wedge counts prevent oversized outer pieces"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},fog:{color:"dark grey",near:9000,far:30000},note:"chiseled stone wedges with cracks, seam bevels, and local fake AO"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
-  </script>
+</script>
 </body>
 </html>
