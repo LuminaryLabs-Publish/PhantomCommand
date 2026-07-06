@@ -1,0 +1,26 @@
+{
+  "schema": "phantom-command.experience.v1",
+  "version": "0.1.0",
+  "tracks": {
+    "faction": {
+      "label": "Faction Rank",
+      "thresholds": [
+        { "rank": 1, "xpRequired": 0, "label": "Rank 1" },
+        { "rank": 2, "xpRequired": 120, "label": "Rank 2" },
+        { "rank": 3, "xpRequired": 300, "label": "Rank 3" },
+        { "rank": 4, "xpRequired": 600, "label": "Rank 4" }
+      ]
+    }
+  },
+  "masteryPoints": {
+    "rankRewards": {
+      "2": 1,
+      "3": 1,
+      "4": 2
+    }
+  },
+  "idempotency": {
+    "xpEventKey": "sourceEventId",
+    "ledger": "processedExperienceEvents"
+  }
+}
