@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: WASD camera pan kit, soft bounds, pullback force, darker far fog</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: house-scale Totem, Grim Reaper smoke placeholder, WASD camera pan</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -89,10 +89,7 @@ function createWasdPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing
       velocity.multiplyScalar(Math.pow(.06,dt));
       target.x=clampHard(target.x+velocity.x*dt);
       target.z=clampHard(target.z+velocity.z*dt);
-      if(!keys.size){
-        target.x+=signedPull(target.x)*dt*.12;
-        target.z+=signedPull(target.z)*dt*.12;
-      }
+      if(!keys.size){target.x+=signedPull(target.x)*dt*.12;target.z+=signedPull(target.z)*dt*.12;}
       const alpha=1-Math.exp(-smoothing*dt);
       current.lerp(target,alpha);
       return current;
@@ -101,7 +98,56 @@ function createWasdPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing
   };
 }
 
+function createGrimReaperKit({position=new THREE.Vector3(12,0,10),particleCount=90}={}){
+  const group=new THREE.Group();
+  group.position.copy(position);
+  const anchor=new THREE.Mesh(new THREE.CylinderGeometry(.45,.65,1.8,10),new THREE.MeshStandardMaterial({color:0x111214,roughness:.9,metalness:.02}));
+  anchor.position.y=.9;
+  anchor.castShadow=true;
+  anchor.receiveShadow=true;
+  group.add(anchor);
+  const hood=new THREE.Mesh(new THREE.SphereGeometry(.7,14,14),new THREE.MeshStandardMaterial({color:0x090a0b,roughness:.96,metalness:.01}));
+  hood.scale.set(1,.75,1);
+  hood.position.y=2.05;
+  hood.castShadow=true;
+  group.add(hood);
+  const smokeGeometry=new THREE.BufferGeometry();
+  const positions=new Float32Array(particleCount*3);
+  const seeds=[];
+  for(let i=0;i<particleCount;i++){
+    seeds.push({angle:Math.random()*Math.PI*2,radius:.35+Math.random()*1.1,height:Math.random()*4,speed:.35+Math.random()*.8,phase:Math.random()*10});
+  }
+  smokeGeometry.setAttribute("position",new THREE.BufferAttribute(positions,3));
+  const smokeMaterial=new THREE.PointsMaterial({color:0x1f2325,size:1.9,transparent:true,opacity:.62,depthWrite:false,sizeAttenuation:true});
+  const smoke=new THREE.Points(smokeGeometry,smokeMaterial);
+  smoke.position.y=.8;
+  group.add(smoke);
+  scene.add(group);
+  return {
+    id:"grim-reaper-kit",
+    entityId:"grim-reaper-placeholder",
+    group,
+    update(dt,time){
+      for(let i=0;i<particleCount;i++){
+        const s=seeds[i];
+        const y=(s.height+time*s.speed)%4.4;
+        const drift=Math.sin(time*.8+s.phase)*.35;
+        const radius=s.radius+y*.18;
+        const angle=s.angle+Math.sin(time*.25+s.phase)*.4;
+        positions[i*3]=Math.cos(angle)*radius+drift;
+        positions[i*3+1]=y;
+        positions[i*3+2]=Math.sin(angle)*radius;
+      }
+      smokeGeometry.attributes.position.needsUpdate=true;
+      smokeMaterial.opacity=.45+Math.sin(time*1.6)*.1;
+      group.rotation.y=Math.sin(time*.45)*.18;
+    },
+    getState(){return{entityId:"grim-reaper-placeholder",position:{x:group.position.x,y:group.position.y,z:group.position.z},particleCount};}
+  };
+}
+
 const wasdPanKit=createWasdPanKit();
+const grimReaperKit=createGrimReaperKit();
 
 function createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
   const localA0=-span*.5+seamInset;
@@ -190,21 +236,21 @@ function makePiece({ringIndex,partIndex,innerR,outerR,span,seamInset,height,fina
 
 function addTotem(){
   const group=new THREE.Group();
-  const base=new THREE.Mesh(new THREE.CylinderGeometry(130,170,42,8),darkStone);
-  base.position.y=21;base.castShadow=true;base.receiveShadow=true;group.add(base);
-  const tower=new THREE.Mesh(new THREE.BoxGeometry(100,520,100),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));
-  tower.position.y=270;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);
-  const top=new THREE.Mesh(new THREE.BoxGeometry(170,48,170),darkStone);
-  top.position.y=540;top.castShadow=true;top.receiveShadow=true;group.add(top);
-  const core=new THREE.Mesh(new THREE.SphereGeometry(26,24,24),glowMat);
-  core.position.y=360;group.add(core);
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),darkStone);
+  base.position.y=.3;base.castShadow=true;base.receiveShadow=true;group.add(base);
+  const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));
+  tower.position.y=2.3;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);
+  const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),darkStone);
+  top.position.y=4.35;top.castShadow=true;top.receiveShadow=true;group.add(top);
+  const core=new THREE.Mesh(new THREE.SphereGeometry(.45,20,20),glowMat);
+  core.position.y=2.9;group.add(core);
   scene.add(group);
-  return {group,core};
+  return {group,core,size:{height:4.7,width:11.6}};
 }
 
 const totem=addTotem();
-const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(110,110,24,64),stoneMats[1]);
-centerDisc.position.y=12;centerDisc.castShadow=true;centerDisc.receiveShadow=true;scene.add(centerDisc);
+const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(9,9,.28,64),stoneMats[1]);
+centerDisc.position.y=.14;centerDisc.castShadow=true;centerDisc.receiveShadow=true;scene.add(centerDisc);
 
 {
   let currentInner=130;
@@ -247,6 +293,7 @@ function animate(nowMs){
   lastTime=time;
   totem.group.rotation.y=Math.sin(time*.18)*.025;
   totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);
+  grimReaperKit.update(dt,time);
   for(const item of parts){
     const local=clamp01((time-item.delay)/MOVE_SECONDS);
     const radialEase=easeOutCubic(local);
@@ -265,7 +312,7 @@ function animate(nowMs){
   requestAnimationFrame(animate);
 }
 
-window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"opening scene active with wasd-pan-kit"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"house-scale totem with grim-reaper-kit smoke placeholder"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
   </script>
