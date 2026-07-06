@@ -1,0 +1,40 @@
+{
+  "schema": "phantom-command.kill-rewards.v1",
+  "version": "0.1.0",
+  "rewards": {
+    "living_soldier": {
+      "resources": { "souls": 12 },
+      "xp": 8,
+      "corpse": "human_corpse"
+    },
+    "hunter": {
+      "resources": { "souls": 14 },
+      "xp": 10,
+      "corpse": "human_corpse"
+    },
+    "cleric": {
+      "resources": { "souls": 18 },
+      "xp": 20,
+      "corpse": "consecrated_corpse"
+    },
+    "knight": {
+      "resources": { "souls": 25, "bone": 4 },
+      "xp": 18,
+      "corpse": "armored_corpse"
+    },
+    "pyre_engine": {
+      "resources": { "souls": 10, "bone": 18 },
+      "xp": 30,
+      "corpse": null
+    },
+    "totem_guard": {
+      "resources": { "souls": 35, "bone": 10 },
+      "xp": 35,
+      "corpse": "cursed_guard_corpse"
+    }
+  },
+  "idempotency": {
+    "rewardKey": "defeatId",
+    "ledger": "processedDefeatRewards"
+  }
+}
