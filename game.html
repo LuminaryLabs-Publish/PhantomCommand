@@ -10,7 +10,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;fon
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: chiseled stone sections, camera starts 40m, scroll zoom 10m to 500m</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: 0.25x construct animation, camera starts 80m, scroll zoom 10m to 500m</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -28,7 +28,7 @@ scene.fog=new THREE.Fog(0x51565a,9000,30000);
 
 const CAMERA_MIN_ZOOM=10;
 const CAMERA_MAX_ZOOM=500;
-const CAMERA_DEFAULT_ZOOM=40;
+const CAMERA_DEFAULT_ZOOM=80;
 const CAMERA_PITCH_Z_RATIO=.62;
 let cameraZoom=CAMERA_DEFAULT_ZOOM;
 let cameraZoomTarget=CAMERA_DEFAULT_ZOOM;
@@ -62,9 +62,9 @@ const RING_WIDTH_GROWTH=1.25;
 const MAX_RING_WIDTH=120;
 const SLAB_HEIGHT=1.18;
 const CENTER_PLATFORM_HEIGHT=1.18;
-const MOVE_SECONDS=2;
-const RING_STAGGER=.10;
-const PART_STAGGER=.03;
+const MOVE_SECONDS=8;
+const RING_STAGGER=.40;
+const PART_STAGGER=.12;
 const OFFSCREEN_EXTRA=12000;
 const STONE_DETAIL={seamGrooveWidth:.18,seamGrooveDepth:.035,bevelScale:.13,chipAmountMin:.12,chipAmountMax:1.8,crackCountMin:2,crackCountMax:5,crackWidthMin:.06,crackWidthMax:.22,aoStripOpacity:.32,aoCrackOpacity:.48,aoUndersideOpacity:.24};
 const parts=[];
@@ -195,7 +195,7 @@ const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));cons
 
 function animate(nowMs){const time=nowMs*.001;const dt=Math.min(.05,lastTime?time-lastTime:1/60);lastTime=time;totem.group.rotation.y=Math.sin(time*.18)*.025;totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);grimReaperKit.update(dt,time);for(const item of parts){const local=clamp01((time-item.delay)/MOVE_SECONDS);const radialEase=easeOutCubic(local);const descend=smoothstep((local-.60)/.40);const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*18;item.group.position.copy(pos);item.group.rotation.set(0,item.finalRotationY,0);}cameraZoom+=(cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));const pan=wasdPanKit.update(dt);const cameraOffset=new THREE.Vector3(0,cameraZoom,cameraZoom*CAMERA_PITCH_Z_RATIO);const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);camera.position.copy(pan).add(cameraOffset);camera.lookAt(pan.clone().add(targetOffset));renderer.render(scene,camera);requestAnimationFrame(animate);}
 
-window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},fog:{color:"dark grey",near:9000,far:30000},note:"original ring animation preserved; camera source is 40m/500m; row growth is 25%"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,minPartsPerRing:MIN_PARTS_PER_RING,maxPartsPerRing:MAX_PARTS_PER_RING,targetMaxWedgeArc:TARGET_MAX_WEDGE_ARC,pieces:parts.length,ringParts:ringSpecs.map(spec=>spec.partsPerRing),firstInnerRadius:FIRST_INNER_RADIUS,firstRingWidth:FIRST_RING_WIDTH,ringWidthGrowth:RING_WIDTH_GROWTH,maxRingWidth:MAX_RING_WIDTH,slabHeight:SLAB_HEIGHT,animation:{speedScale:.25,moveSeconds:MOVE_SECONDS,ringStagger:RING_STAGGER,partStagger:PART_STAGGER},centerPlatform:{radius:FIRST_INNER_RADIUS-.35,height:CENTER_PLATFORM_HEIGHT},camera:{defaultHeight:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget},buildSeconds:totalBuildTime,totem:totem.size,grimReaperKit:grimReaperKit.getState(),wasdPanKit:wasdPanKit.getState(),chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},fog:{color:"dark grey",near:9000,far:30000},note:"original ring animation preserved at 0.25x speed; camera starts at 80m; row growth is 25%"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
 </script>
