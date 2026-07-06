@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Phantom Command - Opening Scene</title>
 <style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#dfe8ef;font-family:system-ui,sans-serif}#game{display:block;width:100vw;height:100vh}.hud{position:fixed;top:14px;left:14px;padding:10px 12px;border:1px solid rgba(0,0,0,.14);background:rgba(255,255,255,.9);border-radius:10px;pointer-events:none;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.1)}.hud h1{margin:0 0 4px;font-size:14px;letter-spacing:.08em;text-transform:uppercase}.hud p{margin:0;font-size:12px;opacity:.74}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#51565a;font-family:system-ui,sans-serif}#game{display:block;width:100vw;height:100vh}.hud{position:fixed;top:14px;left:14px;padding:10px 12px;border:1px solid rgba(0,0,0,.14);background:rgba(235,238,240,.9);border-radius:10px;pointer-events:none;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.1)}.hud h1{margin:0 0 4px;font-size:14px;letter-spacing:.08em;text-transform:uppercase}.hud p{margin:0;font-size:12px;opacity:.74}
 </style>
 </head>
 <body>
 <canvas id="game"></canvas>
-<aside class="hud"><h1>Phantom Command</h1><p>Opening construct scene: 20 rings, 5 wedges, 1.5x layer growth</p></aside>
+<aside class="hud"><h1>Phantom Command</h1><p>Opening scene: WASD camera pan kit, soft bounds, pullback force, darker far fog</p></aside>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
 
@@ -18,13 +18,13 @@ const canvas=document.getElementById("game");
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,logarithmicDepthBuffer:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
 renderer.setSize(innerWidth,innerHeight);
-renderer.setClearColor(0xdfe8ef,1);
+renderer.setClearColor(0x51565a,1);
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0xdfe8ef);
-scene.fog=new THREE.FogExp2(0xdfe8ef,.00018);
+scene.background=new THREE.Color(0x51565a);
+scene.fog=new THREE.Fog(0x51565a,9000,30000);
 
 const camera=new THREE.PerspectiveCamera(42,innerWidth/innerHeight,10,500000);
 const lookTarget=new THREE.Vector3(0,120,0);
@@ -66,6 +66,42 @@ function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
 function easeOutCubic(t){return 1-Math.pow(1-t,3);}
 function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
 function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
+
+function createWasdPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing=10,pullbackForce=4.8}={}){
+  const keys=new Set();
+  const target=new THREE.Vector3();
+  const current=new THREE.Vector3();
+  const velocity=new THREE.Vector3();
+  addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright"].includes(k)){keys.add(k);e.preventDefault();}});
+  addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
+  addEventListener("blur",()=>keys.clear());
+  function signedPull(v){const over=Math.abs(v)-softLimit;if(over<=0)return 0;return -Math.sign(v)*over*pullbackForce;}
+  function clampHard(v){return Math.max(-hardLimit,Math.min(hardLimit,v));}
+  return {
+    id:"wasd-pan-kit",
+    update(dt){
+      const x=(keys.has("d")||keys.has("arrowright")?1:0)-(keys.has("a")||keys.has("arrowleft")?1:0);
+      const z=(keys.has("s")||keys.has("arrowdown")?1:0)-(keys.has("w")||keys.has("arrowup")?1:0);
+      const input=new THREE.Vector3(x,0,z);
+      if(input.lengthSq()>1) input.normalize();
+      velocity.x+=input.x*panSpeed*dt+signedPull(target.x)*dt;
+      velocity.z+=input.z*panSpeed*dt+signedPull(target.z)*dt;
+      velocity.multiplyScalar(Math.pow(.06,dt));
+      target.x=clampHard(target.x+velocity.x*dt);
+      target.z=clampHard(target.z+velocity.z*dt);
+      if(!keys.size){
+        target.x+=signedPull(target.x)*dt*.12;
+        target.z+=signedPull(target.z)*dt*.12;
+      }
+      const alpha=1-Math.exp(-smoothing*dt);
+      current.lerp(target,alpha);
+      return current;
+    },
+    getState(){return{target:{x:target.x,z:target.z},current:{x:current.x,z:current.z},softLimit,hardLimit,pullbackForce};}
+  };
+}
+
+const wasdPanKit=createWasdPanKit();
 
 function createLocalCenteredWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
   const localA0=-span*.5+seamInset;
@@ -195,7 +231,7 @@ for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
   }
 }
 
-const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0xf7f9fb,transparent:true,opacity:.72}));
+const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0x5d6266,transparent:true,opacity:.46}));
 cloudPlane.rotation.x=-Math.PI/2;
 cloudPlane.position.y=-500;
 scene.add(cloudPlane);
@@ -203,9 +239,12 @@ scene.add(cloudPlane);
 const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
 const tenLayerFinishTime=9*RING_STAGGER+(PARTS_PER_RING-1)*PART_STAGGER+MOVE_SECONDS;
 const zoomDuration=3;
+let lastTime=0;
 
 function animate(nowMs){
   const time=nowMs*.001;
+  const dt=Math.min(.05,lastTime?time-lastTime:1/60);
+  lastTime=time;
   totem.group.rotation.y=Math.sin(time*.18)*.025;
   totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08);
   for(const item of parts){
@@ -218,14 +257,15 @@ function animate(nowMs){
     item.group.rotation.set(0,item.finalRotationY,0);
   }
   const zoomProgress=smoothstep((time-tenLayerFinishTime)/zoomDuration);
-  const camPos=new THREE.Vector3().lerpVectors(farCameraPos,nearCameraPos,zoomProgress);
-  camera.position.copy(camPos);
-  camera.lookAt(lookTarget);
+  const baseCamPos=new THREE.Vector3().lerpVectors(farCameraPos,nearCameraPos,zoomProgress);
+  const pan=wasdPanKit.update(dt);
+  camera.position.copy(baseCamPos).add(pan);
+  camera.lookAt(lookTarget.clone().add(pan));
   renderer.render(scene,camera);
   requestAnimationFrame(animate);
 }
 
-window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,note:"opening scene active"};}};
+window.GameHost={getState(){return{rings:RING_COUNT,partsPerRing:PARTS_PER_RING,pieces:parts.length,buildSeconds:totalBuildTime,zoomStartsAfterSeconds:tenLayerFinishTime,wasdPanKit:wasdPanKit.getState(),fog:{color:"dark grey",near:9000,far:30000},note:"opening scene active with wasd-pan-kit"};}};
 window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
 requestAnimationFrame(animate);
   </script>
