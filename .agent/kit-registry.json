@@ -1,0 +1,461 @@
+{
+  "schema": "nexus.agent.kit-registry.v1",
+  "repo": "LuminaryLabs-Publish/PhantomCommand",
+  "updatedAt": "2026-07-07T04:21:15-04:00",
+  "status": "follow-up-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T04-21-15-04-00/project-breakdown.md",
+  "currentRuntime": {
+    "type": "static-vite-three-app",
+    "entrypoints": [
+      "index.html",
+      "game.html"
+    ],
+    "primaryGap": "The runtime is still mostly inline in game.html and is not yet driven by config-backed RTS services."
+  },
+  "kits": [
+    {
+      "id": "construct-spiral-intro-kit",
+      "status": "implemented-source-kit",
+      "domainPath": "n:sequence:construct:spiral-intro",
+      "sourceFiles": [
+        "src/kits/construct-spiral-intro-kit/index.js",
+        "tests/construct-spiral-intro-kit-smoke.mjs"
+      ],
+      "provides": [
+        "createConstructSpiralIntroSchedule",
+        "createConstructSpiralIntroKit",
+        "installPieces",
+        "reset",
+        "update",
+        "snapshot",
+        "schedule",
+        "activePieces",
+        "settledPieces",
+        "pendingPieces",
+        "newlyActivePieces",
+        "newlySettledPieces",
+        "getPieceProgress",
+        "getPieceStatus"
+      ],
+      "requires": [
+        "piece descriptors with ringIndex, partIndex, and partsPerRing",
+        "dt tick source"
+      ],
+      "blockers": [
+        "Not yet wired into game.html live scene."
+      ]
+    },
+    {
+      "id": "phantom-command-static-app-shell-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "index.html"
+      ],
+      "provides": [
+        "renderMenu",
+        "routeToGame",
+        "openSceneDirectly"
+      ],
+      "requires": [
+        "static deploy paths"
+      ],
+      "blockers": [
+        "Menu remains hardcoded HTML/CSS/JS."
+      ]
+    },
+    {
+      "id": "phantom-command-construct-scene-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "bootConstructScene",
+        "createScene",
+        "createLighting",
+        "createFogPlane",
+        "tickConstructScene"
+      ],
+      "requires": [
+        "Three.js renderer",
+        "construct spiral scheduling",
+        "camera navigation",
+        "HUD diagnostics"
+      ],
+      "blockers": [
+        "Current implementation is still inline in game.html."
+      ]
+    },
+    {
+      "id": "phantom-command-ritual-ring-geometry-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "generateRingSpecs",
+        "partsForRing",
+        "createWedgeGeometry",
+        "createRingPieceDescriptor",
+        "seededStoneVariation"
+      ],
+      "requires": [
+        "ring geometry constants",
+        "seeded random helper"
+      ],
+      "blockers": [
+        "Geometry and animation are currently coupled."
+      ]
+    },
+    {
+      "id": "phantom-command-wedge-detail-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "addSeams",
+        "addCracks",
+        "assignStoneMaterial"
+      ],
+      "requires": [
+        "wedge meshes",
+        "material palette"
+      ],
+      "blockers": [
+        "Detail generation lives inside makePiece."
+      ]
+    },
+    {
+      "id": "phantom-command-construct-animation-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html",
+        "src/kits/construct-spiral-intro-kit/index.js"
+      ],
+      "provides": [
+        "applyPieceTransform",
+        "computeDropProgress",
+        "computeRadialProgress",
+        "computePhase",
+        "skip",
+        "restart"
+      ],
+      "requires": [
+        "construct-spiral-intro-kit",
+        "piece start/final transforms"
+      ],
+      "blockers": [
+        "Live scene still uses custom inline construct timing instead of the kit."
+      ]
+    },
+    {
+      "id": "phantom-command-totem-visual-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "createCenterDisc",
+        "createTotemBase",
+        "createGlowCore",
+        "createOrbitRing"
+      ],
+      "requires": [
+        "Three.js scene",
+        "materials"
+      ],
+      "blockers": [
+        "Visual object has no gameplay objective state bridge."
+      ]
+    },
+    {
+      "id": "phantom-command-phantom-commander-visual-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "createCommanderBody",
+        "createSmokePoints",
+        "tickSmoke",
+        "tickHover"
+      ],
+      "requires": [
+        "Three.js scene",
+        "time source"
+      ],
+      "blockers": [
+        "Visual has no selection, command, or faction domain link."
+      ]
+    },
+    {
+      "id": "phantom-command-camera-navigation-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "panFromKeys",
+        "zoomFromWheel",
+        "clampTarget",
+        "smoothCameraTarget",
+        "applyCameraPose"
+      ],
+      "requires": [
+        "input state",
+        "camera",
+        "bounds"
+      ],
+      "blockers": [
+        "Camera target state is local to game.html."
+      ]
+    },
+    {
+      "id": "phantom-command-hud-diagnostics-kit",
+      "status": "candidate-extraction",
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "setProgress",
+        "setConstructedCount",
+        "setPhase",
+        "setStatus",
+        "showError"
+      ],
+      "requires": [
+        "DOM elements",
+        "scene/construct state"
+      ],
+      "blockers": [
+        "HUD reads inline local values, not GameHost state."
+      ]
+    },
+    {
+      "id": "phantom-command-gamehost-kit",
+      "status": "recommended-next",
+      "sourceFiles": [],
+      "provides": [
+        "window.GameHost.getState",
+        "window.GameHost.getDiagnostics",
+        "window.GameHost.restart",
+        "window.GameHost.dispatch"
+      ],
+      "requires": [
+        "construct state",
+        "scenario state",
+        "input command queue"
+      ],
+      "blockers": [
+        "No GameHost surface is currently exposed."
+      ]
+    },
+    {
+      "id": "phantom-scenario-config-kit",
+      "status": "recommended-next",
+      "sourceFiles": [
+        "config/scenario-001.config.json",
+        "config/map-generation.config.json",
+        "config/enemy-waves.config.json",
+        "config/experience.config.json",
+        "config/unlocks.config.json"
+      ],
+      "provides": [
+        "loadScenarioConfig",
+        "loadMapConfig",
+        "loadEnemyWaveConfig",
+        "loadExperienceConfig",
+        "loadUnlockConfig",
+        "composeInitialScenarioState"
+      ],
+      "requires": [
+        "static JSON fetch",
+        "schema validation"
+      ],
+      "blockers": [
+        "Config files are not yet loaded by the runtime."
+      ]
+    },
+    {
+      "id": "phantom-map-generation-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/map-generation.config.json"
+      ],
+      "provides": [
+        "generateRadialRings",
+        "placePlayerStart",
+        "placeResourceNodes",
+        "placeEnemyCamps",
+        "placeWaveLanes",
+        "placeCenterTotem"
+      ],
+      "requires": [
+        "map-generation config",
+        "seeded random"
+      ],
+      "blockers": [
+        "Map config is not represented visually or interactively yet."
+      ]
+    },
+    {
+      "id": "world-economy-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/scenario-001.config.json",
+        "config/map-generation.config.json"
+      ],
+      "provides": [
+        "getBalance",
+        "canAfford",
+        "payCost",
+        "grantResources",
+        "tickResourceNodes"
+      ],
+      "requires": [
+        "resource node config",
+        "scenario starting resources"
+      ],
+      "blockers": [
+        "No runtime economy ledger yet."
+      ]
+    },
+    {
+      "id": "experience-progression-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/experience.config.json"
+      ],
+      "provides": [
+        "grantExperience",
+        "checkRankThresholds",
+        "grantMasteryPoints",
+        "trackProcessedExperienceEvents"
+      ],
+      "requires": [
+        "experience config",
+        "sourceEventId ledger"
+      ],
+      "blockers": [
+        "No gameplay event stream exists yet."
+      ]
+    },
+    {
+      "id": "unlock-registry-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/unlocks.config.json"
+      ],
+      "provides": [
+        "isUnlocked",
+        "evaluateRequirements",
+        "claimUnlock",
+        "trackProcessedUnlockClaims"
+      ],
+      "requires": [
+        "unlock config",
+        "economy/building/progression state"
+      ],
+      "blockers": [
+        "No runtime state model exists for requirements."
+      ]
+    },
+    {
+      "id": "pve-director-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/enemy-waves.config.json",
+        "config/map-generation.config.json"
+      ],
+      "provides": [
+        "scheduleWaves",
+        "chooseWaveLane",
+        "spawnDueWaves",
+        "selectAttackTarget",
+        "trackTotemPhaseWaves"
+      ],
+      "requires": [
+        "enemy wave config",
+        "wave lane config",
+        "scenario time"
+      ],
+      "blockers": [
+        "No enemy actor runtime yet."
+      ]
+    },
+    {
+      "id": "rts-command-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [],
+      "provides": [
+        "selectUnits",
+        "requestMove",
+        "requestAttack",
+        "requestBuild",
+        "requestProduce"
+      ],
+      "requires": [
+        "input adapter",
+        "unit/building state",
+        "command validation"
+      ],
+      "blockers": [
+        "No RTS interaction layer exists yet."
+      ]
+    },
+    {
+      "id": "rts-combat-resolution-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [],
+      "provides": [
+        "validateTarget",
+        "resolveAttack",
+        "applyDamage",
+        "emitDefeated"
+      ],
+      "requires": [
+        "unit stats",
+        "enemy stats",
+        "targeting commands"
+      ],
+      "blockers": [
+        "No units/enemies are simulated yet."
+      ]
+    },
+    {
+      "id": "scenario-objective-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": [
+        "config/scenario-001.config.json"
+      ],
+      "provides": [
+        "evaluateObjectives",
+        "markObjectiveComplete",
+        "evaluateWinCondition",
+        "evaluateLoseCondition"
+      ],
+      "requires": [
+        "scenario state",
+        "building state",
+        "enemy camp state"
+      ],
+      "blockers": [
+        "Scenario objectives are config-only."
+      ]
+    }
+  ],
+  "nextRecommendedSlice": {
+    "id": "phantom-command-config-backed-rts-bootstrap",
+    "summary": "Wire the existing construct intro kit into the live scene, expose GameHost, load config JSON, and transition into a fixed RTS scenario state after the construct completes.",
+    "minimumChecklist": [
+      "Keep index.html as menu shell.",
+      "Convert game.html to markup plus src/main.js import.",
+      "Use construct-spiral-intro-kit for construct scheduling.",
+      "Add phantom-command-gamehost-kit.",
+      "Load scenario/map/wave/experience/unlock config.",
+      "Render initial fixed RTS scenario descriptors.",
+      "Add smoke test for scenario bootstrap and objective completion."
+    ]
+  }
+}
