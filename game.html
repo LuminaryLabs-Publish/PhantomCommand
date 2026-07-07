@@ -1,407 +1,56 @@
 <!doctype html>
 <html lang="en">
+<!-- phantom-command-build: immediate-construct-v3 -->
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Phantom Command - Opening Scene</title>
+<title>Phantom Command - Immediate Construct</title>
 <style>
-:root{color-scheme:dark}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1f2327;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-#game{display:block;width:100vw;height:100vh;outline:none}
-.panel{position:fixed;z-index:2;color:#e9edf0;background:rgba(15,18,21,.72);border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 60px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
-.hud{top:16px;left:16px;max-width:340px;padding:14px 16px;border-radius:14px}
-.hud h1{margin:0 0 6px;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#f4f7fb}
-.hud p{margin:0 0 10px;font-size:12px;line-height:1.45;color:#bfc8cf}
-.readout{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:10px;font-size:12px;color:#dfe5ea}
-.readout span:nth-child(even){font-variant-numeric:tabular-nums;color:#fff}
-.meter{height:6px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.12)}
-.meter i{display:block;width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,#8fa7bd,#f0f6ff)}
-.controls{right:16px;bottom:16px;padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.55;color:#d8e0e6}
-.controls b{color:#fff}
-.badge{display:inline-block;margin-top:8px;padding:4px 8px;border-radius:999px;background:rgba(158,190,218,.16);border:1px solid rgba(196,221,243,.18);color:#f2f7ff;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
-button{margin-top:10px;margin-right:6px;padding:6px 9px;color:#ecf2f7;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;cursor:pointer}
-button:hover{background:rgba(255,255,255,.14)}
-#errorPanel{display:none;position:fixed;inset:24px;z-index:5;padding:18px;border-radius:14px;white-space:pre-wrap;color:#ffe8e8;background:rgba(70,20,20,.92);border:1px solid rgba(255,160,160,.3)}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#20252a;font-family:system-ui,sans-serif;color:#edf3f8}#game{display:block;width:100vw;height:100vh}.panel{position:fixed;z-index:2;background:rgba(12,15,18,.78);border:1px solid rgba(255,255,255,.14);box-shadow:0 16px 48px rgba(0,0,0,.35);backdrop-filter:blur(10px);border-radius:14px}.hud{top:16px;left:16px;width:340px;padding:14px 16px}.hud h1{margin:0 0 6px;font-size:14px;letter-spacing:.12em;text-transform:uppercase}.hud p{margin:0 0 10px;color:#c7d0d8;font-size:12px;line-height:1.45}.meter{height:7px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}.meter i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#9fb4c6,#f5fbff)}.readout{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:10px;font-size:12px}.controls{right:16px;bottom:16px;padding:10px 12px;font-size:12px;line-height:1.55;color:#d8e0e6}button{margin-top:8px;margin-right:6px;padding:6px 9px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eef5fb;cursor:pointer}#errorPanel{display:none;position:fixed;inset:24px;z-index:5;padding:18px;background:#451b1b;color:#ffe8e8;border-radius:14px;white-space:pre-wrap}
 </style>
 </head>
 <body>
-<canvas id="game" role="application" aria-label="Phantom Command opening scene"></canvas>
-<aside class="panel hud" aria-label="Game HUD">
-  <h1>Phantom Command</h1>
-  <p id="statusText">Opening scene: command platform reconstructing from radial stone sections.</p>
-  <div class="meter" aria-hidden="true"><i id="progressBar"></i></div>
-  <div class="readout">
-    <span>Constructed</span><span id="pieceCount">0 / 0</span>
-    <span>Phase</span><span id="phaseText">forming</span>
-    <span>Camera</span><span id="cameraText">orbit</span>
-  </div>
-  <span class="badge" id="badgeText">Opening sequence</span>
-</aside>
-<aside class="panel controls" aria-label="Controls">
-  <b>Controls</b><br>
-  WASD / arrows: pan<br>
-  Mouse wheel: zoom<br>
-  Space: skip construct<br>
-  R: restart sequence<br>
-  <button id="skipBtn">Skip</button><button id="resetBtn">Restart</button>
-</aside>
+<canvas id="game"></canvas>
+<aside class="panel hud"><h1>Phantom Command</h1><p id="status">Immediate construct v3: slabs are visible and moving on frame one.</p><div class="meter"><i id="bar"></i></div><div class="readout"><span>Constructed</span><span id="count">0 / 0</span><span>Phase</span><span id="phase">forming</span><span>Build</span><span>v3</span></div></aside>
+<aside class="panel controls"><b>Controls</b><br>WASD / arrows: pan<br>Mouse wheel: zoom<br>Space: skip<br>R: restart<br><button id="skip">Skip</button><button id="restart">Restart</button></aside>
 <section id="errorPanel" role="alert"></section>
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.160.0/build/three.module.js";
-
-const canvas=document.getElementById("game");
-const statusText=document.getElementById("statusText");
-const progressBar=document.getElementById("progressBar");
-const pieceCount=document.getElementById("pieceCount");
-const phaseText=document.getElementById("phaseText");
-const cameraText=document.getElementById("cameraText");
-const badgeText=document.getElementById("badgeText");
-const errorPanel=document.getElementById("errorPanel");
-
-const state={
-  phase:"forming",
-  startedAt:0,
-  time:0,
-  complete:false,
-  skipped:false,
-  progress:0,
-  completedPieces:0,
-  cameraMode:"orbit"
-};
-
-function showFatal(error){
-  errorPanel.style.display="block";
-  errorPanel.textContent=String(error?.stack||error?.message||error);
-}
-
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,logarithmicDepthBuffer:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-renderer.setSize(innerWidth,innerHeight);
-renderer.setClearColor(0x1f2327,1);
-renderer.shadowMap.enabled=true;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.08;
-
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x252a2e);
-scene.fog=new THREE.Fog(0x252a2e,900,7200);
-
-const CAMERA_MIN_ZOOM=24;
-const CAMERA_MAX_ZOOM=620;
-const CAMERA_DEFAULT_ZOOM=120;
-const CAMERA_PITCH_Z_RATIO=.74;
-let cameraZoom=CAMERA_DEFAULT_ZOOM;
-let cameraZoomTarget=CAMERA_DEFAULT_ZOOM;
-let orbitAngle=-.42;
-
-const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,500000);
-scene.add(new THREE.AmbientLight(0xdbe7f2,.72));
-const sun=new THREE.DirectionalLight(0xffffff,1.45);
-sun.position.set(-900,2300,1200);
-sun.castShadow=true;
-sun.shadow.mapSize.set(2048,2048);
-sun.shadow.camera.left=-9000;
-sun.shadow.camera.right=9000;
-sun.shadow.camera.top=9000;
-sun.shadow.camera.bottom=-9000;
-scene.add(sun);
-const fill=new THREE.DirectionalLight(0x9ebbea,.55);
-fill.position.set(2200,1000,-1800);
-scene.add(fill);
-
 const RING_COUNT=10;
+const TARGET_MAX_WEDGE_ARC=70;
 const MIN_PARTS_PER_RING=5;
 const MAX_PARTS_PER_RING=32;
-const TARGET_MAX_WEDGE_ARC=70;
 const FIRST_INNER_RADIUS=10;
 const FIRST_RING_WIDTH=7;
 const RING_WIDTH_GROWTH=1.25;
 const MAX_RING_WIDTH=120;
 const SLAB_HEIGHT=1.18;
-const CENTER_PLATFORM_HEIGHT=1.18;
-const MOVE_SECONDS=5.2;
-const DROP_START_SECONDS=.65;
-const RING_STAGGER=.26;
-const PART_STAGGER=.07;
-const START_RADIUS_MULTIPLIER=1.82;
-const START_HEIGHT_BASE=150;
-const START_HEIGHT_RING_STEP=20;
-const STONE_DETAIL={seamGrooveWidth:.18,bevelScale:.13,chipAmountMin:.12,chipAmountMax:1.8,crackCountMin:2,crackCountMax:5,crackWidthMin:.06,crackWidthMax:.22,aoStripOpacity:.32,aoCrackOpacity:.48,aoUndersideOpacity:.24};
-
-const parts=[];
-const ringSpecs=[];
-
-const mkMat=color=>new THREE.MeshStandardMaterial({color,roughness:.95,metalness:.02,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
-const stoneMats=[0x6f6f6b,0x85847e,0x5d5e5c,0x97958d,0x74746f].map(mkMat);
-const darkStone=mkMat(0x4f5050);
-const lipMat=new THREE.MeshStandardMaterial({color:0x9a9890,roughness:.92,metalness:.01,polygonOffset:true,polygonOffsetFactor:-.5,polygonOffsetUnits:-.5});
-const seamAoMat=new THREE.MeshBasicMaterial({color:0x151718,transparent:true,opacity:STONE_DETAIL.aoStripOpacity,depthWrite:false});
-const crackAoMat=new THREE.MeshBasicMaterial({color:0x101112,transparent:true,opacity:STONE_DETAIL.aoCrackOpacity,depthWrite:false});
-const undersideAoMat=new THREE.MeshBasicMaterial({color:0x0d0f10,transparent:true,opacity:STONE_DETAIL.aoUndersideOpacity,depthWrite:false,side:THREE.DoubleSide});
-const glowMat=new THREE.MeshStandardMaterial({color:0xf6fbff,emissive:0xb8d2ff,emissiveIntensity:.75,roughness:.45,metalness:.05});
-
-function clamp01(v){return Math.max(0,Math.min(1,v));}
-function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
-function smoothstep(t){t=clamp01(t);return t*t*(3-2*t);}
-function easeOutCubic(t){return 1-Math.pow(1-t,3);}
-function polar(radius,theta){return new THREE.Vector3(Math.cos(theta)*radius,0,Math.sin(theta)*radius);}
-function roughValue(seed,i){const n=Math.sin(seed*91.7+i*17.13)*43758.5453;return n-Math.floor(n);}
-function getPartsForRing(innerR,outerR){const midR=(innerR+outerR)*.5;const arcCount=Math.ceil((Math.PI*2*midR)/TARGET_MAX_WEDGE_ARC);return clamp(arcCount,MIN_PARTS_PER_RING,MAX_PARTS_PER_RING);}
-function localPolarPoint(radius,angle,midR,y=0){return new THREE.Vector3(Math.cos(angle)*radius-midR,y,Math.sin(angle)*radius);}
-function addOrientedBox(parent,center,length,thickness,width,angle,mat){const mesh=new THREE.Mesh(new THREE.BoxGeometry(length,thickness,width),mat);mesh.position.copy(center);mesh.rotation.y=-angle;parent.add(mesh);return mesh;}
-
-canvas.addEventListener("wheel",e=>{e.preventDefault();cameraZoomTarget=clamp(cameraZoomTarget+e.deltaY*.08,CAMERA_MIN_ZOOM,CAMERA_MAX_ZOOM);},{passive:false});
-
-function createInputPanKit({softLimit=5200,hardLimit=6500,panSpeed=1350,smoothing=10,pullbackForce=4.8}={}){
-  const keys=new Set();const target=new THREE.Vector3();const current=new THREE.Vector3();const velocity=new THREE.Vector3();
-  addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(["w","a","s","d","arrowup","arrowdown","arrowleft","arrowright"].includes(k)){keys.add(k);e.preventDefault();}if(k===" "){skipConstruct();e.preventDefault();}if(k==="r"){restartConstruct();e.preventDefault();}});
-  addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
-  addEventListener("blur",()=>keys.clear());
-  function signedPull(v){const over=Math.abs(v)-softLimit;if(over<=0)return 0;return -Math.sign(v)*over*pullbackForce;}
-  function clampHard(v){return Math.max(-hardLimit,Math.min(hardLimit,v));}
-  return {id:"input-pan-kit",update(dt){const x=(keys.has("d")||keys.has("arrowright")?1:0)-(keys.has("a")||keys.has("arrowleft")?1:0);const z=(keys.has("s")||keys.has("arrowdown")?1:0)-(keys.has("w")||keys.has("arrowup")?1:0);const input=new THREE.Vector3(x,0,z);if(input.lengthSq()>1)input.normalize();velocity.x+=input.x*panSpeed*dt+signedPull(target.x)*dt;velocity.z+=input.z*panSpeed*dt+signedPull(target.z)*dt;velocity.multiplyScalar(Math.pow(.06,dt));target.x=clampHard(target.x+velocity.x*dt);target.z=clampHard(target.z+velocity.z*dt);if(!keys.size){target.x+=signedPull(target.x)*dt*.12;target.z+=signedPull(target.z)*dt*.12;}const alpha=1-Math.exp(-smoothing*dt);current.lerp(target,alpha);return current;},getState(){return{target:{x:target.x,z:target.z},current:{x:current.x,z:current.z},softLimit,hardLimit,pullbackForce};}};
-}
-
-function createPhantomCommanderKit({position=new THREE.Vector3(12,CENTER_PLATFORM_HEIGHT,10),particleCount=120}={}){
-  const group=new THREE.Group();group.position.copy(position);
-  const cloakMat=new THREE.MeshStandardMaterial({color:0x101216,roughness:.95,metalness:.02});
-  const anchor=new THREE.Mesh(new THREE.CylinderGeometry(.45,.74,2.15,10),cloakMat);anchor.position.y=1.05;anchor.castShadow=true;anchor.receiveShadow=true;group.add(anchor);
-  const hood=new THREE.Mesh(new THREE.SphereGeometry(.72,16,14),cloakMat);hood.scale.set(1,.72,1);hood.position.y=2.25;hood.castShadow=true;group.add(hood);
-  const scytheMat=new THREE.MeshStandardMaterial({color:0x171a1d,roughness:.76,metalness:.28});
-  const staff=new THREE.Mesh(new THREE.CylinderGeometry(.055,.07,3.9,8),scytheMat);staff.position.set(.92,1.95,-.14);staff.rotation.z=-.15;group.add(staff);
-  const blade=new THREE.Mesh(new THREE.TorusGeometry(.44,.035,8,24,Math.PI*1.05),scytheMat);blade.position.set(1.12,3.76,-.18);blade.rotation.set(Math.PI*.15,0,Math.PI*.35);group.add(blade);
-  const smokeGeometry=new THREE.BufferGeometry();const positions=new Float32Array(particleCount*3);const seeds=[];
-  for(let i=0;i<particleCount;i++){seeds.push({angle:roughValue(7,i)*Math.PI*2,radius:.35+roughValue(11,i)*1.25,height:roughValue(13,i)*4,speed:.35+roughValue(17,i)*.8,phase:roughValue(19,i)*10});}
-  smokeGeometry.setAttribute("position",new THREE.BufferAttribute(positions,3));
-  const smokeMaterial=new THREE.PointsMaterial({color:0x22282c,size:1.75,transparent:true,opacity:.62,depthWrite:false,sizeAttenuation:true});
-  const smoke=new THREE.Points(smokeGeometry,smokeMaterial);smoke.position.y=.55;group.add(smoke);scene.add(group);
-  return {id:"phantom-commander-kit",entityId:"phantom-commander",group,update(dt,time){for(let i=0;i<particleCount;i++){const s=seeds[i];const y=(s.height+time*s.speed)%4.4;const drift=Math.sin(time*.8+s.phase)*.35;const radius=s.radius+y*.18;const angle=s.angle+Math.sin(time*.25+s.phase)*.4;positions[i*3]=Math.cos(angle)*radius+drift;positions[i*3+1]=y;positions[i*3+2]=Math.sin(angle)*radius;}smokeGeometry.attributes.position.needsUpdate=true;smokeMaterial.opacity=.45+Math.sin(time*1.6)*.1;group.rotation.y=Math.sin(time*.45)*.18;group.position.y=position.y+Math.sin(time*1.2)*.12;},getState(){return{entityId:"phantom-commander",position:{x:group.position.x,y:group.position.y,z:group.position.z},particleCount};}};
-}
-
-function createChiseledStoneWedgeGeometry(innerR,outerR,span,seamInset,height,seed){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;const shape=new THREE.Shape();const steps=48;
-  const chipAmount=Math.min(STONE_DETAIL.chipAmountMax,Math.max(STONE_DETAIL.chipAmountMin,ringWidth*.035));
-  function edgeChipRadius(base,i,amount,edgeKind){const n=roughValue(seed+(edgeKind==="outer"?13:31),i);const jag=(n-.5)*amount;const cut=(n>.78?-amount*.42:0);return base+jag+cut;}
-  function localPoint(radius,angle){return {x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius};}
-  let p=localPoint(outerR,localA0);shape.moveTo(p.x,p.y);
-  for(let i=1;i<=steps;i++){const t=i/steps;const a=localA0+(localA1-localA0)*t;const r=edgeChipRadius(outerR,i,chipAmount,"outer");p=localPoint(r,a);shape.lineTo(p.x,p.y);}
-  for(let i=steps;i>=0;i--){const t=i/steps;const a=localA0+(localA1-localA0)*t;const r=edgeChipRadius(innerR,i+100,chipAmount*.55,"inner");p=localPoint(r,a);shape.lineTo(p.x,p.y);}
-  shape.closePath();
-  const geo=new THREE.ExtrudeGeometry(shape,{depth:height,bevelEnabled:true,bevelSegments:2,bevelSize:height*STONE_DETAIL.bevelScale,bevelThickness:height*(STONE_DETAIL.bevelScale+.02),steps:1});
-  geo.rotateX(-Math.PI/2);geo.translate(0,height*.5,0);return geo;
-}
-
-function addCrackGrooves(parent,innerR,outerR,span,seamInset,seed,topY){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;
-  const crackCount=Math.floor(STONE_DETAIL.crackCountMin+roughValue(seed,500)*(STONE_DETAIL.crackCountMax-STONE_DETAIL.crackCountMin+1));
-  for(let i=0;i<crackCount;i++){
-    const a=localA0+(localA1-localA0)*(0.18+roughValue(seed,i+40)*.64);
-    const r=innerR+ringWidth*(.22+roughValue(seed,i+70)*.56);
-    const len=Math.min(ringWidth*.45,4+roughValue(seed,i+90)*10);
-    const w=STONE_DETAIL.crackWidthMin+roughValue(seed,i+110)*(STONE_DETAIL.crackWidthMax-STONE_DETAIL.crackWidthMin);
-    const center=localPolarPoint(r,a,midR,topY+.055);
-    addOrientedBox(parent,center,len,.035,w,a+(roughValue(seed,i+130)-.5)*1.1,crackAoMat);
-    if(roughValue(seed,i+150)>.58){const branchCenter=localPolarPoint(r+len*.18,a+.025,midR,topY+.06);addOrientedBox(parent,branchCenter,len*.42,.03,w*.72,a+.75,crackAoMat);}
-  }
-}
-
-function addRimOcclusion(parent,innerR,outerR,a0,a1,midR,y){
-  const segments=8;
-  for(const radius of [innerR,outerR]){
-    for(let i=0;i<segments;i++){
-      const t0=i/segments;const t1=(i+1)/segments;const a=(a0+(a1-a0)*(t0+t1)*.5);const len=Math.abs(a1-a0)*radius/segments*.92;
-      const center=localPolarPoint(radius,a,midR,y);addOrientedBox(parent,center,len,.03,STONE_DETAIL.seamGrooveWidth,a+Math.PI*.5,seamAoMat);
-    }
-  }
-}
-
-function addSeamOcclusion(parent,innerR,outerR,span,seamInset,height){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const midLen=outerR-innerR;const y=height+.035;
-  for(const a of [localA0,localA1]){const center=localPolarPoint((innerR+outerR)*.5,a,midR,y);addOrientedBox(parent,center,midLen,.035,STONE_DETAIL.seamGrooveWidth,a,seamAoMat);}
-  addRimOcclusion(parent,innerR,outerR,localA0,localA1,midR,y);
-}
-
-function addConnectionBevelLips(parent,innerR,outerR,span,seamInset,height){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const len=outerR-innerR;const y=height+.075;
-  for(const a of [localA0,localA1]){const center=localPolarPoint((innerR+outerR)*.5,a,midR,y);const lip=addOrientedBox(parent,center,len,.08,STONE_DETAIL.seamGrooveWidth*.72,a,lipMat);lip.rotation.z=.08;}
-}
-
-function addUndersideOcclusion(parent,innerR,outerR,span,seamInset,height){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const shape=new THREE.Shape();const steps=24;
-  function lp(radius,angle){return {x:Math.cos(angle)*radius-midR,y:Math.sin(angle)*radius};}
-  let p=lp(outerR+.12,localA0-.006);shape.moveTo(p.x,p.y);
-  for(let i=1;i<=steps;i++){const a=(localA0-.006)+(localA1-localA0+.012)*i/steps;p=lp(outerR+.12,a);shape.lineTo(p.x,p.y);}
-  for(let i=steps;i>=0;i--){const a=(localA0-.006)+(localA1-localA0+.012)*i/steps;p=lp(innerR-.12,a);shape.lineTo(p.x,p.y);}
-  shape.closePath();const geo=new THREE.ShapeGeometry(shape);geo.rotateX(-Math.PI/2);const mesh=new THREE.Mesh(geo,undersideAoMat);mesh.position.y=-.025;parent.add(mesh);
-}
-
-function addSupports(parent,innerR,outerR,span,seamInset,ringIndex,height){
-  const localA0=-span*.5+seamInset;const localA1=span*.5-seamInset;const midR=(innerR+outerR)*.5;const ringWidth=outerR-innerR;
-  for(let i=0;i<3;i++){const t=(i+1)/4;const a=localA0+(localA1-localA0)*t;const r=outerR-Math.max(1,ringWidth*.04);const pillarHeight=5+ringIndex*.85;const w=Math.min(10,Math.max(.7,ringWidth*.035));const pillar=new THREE.Mesh(new THREE.BoxGeometry(w,pillarHeight,w),darkStone);pillar.position.set(Math.cos(a)*r-midR,-pillarHeight*.5,Math.sin(a)*r);pillar.castShadow=true;pillar.receiveShadow=true;parent.add(pillar);}
-}
-
-function createChiseledStoneSectionKit(){return{id:"chiseled-stone-section-kit",createGeometry:createChiseledStoneWedgeGeometry,addCracks:addCrackGrooves,addSeamAo:addSeamOcclusion,addBevelLips:addConnectionBevelLips,addUndersideAo:addUndersideOcclusion};}
-const chiseledStoneSectionKit=createChiseledStoneSectionKit();
-
-function makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle}){
-  const seed=ringIndex*100+partIndex*13;const group=new THREE.Group();const midR=(innerR+outerR)*.5;
-  const stone=new THREE.Mesh(chiseledStoneSectionKit.createGeometry(innerR,outerR,span,seamInset,height,seed),stoneMats[(ringIndex+partIndex)%stoneMats.length]);stone.castShadow=true;stone.receiveShadow=true;group.add(stone);
-  chiseledStoneSectionKit.addUndersideAo(group,innerR,outerR,span,seamInset,height);
-  chiseledStoneSectionKit.addSeamAo(group,innerR,outerR,span,seamInset,height);
-  chiseledStoneSectionKit.addBevelLips(group,innerR,outerR,span,seamInset,height);
-  chiseledStoneSectionKit.addCracks(group,innerR,outerR,span,seamInset,seed,height*.55);
-  addSupports(group,innerR,outerR,span,seamInset,ringIndex,height);
-  const finalPosition=polar(midR,finalAngle);
-  const sideOffset=polar(midR*START_RADIUS_MULTIPLIER,finalAngle+(roughValue(seed,901)-.5)*.32);
-  const startPosition=sideOffset.clone();
-  startPosition.y=START_HEIGHT_BASE+ringIndex*START_HEIGHT_RING_STEP+roughValue(seed,930)*70;
-  const finalRotationY=-finalAngle;
-  const startRotationY=finalRotationY+(roughValue(seed,940)-.5)*.9;
-  group.position.copy(startPosition);
-  group.rotation.set((roughValue(seed,950)-.5)*.24,startRotationY,(roughValue(seed,960)-.5)*.18);
-  scene.add(group);
-  parts.push({group,ringIndex,partIndex,partsPerRing,delay:ringIndex*RING_STAGGER+partIndex*PART_STAGGER,startPosition,finalPosition,finalRotationY,startRotationY,landed:false});
-}
-
-function addTotem(){
-  const group=new THREE.Group();group.position.y=CENTER_PLATFORM_HEIGHT;
-  const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),darkStone);base.position.y=.3;base.castShadow=true;base.receiveShadow=true;group.add(base);
-  const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),new THREE.MeshStandardMaterial({color:0x3b3c40,roughness:.86,metalness:.04}));tower.position.y=2.3;tower.castShadow=true;tower.receiveShadow=true;group.add(tower);
-  const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),darkStone);top.position.y=4.35;top.castShadow=true;top.receiveShadow=true;group.add(top);
-  const core=new THREE.Mesh(new THREE.SphereGeometry(.45,24,24),glowMat);core.position.y=2.9;group.add(core);
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(6.2,.06,8,96),new THREE.MeshBasicMaterial({color:0xc5d9ff,transparent:true,opacity:.28}));ring.rotation.x=Math.PI/2;ring.position.y=4.75;group.add(ring);
-  scene.add(group);
-  return{group,core,ring,size:{height:4.9,width:12.4,platformTop:CENTER_PLATFORM_HEIGHT}};
-}
-
-function addSkyAndGround(){
-  const cloudPlane=new THREE.Mesh(new THREE.CircleGeometry(120000,180),new THREE.MeshBasicMaterial({color:0x394047,transparent:true,opacity:.46}));
-  cloudPlane.rotation.x=-Math.PI/2;cloudPlane.position.y=-500;scene.add(cloudPlane);
-  const horizon=new THREE.Mesh(new THREE.RingGeometry(2200,5200,160),new THREE.MeshBasicMaterial({color:0x30363b,transparent:true,opacity:.42,side:THREE.DoubleSide}));
-  horizon.rotation.x=-Math.PI/2;horizon.position.y=-12;scene.add(horizon);
-}
-
-const inputPanKit=createInputPanKit();
-const phantomCommanderKit=createPhantomCommanderKit();
-const totem=addTotem();
-const centerDisc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.35,FIRST_INNER_RADIUS-.35,CENTER_PLATFORM_HEIGHT,96),stoneMats[1]);
-centerDisc.position.y=CENTER_PLATFORM_HEIGHT*.5;centerDisc.castShadow=true;centerDisc.receiveShadow=true;scene.add(centerDisc);
-addSkyAndGround();
-
-{
-  let currentInner=FIRST_INNER_RADIUS;let ringWidth=FIRST_RING_WIDTH;
-  for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-    if(ringIndex>0)ringWidth=Math.min(MAX_RING_WIDTH,ringWidth*RING_WIDTH_GROWTH);
-    const innerR=currentInner;const outerR=innerR+ringWidth;const height=SLAB_HEIGHT;const clearance=Math.max(.18,ringWidth*.0007);const partsPerRing=getPartsForRing(innerR,outerR);
-    ringSpecs.push({innerR,outerR,height,ringWidth,partsPerRing});currentInner=outerR+clearance;
-  }
-}
-for(let ringIndex=0;ringIndex<RING_COUNT;ringIndex++){
-  const{innerR,outerR,height,partsPerRing}=ringSpecs[ringIndex];const span=(Math.PI*2)/partsPerRing;const seamInset=.0015;const ringOffset=ringIndex%2===0?0:span*.5;
-  for(let partIndex=0;partIndex<partsPerRing;partIndex++){const finalAngle=ringOffset+partIndex*span;makePiece({ringIndex,partIndex,partsPerRing,innerR,outerR,span,seamInset,height,finalAngle});}
-}
-
-const maxPartsInAnyRing=Math.max(...ringSpecs.map(spec=>spec.partsPerRing));
-const totalBuildTime=(RING_COUNT-1)*RING_STAGGER+(maxPartsInAnyRing-1)*PART_STAGGER+MOVE_SECONDS;
-let lastTime=0;
-
-function skipConstruct(){state.skipped=true;state.startedAt=-totalBuildTime-1;for(const item of parts)item.landed=false;}
-function restartConstruct(){state.phase="forming";state.startedAt=state.time;state.complete=false;state.skipped=false;state.progress=0;state.completedPieces=0;for(const item of parts){item.landed=false;item.group.position.copy(item.startPosition);item.group.rotation.set(0,item.startRotationY,0);}}
-document.getElementById("skipBtn").addEventListener("click",skipConstruct);
-document.getElementById("resetBtn").addEventListener("click",restartConstruct);
-
-function updateConstructAnimation(sequenceTime){
-  let completed=0;
-  for(const item of parts){
-    const local=clamp01((sequenceTime-item.delay)/MOVE_SECONDS);
-    if(local>=1)completed++;
-    const radialEase=easeOutCubic(local);
-    const descend=smoothstep((local*MOVE_SECONDS-DROP_START_SECONDS)/(MOVE_SECONDS-DROP_START_SECONDS));
-    const pos=item.startPosition.clone().lerp(item.finalPosition,radialEase);
-    pos.y=item.startPosition.y*(1-descend)+item.finalPosition.y*descend+Math.sin(local*Math.PI)*12;
-    item.group.position.copy(pos);
-    item.group.rotation.x=(1-descend)*Math.sin(local*Math.PI*2+item.partIndex)*.18;
-    item.group.rotation.z=(1-descend)*Math.cos(local*Math.PI*2+item.ringIndex)*.13;
-    item.group.rotation.y=item.startRotationY*(1-radialEase)+item.finalRotationY*radialEase;
-  }
-  state.completedPieces=completed;
-  state.progress=completed/parts.length;
-  if(completed===parts.length&&!state.complete){
-    state.complete=true;
-    state.phase="command online";
-  }else if(!state.complete){
-    state.phase=state.progress>.66?"locking":state.progress>.25?"assembling":"forming";
-  }
-}
-
-function drawHud(){
-  const pct=Math.round(state.progress*100);
-  progressBar.style.width=pct+"%";
-  pieceCount.textContent=`${state.completedPieces} / ${parts.length}`;
-  phaseText.textContent=state.phase;
-  cameraText.textContent=state.cameraMode;
-  if(state.complete){
-    statusText.textContent="Command platform online. Phantom commander anchored at the center watchpoint.";
-    badgeText.textContent=state.skipped?"Skipped to online":"Sequence complete";
-  }else{
-    statusText.textContent="Opening scene: radial stone sections fly inward, descend, lock, and complete the command platform.";
-    badgeText.textContent=`${pct}% reconstructed`;
-  }
-}
-
-function animate(nowMs){
-  try{
-    const time=nowMs*.001;state.time=time;
-    const dt=Math.min(.05,lastTime?time-lastTime:1/60);lastTime=time;
-    const sequenceTime=time-state.startedAt;
-    updateConstructAnimation(sequenceTime);
-    totem.group.rotation.y=Math.sin(time*.18)*.025;
-    totem.core.scale.setScalar(1+Math.sin(time*2.6)*.08+(state.complete?.06:0));
-    totem.ring.rotation.z+=dt*(state.complete?.9:.28);
-    phantomCommanderKit.update(dt,time);
-    cameraZoom+=(cameraZoomTarget-cameraZoom)*(1-Math.exp(-10*dt));
-    const pan=inputPanKit.update(dt);
-    orbitAngle+=dt*(state.complete?.045:.018);
-    const cameraOffset=new THREE.Vector3(Math.sin(orbitAngle)*cameraZoom*.18,cameraZoom,Math.cos(orbitAngle)*cameraZoom*CAMERA_PITCH_Z_RATIO);
-    const targetOffset=new THREE.Vector3(0,CENTER_PLATFORM_HEIGHT*.5,0);
-    camera.position.copy(pan).add(cameraOffset);
-    camera.lookAt(pan.clone().add(targetOffset));
-    drawHud();
-    renderer.render(scene,camera);
-    requestAnimationFrame(animate);
-  }catch(error){showFatal(error);}
-}
-
-window.GameHost={
-  skipConstruct,
-  restartConstruct,
-  getState(){
-    return{
-      phase:state.phase,
-      progress:state.progress,
-      completedPieces:state.completedPieces,
-      pieces:parts.length,
-      rings:RING_COUNT,
-      ringParts:ringSpecs.map(spec=>spec.partsPerRing),
-      firstInnerRadius:FIRST_INNER_RADIUS,
-      firstRingWidth:FIRST_RING_WIDTH,
-      ringWidthGrowth:RING_WIDTH_GROWTH,
-      maxRingWidth:MAX_RING_WIDTH,
-      animation:{moveSeconds:MOVE_SECONDS,dropStartSeconds:DROP_START_SECONDS,ringStagger:RING_STAGGER,partStagger:PART_STAGGER,startHeightBase:START_HEIGHT_BASE,startHeightRingStep:START_HEIGHT_RING_STEP,startRadiusMultiplier:START_RADIUS_MULTIPLIER,totalBuildTime},
-      camera:{defaultZoom:CAMERA_DEFAULT_ZOOM,minZoom:CAMERA_MIN_ZOOM,maxZoom:CAMERA_MAX_ZOOM,currentZoom:cameraZoom,targetZoom:cameraZoomTarget,orbitAngle},
-      totem:totem.size,
-      phantomCommanderKit:phantomCommanderKit.getState(),
-      inputPanKit:inputPanKit.getState(),
-      chiseledStoneSectionKit:{id:chiseledStoneSectionKit.id,stoneDetail:STONE_DETAIL},
-      note:"Each section has a delay, starts outward and above its final polar position, eases inward, descends after a short delay, and locks into the final ring."
-    };
-  }
-};
-
-window.addEventListener("resize",()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);});
-requestAnimationFrame(animate);
+const CONSTRUCT_PREWARM_SECONDS=.95;
+const MOVE_SECONDS=3.6;
+const DROP_START_SECONDS=.12;
+const RING_STAGGER=.12;
+const PART_STAGGER=.03;
+const START_RADIUS_MULTIPLIER=1.45;
+const START_HEIGHT_BASE=28;
+const START_HEIGHT_RING_STEP=4;
+const canvas=document.getElementById('game'),bar=document.getElementById('bar'),countEl=document.getElementById('count'),phaseEl=document.getElementById('phase'),statusEl=document.getElementById('status'),errorPanel=document.getElementById('errorPanel');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,logarithmicDepthBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x252a2e);scene.fog=new THREE.Fog(0x252a2e,700,7000);
+const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,.1,500000);let zoom=120,zoomTarget=120,orbit=-.42,last=0;
+scene.add(new THREE.AmbientLight(0xdbe7f2,.72));const sun=new THREE.DirectionalLight(0xffffff,1.45);sun.position.set(-900,2300,1200);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);const fill=new THREE.DirectionalLight(0x9ebbea,.55);fill.position.set(2200,1000,-1800);scene.add(fill);
+const stone=[0x6f6f6b,0x85847e,0x5d5e5c,0x97958d,0x74746f].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.95,metalness:.02}));const dark=new THREE.MeshStandardMaterial({color:0x4f5050,roughness:.95});const glow=new THREE.MeshStandardMaterial({color:0xf6fbff,emissive:0xb8d2ff,emissiveIntensity:.8,roughness:.45});const lineMat=new THREE.MeshBasicMaterial({color:0x111416,transparent:true,opacity:.38,depthWrite:false});
+const parts=[],rings=[],input={keys:new Set(),target:new THREE.Vector3(),current:new THREE.Vector3(),velocity:new THREE.Vector3()};let startedAt=-CONSTRUCT_PREWARM_SECONDS,complete=false,skipped=false,phase='forming',progress=0;
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}function c01(v){return clamp(v,0,1)}function smooth(t){t=c01(t);return t*t*(3-2*t)}function ease(t){return 1-Math.pow(1-c01(t),3)}function rv(s,i){const n=Math.sin(s*91.7+i*17.13)*43758.5453;return n-Math.floor(n)}function polar(r,a,y=0){return new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r)}function partsFor(i,o){return clamp(Math.ceil(Math.PI*2*((i+o)*.5)/TARGET_MAX_WEDGE_ARC),MIN_PARTS_PER_RING,MAX_PARTS_PER_RING)}
+function wedge(inner,outer,span,h,seed){const mid=(inner+outer)*.5,shape=new THREE.Shape(),steps=18,a0=-span*.5+.002,a1=span*.5-.002;function p(r,a,j=0){return{x:Math.cos(a)*(r+j)-mid,y:Math.sin(a)*(r+j)}}let q=p(outer,a0);shape.moveTo(q.x,q.y);for(let i=1;i<=steps;i++){const a=a0+(a1-a0)*i/steps;q=p(outer,a,(rv(seed,i)-.5)*.5);shape.lineTo(q.x,q.y)}for(let i=steps;i>=0;i--){const a=a0+(a1-a0)*i/steps;q=p(inner,a,(rv(seed,100+i)-.5)*.25);shape.lineTo(q.x,q.y)}shape.closePath();const g=new THREE.ExtrudeGeometry(shape,{depth:h,bevelEnabled:true,bevelSegments:2,bevelSize:h*.12,bevelThickness:h*.14});g.rotateX(-Math.PI/2);g.translate(0,h*.5,0);return g}
+function makePiece(ring,idx,inner,outer,span,angle){const seed=ring*100+idx*13,mid=(inner+outer)*.5,group=new THREE.Group();const mesh=new THREE.Mesh(wedge(inner,outer,span,SLAB_HEIGHT,seed),stone[(ring+idx)%stone.length]);mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);for(const a of[-span*.5,span*.5]){const seam=new THREE.Mesh(new THREE.BoxGeometry(outer-inner,.035,.12),lineMat);seam.position.set(Math.cos(a)*mid-mid,SLAB_HEIGHT+.04,Math.sin(a)*mid);seam.rotation.y=-a;group.add(seam)}for(let i=0;i<2;i++){const a=-span*.28+span*.56*rv(seed,i+40),rr=inner+(outer-inner)*(.25+.5*rv(seed,i+80));const crack=new THREE.Mesh(new THREE.BoxGeometry(3+rv(seed,i+90)*7,.03,.08),lineMat);crack.position.set(Math.cos(a)*rr-mid,SLAB_HEIGHT+.08,Math.sin(a)*rr);crack.rotation.y=-a+(rv(seed,i+130)-.5);group.add(crack)}const final=polar(mid,angle,0),start=polar(mid*START_RADIUS_MULTIPLIER,angle+(rv(seed,901)-.5)*.32,START_HEIGHT_BASE+ring*START_HEIGHT_RING_STEP+rv(seed,930)*14),finalRy=-angle,startRy=finalRy+(rv(seed,940)-.5)*.9;group.position.copy(start);group.rotation.set((rv(seed,950)-.5)*.25,startRy,(rv(seed,960)-.5)*.2);scene.add(group);parts.push({group,ring,idx,delay:ring*RING_STAGGER+idx*PART_STAGGER,start,final,startRy,finalRy})}
+function addCenter(){const disc=new THREE.Mesh(new THREE.CylinderGeometry(FIRST_INNER_RADIUS-.35,FIRST_INNER_RADIUS-.35,1.18,96),stone[1]);disc.position.y=.59;disc.castShadow=true;disc.receiveShadow=true;scene.add(disc);const g=new THREE.Group();g.position.y=1.18;const base=new THREE.Mesh(new THREE.CylinderGeometry(4.2,5.8,.6,8),dark);base.position.y=.3;g.add(base);const tower=new THREE.Mesh(new THREE.BoxGeometry(4.4,3.4,4.4),dark);tower.position.y=2.3;g.add(tower);const top=new THREE.Mesh(new THREE.BoxGeometry(8.5,.7,8.5),dark);top.position.y=4.35;g.add(top);const core=new THREE.Mesh(new THREE.SphereGeometry(.45,24,24),glow);core.position.y=2.9;g.add(core);const ring=new THREE.Mesh(new THREE.TorusGeometry(6.2,.06,8,96),new THREE.MeshBasicMaterial({color:0xc5d9ff,transparent:true,opacity:.28}));ring.rotation.x=Math.PI/2;ring.position.y=4.75;g.add(ring);scene.add(g);return{g,core,ring}}
+function addPhantom(){const g=new THREE.Group();g.position.set(12,1.18,10);const body=new THREE.Mesh(new THREE.CylinderGeometry(.45,.75,2.2,10),dark);body.position.y=1.05;g.add(body);const hood=new THREE.Mesh(new THREE.SphereGeometry(.72,16,14),dark);hood.scale.set(1,.72,1);hood.position.y=2.25;g.add(hood);const count=90,pos=new Float32Array(count*3),geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));const smoke=new THREE.Points(geo,new THREE.PointsMaterial({color:0x22282c,size:1.8,transparent:true,opacity:.6,depthWrite:false}));smoke.position.y=.55;g.add(smoke);scene.add(g);return{g,update(t){for(let i=0;i<count;i++){const y=(rv(13,i)*4+t*(.35+rv(17,i)*.8))%4.4,a=rv(7,i)*Math.PI*2+Math.sin(t*.25+rv(19,i)*10)*.4,rr=.35+rv(11,i)*1.25+y*.18;pos[i*3]=Math.cos(a)*rr+Math.sin(t*.8+i)*.35;pos[i*3+1]=y;pos[i*3+2]=Math.sin(a)*rr}geo.attributes.position.needsUpdate=true;g.rotation.y=Math.sin(t*.45)*.18;g.position.y=1.18+Math.sin(t*1.2)*.12}}}
+let inner=FIRST_INNER_RADIUS,width=FIRST_RING_WIDTH;for(let r=0;r<RING_COUNT;r++){if(r>0)width=Math.min(MAX_RING_WIDTH,width*RING_WIDTH_GROWTH);const outer=inner+width,n=partsFor(inner,outer);rings.push({inner,outer,n});inner=outer+Math.max(.18,width*.0007)}rings.forEach((spec,r)=>{const span=Math.PI*2/spec.n,off=r%2?span*.5:0;for(let i=0;i<spec.n;i++)makePiece(r,i,spec.inner,spec.outer,span,off+i*span)});const maxParts=Math.max(...rings.map(r=>r.n)),totalBuild=(RING_COUNT-1)*RING_STAGGER+(maxParts-1)*PART_STAGGER+MOVE_SECONDS,totem=addCenter(),phantom=addPhantom();const fog=new THREE.Mesh(new THREE.CircleGeometry(120000,128),new THREE.MeshBasicMaterial({color:0x394047,transparent:true,opacity:.46}));fog.rotation.x=-Math.PI/2;fog.position.y=-500;scene.add(fog);
+function skip(){skipped=true;complete=false;startedAt=-totalBuild-1}function restart(){startedAt=performance.now()*.001-CONSTRUCT_PREWARM_SECONDS;complete=false;skipped=false;progress=0;phase='forming'}document.getElementById('skip').onclick=skip;document.getElementById('restart').onclick=restart;addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){input.keys.add(k);e.preventDefault()}if(k===' '){skip();e.preventDefault()}if(k==='r'){restart();e.preventDefault()}});addEventListener('keyup',e=>input.keys.delete(e.key.toLowerCase()));addEventListener('blur',()=>input.keys.clear());canvas.addEventListener('wheel',e=>{e.preventDefault();zoomTarget=clamp(zoomTarget+e.deltaY*.08,24,620)},{passive:false});
+function pan(dt){const x=(input.keys.has('d')||input.keys.has('arrowright')?1:0)-(input.keys.has('a')||input.keys.has('arrowleft')?1:0),z=(input.keys.has('s')||input.keys.has('arrowdown')?1:0)-(input.keys.has('w')||input.keys.has('arrowup')?1:0),v=new THREE.Vector3(x,0,z);if(v.lengthSq()>1)v.normalize();input.velocity.x+=v.x*1350*dt;input.velocity.z+=v.z*1350*dt;input.velocity.multiplyScalar(Math.pow(.06,dt));input.target.x=clamp(input.target.x+input.velocity.x*dt,-6500,6500);input.target.z=clamp(input.target.z+input.velocity.z*dt,-6500,6500);input.current.lerp(input.target,1-Math.exp(-10*dt));return input.current}
+function construct(seq){let done=0;for(const p of parts){const local=c01((seq-p.delay)/MOVE_SECONDS);if(local>=1)done++;const radial=ease(local),drop=smooth((local*MOVE_SECONDS-DROP_START_SECONDS)/(MOVE_SECONDS-DROP_START_SECONDS)),pos=p.start.clone().lerp(p.final,radial);pos.y=p.start.y*(1-drop)+p.final.y*drop+Math.sin(local*Math.PI)*10;p.group.position.copy(pos);p.group.rotation.x=(1-drop)*Math.sin(local*Math.PI*2+p.idx)*.18;p.group.rotation.z=(1-drop)*Math.cos(local*Math.PI*2+p.ring)*.13;p.group.rotation.y=p.startRy*(1-radial)+p.finalRy*radial}progress=done/parts.length;if(done===parts.length&&!complete){complete=true;phase='command online'}else if(!complete){phase=progress>.66?'locking':progress>.25?'assembling':'forming'}bar.style.width=Math.round(progress*100)+'%';countEl.textContent=`${done} / ${parts.length}`;phaseEl.textContent=phase;statusEl.textContent=complete?'Command platform online. Phantom commander anchored.':'Immediate construct v3: visible slabs fly inward, descend, and lock from the first frame.'}
+function animate(ms){try{const t=ms*.001,dt=Math.min(.05,last?t-last:1/60);last=t;construct(t-startedAt);totem.g.rotation.y=Math.sin(t*.18)*.025;totem.core.scale.setScalar(1+Math.sin(t*2.6)*.08+(complete?.06:0));totem.ring.rotation.z+=dt*(complete?.9:.28);phantom.update(t);zoom+=(zoomTarget-zoom)*(1-Math.exp(-10*dt));orbit+=dt*(complete?.045:.018);const p=pan(dt);camera.position.copy(p).add(new THREE.Vector3(Math.sin(orbit)*zoom*.18,zoom,Math.cos(orbit)*zoom*.74));camera.lookAt(p.clone().add(new THREE.Vector3(0,.6,0)));renderer.render(scene,camera);requestAnimationFrame(animate)}catch(e){errorPanel.style.display='block';errorPanel.textContent=String(e?.stack||e)}}
+window.GameHost={skipConstruct:skip,restartConstruct:restart,getState(){return{buildId:'immediate-construct-v3',phase,progress,pieces:parts.length,rings:RING_COUNT,ringParts:rings.map(r=>r.n),animation:{prewarmSeconds:CONSTRUCT_PREWARM_SECONDS,moveSeconds:MOVE_SECONDS,dropStartSeconds:DROP_START_SECONDS,ringStagger:RING_STAGGER,partStagger:PART_STAGGER,startHeightBase:START_HEIGHT_BASE,startHeightRingStep:START_HEIGHT_RING_STEP,startRadiusMultiplier:START_RADIUS_MULTIPLIER,totalBuildTime:totalBuild},note:'Starts prewarmed with low visible spawn height and short stagger.'}}};addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(innerWidth,innerHeight)});requestAnimationFrame(animate);
 </script>
 </body>
 </html>
