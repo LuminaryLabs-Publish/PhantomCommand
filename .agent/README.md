@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T17-49-34-04-00`
+**Latest documented run:** `2026-07-07T19-08-52-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T17-49-34-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -16,9 +16,9 @@ The active user flow is still:
 index.html -> game.html -> inline sequential-ring-v5 construct proof
 ```
 
-`index.html` is the menu route. It shows the Phantom Command menu and routes Start / Open Scene into `game.html`.
+`index.html` is the static menu route. It routes Start / Open Scene into `game.html`.
 
-`game.html` is still the true runtime authority. It imports Three.js from CDN and owns the renderer, scene, fog, lights, camera, HUD, materials, input, construct constants, ring descriptor math, wedge geometry, piece delays, animation loop, skip/restart controls, and `window.GameHost` inline.
+`game.html` is still the live runtime authority. It imports Three.js from CDN and owns renderer setup, scene setup, fog, lights, camera, HUD, materials, input, construct constants, ring descriptor math, wedge geometry, piece delays, animation, skip/restart controls, camera navigation, completion phase, and `window.GameHost` inline.
 
 The current live build remains `sequential-ring-v5`:
 
@@ -52,31 +52,34 @@ Tracked entries:
 .agent/trackers/2026-07-07T15-19-05-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T16-30-00-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T17-49-34-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Scenario Bootstrap Snapshot + RTS Boundary Fixture Lock` slice.
+Build the `PhantomCommand Construct Event Source Gate + Scenario Bootstrap Replay Lock` slice.
 
 ```txt
 menu and game visuals stay unchanged
-  -> source-own sequential-ring-v5 profile
-  -> derive ring descriptors and piece descriptors from source modules
-  -> assert ten rings, zero gaps, [5,5,5,5,6,8,10,12,16,20], and 92 total pieces
-  -> assert positive inner-first timing margins
-  -> add ConstructEventEnvelope and ConstructEventReducer
-  -> emit construct_complete exactly once
+  -> source-own sequential-ring-v5 constants
+  -> derive live-compatible ring descriptors
+  -> derive live-compatible piece descriptors
+  -> prove ten rings, zero gaps, live part counts, and 92 pieces
+  -> prove positive inner-first timing margins
+  -> add construct event envelopes
+  -> add construct event results
+  -> accept construct_complete exactly once
   -> reject duplicate construct_complete with stable reason duplicate_construct_complete
-  -> add ConstructSnapshot
-  -> add ScenarioBootstrapPreflightResult
+  -> project ConstructSnapshot
+  -> add scenario bootstrap preflight and result contracts
   -> reject bootstrap before construct completion with reason construct_incomplete
-  -> accept scenario_001_raise_the_host after construct completion
+  -> accept scenario_001_raise_the_host after completion
   -> reject duplicate bootstrap with reason duplicate_scenario_bootstrap
-  -> add ScenarioBootstrapSnapshot with RTS boundary placeholders only
-  -> expose GameHost diagnostics for construct and scenario bootstrap
+  -> project ScenarioBootstrapSnapshot with placeholder RTS boundary data only
+  -> expose additive GameHost diagnostics
   -> add DOM-free smoke fixtures
-  -> keep full RTS gameplay deferred until construct and bootstrap fixtures pass
+  -> keep full RTS gameplay deferred until descriptor, event, snapshot, and bootstrap replay parity passes
 ```
 
 Minimum next build checklist:
@@ -93,11 +96,14 @@ Minimum next build checklist:
 - Add `phantom-command-inner-first-timeline-contract-kit`.
 - Compute `firstStart`, `lastStart`, `firstSettle`, `lastSettle`, and `marginSeconds` for every ring transition.
 - Add `phantom-command-construct-event-envelope-kit`.
+- Add `phantom-command-construct-event-result-kit`.
 - Add `phantom-command-construct-event-reducer-kit`.
 - Emit `construct_complete` exactly once.
 - Reject duplicate `construct_complete` with reason `duplicate_construct_complete`.
+- Add `phantom-command-construct-event-journal-kit`.
 - Add `phantom-command-construct-snapshot-contract-kit`.
 - Add `phantom-command-scenario-bootstrap-preflight-kit`.
+- Add `phantom-command-scenario-bootstrap-result-kit`.
 - Add `phantom-command-scenario-bootstrap-gate-kit`.
 - Add `phantom-command-scenario-bootstrap-snapshot-kit`.
 - Add `phantom-command-gamehost-construct-diagnostics-kit`.
@@ -107,5 +113,6 @@ Minimum next build checklist:
 - Add `phantom-command-construct-event-reducer-smoke-kit`.
 - Add `phantom-command-construct-snapshot-smoke-kit`.
 - Add `phantom-command-scenario-bootstrap-gate-smoke-kit`.
+- Add `phantom-command-gamehost-diagnostics-smoke-kit`.
 - Keep `construct-spiral-intro-kit` defaults unchanged.
 - Defer full RTS gameplay until descriptor, timeline, event, snapshot, and bootstrap gate parity pass.
