@@ -1,20 +1,22 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T11:18:32-04:00",
-  "status": "source-construct-profile-ring-descriptor-parity-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T11-18-32-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T12:50:04-04:00",
+  "status": "inner-first-timeline-contract-construct-snapshot-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T12-50-04-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": ["index.html", "game.html"],
     "liveBuildId": "sequential-ring-v5",
     "buildScript": "node scripts/build-static.mjs",
+    "expectedLiveRingPartCounts": [5, 5, 5, 5, 6, 8, 10, 12, 16, 20],
+    "expectedLiveTotalPieces": 92,
     "currentGameHostSurface": [
       "window.GameHost.skipConstruct",
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live sequential-ring-v5 constants, no-gap ring descriptor math, ring part counts, mesh creation, animation timing, HUD, camera, and construct-only GameHost snapshot. The reusable construct-spiral-intro-kit should remain compatibility-safe until a source profile and descriptor parity fixture prove the live profile." 
+    "primaryGap": "game.html still owns the live sequential-ring-v5 profile, no-gap ring descriptor math, piece descriptors, timeline math, mesh creation, HUD, camera, and construct-only GameHost snapshot. The next cut should prove source descriptor parity, inner-first timeline parity, and construct snapshot shape before runtime splitting."
   },
   "interactionLoops": {
     "current": [
@@ -23,7 +25,7 @@
       "import Three.js from CDN",
       "initialize renderer, scene, fog, lights, camera, HUD, materials, and input state inline",
       "define sequential-ring-v5 constants inline",
-      "compute ten no-gap ring descriptors inline",
+      "compute ten contiguous no-gap ring descriptors inline",
       "compute ring part counts from circumference inline",
       "create wedge meshes, seams, center disc, Grim Reaper Totem, and Phantom Commander inline",
       "animate each piece by ringIndex * RING_STAGGER + partIndex * PART_STAGGER",
@@ -35,7 +37,9 @@
       "load menu",
       "load source-owned sequential-ring-v5 profile",
       "emit source ring and piece descriptors matching live game.html math",
+      "emit inner-first timeline guards proving ring N starts after ring N-1 can settle",
       "run construct intro from descriptors",
+      "publish ConstructSnapshot",
       "publish construct_complete",
       "transition GameHost mode to scenario_bootstrap",
       "load scenario, map, wave, experience, and unlock configs",
@@ -51,11 +55,13 @@
       "source construct profile service",
       "ring descriptor service",
       "piece descriptor service",
+      "inner-first timeline contract service",
       "construct profile parity fixture",
       "live ring descriptor smoke",
-      "sequential profile adapter after parity",
-      "construct snapshot contract after descriptor parity",
-      "GameHost diagnostics and snapshot service after construct snapshot",
+      "inner-first timeline smoke",
+      "construct snapshot smoke",
+      "sequential profile adapter after descriptor/timeline parity",
+      "GameHost diagnostics after construct snapshot",
       "scenario bootstrap fixture after construct source parity"
     ]
   },
@@ -76,12 +82,18 @@
     "ring-part-count-policy",
     "ring-descriptor-generation",
     "piece-descriptor-generation",
+    "piece-id-policy",
+    "piece-seed-policy",
+    "inner-first-timeline-contract",
+    "ring-settle-boundary-policy",
+    "ring-start-acceptance-policy",
     "construct-profile-parity-fixture",
+    "construct-timeline-parity-fixture",
+    "construct-snapshot-contract",
     "ritual-wedge-geometry",
     "stone-wedge-material-detail",
     "construct-animation-timeline",
     "construct-sequential-profile-adapter",
-    "construct-snapshot-contract",
     "construct-source-kit-parity",
     "construct-completion-event",
     "grim-reaper-totem-visual-object",
@@ -167,7 +179,7 @@
         "assertAllPiecesSettled"
       ],
       "requires": ["construct-spiral-intro-kit"],
-      "blockers": ["Does not validate live sequential-ring-v5 constants, zero gaps, ring widths, part counts, total pieces, skip/restart, or GameHost shape."]
+      "blockers": ["Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, inner-first timing margins, skip/restart, or GameHost shape."]
     },
     {
       "id": "phantom-command-source-construct-profile-kit",
@@ -217,6 +229,36 @@
       "blockers": ["Piece descriptors are still created inline in game.html."]
     },
     {
+      "id": "phantom-command-inner-first-timeline-contract-kit",
+      "status": "recommended-next-contract-kit",
+      "sourceFiles": ["src/kits/phantom-command-inner-first-timeline-contract-kit/index.js"],
+      "provides": [
+        "computePieceDelay",
+        "computeRingFirstStart",
+        "computeRingLastStart",
+        "computeRingFirstSettle",
+        "computeRingLastSettle",
+        "computeOuterStartMarginSeconds",
+        "assertInnerRingSettlesBeforeOuterRingStarts",
+        "emitTimelineGuards"
+      ],
+      "requires": ["source construct profile", "ring descriptors", "piece descriptors"],
+      "blockers": ["Does not exist yet."]
+    },
+    {
+      "id": "phantom-command-ring-settle-boundary-kit",
+      "status": "recommended-next-policy-kit",
+      "sourceFiles": ["src/kits/phantom-command-ring-settle-boundary-kit/index.js"],
+      "provides": [
+        "resolveRingBoundary",
+        "assertNoConcurrentOuterStart",
+        "assertPositiveTransitionMargin",
+        "serializeRingBoundaryDiagnostics"
+      ],
+      "requires": ["inner-first timeline contract"],
+      "blockers": ["Does not exist yet."]
+    },
+    {
       "id": "phantom-command-construct-profile-parity-fixture-kit",
       "status": "recommended-next-fixture-kit",
       "sourceFiles": ["tests/phantom-command-construct-profile-parity-fixture.mjs"],
@@ -225,9 +267,10 @@
         "computeExpectedLiveRings",
         "assertBuildId",
         "assertRingDescriptorParity",
-        "assertPieceDescriptorParity"
+        "assertPieceDescriptorParity",
+        "assertTimelineParity"
       ],
-      "requires": ["source construct profile", "ring descriptor kit", "piece descriptor kit"],
+      "requires": ["source construct profile", "ring descriptor kit", "piece descriptor kit", "inner-first timeline contract kit"],
       "blockers": ["Does not exist yet."]
     },
     {
@@ -247,8 +290,48 @@
       "blockers": ["Does not exist yet."]
     },
     {
+      "id": "phantom-command-inner-first-timeline-smoke-kit",
+      "status": "recommended-next-smoke-kit",
+      "sourceFiles": ["tests/phantom-command-inner-first-timeline-smoke.mjs"],
+      "provides": [
+        "assertPieceDelayFormula",
+        "assertRingSettleBeforeOuterStart",
+        "assertTransitionMargins",
+        "assertNoOuterRingStartsDuringInnerDrop"
+      ],
+      "requires": ["inner-first timeline contract kit"],
+      "blockers": ["Does not exist yet."]
+    },
+    {
+      "id": "phantom-command-construct-snapshot-contract-kit",
+      "status": "recommended-next-snapshot-kit",
+      "sourceFiles": ["src/kits/phantom-command-construct-snapshot-contract-kit/index.js"],
+      "provides": [
+        "serializeConstructSnapshot",
+        "getConstructDiagnostics",
+        "serializeTimelineGuards",
+        "assertSnapshotShape"
+      ],
+      "requires": ["construct profile", "ring descriptors", "piece descriptors", "timeline guards", "mode state"],
+      "blockers": ["Current GameHost is inline and construct-only."]
+    },
+    {
+      "id": "phantom-command-construct-snapshot-smoke-kit",
+      "status": "recommended-next-smoke-kit",
+      "sourceFiles": ["tests/phantom-command-construct-snapshot-smoke.mjs"],
+      "provides": [
+        "assertBuildId",
+        "assertRingDescriptorProjection",
+        "assertPieceCountProjection",
+        "assertTimelineGuardProjection",
+        "assertProgressPhaseCompleteFields"
+      ],
+      "requires": ["construct snapshot contract"],
+      "blockers": ["Does not exist yet."]
+    },
+    {
       "id": "phantom-command-sequential-profile-adapter-kit",
-      "status": "deferred-until-source-descriptor-parity-passes",
+      "status": "deferred-until-descriptor-timeline-snapshot-parity-passes",
       "sourceFiles": ["src/kits/phantom-command-sequential-profile-adapter-kit/index.js"],
       "provides": [
         "toConstructIntroPieces",
@@ -257,15 +340,8 @@
         "computeOuterRingStartTimes",
         "assertNoOuterRingStartsBeforeInnerRingSettles"
       ],
-      "requires": ["source construct profile", "ring descriptors", "piece descriptors", "construct-spiral-intro-kit or parallel timeline service"],
-      "blockers": ["Should wait until source profile and descriptor parity are proven."]
-    },
-    {
-      "id": "phantom-command-construct-snapshot-contract-kit",
-      "status": "deferred-until-descriptor-parity",
-      "sourceFiles": ["src/kits/phantom-command-construct-snapshot-contract-kit/index.js"],
-      "provides": ["serializeConstructSnapshot", "getConstructDiagnostics", "assertSnapshotShape"],
-      "requires": ["construct profile", "timeline state", "mode state"]
+      "requires": ["source construct profile", "ring descriptors", "piece descriptors", "timeline contract", "construct-spiral-intro-kit or parallel timeline service"],
+      "blockers": ["Should wait until source profile, descriptor parity, timeline parity, and snapshot parity are proven."]
     },
     {
       "id": "phantom-command-gamehost-authority-kit",
@@ -318,202 +394,50 @@
       ],
       "provides": ["loadScenarioConfig", "loadMapConfig", "loadEnemyWaveConfig", "loadExperienceConfig", "loadUnlockConfig", "validateScenarioReferences"],
       "requires": ["static JSON fetch", "schema validation", "deterministic state composer"]
-    },
-    {
-      "id": "phantom-scenario-snapshot-contract-kit",
-      "status": "planned-domain-kit-after-bootstrap-fixture",
-      "provides": ["serializeScenarioSnapshot", "assertScenarioSnapshotShape", "exposeStartingResources", "exposeStartingUnits", "exposeStartingBuildings", "exposeObjectives", "exposeMapSeed"],
-      "requires": ["scenario config", "map config"]
-    },
-    {
-      "id": "rts-command-domain-kit",
-      "status": "deferred-until-profile-and-snapshot-parity",
-      "provides": ["dispatchCommand", "selectUnits", "requestMove", "requestAttack", "requestBuild", "requestProduce", "appendJournal"],
-      "requires": ["scenario state", "unit state", "building state", "economy ledger"]
     }
   ],
-  "kitGroups": {
-    "currentExplicit": ["construct-spiral-intro-kit", "construct-spiral-intro-kit-smoke"],
-    "immediateNextCutover": [
-      "phantom-command-source-construct-profile-kit",
-      "phantom-command-ring-descriptor-kit",
-      "phantom-command-piece-descriptor-kit",
-      "phantom-command-construct-profile-parity-fixture-kit",
-      "phantom-command-live-ring-descriptor-smoke-kit"
-    ],
-    "deferredNextCutover": [
-      "phantom-command-sequential-profile-adapter-kit",
-      "phantom-command-construct-snapshot-contract-kit",
-      "phantom-command-gamehost-authority-kit",
-      "phantom-command-scenario-bootstrap-fixture-kit",
-      "phantom-command-live-construct-parity-smoke-kit",
-      "phantom-command-scenario-snapshot-smoke-kit"
-    ],
-    "runtimeExtraction": [
-      "phantom-command-static-app-shell-kit",
-      "phantom-command-menu-route-kit",
-      "phantom-command-main-runtime-kit",
-      "phantom-command-construct-scene-kit",
-      "phantom-command-three-render-kit",
-      "phantom-command-ritual-ring-geometry-kit",
-      "phantom-command-wedge-detail-kit",
-      "phantom-command-construct-animation-timeline-kit",
-      "phantom-command-totem-visual-kit",
-      "phantom-command-phantom-commander-visual-kit",
-      "phantom-command-camera-navigation-kit",
-      "phantom-command-hud-diagnostics-kit",
-      "phantom-command-mode-state-kit"
-    ],
-    "gameplayDomains": [
-      "phantom-scenario-config-kit",
-      "phantom-scenario-snapshot-contract-kit",
-      "phantom-map-generation-domain-kit",
-      "radial-center-pressure-map-kit",
-      "world-economy-domain-kit",
-      "soul-economy-domain-kit",
-      "experience-progression-domain-kit",
-      "unlock-registry-domain-kit",
-      "undead-unit-domain-kit",
-      "enemy-unit-domain-kit",
-      "necropolis-building-domain-kit",
-      "building-production-queue-kit",
-      "upgrade-research-domain-kit",
-      "pve-director-domain-kit",
-      "wave-lane-spawner-kit",
-      "rts-command-domain-kit",
-      "rts-combat-resolution-domain-kit",
-      "rts-movement-system-kit",
-      "rts-render-descriptor-kit",
-      "scenario-objective-kit",
-      "scenario-authority-smoke-kit",
-      "command-journal-replay-kit"
-    ],
-    "objectsAndSubdomains": [
-      "crypt-core-domain-kit",
-      "grave-harvester-domain-kit",
-      "bone-pit-domain-kit",
-      "black-chapel-domain-kit",
-      "skeleton-unit-kit",
-      "zombie-unit-kit",
-      "ghoul-unit-kit",
-      "wight-unit-kit",
-      "militia-enemy-kit",
-      "hunter-enemy-kit",
-      "cleric-enemy-kit",
-      "knight-enemy-kit",
-      "pyre-engine-enemy-kit",
-      "grim-reaper-totem-objective-kit",
-      "outer-militia-camp-objective-kit"
-    ]
-  },
-  "services": [
-    "appShell.routeToGame",
-    "appShell.openSceneDirectly",
-    "mainRuntime.boot",
-    "mainRuntime.bindDom",
-    "mainRuntime.bindInputs",
-    "mainRuntime.startFrameLoop",
-    "mainRuntime.publishSnapshots",
-    "threeRender.createRenderer",
-    "threeRender.createScene",
+  "serviceSurface": [
     "sourceConstructProfile.getSequentialRingV5Profile",
-    "sourceConstructProfile.assertProfileBuildId",
-    "sourceConstructProfile.exportConstructConstants",
-    "sourceConstructProfile.validateRingCount",
-    "sourceConstructProfile.validateWidthPolicy",
-    "sourceConstructProfile.validateNoGapProfile",
-    "sourceConstructProfile.validateTimingProfile",
-    "sequentialRing.computeRingWidths",
-    "sequentialRing.computeNoGapRadii",
-    "sequentialRing.computeRingPartCounts",
     "ringDescriptor.emitRingDescriptors",
-    "ringDescriptor.assertTenRings",
-    "ringDescriptor.assertZeroGaps",
-    "ringDescriptor.assertWidthGrowth",
-    "ringDescriptor.assertPartCountParity",
     "pieceDescriptor.emitPieceDescriptors",
-    "pieceDescriptor.emitPieceIds",
-    "pieceDescriptor.emitPieceAngles",
-    "pieceDescriptor.emitPieceSeeds",
-    "profileParityFixture.assertBuildId",
-    "profileParityFixture.assertRingDescriptorParity",
-    "profileParityFixture.assertPieceDescriptorParity",
-    "profileAdapter.toConstructIntroPieces",
-    "profileAdapter.assertNoOuterRingStartsBeforeInnerRingSettles",
+    "innerFirstTimeline.emitTimelineGuards",
+    "innerFirstTimeline.assertRingSettleBeforeOuterStart",
     "constructSnapshot.serialize",
     "gameHost.getState",
     "gameHost.getDiagnostics",
     "gameHost.dispatch",
-    "gameHost.subscribe",
-    "gameHost.getConstructState",
-    "gameHost.getScenarioState",
-    "gameHost.getCommandJournal",
-    "scenarioBootstrap.composeInitialScenarioSnapshot",
-    "mapGeneration.generateRadialRings",
-    "mapGeneration.placePlayerStart",
-    "mapGeneration.placeResourceNodes",
-    "mapGeneration.placeEnemyCamps",
-    "mapGeneration.placeWaveLanes",
-    "command.dispatchCommand",
-    "command.appendJournal",
     "smoke.runConstructProfileParity",
     "smoke.runLiveRingDescriptorParity",
-    "smoke.runSequentialProfileAdapter",
+    "smoke.runInnerFirstTimelineParity",
+    "smoke.runConstructSnapshotShape",
     "smoke.runScenarioBootstrap"
   ],
-  "recommendedNextSlice": {
-    "name": "PhantomCommand Source Construct Profile + Ring Descriptor Parity Fixture Cutover",
-    "sequence": [
-      "preserve current game.html behavior",
-      "create phantom-command-source-construct-profile-kit",
-      "move live sequential-ring-v5 constants into one source-owned profile object",
-      "create phantom-command-ring-descriptor-kit",
-      "reproduce width growth, no-gap radii, and ringParts formula exactly",
-      "create phantom-command-piece-descriptor-kit",
-      "emit stable piece ids and descriptor metadata",
-      "create phantom-command-construct-profile-parity-fixture-kit",
-      "add live ring descriptor smoke for build id, ring count, widths, gaps, part counts, and total pieces",
-      "keep construct-spiral-intro-kit default behavior unchanged",
-      "defer sequential adapter, scenario bootstrap, and RTS commands until descriptor parity passes"
-    ]
-  },
+  "nextBuildTarget": "PhantomCommand Inner-First Timeline Contract + Construct Snapshot Fixture Cutover",
   "acceptanceTargets": [
-    "npm run build still succeeds",
-    "source profile reports buildId sequential-ring-v5",
-    "source profile contains every live construct constant now duplicated in game.html",
-    "ring descriptor emits exactly ten rings",
-    "all ring gaps are zero",
-    "ring widths match FIRST_RING_WIDTH * RING_WIDTH_GROWTH capped by MAX_RING_WIDTH",
-    "inner/outer radii are contiguous with zero physical gap",
-    "ring part counts match the live ringParts(inner, outer) formula",
-    "piece descriptor total count equals sum of ring part counts",
+    "game.html visual behavior remains unchanged",
+    "sequential-ring-v5 constants exist in one source-owned profile",
+    "source descriptors reproduce ten rings",
+    "source descriptors reproduce zero physical gaps",
+    "source part counts match live ringParts(inner, outer)",
+    "source total piece count is 92",
     "piece ids are stable and deterministic",
-    "new parity fixture runs without DOM or Three.js renderer",
-    "existing construct-spiral-intro-kit smoke still passes",
-    "game.html behavior remains unchanged during this parity-only slice",
-    "scenario bootstrap remains deferred until source descriptor parity passes"
+    "timeline guards prove every inner ring can finish before the next outer ring starts",
+    "ConstructSnapshot exposes build id, rings, pieces, phase, progress, complete, and timeline guards",
+    "DOM-free smoke covers descriptor parity, timeline parity, and snapshot shape",
+    "construct-spiral-intro-kit defaults remain unchanged",
+    "scenario bootstrap and RTS commands remain deferred until construct source parity passes"
   ],
-  "validation": {
-    "performed": [
-      "read LuminaryLabs-Dev/LuminaryLabs latest TheOpenAbove ledger",
-      "read repo .agent README",
-      "read repo .agent kit registry",
-      "read package.json",
-      "read README.md",
-      "read game.html",
-      "read construct-spiral-intro-kit source",
-      "read construct smoke fixture",
-      "read scenario config",
-      "read map config"
-    ],
-    "notPerformed": [
-      "local checkout",
-      "npm install",
-      "npm run build",
-      "browser smoke",
-      "live Pages check",
-      "GitHub Actions rerun",
-      "runtime source edit"
-    ]
-  }
+  "outOfScopeNextSlice": [
+    "runtime split from game.html",
+    "three render extraction",
+    "scenario bootstrap",
+    "RTS unit selection",
+    "building placement",
+    "economy tick",
+    "combat resolution",
+    "wave director",
+    "XP and unlock progression",
+    "save/load",
+    "networking"
+  ]
 }
