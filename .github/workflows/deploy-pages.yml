@@ -40,11 +40,13 @@ jobs:
           touch dist/.nojekyll
           test -f dist/index.html
           test -f dist/game.html
-          grep -q 'Immediate construct' dist/game.html
+          grep -q 'ring-gap-v4' dist/game.html
           grep -q 'const RING_COUNT=10;' dist/game.html
           grep -q 'const MOVE_SECONDS=' dist/game.html
           grep -q 'const DROP_START_SECONDS=' dist/game.html
           grep -q 'const START_HEIGHT_BASE=' dist/game.html
+          grep -q 'const RING_GAP_BASE=' dist/game.html
+          grep -q 'const RING_GAP_GROWTH=' dist/game.html
           find dist -maxdepth 3 -type f | sort
 
       - name: Configure Pages
