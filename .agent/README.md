@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T11-18-32-04-00`
+**Latest documented run:** `2026-07-07T12-50-04-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T11-18-32-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T12-50-04-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -12,7 +12,7 @@
 
 The live proof is still `sequential-ring-v5`: ten concentric no-gap stone rings assemble around the Grim Reaper Totem. The current runtime defines construct constants, ring layout, wedge geometry, material detail, animation timing, input, HUD, camera, and `window.GameHost` inline in `game.html`.
 
-The source kit at `src/kits/construct-spiral-intro-kit/index.js` is useful, but its default schedule is still spiral/window based. The next cutover should first create a source-owned construct profile and ring descriptor parity fixture before adapting the generic construct kit or splitting the runtime.
+The source kit at `src/kits/construct-spiral-intro-kit/index.js` is useful as a generic sequencing kit, but its default schedule is still spiral/window based. The next cutover should first create a source-owned construct profile, live ring descriptors, stable piece descriptors, inner-first timeline guards, and construct snapshot fixtures before adapting the generic construct kit or splitting the runtime.
 
 The design/config layer remains ahead of runtime. It already defines `scenario_001_raise_the_host`, starting resources, Crypt Core, starter Skeletons/Zombies, Grave Harvester, Bone Pit, the first enemy camp, win/loss conditions, radial map rings, resource nodes, the center totem, and wave lanes.
 
@@ -31,12 +31,13 @@ Tracked entries:
 .agent/trackers/2026-07-07T09-00-25-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T10-08-37-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T11-18-32-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T12-50-04-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Source Construct Profile + Ring Descriptor Parity Fixture Cutover` slice.
+Build the `PhantomCommand Inner-First Timeline Contract + Construct Snapshot Fixture Cutover` slice.
 
 ```txt
 menu
@@ -46,9 +47,11 @@ menu
   -> source ring widths reproduce FIRST_RING_WIDTH * RING_WIDTH_GROWTH capped by MAX_RING_WIDTH
   -> source ring part counts reproduce ringParts(inner, outer)
   -> source piece descriptors emit stable ids and metadata
-  -> DOM-free parity fixture validates build id, ring count, widths, gaps, part counts, and total pieces
+  -> inner-first timeline guards prove every inner ring can settle before the next outer ring starts
+  -> construct snapshot exposes build id, rings, pieces, progress, phase, completion, and timeline guard diagnostics
+  -> DOM-free parity fixture validates build id, ring count, widths, gaps, part counts, total pieces, timeline margins, and snapshot shape
   -> existing construct-spiral-intro-kit smoke remains a generic regression guard
-  -> sequential adapter, GameHost extraction, scenario bootstrap, and RTS commands stay deferred until descriptor parity passes
+  -> sequential adapter, GameHost extraction, scenario bootstrap, and RTS commands stay deferred until descriptor/timeline/snapshot parity passes
 ```
 
 Minimum next build checklist:
@@ -61,7 +64,12 @@ Minimum next build checklist:
 - Reproduce ten rings, zero gaps, live ring widths, and live part counts.
 - Add `phantom-command-piece-descriptor-kit`.
 - Emit stable piece ids, ring indices, part indices, part counts, angle/span data, and deterministic seed data.
+- Add `phantom-command-inner-first-timeline-contract-kit`.
+- Compute `firstStart`, `lastStart`, `firstSettle`, `lastSettle`, and `marginSeconds` for every ring transition.
 - Add `phantom-command-construct-profile-parity-fixture-kit`.
 - Add `phantom-command-live-ring-descriptor-smoke-kit`.
-- Keep `construct-spiral-intro-kit` defaults unchanged until descriptor parity passes.
-- Do not expand scenario bootstrap, selection, units, buildings, economy, combat, or wave behavior until source descriptor parity is stable.
+- Add `phantom-command-inner-first-timeline-smoke-kit`.
+- Add `phantom-command-construct-snapshot-contract-kit`.
+- Add `phantom-command-construct-snapshot-smoke-kit`.
+- Keep `construct-spiral-intro-kit` defaults unchanged until descriptor, timeline, and snapshot parity pass.
+- Do not expand scenario bootstrap, selection, units, buildings, economy, combat, or wave behavior until source construct parity is stable.
