@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T07:49:39-04:00",
-  "status": "sequential-construct-parity-scenario-authority-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T07-49-39-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T09:00:25-04:00",
+  "status": "construct-profile-source-cutover-gamehost-snapshot-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T09-00-25-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -11,53 +11,72 @@
       "game.html"
     ],
     "liveBuildId": "sequential-ring-v5",
-    "previousDocsDrift": "Older agent notes and the central ledger still referenced ring-gap-v4. The live game.html now reports sequential-ring-v5 and a no-physical-gap inner-ring-first construct.",
     "currentGameHostSurface": [
       "window.GameHost.skipConstruct",
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "The live runtime is still an inline construct scene. The source construct kit exists but is not live-wired and its spiral scheduling profile must be reconciled with sequential-ring-v5 before config-backed RTS scenario authority is bootstrapped."
+    "primaryGap": "The visual construct proof is inline in game.html, while the source construct kit uses a different spiral/window profile. The next build must make sequential-ring-v5 source-authoritative before the RTS scenario command reducer is expanded."
   },
   "interactionLoops": {
     "current": [
       "load index.html menu",
       "open game.html construct scene",
-      "initialize Three.js renderer, fog, camera, lights, HUD, and inputs",
-      "generate ten concentric no-gap ring specs inline",
+      "import Three.js from CDN",
+      "initialize renderer, scene, fog, lights, camera, HUD, materials, and inputs",
+      "define sequential-ring-v5 constants inline",
+      "generate ten concentric no-gap rings",
       "create wedge meshes, seams, stone materials, center disc, totem, and phantom commander",
-      "animate inner rings before outer rings using sequential-ring-v5 timing",
-      "pan with WASD/arrows, zoom with wheel, skip with Space, restart with R",
-      "update progress, piece count, phase, status, and build id HUD",
-      "expose construct-only snapshot through inline GameHost",
+      "animate pieces by ringIndex * RING_STAGGER + partIndex * PART_STAGGER",
+      "inner rings settle before outer rings begin",
+      "allow pan, zoom, skip, and restart",
+      "update HUD progress, count, phase, status, and build id",
+      "expose construct-only state through inline GameHost",
       "reach command platform online"
     ],
     "targetFirstPlayable": [
       "load menu and route to game",
-      "run source-authoritative construct intro with a profile matching sequential-ring-v5",
-      "GameHost switches from construct_intro to scenario_bootstrap",
+      "run source-authoritative construct intro matching sequential-ring-v5",
+      "publish construct_complete",
+      "switch GameHost mode to scenario_bootstrap",
       "load scenario, map, wave, experience, and unlock config JSON",
-      "compose fixed deterministic RTS state",
-      "GameHost switches to scenario_active",
-      "select starter Skeletons/Zombies",
+      "compose deterministic RTS scenario snapshot",
+      "switch GameHost mode to scenario_active",
+      "select starter Skeletons and Zombies",
       "build Grave Harvester and Bone Pit",
-      "tick resource nodes and first wave lane",
+      "tick resources and first wave lane",
       "clear outer_militia_camp_01",
-      "evaluate objectives, resources, XP, unlocks, win state, and Crypt Core loss"
+      "evaluate objectives, XP, unlocks, win state, and Crypt Core loss"
+    ],
+    "recommendedSourceAuthorityLoop": [
+      "thin game.html module entry",
+      "boot src/main.js",
+      "load sequential-ring-v5 profile from source",
+      "emit ring and piece descriptors",
+      "create Three.js meshes from descriptors",
+      "drive animation from source timeline",
+      "publish ConstructSnapshot every frame",
+      "promote GameHost mode, diagnostics, and snapshot surfaces",
+      "compose deterministic ScenarioSnapshot after construct completion",
+      "validate source/live parity with smoke fixtures"
     ]
   },
   "domains": [
     "static-app-shell",
     "main-menu-routing",
-    "github-pages-deploy",
     "vite-static-build",
+    "github-pages-deploy",
     "three-render-host",
     "runtime-boot-sequence",
-    "construct-scene-runtime",
+    "inline-construct-runtime",
+    "source-construct-profile",
+    "construct-profile-config",
     "sequential-ring-layout",
+    "ring-descriptor-generation",
     "ritual-wedge-geometry",
     "stone-wedge-material-detail",
-    "construct-animation-profile",
+    "construct-animation-timeline",
+    "construct-snapshot-contract",
     "construct-source-kit-parity",
     "grim-reaper-totem-visual-object",
     "phantom-commander-visual-object",
@@ -66,9 +85,11 @@
     "wheel-zoom-input",
     "hud-diagnostics",
     "gamehost-authority",
+    "mode-state-machine",
     "construct-smoke-testing",
     "scenario-config-loading",
     "scenario-state-composition",
+    "scenario-snapshot-contract",
     "radial-map-generation",
     "center-pressure-ring-model",
     "player-start-placement",
@@ -89,7 +110,6 @@
     "rts-movement-requests",
     "rts-attack-requests",
     "world-economy-ledger",
-    "soul-economy-ledger",
     "combat-resolution",
     "objective-tracking",
     "experience-progression",
@@ -101,216 +121,398 @@
   "kits": [
     {
       "id": "construct-spiral-intro-kit",
-      "status": "implemented-source-kit-not-live-wired",
+      "status": "implemented-source-kit-needs-sequential-profile-adapter",
       "domainPath": "n:sequence:construct:spiral-intro",
-      "sourceFiles": ["src/kits/construct-spiral-intro-kit/index.js"],
-      "provides": ["createConstructSpiralIntroPieceId", "createConstructSpiralIntroSchedule", "createConstructSpiralIntroKit", "installPieces", "reset", "update", "snapshot", "schedule", "activePieces", "settledPieces", "pendingPieces", "newlyActivePieces", "newlySettledPieces", "getPieceProgress", "getPieceStatus"],
-      "requires": ["piece descriptors with ringIndex, partIndex, partsPerRing", "dt tick source"],
-      "blockers": ["The live construct uses sequential-ring-v5 timing inline in game.html, not this kit."]
+      "sourceFiles": [
+        "src/kits/construct-spiral-intro-kit/index.js"
+      ],
+      "provides": [
+        "createConstructSpiralIntroPieceId",
+        "createConstructSpiralIntroSchedule",
+        "createConstructSpiralIntroKit",
+        "installPieces",
+        "reset",
+        "update",
+        "snapshot",
+        "schedule",
+        "activePieces",
+        "settledPieces",
+        "pendingPieces",
+        "newlyActivePieces",
+        "newlySettledPieces",
+        "getPieceProgress",
+        "getPieceStatus"
+      ],
+      "requires": [
+        "piece descriptors",
+        "dt tick source"
+      ],
+      "blockers": [
+        "Default spiral profile does not match the live sequential-ring-v5 no-gap inner-first behavior."
+      ]
     },
     {
       "id": "construct-spiral-intro-kit-smoke",
-      "status": "implemented-smoke-fixture",
-      "sourceFiles": ["tests/construct-spiral-intro-kit-smoke.mjs"],
-      "provides": ["assertKitId", "assertDomainPath", "installGeneratedRingPieces", "assertScheduleOrdering", "tickUntilComplete", "assertActiveCountCap", "assertActiveRingWindow", "assertAllPiecesSettled"],
-      "requires": ["construct-spiral-intro-kit"],
-      "blockers": ["Does not validate the live sequential-ring-v5 timing or RTS scenario bootstrap."]
+      "status": "implemented-smoke-fixture-needs-live-profile-parity-expansion",
+      "sourceFiles": [
+        "tests/construct-spiral-intro-kit-smoke.mjs"
+      ],
+      "provides": [
+        "assertKitId",
+        "assertDomainPath",
+        "installGeneratedRingPieces",
+        "assertScheduleOrdering",
+        "tickUntilComplete",
+        "assertActiveCountCap",
+        "assertActiveRingWindow",
+        "assertAllPiecesSettled"
+      ],
+      "requires": [
+        "construct-spiral-intro-kit"
+      ],
+      "blockers": [
+        "Does not validate the live sequential-ring-v5 constants, zero ring gaps, or GameHost snapshot contract."
+      ]
+    },
+    {
+      "id": "phantom-command-source-construct-profile-kit",
+      "status": "recommended-next-source-authority-kit",
+      "sourceFiles": [
+        "src/main.js",
+        "src/kits/phantom-command-source-construct-profile-kit/index.js"
+      ],
+      "provides": [
+        "getSequentialRingV5Profile",
+        "assertProfileBuildId",
+        "exportConstructConstants",
+        "validateNoGapProfile",
+        "validateInnerFirstScheduling"
+      ],
+      "requires": [
+        "sequential-ring-v5 constants from live proof"
+      ],
+      "blockers": [
+        "Does not exist yet."
+      ]
+    },
+    {
+      "id": "phantom-command-ring-descriptor-kit",
+      "status": "recommended-next-source-authority-kit",
+      "sourceFiles": [
+        "src/kits/phantom-command-ring-descriptor-kit/index.js"
+      ],
+      "provides": [
+        "computeRingWidths",
+        "computeNoGapRadii",
+        "computeRingPartCounts",
+        "emitRingDescriptors",
+        "emitPieceDescriptors"
+      ],
+      "requires": [
+        "source construct profile"
+      ],
+      "blockers": [
+        "Ring descriptors are still created inline in game.html."
+      ]
     },
     {
       "id": "phantom-command-static-app-shell-kit",
       "status": "candidate-extraction",
-      "sourceFiles": ["index.html"],
-      "provides": ["renderMenu", "routeToGame", "openSceneDirectly", "preserveStaticRouteContract"],
-      "requires": ["static deploy paths"],
-      "blockers": ["Menu remains hardcoded HTML/CSS/JS."]
+      "sourceFiles": [
+        "index.html"
+      ],
+      "provides": [
+        "renderMenu",
+        "routeToGame",
+        "openSceneDirectly",
+        "preserveStaticRouteContract"
+      ],
+      "requires": [
+        "static deploy paths"
+      ]
     },
     {
-      "id": "phantom-command-menu-route-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["index.html"],
-      "provides": ["startGame", "openGameHtml", "preservePagesBasePath"],
-      "requires": ["app shell"],
-      "blockers": ["Route behavior is not a source service."]
+      "id": "phantom-command-main-runtime-kit",
+      "status": "recommended-next-runtime-cutover",
+      "sourceFiles": [
+        "src/main.js",
+        "game.html"
+      ],
+      "provides": [
+        "bootRuntime",
+        "bindDom",
+        "bindInputs",
+        "startFrameLoop",
+        "publishSnapshots"
+      ],
+      "requires": [
+        "thin game.html",
+        "source construct profile",
+        "three render kit"
+      ]
     },
     {
       "id": "phantom-command-construct-scene-kit",
       "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["bootConstructScene", "createScene", "createRenderer", "createLighting", "createFog", "tickConstructScene"],
-      "requires": ["Three.js renderer", "construct schedule", "camera navigation", "HUD diagnostics"],
-      "blockers": ["Scene boot and tick loop are inline in game.html."]
+      "sourceFiles": [
+        "game.html"
+      ],
+      "provides": [
+        "bootConstructScene",
+        "createScene",
+        "createRenderer",
+        "createLighting",
+        "createFog",
+        "tickConstructScene"
+      ],
+      "requires": [
+        "Three.js renderer",
+        "construct schedule",
+        "camera navigation",
+        "HUD diagnostics"
+      ]
     },
     {
-      "id": "phantom-command-sequential-ring-layout-kit",
+      "id": "phantom-command-construct-animation-timeline-kit",
       "status": "recommended-next-parity-kit",
-      "sourceFiles": ["game.html"],
-      "provides": ["computeRingWidths", "computeRingPartCounts", "computeNoGapRadii", "emitRingPieceDescriptors"],
-      "requires": ["RING_COUNT", "FIRST_INNER_RADIUS", "FIRST_RING_WIDTH", "RING_WIDTH_GROWTH", "MAX_RING_WIDTH"],
-      "blockers": ["Ring generation is inline and duplicated away from construct-spiral-intro-kit."]
+      "sourceFiles": [
+        "game.html",
+        "src/kits/construct-spiral-intro-kit/index.js"
+      ],
+      "provides": [
+        "computePieceDelay",
+        "computeTotalBuildTime",
+        "computePieceProgress",
+        "computeRadialProgress",
+        "computeDropProgress",
+        "skip",
+        "restart"
+      ],
+      "requires": [
+        "source construct profile",
+        "piece descriptors"
+      ]
     },
     {
-      "id": "phantom-command-ritual-ring-geometry-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["generateRingSpecs", "computeRingPartCount", "createWedgeGeometry", "createRingPieceDescriptor", "seededStoneVariation"],
-      "requires": ["ring geometry constants", "seeded random helper"],
-      "blockers": ["Geometry, material, and animation state are coupled."]
-    },
-    {
-      "id": "phantom-command-wedge-detail-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["addSeams", "addCracks", "assignStoneMaterial"],
-      "requires": ["wedge meshes", "material palette"],
-      "blockers": ["Detail generation lives inside piece construction."]
-    },
-    {
-      "id": "phantom-command-construct-animation-profile-kit",
-      "status": "recommended-next-parity-kit",
-      "sourceFiles": ["game.html", "src/kits/construct-spiral-intro-kit/index.js"],
-      "provides": ["defineSequentialRingProfile", "computePieceDelay", "computeRadialProgress", "computeDropProgress", "computePhase", "skip", "restart"],
-      "requires": ["construct source kit", "piece start/final transforms", "live timing constants"],
-      "blockers": ["Source kit profile and live sequential-ring-v5 behavior are not unified."]
-    },
-    {
-      "id": "phantom-command-totem-visual-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["createCenterDisc", "createTotemBase", "createGlowCore", "tickTotemIdle"],
-      "requires": ["Three.js scene", "materials"],
-      "blockers": ["Visual object has no objective state bridge."]
-    },
-    {
-      "id": "phantom-command-phantom-commander-visual-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["createCommanderBody", "createCommanderHood", "tickHover", "tickTurn"],
-      "requires": ["Three.js scene", "time source"],
-      "blockers": ["Visual has no selection, command, or faction domain link."]
-    },
-    {
-      "id": "phantom-command-camera-navigation-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["panFromKeys", "zoomFromWheel", "clampTarget", "smoothCameraTarget", "applyCameraPose"],
-      "requires": ["input state", "camera", "bounds"],
-      "blockers": ["Camera target state is local to game.html."]
-    },
-    {
-      "id": "phantom-command-hud-diagnostics-kit",
-      "status": "candidate-extraction",
-      "sourceFiles": ["game.html"],
-      "provides": ["setProgress", "setConstructedCount", "setPhase", "setStatus", "setBuildId", "showScenarioStatus", "showError"],
-      "requires": ["DOM elements", "construct state", "scenario state", "GameHost state"],
-      "blockers": ["HUD reads inline local values, not normalized mode/scenario state."]
+      "id": "phantom-command-construct-snapshot-contract-kit",
+      "status": "recommended-next-snapshot-contract-kit",
+      "sourceFiles": [
+        "src/kits/phantom-command-construct-snapshot-contract-kit/index.js"
+      ],
+      "provides": [
+        "getConstructState",
+        "getConstructDiagnostics",
+        "serializeConstructSnapshot",
+        "assertSnapshotShape"
+      ],
+      "requires": [
+        "construct profile",
+        "timeline state",
+        "mode state"
+      ]
     },
     {
       "id": "phantom-command-gamehost-authority-kit",
       "status": "recommended-next-authority-cutover",
-      "sourceFiles": ["game.html", "src/main.js"],
-      "currentProvides": ["skipConstruct", "restartConstruct", "getState"],
-      "recommendedProvides": ["getState", "getDiagnostics", "dispatch", "subscribe", "getScenarioState", "getCommandJournal", "getConstructState"],
-      "requires": ["construct state", "scenario state", "mode state", "command reducer", "diagnostics snapshot"],
-      "blockers": ["Current GameHost is inline and construct-only."]
+      "sourceFiles": [
+        "game.html",
+        "src/main.js"
+      ],
+      "currentProvides": [
+        "skipConstruct",
+        "restartConstruct",
+        "getState"
+      ],
+      "recommendedProvides": [
+        "getState",
+        "getDiagnostics",
+        "dispatch",
+        "subscribe",
+        "getConstructState",
+        "getScenarioState",
+        "getCommandJournal"
+      ],
+      "requires": [
+        "construct snapshot",
+        "scenario snapshot",
+        "mode state",
+        "diagnostics snapshot"
+      ],
+      "blockers": [
+        "Current GameHost is inline and construct-only."
+      ]
+    },
+    {
+      "id": "phantom-command-mode-state-kit",
+      "status": "recommended-next-authority-cutover",
+      "provides": [
+        "construct_intro",
+        "scenario_bootstrap",
+        "scenario_active",
+        "scenario_complete",
+        "scenario_failed",
+        "transition",
+        "history"
+      ],
+      "requires": [
+        "construct completion event",
+        "scenario bootstrap result"
+      ]
     },
     {
       "id": "phantom-scenario-config-kit",
-      "status": "recommended-next",
-      "sourceFiles": ["config/scenario-001.config.json", "config/map-generation.config.json", "config/enemy-waves.config.json", "config/experience.config.json", "config/unlocks.config.json"],
-      "provides": ["loadScenarioConfig", "loadMapConfig", "loadEnemyWaveConfig", "loadExperienceConfig", "loadUnlockConfig", "composeInitialScenarioState", "validateScenarioReferences"],
-      "requires": ["static JSON fetch", "schema validation", "deterministic state composer"],
-      "blockers": ["Config files are not yet loaded by the runtime."]
+      "status": "recommended-next-scenario-bootstrap",
+      "sourceFiles": [
+        "config/scenario-001.config.json",
+        "config/map-generation.config.json",
+        "config/enemy-waves.config.json",
+        "config/experience.config.json",
+        "config/unlocks.config.json"
+      ],
+      "provides": [
+        "loadScenarioConfig",
+        "loadMapConfig",
+        "loadEnemyWaveConfig",
+        "loadExperienceConfig",
+        "loadUnlockConfig",
+        "composeInitialScenarioState",
+        "validateScenarioReferences"
+      ],
+      "requires": [
+        "static JSON fetch",
+        "schema validation",
+        "deterministic state composer"
+      ],
+      "blockers": [
+        "Config files are not yet loaded by the runtime."
+      ]
+    },
+    {
+      "id": "phantom-scenario-snapshot-contract-kit",
+      "status": "recommended-next-scenario-bootstrap",
+      "provides": [
+        "serializeScenarioSnapshot",
+        "assertScenarioSnapshotShape",
+        "exposeStartingResources",
+        "exposeStartingUnits",
+        "exposeStartingBuildings",
+        "exposeObjectives",
+        "exposeMapSeed"
+      ],
+      "requires": [
+        "scenario config",
+        "map config"
+      ]
     },
     {
       "id": "phantom-map-generation-domain-kit",
       "status": "planned-domain-kit",
-      "sourceFiles": ["config/map-generation.config.json"],
-      "provides": ["generateRadialRings", "placePlayerStart", "placeResourceNodes", "placeEnemyCamps", "placeWaveLanes", "placeCenterTotem"],
-      "requires": ["map-generation config", "seeded random"],
-      "blockers": ["Map config is not represented visually or interactively yet."]
-    },
-    {
-      "id": "radial-center-pressure-map-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": ["config/map-generation.config.json"],
-      "provides": ["classifyRingForPosition", "computeDangerLevel", "computeResourceMultiplier", "computeCorruptionFlag"],
-      "requires": ["ring model config", "world position"],
-      "blockers": ["No RTS world positions exist yet."]
+      "sourceFiles": [
+        "config/map-generation.config.json"
+      ],
+      "provides": [
+        "generateRadialRings",
+        "placePlayerStart",
+        "placeResourceNodes",
+        "placeEnemyCamps",
+        "placeWaveLanes",
+        "placeCenterTotem"
+      ],
+      "requires": [
+        "map-generation config",
+        "seeded random"
+      ]
     },
     {
       "id": "world-economy-domain-kit",
       "status": "planned-domain-kit",
-      "sourceFiles": ["config/scenario-001.config.json", "config/map-generation.config.json"],
-      "provides": ["getBalance", "canAfford", "payCost", "grantResources", "tickResourceNodes", "emitEconomyEvents"],
-      "requires": ["resource node config", "scenario starting resources"],
-      "blockers": ["No runtime economy ledger yet."]
-    },
-    {
-      "id": "soul-economy-domain-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": ["config/scenario-001.config.json", "config/map-generation.config.json"],
-      "provides": ["harvestSouls", "spendSouls", "validateSoulCosts"],
-      "requires": ["world-economy-domain-kit"],
-      "blockers": ["Soul income/costs are config-only."]
-    },
-    {
-      "id": "experience-progression-domain-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": ["config/experience.config.json"],
-      "provides": ["grantExperience", "checkRankThresholds", "grantMasteryPoints", "trackProcessedExperienceEvents"],
-      "requires": ["experience config", "sourceEventId ledger"],
-      "blockers": ["No gameplay event stream exists yet."]
-    },
-    {
-      "id": "unlock-registry-domain-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": ["config/unlocks.config.json"],
-      "provides": ["isUnlocked", "evaluateRequirements", "claimUnlock", "trackProcessedUnlockClaims"],
-      "requires": ["unlock config", "economy/building/progression state"],
-      "blockers": ["No runtime state model exists for requirements."]
-    },
-    {
-      "id": "pve-director-domain-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": ["config/enemy-waves.config.json", "config/map-generation.config.json"],
-      "provides": ["scheduleWaves", "chooseWaveLane", "spawnDueWaves", "selectAttackTarget", "trackTotemPhaseWaves"],
-      "requires": ["enemy wave config", "wave lane config", "scenario time"],
-      "blockers": ["No enemy actor runtime yet."]
+      "sourceFiles": [
+        "config/scenario-001.config.json",
+        "config/map-generation.config.json"
+      ],
+      "provides": [
+        "getBalance",
+        "canAfford",
+        "payCost",
+        "grantResources",
+        "tickResourceNodes",
+        "emitEconomyEvents"
+      ],
+      "requires": [
+        "resource node config",
+        "scenario starting resources"
+      ]
     },
     {
       "id": "rts-command-domain-kit",
-      "status": "recommended-next",
-      "sourceFiles": [],
-      "provides": ["dispatchCommand", "selectUnits", "requestMove", "requestAttack", "requestBuild", "requestProduce", "validateCommand", "appendCommandJournal"],
-      "requires": ["input adapter", "unit/building state", "command validation", "GameHost authority"],
-      "blockers": ["No RTS interaction layer exists yet."]
-    },
-    {
-      "id": "rts-combat-resolution-domain-kit",
-      "status": "planned-domain-kit",
-      "sourceFiles": [],
-      "provides": ["validateTarget", "resolveAttack", "applyDamage", "emitDefeated"],
-      "requires": ["unit stats", "enemy stats", "targeting commands"],
-      "blockers": ["No units/enemies are simulated yet."]
+      "status": "planned-domain-kit-after-snapshot-cutover",
+      "provides": [
+        "dispatchCommand",
+        "selectUnits",
+        "requestMove",
+        "requestAttack",
+        "requestBuild",
+        "requestProduce",
+        "appendJournal"
+      ],
+      "requires": [
+        "scenario state",
+        "unit state",
+        "building state",
+        "economy ledger"
+      ]
     },
     {
       "id": "scenario-objective-kit",
-      "status": "recommended-next",
-      "sourceFiles": ["config/scenario-001.config.json"],
-      "provides": ["evaluateObjectives", "markObjectiveComplete", "evaluateWinCondition", "evaluateLoseCondition"],
-      "requires": ["scenario state", "building state", "enemy camp state"],
-      "blockers": ["Scenario objectives are config-only."]
+      "status": "planned-domain-kit",
+      "provides": [
+        "evaluate",
+        "markComplete",
+        "evaluateWinCondition",
+        "evaluateLoseCondition"
+      ],
+      "requires": [
+        "scenario objectives",
+        "event ledger"
+      ]
+    },
+    {
+      "id": "phantom-command-live-construct-parity-smoke-kit",
+      "status": "recommended-next-smoke-kit",
+      "provides": [
+        "runConstructProfileParity",
+        "runLiveConstructParity",
+        "assertBuildId",
+        "assertRingCount",
+        "assertZeroRingGaps",
+        "assertInnerBeforeOuter",
+        "assertSkipRestart",
+        "assertGameHostConstructSnapshot"
+      ],
+      "requires": [
+        "source construct profile",
+        "GameHost snapshot"
+      ]
     },
     {
       "id": "scenario-authority-smoke-kit",
-      "status": "recommended-next-smoke-fixture",
-      "sourceFiles": [],
-      "provides": ["assertConstructComplete", "assertScenarioBootstrap", "assertCommandJournalReplay", "assertBuildObjectives", "assertFirstCampClear"],
-      "requires": ["GameHost authority kit", "scenario config kit", "command reducer"],
-      "blockers": ["No scenario smoke harness exists yet."]
+      "status": "planned-after-snapshot-bootstrap",
+      "provides": [
+        "runScenarioBootstrapFixture",
+        "assertStartingResources",
+        "assertStartingUnits",
+        "assertObjectives",
+        "assertCommandJournalReplay"
+      ],
+      "requires": [
+        "scenario snapshot contract",
+        "GameHost authority kit"
+      ]
     }
   ],
-  "objectKitCandidates": [
+  "objectKits": [
+    "phantom-command-totem-visual-kit",
+    "phantom-command-phantom-commander-visual-kit",
     "crypt-core-domain-kit",
     "grave-harvester-domain-kit",
     "bone-pit-domain-kit",
@@ -327,25 +529,61 @@
     "grim-reaper-totem-objective-kit",
     "outer-militia-camp-objective-kit"
   ],
-  "nextRecommendedSlice": {
-    "id": "phantom-command-sequential-construct-parity-scenario-authority-cutover",
-    "summary": "First reconcile docs, source kit scheduling, and live sequential-ring-v5 behavior, then promote inline GameHost into a scenario authority service and bootstrap deterministic RTS state from config.",
-    "minimumChecklist": [
-      "Keep index.html as the menu shell.",
-      "Split game.html into thin markup plus src/main.js.",
-      "Move sequential-ring-v5 constants into a construct profile config.",
-      "Add a source service that produces the same no-gap inner-ring-first sequence currently seen live.",
-      "Wire construct-spiral-intro-kit or a compatible profile adapter into the live scene.",
-      "Add live parity smoke for build id, ring count, no physical gaps, inner-before-outer completion, skip, restart, and GameHost construct state.",
-      "Promote inline GameHost into phantom-command-gamehost-authority-kit.",
-      "Add modes: construct_intro, scenario_bootstrap, scenario_active, scenario_complete, scenario_failed.",
-      "Add getDiagnostics, dispatch, subscribe, getConstructState, getScenarioState, and getCommandJournal surfaces.",
-      "Load scenario/map/wave/experience/unlock config JSON.",
-      "Compose initial RTS scenario state after construct completion.",
-      "Render Crypt Core, resource nodes, starter squads, first camp, and wave lanes.",
-      "Add SELECT_UNITS, REQUEST_MOVE, REQUEST_BUILD, REQUEST_PRODUCE, and REQUEST_ATTACK commands.",
-      "Evaluate Grave Harvester, Bone Pit, first camp clear, win, and lose conditions.",
-      "Add smoke tests for scenario bootstrap, first build objective, first camp clear, and command journal replay."
+  "services": [
+    "appShell.routeToGame",
+    "mainRuntime.boot",
+    "threeRender.createRenderer",
+    "sourceConstructProfile.getSequentialRingV5Profile",
+    "sourceConstructProfile.validateNoGapProfile",
+    "ringDescriptor.emitRingDescriptors",
+    "ringDescriptor.emitPieceDescriptors",
+    "constructTimeline.computePieceDelay",
+    "constructTimeline.computePieceProgress",
+    "constructTimeline.skip",
+    "constructTimeline.restart",
+    "constructSnapshot.getState",
+    "constructSnapshot.getDiagnostics",
+    "gameHost.getState",
+    "gameHost.getDiagnostics",
+    "gameHost.dispatch",
+    "gameHost.subscribe",
+    "gameHost.getConstructState",
+    "gameHost.getScenarioState",
+    "gameHost.getCommandJournal",
+    "modeState.transition",
+    "scenarioConfig.loadConfig",
+    "scenarioConfig.validateReferences",
+    "scenarioSnapshot.serialize",
+    "mapGeneration.generateRadialRings",
+    "economy.getBalance",
+    "economy.canAfford",
+    "command.dispatchCommand",
+    "objective.evaluate",
+    "smoke.runConstructProfileParity",
+    "smoke.runScenarioBootstrap"
+  ],
+  "recommendedNextWork": {
+    "title": "PhantomCommand Construct Profile Source Cutover + GameHost Snapshot Contract",
+    "buildOrder": [
+      "keep index.html as menu shell",
+      "split game.html into thin markup plus src/main.js",
+      "create phantom-command-source-construct-profile-kit",
+      "encode sequential-ring-v5 constants in one profile object",
+      "create phantom-command-ring-descriptor-kit",
+      "make descriptors reproduce ten rings, zero gaps, live ring widths, live part counts, and inner-before-outer scheduling",
+      "adapt or extend construct-spiral-intro-kit so source scheduling can match the live profile",
+      "create construct snapshot contract",
+      "promote inline GameHost into phantom-command-gamehost-authority-kit",
+      "add mode state for construct_intro, scenario_bootstrap, scenario_active, scenario_complete, and scenario_failed",
+      "add GameHost getState, getDiagnostics, getConstructState, getScenarioState, getCommandJournal, dispatch, and subscribe surfaces",
+      "add scenario bootstrap that loads config JSON and emits a deterministic ScenarioSnapshot after construct completion",
+      "add parity smoke for source profile constants, no gaps, ring ordering, skip, restart, GameHost snapshot, and scenario bootstrap"
     ]
+  },
+  "validation": {
+    "runtimeSourceChanged": false,
+    "buildRun": false,
+    "testRun": false,
+    "docsOnly": true
   }
 }
