@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T15:19:05-04:00",
-  "status": "construct-descriptor-authority-completion-event-fixture-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T15-19-05-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T16:30:00-04:00",
+  "status": "construct-snapshot-authority-scenario-bootstrap-preflight-fixture-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T16-30-00-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -25,12 +25,27 @@
       20
     ],
     "expectedLiveTotalPieces": 92,
+    "expectedLiveTotalBuildSeconds": 31.915,
     "currentGameHostSurface": [
       "window.GameHost.skipConstruct",
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live sequential-ring-v5 source profile, ring descriptors, piece descriptors, timeline math, mesh creation, HUD, camera, and construct-only GameHost. The next cut should extract descriptor authority and construct completion event semantics before scenario bootstrap or RTS gameplay expansion."
+    "primaryGap": "game.html still owns the live sequential-ring-v5 source profile, ring descriptors, piece descriptors, timeline math, mesh creation, HUD, camera, and construct-only GameHost. The next cut should extract construct descriptor authority, construct completion event semantics, construct snapshots, and scenario bootstrap preflight before RTS gameplay expansion."
+  },
+  "selection": {
+    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
+    "reason": "central ledger oldest eligible tracked Publish repo by latest review timestamp",
+    "latestEligibleTimestampsChecked": {
+      "PhantomCommand": "2026-07-07T15:19:05-04:00",
+      "PrehistoricRush": "2026-07-07T15:29:27-04:00",
+      "MyCozyIsland": "2026-07-07T15:40:06-04:00",
+      "IntoTheMeadow": "2026-07-07T15:49:14-04:00",
+      "ZombieOrchard": "2026-07-07T15:59:24-04:00",
+      "HorrorCorridor": "2026-07-07T16:09:54-04:00",
+      "TheOpenAbove": "2026-07-07T16:21:09-04:00",
+      "AetherVale": "2026-07-07T16:29:18-04:00"
+    }
   },
   "interactionLoops": {
     "current": [
@@ -55,15 +70,12 @@
       "run construct intro from descriptors",
       "publish ConstructSnapshot",
       "emit construct_complete exactly once",
-      "gate scenario bootstrap after construct completion",
-      "load scenario_001_raise_the_host config",
-      "compose deterministic ScenarioBootstrapSnapshot",
+      "reject duplicate construct_complete with stable reason metadata",
+      "reject scenario bootstrap before construct completion",
+      "accept scenario bootstrap after construct completion",
+      "compose ScenarioBootstrapSnapshot for scenario_001_raise_the_host",
       "transition GameHost mode to scenario_active",
-      "select starter undead",
-      "build Grave Harvester and Bone Pit",
-      "tick resources and wave lanes",
-      "clear outer_militia_camp_01",
-      "evaluate objectives, XP, unlocks, win, loss, and journal"
+      "defer RTS selection, units, buildings, economy, waves, combat, and objectives until bootstrap parity passes"
     ],
     "recommendedServiceLoop": [
       "source construct profile service",
@@ -73,8 +85,10 @@
       "construct event envelope service",
       "construct event reducer service",
       "construct snapshot projector",
+      "scenario bootstrap preflight service",
+      "scenario bootstrap snapshot projector",
       "GameHost construct diagnostics service",
-      "DOM-free construct descriptor and completion fixture harness"
+      "DOM-free construct and bootstrap fixture harness"
     ]
   },
   "domains": [
@@ -120,6 +134,7 @@
     "gamehost-authority",
     "mode-state-machine",
     "scenario-bootstrap-gate",
+    "scenario-bootstrap-preflight",
     "scenario-config-loading",
     "scenario-state-composition",
     "scenario-snapshot-contract",
@@ -150,6 +165,45 @@
     "command-journal-replay",
     "behavior-smoke-testing"
   ],
+  "services": {
+    "currentRuntime": [
+      "serve static menu route",
+      "serve static game route",
+      "build Three.js renderer, scene, camera, lights, fog, HUD, materials, and input state inline",
+      "create ring descriptors inline from constants",
+      "create wedge geometry and seam meshes inline",
+      "animate construct pieces through radial and drop interpolation",
+      "track progress, phase, total pieces, and completion",
+      "allow pan, zoom, skip, and restart controls",
+      "expose construct diagnostics through window.GameHost.getState"
+    ],
+    "currentSourceKit": [
+      "create generic construct piece ids",
+      "create generic construct schedules",
+      "install pieces",
+      "reset state",
+      "update progress over time",
+      "emit snapshots",
+      "report pending, active, settled, newly active, and newly settled pieces"
+    ],
+    "nextNeeded": [
+      "own live sequential-ring-v5 profile outside game.html",
+      "emit serializable ring descriptors",
+      "emit serializable piece descriptors",
+      "prove zero gaps and live part-count parity",
+      "prove inner-first ring timing with positive transition margins",
+      "emit accepted/rejected construct event envelopes",
+      "emit construct_complete exactly once",
+      "reject duplicate construct completion with stable reason",
+      "project ConstructSnapshot without DOM or Three.js dependency",
+      "preflight scenario bootstrap with explicit accepted/rejected result",
+      "reject scenario bootstrap before construct completion",
+      "accept scenario bootstrap after construct completion",
+      "project ScenarioBootstrapSnapshot",
+      "expand window.GameHost diagnostics without breaking current surface",
+      "add fixture smoke for descriptor parity, completion idempotency, bootstrap gating, and snapshot shape"
+    ]
+  },
   "kits": [
     {
       "id": "construct-spiral-intro-kit",
@@ -203,7 +257,7 @@
         "construct-spiral-intro-kit"
       ],
       "blockers": [
-        "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, inner-first timing margins, construct_complete, or GameHost shape."
+        "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, inner-first timing margins, construct_complete, bootstrap preflight, or GameHost shape."
       ]
     },
     {
@@ -262,6 +316,8 @@
         "emitPieceIds",
         "emitPieceAngles",
         "emitPieceSeeds",
+        "emitPieceDelays",
+        "emitPieceSettleTimes",
         "assertPieceTotal"
       ],
       "requires": [
@@ -423,6 +479,68 @@
       ]
     },
     {
+      "id": "phantom-command-scenario-bootstrap-preflight-kit",
+      "status": "recommended-next-gate-contract-kit",
+      "sourceFiles": [
+        "src/kits/phantom-command-scenario-bootstrap-preflight-kit/index.js"
+      ],
+      "provides": [
+        "createScenarioBootstrapPreflightResult",
+        "rejectBootstrapBeforeConstructComplete",
+        "acceptBootstrapAfterConstructComplete",
+        "serializeBootstrapPreflightReason"
+      ],
+      "requires": [
+        "construct snapshot contract",
+        "mode state"
+      ],
+      "blockers": [
+        "Does not exist yet."
+      ]
+    },
+    {
+      "id": "phantom-command-scenario-bootstrap-gate-kit",
+      "status": "recommended-next-bootstrap-gate-kit",
+      "sourceFiles": [
+        "src/kits/phantom-command-scenario-bootstrap-gate-kit/index.js"
+      ],
+      "provides": [
+        "canBootstrapScenario",
+        "openBootstrapGate",
+        "rejectEarlyBootstrap",
+        "serializeBootstrapGateDiagnostics"
+      ],
+      "requires": [
+        "scenario bootstrap preflight",
+        "construct completion event"
+      ],
+      "blockers": [
+        "Does not exist yet."
+      ]
+    },
+    {
+      "id": "phantom-command-scenario-bootstrap-snapshot-kit",
+      "status": "recommended-next-bootstrap-snapshot-kit",
+      "sourceFiles": [
+        "src/kits/phantom-command-scenario-bootstrap-snapshot-kit/index.js"
+      ],
+      "provides": [
+        "serializeScenarioBootstrapSnapshot",
+        "assertScenarioId",
+        "assertStarterResources",
+        "assertCenterTotem",
+        "assertStarterRoster",
+        "assertBootstrapSnapshotShape"
+      ],
+      "requires": [
+        "scenario bootstrap gate",
+        "scenario config"
+      ],
+      "blockers": [
+        "Does not exist yet."
+      ]
+    },
+    {
       "id": "phantom-command-gamehost-construct-diagnostics-kit",
       "status": "recommended-next-host-contract-kit",
       "sourceFiles": [
@@ -430,11 +548,13 @@
       ],
       "provides": [
         "getConstructSnapshot",
+        "getScenarioBootstrapSnapshot",
         "getConstructDiagnostics",
         "getFixtureSummary"
       ],
       "requires": [
-        "construct snapshot contract"
+        "construct snapshot contract",
+        "scenario bootstrap snapshot"
       ],
       "blockers": [
         "Current window.GameHost surface only exposes skipConstruct, restartConstruct, and getState."
@@ -503,11 +623,30 @@
       "blockers": [
         "Does not exist yet."
       ]
+    },
+    {
+      "id": "phantom-command-scenario-bootstrap-gate-smoke-kit",
+      "status": "recommended-next-smoke-kit",
+      "sourceFiles": [
+        "tests/phantom-command-scenario-bootstrap-gate-smoke.mjs"
+      ],
+      "provides": [
+        "assertBootstrapRejectedBeforeCompletion",
+        "assertBootstrapAcceptedAfterCompletion",
+        "assertScenarioBootstrapSnapshotShape",
+        "assertBootstrapDoesNotEnableFullRtsPrematurely"
+      ],
+      "requires": [
+        "scenario bootstrap preflight kit",
+        "scenario bootstrap gate kit",
+        "scenario bootstrap snapshot kit"
+      ],
+      "blockers": [
+        "Does not exist yet."
+      ]
     }
   ],
   "deferredKits": [
-    "phantom-command-scenario-bootstrap-gate-kit",
-    "phantom-command-scenario-bootstrap-snapshot-kit",
     "phantom-command-scenario-config-loader-kit",
     "phantom-command-radial-map-kit",
     "phantom-command-center-pressure-ring-kit",
@@ -529,7 +668,7 @@
     "phantom-command-command-journal-replay-kit"
   ],
   "recommendedNextSlice": {
-    "name": "PhantomCommand Construct Descriptor Authority + Completion Event Fixture Cutover",
+    "name": "PhantomCommand Construct Snapshot Authority + Scenario Bootstrap Preflight Fixture Cutover",
     "buildOrder": [
       "preserve current index.html and game.html behavior",
       "add phantom-command-source-construct-profile-kit with exact sequential-ring-v5 constants",
@@ -542,9 +681,14 @@
       "reject duplicate construct_complete with a stable reason",
       "add phantom-command-construct-snapshot-contract-kit",
       "project descriptors, timeline guards, progress, phase, completion, and event journal counts",
-      "add DOM-free smokes for profile parity, descriptors, timeline guards, construct event reducer, and construct snapshot behavior",
+      "add phantom-command-scenario-bootstrap-preflight-kit",
+      "reject scenario bootstrap before construct completion",
+      "accept scenario bootstrap after construct completion",
+      "add phantom-command-scenario-bootstrap-snapshot-kit for scenario_001_raise_the_host",
+      "expand GameHost diagnostics while keeping skipConstruct, restartConstruct, and getState compatible",
+      "add DOM-free smokes for profile parity, descriptors, timeline guards, construct event reducer, construct snapshot behavior, and bootstrap gate behavior",
       "keep construct-spiral-intro-kit defaults unchanged",
-      "defer scenario bootstrap, RTS selection, unit commands, buildings, economy, waves, and combat until event/snapshot parity exists"
+      "defer RTS selection, unit commands, buildings, economy, waves, combat, and objectives until construct/bootstrap parity exists"
     ],
     "acceptanceTargets": [
       "menu still loads game.html",
@@ -556,7 +700,10 @@
       "outer ring starts after previous ring can settle",
       "construct_complete fires exactly once",
       "duplicate construct_complete is rejected with a stable reason",
-      "ConstructSnapshot is serializable and DOM-free"
+      "ConstructSnapshot is serializable and DOM-free",
+      "scenario bootstrap before construct completion is rejected",
+      "scenario bootstrap after construct completion is accepted",
+      "ScenarioBootstrapSnapshot is serializable and DOM-free"
     ]
   }
 }
