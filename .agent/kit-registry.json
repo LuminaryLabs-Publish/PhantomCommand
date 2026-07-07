@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T05:31:31-04:00",
-  "status": "source-kit-and-scenario-bootstrap-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T05-31-31-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T06:41:55-04:00",
+  "status": "gamehost-authority-scenario-command-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T06-41-55-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -16,29 +16,31 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html now exposes construct diagnostics, but the live runtime is still inline and is not yet driven by the source construct kit or config-backed RTS scenario services."
+    "primaryGap": "The live runtime remains an inline construct scene. The source construct kit exists but is not authoritative in game.html, and the config-backed RTS scenario is not yet bootstrapped after construct completion."
   },
   "interactionLoops": {
     "current": [
-      "load menu",
+      "load index.html menu",
       "open game.html construct scene",
-      "generate concentric ring pieces",
+      "generate concentric ring pieces inline",
       "animate pieces inward and downward",
-      "update HUD progress/count/phase",
+      "update HUD progress, count, and phase",
       "pan and zoom camera",
       "skip or restart construct",
-      "expose construct state through GameHost"
+      "expose construct-only state through inline GameHost",
+      "reach command platform online"
     ],
     "targetFirstPlayable": [
-      "construct intro completes",
-      "load scenario-001 and map config",
-      "compose fixed RTS state",
-      "select starter undead",
+      "construct intro completes through construct-spiral-intro-kit",
+      "GameHost switches to scenario_bootstrap",
+      "load scenario/map/wave/experience/unlock config JSON",
+      "compose fixed deterministic RTS state",
+      "select starter Skeletons/Zombies",
       "build Grave Harvester",
       "build Bone Pit",
-      "defend against first wave",
+      "tick resource nodes and first wave lane",
       "clear first enemy camp",
-      "evaluate win/loss state"
+      "evaluate objectives, XP, unlocks, win/loss state"
     ]
   },
   "kits": [
@@ -51,6 +53,7 @@
         "tests/construct-spiral-intro-kit-smoke.mjs"
       ],
       "provides": [
+        "createConstructSpiralIntroPieceId",
         "createConstructSpiralIntroSchedule",
         "createConstructSpiralIntroKit",
         "installPieces",
@@ -75,10 +78,33 @@
       ]
     },
     {
+      "id": "construct-spiral-intro-kit-smoke",
+      "status": "implemented-smoke-fixture",
+      "sourceFiles": [
+        "tests/construct-spiral-intro-kit-smoke.mjs"
+      ],
+      "provides": [
+        "assertKitId",
+        "assertDomainPath",
+        "installGeneratedRingPieces",
+        "assertScheduleOrdering",
+        "tickUntilComplete",
+        "assertActiveCountCap",
+        "assertActiveRingWindow",
+        "assertAllPiecesSettled"
+      ],
+      "requires": [
+        "construct-spiral-intro-kit"
+      ],
+      "blockers": [
+        "Does not yet validate the live page or config-backed RTS bootstrap."
+      ]
+    },
+    {
       "id": "phantom-command-static-app-shell-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["index.html"],
-      "provides": ["renderMenu", "routeToGame", "openSceneDirectly"],
+      "provides": ["renderMenu", "routeToGame", "openSceneDirectly", "preserveStaticRouteContract"],
       "requires": ["static deploy paths"],
       "blockers": ["Menu remains hardcoded HTML/CSS/JS."]
     },
@@ -86,7 +112,7 @@
       "id": "phantom-command-construct-scene-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["game.html"],
-      "provides": ["bootConstructScene", "createScene", "createLighting", "createFog", "tickConstructScene"],
+      "provides": ["bootConstructScene", "createScene", "createRenderer", "createLighting", "createFog", "tickConstructScene"],
       "requires": ["Three.js renderer", "construct spiral scheduling", "camera navigation", "HUD diagnostics"],
       "blockers": ["Scene boot and tick loop are still inline in game.html."]
     },
@@ -110,7 +136,7 @@
       "id": "phantom-command-construct-animation-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["game.html", "src/kits/construct-spiral-intro-kit/index.js"],
-      "provides": ["applyPieceTransform", "computeDropProgress", "computeRadialProgress", "computePhase", "skip", "restart"],
+      "provides": ["computePieceLocalProgress", "applyRadialProgress", "applyDropProgress", "computePhase", "skip", "restart"],
       "requires": ["construct-spiral-intro-kit", "piece start/final transforms"],
       "blockers": ["Live scene uses ad hoc sequence timing instead of source kit state."]
     },
@@ -118,7 +144,7 @@
       "id": "phantom-command-totem-visual-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["game.html"],
-      "provides": ["createCenterDisc", "createTotemBase", "createGlowCore", "createOrbitRing"],
+      "provides": ["createCenterDisc", "createTotemBase", "createGlowCore", "tickTotemIdle"],
       "requires": ["Three.js scene", "materials"],
       "blockers": ["Visual object has no gameplay objective state bridge."]
     },
@@ -126,7 +152,7 @@
       "id": "phantom-command-phantom-commander-visual-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["game.html"],
-      "provides": ["createCommanderBody", "createSmokePoints", "tickSmoke", "tickHover"],
+      "provides": ["createCommanderBody", "createCommanderHood", "tickHover", "tickTurn"],
       "requires": ["Three.js scene", "time source"],
       "blockers": ["Visual has no selection, command, or faction domain link."]
     },
@@ -142,17 +168,17 @@
       "id": "phantom-command-hud-diagnostics-kit",
       "status": "candidate-extraction",
       "sourceFiles": ["game.html"],
-      "provides": ["setProgress", "setConstructedCount", "setPhase", "setStatus", "showError"],
-      "requires": ["DOM elements", "scene/construct state"],
-      "blockers": ["HUD reads inline local values, not a normalized GameHost scenario state."]
+      "provides": ["setProgress", "setConstructedCount", "setPhase", "setStatus", "setBuildId", "showError"],
+      "requires": ["DOM elements", "scene/construct/scenario state"],
+      "blockers": ["HUD reads inline local values, not a normalized GameHost mode/scenario state."]
     },
     {
       "id": "phantom-command-gamehost-kit",
-      "status": "partial-inline-needs-promotion",
+      "status": "recommended-next-authority-cutover",
       "sourceFiles": ["game.html"],
-      "provides": ["skipConstruct", "restartConstruct", "getState"],
-      "recommendedProvides": ["getDiagnostics", "dispatch", "subscribe", "getScenarioState"],
-      "requires": ["construct state", "scenario state", "input command queue"],
+      "currentProvides": ["skipConstruct", "restartConstruct", "getState"],
+      "recommendedProvides": ["getState", "getDiagnostics", "dispatch", "subscribe", "getScenarioState", "getCommandJournal"],
+      "requires": ["construct state", "scenario state", "mode state", "input command queue", "diagnostics snapshot"],
       "blockers": ["Current GameHost is inline and construct-only."]
     },
     {
@@ -165,7 +191,7 @@
         "config/experience.config.json",
         "config/unlocks.config.json"
       ],
-      "provides": ["loadScenarioConfig", "loadMapConfig", "loadEnemyWaveConfig", "loadExperienceConfig", "loadUnlockConfig", "composeInitialScenarioState"],
+      "provides": ["loadScenarioConfig", "loadMapConfig", "loadEnemyWaveConfig", "loadExperienceConfig", "loadUnlockConfig", "composeInitialScenarioState", "validateScenarioReferences"],
       "requires": ["static JSON fetch", "schema validation", "deterministic state composer"],
       "blockers": ["Config files are not yet loaded by the runtime."]
     },
@@ -178,12 +204,28 @@
       "blockers": ["Map config is not represented visually or interactively yet."]
     },
     {
+      "id": "radial-center-pressure-map-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": ["config/map-generation.config.json"],
+      "provides": ["classifyRingForPosition", "computeDangerLevel", "computeResourceMultiplier", "computeCorruptionFlag"],
+      "requires": ["ring model config", "world position"],
+      "blockers": ["No RTS world positions exist yet."]
+    },
+    {
       "id": "world-economy-domain-kit",
       "status": "planned-domain-kit",
       "sourceFiles": ["config/scenario-001.config.json", "config/map-generation.config.json"],
-      "provides": ["getBalance", "canAfford", "payCost", "grantResources", "tickResourceNodes"],
+      "provides": ["getBalance", "canAfford", "payCost", "grantResources", "tickResourceNodes", "emitEconomyEvents"],
       "requires": ["resource node config", "scenario starting resources"],
       "blockers": ["No runtime economy ledger yet."]
+    },
+    {
+      "id": "soul-economy-domain-kit",
+      "status": "planned-domain-kit",
+      "sourceFiles": ["config/scenario-001.config.json", "config/map-generation.config.json"],
+      "provides": ["harvestSouls", "spendSouls", "validateSoulCosts"],
+      "requires": ["world-economy-domain-kit"],
+      "blockers": ["Soul income/costs are config-only."]
     },
     {
       "id": "experience-progression-domain-kit",
@@ -211,10 +253,10 @@
     },
     {
       "id": "rts-command-domain-kit",
-      "status": "planned-domain-kit",
+      "status": "recommended-next",
       "sourceFiles": [],
-      "provides": ["selectUnits", "requestMove", "requestAttack", "requestBuild", "requestProduce"],
-      "requires": ["input adapter", "unit/building state", "command validation"],
+      "provides": ["dispatchCommand", "selectUnits", "requestMove", "requestAttack", "requestBuild", "requestProduce", "validateCommand", "appendCommandJournal"],
+      "requires": ["input adapter", "unit/building state", "command validation", "GameHost authority"],
       "blockers": ["No RTS interaction layer exists yet."]
     },
     {
@@ -227,26 +269,46 @@
     },
     {
       "id": "scenario-objective-kit",
-      "status": "planned-domain-kit",
+      "status": "recommended-next",
       "sourceFiles": ["config/scenario-001.config.json"],
       "provides": ["evaluateObjectives", "markObjectiveComplete", "evaluateWinCondition", "evaluateLoseCondition"],
       "requires": ["scenario state", "building state", "enemy camp state"],
       "blockers": ["Scenario objectives are config-only."]
     }
   ],
+  "objectKitCandidates": [
+    "crypt-core-domain-kit",
+    "grave-harvester-domain-kit",
+    "bone-pit-domain-kit",
+    "black-chapel-domain-kit",
+    "skeleton-unit-kit",
+    "zombie-unit-kit",
+    "ghoul-unit-kit",
+    "wight-unit-kit",
+    "militia-enemy-kit",
+    "hunter-enemy-kit",
+    "cleric-enemy-kit",
+    "knight-enemy-kit",
+    "pyre-engine-enemy-kit",
+    "grim-reaper-totem-objective-kit",
+    "outer-militia-camp-objective-kit"
+  ],
   "nextRecommendedSlice": {
-    "id": "phantom-command-source-kit-scenario-bootstrap-cutover",
-    "summary": "Promote the inline construct runtime into source modules, wire construct-spiral-intro-kit into the live sequence, promote the inline GameHost into a real service, then bootstrap the fixed config-backed RTS scenario after construct completion.",
+    "id": "phantom-command-gamehost-authority-scenario-command-cutover",
+    "summary": "Promote the inline construct-only GameHost into a source authority service, wire construct-spiral-intro-kit into the live sequence, bootstrap config-backed scenario state after the intro, and route first RTS commands through a deterministic command reducer.",
     "minimumChecklist": [
       "Split game.html into thin markup plus src/main.js.",
       "Move construct constants into source/config.",
       "Use construct-spiral-intro-kit for live piece scheduling.",
       "Promote GameHost into phantom-command-gamehost-kit.",
-      "Add getDiagnostics and dispatch command surfaces.",
+      "Add modes: construct_intro, scenario_bootstrap, scenario_active, scenario_complete, scenario_failed.",
+      "Add getDiagnostics, dispatch, subscribe, getScenarioState, and getCommandJournal surfaces.",
       "Load scenario/map/wave/experience/unlock config JSON.",
       "Compose initial RTS scenario state after construct completion.",
       "Render Crypt Core, resource nodes, starter squads, first camp, and wave lanes.",
-      "Add smoke tests for construct completion, scenario bootstrap, first build objective, and first camp clear."
+      "Add SELECT_UNITS, REQUEST_MOVE, REQUEST_BUILD, REQUEST_PRODUCE, and REQUEST_ATTACK commands.",
+      "Evaluate Grave Harvester, Bone Pit, first camp clear, win, and lose conditions.",
+      "Add smoke tests for construct completion, scenario bootstrap, first build objective, first camp clear, and command journal replay."
     ]
   }
 }
