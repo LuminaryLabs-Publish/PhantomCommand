@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T14-00-18-04-00`
+**Latest documented run:** `2026-07-07T15-19-05-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T14-00-18-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T15-19-05-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -12,9 +12,9 @@
 
 The live proof remains `sequential-ring-v5`: ten contiguous no-gap stone rings assemble around the Grim Reaper Totem. The current runtime defines construct constants, ring layout, wedge geometry, material detail, animation timing, input, HUD, camera, and `window.GameHost` inline in `game.html`.
 
-The source kit at `src/kits/construct-spiral-intro-kit/index.js` is still valuable as a generic sequencing kit, but it is not yet the live construct authority. Its default schedule is spiral/window based, while the live proof needs strict source-owned sequential-ring-v5 descriptors and inner-first timeline guards.
+The source kit at `src/kits/construct-spiral-intro-kit/index.js` is valuable as a generic sequencing kit, but it is not the live construct authority. Its default schedule is spiral/window based, while the live proof needs strict Phantom-specific sequential-ring-v5 descriptors, inner-first timeline guards, completion event semantics, and DOM-free snapshot fixtures.
 
-The design/config layer remains ahead of runtime. It already points toward `scenario_001_raise_the_host`, starting resources, Crypt Core, starter Skeletons/Zombies, Grave Harvester, Bone Pit, the first enemy camp, win/loss conditions, radial map rings, resource nodes, the center totem, and wave lanes. The next source slice should only gate scenario bootstrap after construct completion, not build the whole RTS yet.
+The design/config layer remains ahead of runtime. It points toward `scenario_001_raise_the_host`, starting resources, Crypt Core, starter Skeletons/Zombies, Grave Harvester, Bone Pit, the first enemy camp, win/loss conditions, radial map rings, resource nodes, the center totem, and wave lanes. The next source slice should not jump to full RTS yet; it should first make construct descriptors and construct completion events source-authoritative.
 
 ## Current documentation status
 
@@ -33,12 +33,13 @@ Tracked entries:
 .agent/trackers/2026-07-07T11-18-32-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T12-50-04-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T14-00-18-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T15-19-05-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Construct Source Profile + Scenario Bootstrap Gate Fixture Cutover` slice.
+Build the `PhantomCommand Construct Descriptor Authority + Completion Event Fixture Cutover` slice.
 
 ```txt
 menu
@@ -47,13 +48,13 @@ menu
   -> source ring descriptors reproduce ten contiguous zero-gap rings
   -> source piece descriptors reproduce ids, angles, spans, seeds, part counts, and total pieces
   -> inner-first timeline guards prove every outer ring starts only after the previous inner ring can settle
+  -> ConstructEventEnvelope records accepted/rejected completion outcomes
+  -> construct_complete is emitted exactly once after all pieces settle
+  -> duplicate construct_complete is rejected with a stable reason
   -> ConstructSnapshot exposes build id, rings, pieces, progress, phase, completion, timeline guards, and event-journal counts
-  -> construct_complete is emitted exactly once
-  -> scenario bootstrap gate rejects early bootstrap before construct_complete
-  -> scenario bootstrap gate accepts after construct_complete and emits ScenarioBootstrapResult
-  -> DOM-free parity fixtures validate profile, descriptors, timeline, snapshot, event, and gate behavior
+  -> DOM-free parity fixtures validate profile, descriptors, timeline, completion event idempotency, and snapshot behavior
   -> existing construct-spiral-intro-kit smoke remains a generic regression guard
-  -> RTS selection, units, buildings, economy, waves, combat, and scenario-active play stay deferred until bootstrap snapshot parity passes
+  -> scenario bootstrap, RTS selection, units, buildings, economy, waves, combat, and scenario-active play stay deferred until construct event/snapshot parity passes
 ```
 
 Minimum next build checklist:
@@ -68,15 +69,16 @@ Minimum next build checklist:
 - Emit stable piece ids, ring indices, part indices, part counts, angle/span data, and deterministic seed data.
 - Add `phantom-command-inner-first-timeline-contract-kit`.
 - Compute `firstStart`, `lastStart`, `firstSettle`, `lastSettle`, and `marginSeconds` for every ring transition.
+- Add `phantom-command-construct-event-envelope-kit`.
+- Add `phantom-command-construct-event-reducer-kit`.
+- Emit `construct_complete` exactly once when all pieces are settled.
+- Reject duplicate `construct_complete` with a stable reason.
 - Add `phantom-command-construct-snapshot-contract-kit`.
-- Add `phantom-command-construct-event-journal-kit`.
-- Emit `construct_complete` exactly once.
-- Add `phantom-command-scenario-bootstrap-gate-kit`.
-- Reject scenario bootstrap before a valid construct completion event.
-- Accept scenario bootstrap after construct completion and emit a stable `ScenarioBootstrapResult`.
+- Add `phantom-command-gamehost-construct-diagnostics-kit`.
 - Add `phantom-command-construct-profile-parity-fixture-kit`.
 - Add `phantom-command-live-ring-descriptor-smoke-kit`.
 - Add `phantom-command-inner-first-timeline-smoke-kit`.
+- Add `phantom-command-construct-event-reducer-smoke-kit`.
 - Add `phantom-command-construct-snapshot-smoke-kit`.
-- Add `phantom-command-scenario-bootstrap-gate-smoke-kit`.
-- Keep `construct-spiral-intro-kit` defaults unchanged until descriptor, timeline, snapshot, and bootstrap gate parity pass.
+- Keep `construct-spiral-intro-kit` defaults unchanged.
+- Defer scenario bootstrap and full RTS gameplay until descriptor, timeline, event, and snapshot parity pass.
