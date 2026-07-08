@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T09:19:43-04:00`
+**Timestamp:** `2026-07-08T10-58-46-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Source Profile + Construct/Scenario Result Wire Map
+PhantomCommand Construct Scenario Acceptance Matrix
 ```
 
 ## Goal
@@ -18,37 +18,39 @@ The next cut should prove that `smooth-ring-handoff-v6` can transition from visu
 
 - [ ] Keep `index.html -> game.html` routing unchanged.
 - [ ] Keep visible `smooth-ring-handoff-v6` construct behavior unchanged.
-- [ ] Add a source-owned `smooth-ring-handoff-v6` profile outside `game.html`.
+- [ ] Add `src/kits/phantom-command-smooth-handoff-profile-kit/index.js`.
+- [ ] Mirror current `game.html` constants exactly.
 - [ ] Add profile normalization.
-- [ ] Add a source fingerprint service.
-- [ ] Add a source snapshot service.
-- [ ] Add ring descriptor generation from the source profile.
-- [ ] Add piece descriptor generation from the ring descriptors.
-- [ ] Add delay and settle descriptor generation.
-- [ ] Add handoff/margin descriptors proving current timing parity.
+- [ ] Add `src/kits/phantom-command-source-profile-fingerprint-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-ring-descriptor-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-piece-descriptor-kit/index.js`.
+- [ ] Add delay, settle, and margin descriptor helpers.
 - [ ] Add a parity report for ring count, gaps, part counts, total pieces, and total build seconds.
+- [ ] Add `src/kits/phantom-command-construct-result-kit/index.js`.
 - [ ] Add `ConstructEventEnvelope`.
 - [ ] Add `ConstructEventResult`.
-- [ ] Add construct event reducer.
 - [ ] Accept `construct_complete` exactly once.
 - [ ] Reject duplicate `construct_complete` with `duplicate_construct_complete`.
 - [ ] Add `ConstructEventJournal`.
 - [ ] Add serializable `ConstructSnapshot`.
+- [ ] Add `src/kits/phantom-command-scenario-bootstrap-kit/index.js`.
 - [ ] Add `ScenarioBootstrapCommand`.
-- [ ] Add `ScenarioBootstrapPreflight`.
 - [ ] Reject bootstrap before completion with `construct_incomplete`.
 - [ ] Accept `scenario_001_raise_the_host` after completion.
 - [ ] Reject duplicate bootstrap with `duplicate_scenario_bootstrap`.
 - [ ] Add serializable `ScenarioBootstrapSnapshot` with RTS boundary placeholders only.
+- [ ] Add `src/kits/phantom-command-gamehost-diagnostics-adapter-kit/index.js`.
 - [ ] Expand `window.GameHost.getState()` additively without breaking `skipConstruct` or `restartConstruct`.
-- [ ] Add DOM-free fixture smoke for profile parity.
-- [ ] Add DOM-free fixture smoke for ring descriptors.
-- [ ] Add DOM-free fixture smoke for piece descriptors.
-- [ ] Add DOM-free fixture smoke for handoff/timeline margins.
-- [ ] Add DOM-free fixture smoke for construct completion idempotency.
-- [ ] Add DOM-free fixture smoke for scenario bootstrap gating.
-- [ ] Add DOM-free fixture smoke for snapshot shape.
-- [ ] Add DOM-free fixture smoke for legacy GameHost compatibility.
+- [ ] Add `tests/phantom-command-source-acceptance-fixture.mjs`.
+- [ ] Fixture proves profile parity.
+- [ ] Fixture proves ring descriptor parity.
+- [ ] Fixture proves piece descriptor parity.
+- [ ] Fixture proves handoff/timeline margin parity.
+- [ ] Fixture proves construct completion idempotency.
+- [ ] Fixture proves scenario bootstrap gating.
+- [ ] Fixture proves snapshot shape.
+- [ ] Fixture proves legacy GameHost compatibility shape.
 
 ## Recommended build order
 
@@ -91,6 +93,10 @@ The next cut should prove that `smooth-ring-handoff-v6` can transition from visu
 ## Required result reasons
 
 ```txt
+profile_parity_ok
+ring_parity_ok
+piece_parity_ok
+timeline_parity_ok
 construct_complete_accepted
 duplicate_construct_complete
 construct_restarted
@@ -101,6 +107,26 @@ construct_incomplete
 duplicate_scenario_bootstrap
 unknown_scenario
 source_fingerprint_mismatch
+snapshot_serializable
+legacy_gamehost_compatible
+```
+
+## Acceptance matrix to implement
+
+```txt
+profile-parity: profile -> fingerprint -> source snapshot
+ring-parity: profile -> ring descriptors -> [5,5,5,5,6,8,10,12,16,20]
+piece-parity: ring descriptors -> piece descriptors -> count 92
+timeline-parity: profile + pieces -> margin descriptors -> 19.923 seconds
+construct-idempotency: complete -> complete duplicate
+construct-reset: complete -> restart -> complete
+construct-skip: forming -> skip -> complete snapshot
+scenario-early-reject: bootstrap before construct complete
+scenario-accepted: complete -> bootstrap scenario_001_raise_the_host
+scenario-duplicate-reject: complete -> bootstrap -> bootstrap duplicate
+scenario-unknown-reject: complete -> bootstrap unsupported id
+snapshot-shape: ConstructSnapshot + ScenarioBootstrapSnapshot stringify and parse
+gamehost-shape: additive diagnostic payload keeps legacy methods
 ```
 
 ## Do not do yet
