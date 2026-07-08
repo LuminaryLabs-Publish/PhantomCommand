@@ -1,16 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T15-58-59-04-00",
-  "status": "source-profile-consumer-splice-map-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T15-58-59-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T15-58-59-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T15-58-59-04-00-source-profile-consumer-dsk-breakdown.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-08T15-58-59-04-00-gamehost-source-consumer-readback.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T15-58-59-04-00-construct-to-bootstrap-consumer-gate.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T15-58-59-04-00-consumer-splice-map.md",
-  "previousTracker": ".agent/trackers/2026-07-08T14-08-24-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T14-08-24-04-00.md",
+  "updatedAt": "2026-07-08T18-29-21-04-00",
+  "status": "source-profile-fixture-row-acceptance-gamehost-readback-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T18-29-21-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T18-29-21-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T18-29-21-04-00-source-profile-fixture-dsk-breakdown.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-08T18-29-21-04-00-gamehost-source-profile-readback-gate.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T18-29-21-04-00-construct-result-bootstrap-blocker.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T18-29-21-04-00-fixture-row-acceptance-contract.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-08T18-29-21-04-00-construct-complete-command-boundary.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-08T18-29-21-04-00-fixture-check-integration.md",
+  "previousTracker": ".agent/trackers/2026-07-08T15-58-59-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T15-58-59-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -19,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "oldest eligible tracked Publish repo follow-up selected because the previous PhantomCommand central alignment was older than the observed non-Cavalry follow-ups and the source-profile consumer splice remains unresolved"
+    "reason": "oldest sampled eligible tracked Publish repo follow-up selected because the previous PhantomCommand root alignment was older than the observed non-Cavalry follow-ups and the source-profile fixture acceptance gate remains unresolved"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -39,7 +41,7 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live profile and also renders it. The next cut should source-own the profile, prove DOM-free parity, and splice additive sourceProfile diagnostics into GameHost before scenario bootstrap."
+    "primaryGap": "game.html still owns the live profile and renders it. The next cut should source-own the profile, prove DOM-free parity, and splice additive sourceProfile diagnostics into GameHost before scenario bootstrap."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -74,7 +76,8 @@
       "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
       "project additive GameHost source diagnostics",
       "run DOM-free source-profile fixture",
-      "splice sourceProfile diagnostics into game.html without removing legacy fields"
+      "splice sourceProfile diagnostics into game.html without removing legacy fields",
+      "keep scenario bootstrap blocked until ConstructEventResult exists"
     ]
   },
   "domains": {
@@ -104,18 +107,22 @@
       "ring-descriptor-generation",
       "piece-descriptor-generation",
       "handoff-timeline-contract",
-      "profile-parity-report"
+      "profile-parity-report",
+      "source-profile-fixture-row-contract"
     ],
     "hostConsumer": [
       "gamehost-source-diagnostics",
       "legacy-gamehost-compatibility",
       "source-profile-consumer-splice",
-      "gamehost-shape-fixture"
+      "gamehost-shape-fixture",
+      "gamehost-source-profile-readback"
     ],
     "deferred": [
+      "construct-event-envelope",
       "construct-event-result",
       "construct-completion-idempotency",
       "scenario-bootstrap-gate",
+      "scenario-bootstrap-blocker",
       "rts-boundary-placeholder"
     ]
   },
@@ -156,7 +163,8 @@
       "prove 92 total pieces",
       "prove total build seconds 19.923",
       "project additive GameHost source diagnostics",
-      "splice sourceProfile diagnostics into game.html after fixture proof"
+      "splice sourceProfile diagnostics into game.html after fixture proof",
+      "block scenario bootstrap until typed construct completion exists"
     ]
   },
   "implementedKits": [
@@ -214,7 +222,8 @@
     "phantom-command-gamehost-source-consumer-kit",
     "phantom-command-construct-event-envelope-kit",
     "phantom-command-construct-event-result-kit",
-    "phantom-command-scenario-bootstrap-gate-kit"
+    "phantom-command-scenario-bootstrap-gate-kit",
+    "phantom-command-scenario-bootstrap-blocker-kit"
   ],
   "sourceProfileFixtureRows": [
     "profile_build_id_matches_live_game_html",
@@ -229,7 +238,9 @@
     "source_fingerprint_is_stable",
     "profile_parity_report_has_no_errors",
     "gamehost_source_diagnostics_shape_is_additive",
+    "legacy_gamehost_fields_are_unchanged",
+    "scenario_bootstrap_is_blocked_until_construct_result_exists",
     "fixture_runs_without_dom_canvas_or_three"
   ],
-  "nextSafeLedge": "PhantomCommand Source Profile Consumer Splice Map + Fixture Gate"
+  "nextSafeLedge": "PhantomCommand Source Profile Fixture Row Acceptance + GameHost Readback Gate"
 }
