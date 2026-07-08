@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T09:19:43-04:00`
+**Last aligned:** `2026-07-08T10-58-46-04-00`
 
 ## Purpose
 
@@ -14,25 +14,25 @@ Read this file before changing runtime code.
 
 The full accessible `LuminaryLabs-Publish` repository list was compared against tracked repo-ledger state in `LuminaryLabs-Dev/LuminaryLabs`.
 
-No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, or missing root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, or missing sampled root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected as the oldest eligible fallback follow-up because its root alignment was older than the latest checked eligible repos and it still has a high-value source-authority seam between the inline `smooth-ring-handoff-v6` visual proof, the generic `construct-spiral-intro-kit`, and the future scenario bootstrap gate.
+`PhantomCommand` was selected as a fallback follow-up because the current public route has a stable `smooth-ring-handoff-v6` construct proof, but the transition from visual construct completion to typed scenario bootstrap still needs source-owned acceptance records.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/AetherVale          ledgered with root .agent; last seen 2026-07-08T08:51:48-04:00
-LuminaryLabs-Publish/HorrorCorridor      ledgered with root .agent; last seen 2026-07-08T08:29:35-04:00
-LuminaryLabs-Publish/IntoTheMeadow       ledgered with root .agent; last seen 2026-07-08T09:11:03-04:00
-LuminaryLabs-Publish/MyCozyIsland        ledgered with root .agent; last seen 2026-07-08T08:58:57-04:00
+LuminaryLabs-Publish/IntoTheMeadow       ledgered with root .agent
+LuminaryLabs-Publish/HorrorCorridor      ledgered with root .agent
+LuminaryLabs-Publish/AetherVale          ledgered with root .agent
+LuminaryLabs-Publish/ZombieOrchard       ledgered with root .agent
+LuminaryLabs-Publish/TheUnmappedHouse    ledgered with root .agent
+LuminaryLabs-Publish/MyCozyIsland        ledgered with root .agent
+LuminaryLabs-Publish/TheOpenAbove        ledgered with root .agent
 LuminaryLabs-Publish/PhantomCommand      selected fallback follow-up
-LuminaryLabs-Publish/PrehistoricRush     ledgered with root .agent; last seen 2026-07-08T08:11:28-04:00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/TheOpenAbove        ledgered with root .agent; last seen 2026-07-08T08:39:41-04:00
-LuminaryLabs-Publish/TheUnmappedHouse    ledgered with root .agent; last seen 2026-07-08T08:21:49-04:00
-LuminaryLabs-Publish/ZombieOrchard       ledgered with root .agent; last seen 2026-07-08T08:02:32-04:00
+LuminaryLabs-Publish/PrehistoricRush     ledgered with root .agent
 ```
 
 ## Current product read
@@ -81,7 +81,7 @@ open index.html
   -> visual phase becomes command online
 ```
 
-## Target proof loop
+## Target acceptance loop
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
@@ -111,14 +111,13 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/next-steps.md
 .agent/validation.md
 .agent/architecture-audit/domain-service-breakdown.md
-.agent/architecture-audit/2026-07-08T09-19-43-04-00-dsk-domain-breakdown.md
+.agent/architecture-audit/2026-07-08T10-58-46-04-00-scenario-acceptance-dsk-breakdown.md
 .agent/render-audit/construct-render-audit.md
-.agent/render-audit/2026-07-08T09-19-43-04-00-render-source-authority-map.md
+.agent/render-audit/2026-07-08T10-58-46-04-00-gamehost-render-readback.md
 .agent/gameplay-audit/construct-to-rts-gap.md
-.agent/construct-source-audit/source-authority-fixture-gate.md
-.agent/scenario-bootstrap-audit/2026-07-08T09-19-43-04-00-source-wire-map.md
-.agent/trackers/2026-07-08T09-19-43-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T09-19-43-04-00.md
+.agent/scenario-bootstrap-audit/2026-07-08T10-58-46-04-00-construct-scenario-acceptance-matrix.md
+.agent/trackers/2026-07-08T10-58-46-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T10-58-46-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -144,7 +143,7 @@ The repo should prove the PhantomCommand game slice. Extract reusable construct,
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Source Profile + Construct/Scenario Result Wire Map
+PhantomCommand Construct Scenario Acceptance Matrix
 ```
 
-Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding profile parity, construct result idempotency, scenario bootstrap gating, serializable snapshots, and DOM-free fixtures.
+Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding source parity, construct result idempotency, scenario bootstrap gating, serializable snapshots, additive diagnostics, and DOM-free fixtures.
