@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T07:50:47-04:00",
-  "status": "construct-result-scenario-bootstrap-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T07-50-47-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T09:19:43-04:00",
+  "status": "source-profile-construct-scenario-result-wire-map-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T09-19-43-04-00/project-breakdown.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true
@@ -41,7 +41,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "tracked Publish repo follow-up selected because construct completion and scenario bootstrap remain untyped authority seams"
+    "reason": "tracked Publish repo follow-up selected because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -295,5 +295,5 @@
     "phantom-command-gamehost-diagnostics-adapter-kit",
     "phantom-command-fixture-script-runner-kit"
   ],
-  "nextSafeLedge": "PhantomCommand Construct Result + Scenario Bootstrap Fixture Gate"
+  "nextSafeLedge": "PhantomCommand Source Profile + Construct/Scenario Result Wire Map"
 }
