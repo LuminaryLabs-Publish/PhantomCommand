@@ -40,14 +40,14 @@ jobs:
           touch dist/.nojekyll
           test -f dist/index.html
           test -f dist/game.html
-          grep -q 'sequential-ring-v5' dist/game.html
+          grep -q 'smooth-ring-handoff-v6' dist/game.html
           grep -q 'const RING_COUNT=10;' dist/game.html
           grep -q 'const MOVE_SECONDS=' dist/game.html
           grep -q 'const DROP_START_SECONDS=' dist/game.html
           grep -q 'const START_HEIGHT_BASE=' dist/game.html
           grep -q 'const RING_GAP_BASE=0;' dist/game.html
           grep -q 'const RING_GAP_GROWTH=0;' dist/game.html
-          grep -q 'const RING_STAGGER=' dist/game.html
+          grep -q 'const RING_HANDOFF=' dist/game.html
           find dist -maxdepth 3 -type f | sort
 
       - name: Configure Pages
