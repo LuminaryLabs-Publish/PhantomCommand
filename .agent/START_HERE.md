@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T10-58-46-04-00`
+**Last aligned:** `2026-07-08T12-41-31-04-00`
 
 ## Purpose
 
@@ -16,23 +16,23 @@ The full accessible `LuminaryLabs-Publish` repository list was compared against 
 
 No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, or missing sampled root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected as a fallback follow-up because the current public route has a stable `smooth-ring-handoff-v6` construct proof, but the transition from visual construct completion to typed scenario bootstrap still needs source-owned acceptance records.
+`PhantomCommand` was selected as the oldest eligible fallback because its previous central follow-up was older than the sampled non-Cavalry Publish repos, and the current public route still needs source-profile ownership before scenario bootstrap or RTS gameplay expansion.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow       ledgered with root .agent
-LuminaryLabs-Publish/HorrorCorridor      ledgered with root .agent
-LuminaryLabs-Publish/AetherVale          ledgered with root .agent
-LuminaryLabs-Publish/ZombieOrchard       ledgered with root .agent
-LuminaryLabs-Publish/TheUnmappedHouse    ledgered with root .agent
-LuminaryLabs-Publish/MyCozyIsland        ledgered with root .agent
-LuminaryLabs-Publish/TheOpenAbove        ledgered with root .agent
-LuminaryLabs-Publish/PhantomCommand      selected fallback follow-up
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled follow-up 2026-07-08T12:01:23-04:00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled follow-up 2026-07-08T12:29:17-04:00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled follow-up 2026-07-08T12:21:20-04:00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:40:00-04:00
+LuminaryLabs-Publish/PhantomCommand      selected fallback / previous central update 2026-07-08T10:58:46-04:00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled follow-up 2026-07-08T12:09:27-04:00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PrehistoricRush     ledgered with root .agent
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:49:04-04:00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled follow-up 2026-07-08T11:28:38-04:00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled follow-up 2026-07-08T11:19:53-04:00
 ```
 
 ## Current product read
@@ -73,6 +73,7 @@ open index.html
   -> game.html imports Three.js from CDN
   -> inline smooth-ring-handoff-v6 constants define the construct
   -> inline ring math derives 10 no-gap rings
+  -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
   -> inline wedge factory creates 92 stone pieces
   -> requestAnimationFrame drives construct(seq)
   -> keyboard/mouse/buttons pan, zoom, skip, and restart
@@ -81,7 +82,7 @@ open index.html
   -> visual phase becomes command online
 ```
 
-## Target acceptance loop
+## Target source-profile boundary loop
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
@@ -90,17 +91,11 @@ source-owned smooth-ring-handoff-v6 profile
   -> source snapshot
   -> ring descriptors
   -> piece descriptors
-  -> delay/settle/timeline margin descriptors
-  -> parity report against game.html live values
-  -> ConstructEventEnvelope
-  -> ConstructEventResult
-  -> ConstructEventJournal
-  -> ConstructSnapshot
-  -> ScenarioBootstrapCommand
-  -> ScenarioBootstrapResult
-  -> ScenarioBootstrapSnapshot
-  -> additive GameHost diagnostics
-  -> DOM-free fixture rows
+  -> timing descriptors
+  -> profile parity report
+  -> additive GameHost source diagnostics
+  -> DOM-free source-profile fixture
+  -> later ConstructEventResult and ScenarioBootstrapResult
 ```
 
 ## First files to read
@@ -111,13 +106,13 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/next-steps.md
 .agent/validation.md
 .agent/architecture-audit/domain-service-breakdown.md
-.agent/architecture-audit/2026-07-08T10-58-46-04-00-scenario-acceptance-dsk-breakdown.md
+.agent/architecture-audit/2026-07-08T12-41-31-04-00-dsk-domain-breakdown.md
 .agent/render-audit/construct-render-audit.md
-.agent/render-audit/2026-07-08T10-58-46-04-00-gamehost-render-readback.md
+.agent/render-audit/2026-07-08T12-41-31-04-00-gamehost-source-profile-readback.md
 .agent/gameplay-audit/construct-to-rts-gap.md
-.agent/scenario-bootstrap-audit/2026-07-08T10-58-46-04-00-construct-scenario-acceptance-matrix.md
-.agent/trackers/2026-07-08T10-58-46-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T10-58-46-04-00.md
+.agent/scenario-bootstrap-audit/2026-07-08T12-41-31-04-00-source-profile-implementation-boundary.md
+.agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T12-41-31-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -143,7 +138,7 @@ The repo should prove the PhantomCommand game slice. Extract reusable construct,
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Construct Scenario Acceptance Matrix
+PhantomCommand Source Profile Implementation Boundary
 ```
 
-Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding source parity, construct result idempotency, scenario bootstrap gating, serializable snapshots, additive diagnostics, and DOM-free fixtures.
+Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding source-profile modules, descriptor parity, source fingerprints, source snapshots, additive GameHost diagnostics, and a DOM-free source-profile fixture. Do not start scenario bootstrap reducers until this source-profile boundary passes.
