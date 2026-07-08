@@ -1,25 +1,28 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T04:40:21-04:00`
+**Timestamp:** `2026-07-08T06:19:51-04:00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed full LuminaryLabs-Publish repo set through the GitHub installation.
-- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger search and latest-summary readback.
+- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger search and latest ledger readback.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Selected PhantomCommand as oldest eligible follow-up rotation target among checked non-excluded repos.
+- Selected PhantomCommand as fallback follow-up because internal docs were stale against current game.html build evidence.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
 - Read .agent/known-gaps.md.
 - Read .agent/validation.md.
 - Read README.md.
+- Read package.json.
+- Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added construct-source-audit/source-authority-fixture-gate.md.
+- Added construct-source-audit/smooth-handoff-v6-source-drift.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -47,8 +50,15 @@ README.md declares:
 - game.html is the opening construct scene.
 - GitHub Pages deployment uses .github/workflows/deploy-pages.yml.
 
+package.json declares:
+- build runs node scripts/build-static.mjs.
+- dev/start run Vite on port 4173.
+
+index.html declares:
+- Start and Open Scene route to game.html.
+
 game.html declares:
-- BUILD_ID sequential-ring-v5
+- BUILD_ID smooth-ring-handoff-v6
 - RING_COUNT 10
 - RING_GAP_BASE 0
 - RING_GAP_GROWTH 0
@@ -72,10 +82,10 @@ construct-spiral-intro-kit declares:
 npm install
 npm run build
 node tests/construct-spiral-intro-kit-smoke.mjs
-node <new fixture> for sequential-ring-v5 profile parity
+node <new fixture> for smooth-ring-handoff-v6 profile parity
 node <new fixture> for ring descriptor parity
 node <new fixture> for piece descriptor parity
-node <new fixture> for inner-first transition margins
+node <new fixture> for handoff/timeline margin parity
 node <new fixture> for ConstructEventResult idempotency
 node <new fixture> for ScenarioBootstrapResult gating
 node <new fixture> for snapshot shape
