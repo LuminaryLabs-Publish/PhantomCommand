@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T06:19:51-04:00`
+**Timestamp:** `2026-07-08T07:50:47-04:00`
 
 ## Summary
 
@@ -8,11 +8,11 @@
 
 The repo has a useful generic `construct-spiral-intro-kit`, but the live scene still depends on a large inline runtime in `game.html` for the actual `smooth-ring-handoff-v6` construct.
 
-This pass corrects the internal docs from the older `sequential-ring-v5` target to the current `smooth-ring-handoff-v6` runtime evidence. The next cut should preserve the public construct visual while extracting source authority, descriptor parity, event results, scenario bootstrap gating, and DOM-free fixture replay.
+This pass keeps the source-authority direction intact and narrows the next ledge: fixture-readable construct completion and scenario bootstrap results are required before full RTS expansion.
 
 ## Selection audit
 
-Full `LuminaryLabs-Publish` repo list checked:
+Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
 HorrorCorridor      tracked
@@ -27,7 +27,9 @@ MyCozyIsland        tracked
 TheUnmappedHouse    tracked
 ```
 
-Central ledger state already tracks `PhantomCommand`, so this run treated it as a follow-up documentation pass rather than a first-time intake.
+No checked non-excluded Publish repo was fully new, central-ledger absent, or missing root `.agent/START_HERE.md` state.
+
+`PhantomCommand` was selected as the fallback follow-up target because it still has a high-value authority gap between the visual construct completion and a future RTS scenario bootstrap.
 
 ## Current interaction loop
 
@@ -108,6 +110,8 @@ piece-descriptor-generation
 piece-id-policy
 piece-seed-policy
 piece-angle-policy
+piece-start-pose-policy
+piece-final-pose-policy
 piece-delay-policy
 piece-settle-policy
 wedge-geometry-generation
@@ -128,7 +132,7 @@ scenario-bootstrap-gate
 scenario-bootstrap-journal
 scenario-bootstrap-snapshot
 scenario-mode-state-machine
-scenario-boundary-placeholder
+rts-boundary-placeholder
 fixture-script-runner
 legacy-gamehost-compatibility
 ```
@@ -141,7 +145,7 @@ legacy-gamehost-compatibility
 serve index.html menu
 route Start button to game.html
 route Open Scene link to game.html
-copy index.html, game.html, docs, and config into dist during static build
+copy static files into dist during build
 ```
 
 ### Live inline runtime services
@@ -224,13 +228,25 @@ Next-cut local kits:
 
 ```txt
 phantom-command-smooth-handoff-profile-kit
+phantom-command-source-profile-fingerprint-kit
+phantom-command-source-profile-snapshot-kit
 phantom-command-ring-descriptor-kit
 phantom-command-piece-descriptor-kit
-phantom-command-inner-first-timeline-contract-kit
+phantom-command-piece-delay-policy-kit
+phantom-command-piece-settle-policy-kit
+phantom-command-handoff-timeline-contract-kit
 phantom-command-profile-parity-report-kit
+phantom-command-construct-event-envelope-kit
 phantom-command-construct-event-result-kit
+phantom-command-construct-event-reducer-kit
+phantom-command-construct-completion-idempotency-kit
+phantom-command-construct-event-journal-kit
 phantom-command-construct-snapshot-contract-kit
+phantom-command-scenario-bootstrap-command-kit
+phantom-command-scenario-bootstrap-preflight-kit
 phantom-command-scenario-bootstrap-result-kit
+phantom-command-scenario-bootstrap-gate-kit
+phantom-command-scenario-bootstrap-journal-kit
 phantom-command-scenario-bootstrap-snapshot-kit
 phantom-command-gamehost-diagnostics-adapter-kit
 phantom-command-fixture-script-runner-kit
@@ -240,4 +256,4 @@ phantom-command-fixture-script-runner-kit
 
 The current runtime is visually useful but source-authority weak.
 
-The next implementation cut should not rework rendering first. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`: 10 rings, zero gaps, ring parts `[5,5,5,5,6,8,10,12,16,20]`, 92 pieces, `smooth-ring-handoff-v6`, total build seconds `19.923`, and `GameHost` compatibility.
+The next implementation cut should not rework rendering first and should not start full RTS gameplay. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`, then use that result authority to gate `scenario_001_raise_the_host`.
