@@ -1,53 +1,50 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T15-58-59-04-00`
+**Timestamp:** `2026-07-08T18-29-21-04-00`
 
 ## Summary
 
 `PhantomCommand` is a playable static two-route proof: `index.html` is the menu and `game.html` is the live Three.js construct scene.
 
-The visible construct proof is stable enough to preserve. The current technical risk is still source authority consumption: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline descriptors, HUD mutation, and GameHost projection are all inline in `game.html`.
+The visible construct should be preserved. The active source risk is that the live `smooth-ring-handoff-v6` authority is still inline in `game.html`: source constants, ring descriptors, piece descriptors, timeline math, HUD mutation, and GameHost projection are all coupled to the browser render file.
 
-This pass keeps runtime files unchanged and narrows the next implementation ledge into an exact source-profile consumer splice map.
+This pass keeps runtime files unchanged and turns the next source-profile work into fixture-row acceptance plus GameHost readback contracts.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / newer central follow-up observed
-LuminaryLabs-Publish/PhantomCommand      selected fallback / previous central update 2026-07-08T14-08-24-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled alignment 2026-07-08T17-49-51-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled alignment 2026-07-08T18-19-43-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled alignment 2026-07-08T18-09-21-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled alignment 2026-07-08T17-09-48-04-00
+LuminaryLabs-Publish/PhantomCommand      selected fallback / previous sampled alignment 2026-07-08T15-58-59-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled alignment 2026-07-08T16-51-11-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / newer central follow-up observed
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled alignment 2026-07-08T17-31-22-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled alignment 2026-07-08T16-19-57-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled alignment 2026-07-08T16-20-00-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected because its previous root alignment was the oldest sampled eligible entry and its source profile consumer splice remains unresolved.
+`PhantomCommand` was selected because its previous sampled root alignment was the oldest observed eligible entry and its source-profile fixture gate remains unresolved.
 
 ## Current interaction loop
 
 ```txt
 open index.html
-  -> main menu renders title, subtitle, Start button, and Open Scene link
+  -> menu renders Phantom Command copy and route controls
   -> Start or Open Scene routes to game.html
   -> game.html imports Three.js from CDN
-  -> inline runtime creates renderer, scene, camera, fog, lights, materials, HUD, and input state
+  -> inline runtime creates renderer, scene, fog, lights, camera, HUD, materials, and input state
   -> inline constants define smooth-ring-handoff-v6
   -> inline ring math creates 10 no-gap construct rings
   -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
   -> inline wedge geometry creates 92 stone pieces
   -> construct(seq) animates each piece by ring delay and part delay
-  -> WASD/arrows pan the camera
-  -> mouse wheel zooms
-  -> Space/Skip jumps to complete
-  -> R/Restart resets
+  -> pan, zoom, skip, and restart controls mutate inline runtime state
   -> HUD reports constructed count, phase, build id, and progress
   -> window.GameHost exposes skipConstruct(), restartConstruct(), and getState()
 ```
@@ -101,18 +98,22 @@ construct-profile-normalization
 construct-profile-parity
 construct-source-fingerprint
 construct-source-snapshot
+construct-source-fixture-row-contract
+construct-source-fixture-runner
 construct-descriptor-authority
 ring-descriptor-generation
 piece-descriptor-generation
 piece-delay-policy
 piece-settle-policy
 handoff-timeline-contract
-source-profile-fixture-runner
 gamehost-source-diagnostics
+gamehost-source-profile-readback
+source-profile-consumer-splice
 construct-event-envelope
 construct-event-result
 construct-completion-idempotency
 scenario-bootstrap-gate
+scenario-bootstrap-blocker
 legacy-gamehost-compatibility
 ```
 
@@ -168,7 +169,7 @@ construct-spiral-intro-kit-smoke
   -> assert all pieces settled
 ```
 
-### Needed source-profile consumer services
+### Needed source-profile fixture services
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
@@ -181,7 +182,9 @@ source snapshot service
 profile parity report
 additive GameHost source diagnostics adapter
 DOM-free source profile fixture runner
-game.html source-profile consumer splice
+game.html sourceProfile consumer readback
+construct complete event blocker map
+scenario bootstrap blocker map
 ```
 
 ## Kits
@@ -225,10 +228,11 @@ phantom-command-construct-event-envelope-kit
 phantom-command-construct-event-result-kit
 phantom-command-construct-completion-idempotency-kit
 phantom-command-scenario-bootstrap-gate-kit
+phantom-command-scenario-bootstrap-blocker-kit
 ```
 
 ## Main architectural read
 
-The repo already has a generic construct scheduling kit and smoke test, but the live `game.html` proof does not yet consume a source-owned PhantomCommand profile.
+The repo already has a generic construct scheduling kit and smoke test, but the live construct proof does not yet consume a source-owned PhantomCommand profile.
 
 The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source-profile, descriptor, fingerprint, snapshot, parity, and GameHost diagnostic modules that reproduce the live v6 values, then splice those diagnostics into `game.html` additively.
