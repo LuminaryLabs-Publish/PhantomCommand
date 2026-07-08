@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T15-58-59-04-00`
+**Timestamp:** `2026-07-08T18-29-21-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Source Profile Consumer Splice Map + Fixture Gate
+PhantomCommand Source Profile Fixture Row Acceptance + GameHost Readback Gate
 ```
 
 ## Goal
@@ -44,9 +44,12 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Fixture proves handoff values `RING_HANDOFF = 0.72` and `PART_STAGGER = 0.025`.
 - [ ] Fixture proves source fingerprint stability.
 - [ ] Fixture proves source snapshot serialization.
-- [ ] Fixture proves additive GameHost compatibility shape.
+- [ ] Fixture proves profile parity report has no errors.
+- [ ] Fixture proves additive GameHost source diagnostics shape.
+- [ ] Fixture proves legacy GameHost fields remain unchanged.
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
 - [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
+- [ ] Add fixture script to the validation path only after it exists and passes locally.
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
@@ -92,6 +95,11 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
    - import sourceProfile diagnostics helper into game.html
    - expose sourceProfile through GameHost getState
    - do not change the visible construct in the same pass
+
+9. Construct result blocker ninth
+   - document construct_complete result shape only after source parity passes
+   - reject scenario bootstrap while sourceProfile parity is missing
+   - keep RTS gameplay deferred
 ```
 
 ## Required profile values
@@ -132,6 +140,8 @@ source_snapshot_is_serializable
 source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
+legacy_gamehost_fields_are_unchanged
+scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
 ```
 
