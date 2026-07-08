@@ -1,11 +1,11 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T07:50:47-04:00`
+**Timestamp:** `2026-07-08T09:19:43-04:00`
 
 ## Critical gaps
 
 ```txt
-- game.html still owns the live smooth-ring-handoff-v6 source constants inline.
+- game.html still owns the live smooth-ring-handoff-v6 constants inline.
 - game.html still owns ring descriptor math inline.
 - game.html still owns piece descriptor math inline.
 - game.html still owns wedge geometry, material, construct animation, HUD mutation, input, camera, and GameHost state inline.
@@ -16,24 +16,25 @@
 - There is no descriptor parity fixture proving [5,5,5,5,6,8,10,12,16,20].
 - There is no DOM-free fixture proving 92 live pieces.
 - There is no DOM-free fixture proving total build seconds 19.923.
-- There is no transition-margin fixture proving the handoff overlap and inner-first ordering implied by RING_HANDOFF 0.72.
+- There is no transition-margin fixture proving RING_HANDOFF 0.72 and PART_STAGGER 0.025.
 - Construct completion is represented as visual/HUD phase, not a typed idempotent ConstructEventResult.
-- duplicate construct completion is not rejected through a stable result reason.
+- Duplicate construct completion is not rejected through a stable result reason.
 - Scenario bootstrap does not exist as a command/result gate.
-- early bootstrap is not rejected with construct_incomplete.
-- duplicate bootstrap is not rejected with duplicate_scenario_bootstrap.
+- Early bootstrap is not rejected with construct_incomplete.
+- Duplicate bootstrap is not rejected with duplicate_scenario_bootstrap.
 - ConstructSnapshot and ScenarioBootstrapSnapshot are not stable standalone contracts.
 - window.GameHost is useful but too small for fixture-grade diagnostics.
 - RTS gameplay domains are documented but not yet safely connected to the construct proof.
 ```
 
-## New gap narrowed in this pass
+## Gap narrowed in this pass
 
 ```txt
-- The next implementation target is no longer just source extraction.
-- The handoff must prove source parity and then emit ConstructEventResult and ScenarioBootstrapResult records.
-- The future RTS mode must start only after scenario bootstrap is accepted.
-- Full unit control, economy, waves, combat, and objectives remain deferred until the bootstrap fixture gate passes.
+- The current next target is now an implementation wire map, not another generic extraction note.
+- Source-profile parity must happen before construct result authority.
+- Construct result authority must happen before scenario bootstrap.
+- Scenario bootstrap must happen before unit control, economy, combat, wave, or objective domains.
+- The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until the live profile has parity fixtures.
 ```
 
 ## Visual/render gaps
@@ -46,6 +47,7 @@
 - HUD state mutation happens inside the render/runtime monolith.
 - Render code consumes inline constants instead of reusable descriptors.
 - Renderer handoff cannot yet consume source-owned construct descriptors only.
+- There is no render-source parity snapshot tying the visible build to the source profile.
 ```
 
 ## Gameplay/system gaps
@@ -59,33 +61,36 @@
 - No command journal replay contract exists for the construct -> RTS transition.
 ```
 
-## Documentation gaps closed
+## Documentation gaps closed or refreshed
 
 ```txt
-- Added root .agent/START_HERE.md.
-- Added root .agent/current-audit.md.
-- Added root .agent/known-gaps.md.
-- Added root .agent/next-steps.md.
-- Added root .agent/validation.md.
-- Added architecture, render, gameplay, tracker, and turn-ledger audit files.
-- Added construct-source-audit/source-authority-fixture-gate.md.
-- Added construct-source-audit/smooth-handoff-v6-source-drift.md.
-- Added scenario-bootstrap-audit/construct-result-fixture-matrix.md.
-- Added 2026-07-08T07-50-47-04-00 architecture, render, tracker, and turn-ledger entries.
+- Root .agent/START_HERE.md refreshed.
+- Root .agent/current-audit.md refreshed.
+- Root .agent/known-gaps.md refreshed.
+- Root .agent/next-steps.md refreshed.
+- Root .agent/validation.md refreshed.
+- Root .agent/kit-registry.json refreshed.
+- Added 2026-07-08T09-19-43-04-00 architecture DSK/domain breakdown.
+- Added 2026-07-08T09-19-43-04-00 render source authority map.
+- Added 2026-07-08T09-19-43-04-00 scenario bootstrap source wire map.
+- Added 2026-07-08T09-19-43-04-00 tracker and turn-ledger entries.
 ```
 
 ## Gap priority order
 
 ```txt
 1. Smooth-ring-handoff-v6 source profile ownership.
-2. Descriptor parity proof.
-3. Total build seconds parity proof.
-4. Handoff/margin proof.
-5. ConstructEventResult idempotency.
-6. ConstructSnapshot projection.
-7. ScenarioBootstrapResult gating.
-8. ScenarioBootstrapSnapshot projection.
-9. Additive GameHost diagnostics.
-10. Renderer descriptor handoff.
-11. RTS gameplay expansion.
+2. Profile normalization and source fingerprint.
+3. Source snapshot projection.
+4. Ring descriptor parity proof.
+5. Piece descriptor parity proof.
+6. Total build seconds parity proof.
+7. Handoff/margin proof.
+8. ConstructEventResult idempotency.
+9. ConstructSnapshot projection.
+10. ScenarioBootstrapResult gating.
+11. ScenarioBootstrapSnapshot projection.
+12. Additive GameHost diagnostics.
+13. Renderer descriptor handoff.
+14. RTS gameplay expansion.
 ```
