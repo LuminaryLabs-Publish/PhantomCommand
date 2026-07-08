@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T23-09-45-04-00`
+**Latest documented run:** `2026-07-08T00-41-39-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T23-09-45-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-08T00-41-39-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -10,7 +10,7 @@
 
 `PhantomCommand` is a static Vite / Three.js publish repo for a single-player PvE undead RTS prototype.
 
-The active user flow is still:
+The active user flow remains:
 
 ```txt
 index.html -> game.html -> inline sequential-ring-v5 construct proof
@@ -30,7 +30,7 @@ total pieces: 92
 total build seconds: 31.915
 ```
 
-The source kit at `src/kits/construct-spiral-intro-kit/index.js` remains useful as a generic construct sequencing kit. Keep it generic. Add Phantom-specific profile, descriptor, event, snapshot, and bootstrap gate kits beside it instead of overloading the generic kit.
+The source kit at `src/kits/construct-spiral-intro-kit/index.js` remains useful as a generic construct sequencing kit. Keep it generic. Add Phantom-specific source profile, descriptor, parity, construct event, snapshot, scenario bootstrap, and fixture kits beside it instead of overloading the generic spiral/window scheduling model.
 
 ## Current documentation status
 
@@ -56,16 +56,18 @@ Tracked entries:
 .agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T23-09-45-04-00/project-breakdown.md
+.agent/trackers/2026-07-08T00-41-39-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Descriptor Fixture Matrix + Bootstrap Result Gate` slice.
+Build the `PhantomCommand Construct Source Authority + Scenario Bootstrap Fixture Gate` slice.
 
 ```txt
 menu and game visuals stay unchanged
   -> source-own sequential-ring-v5 constants
+  -> export source fingerprint and source snapshot
   -> normalize construct profile values
   -> derive live-compatible ring descriptors
   -> derive live-compatible piece descriptors
@@ -76,16 +78,16 @@ menu and game visuals stay unchanged
   -> add ConstructEventResult records
   -> accept construct_complete exactly once
   -> reject duplicate construct_complete with duplicate_construct_complete
-  -> append construct event journal entries
+  -> append ConstructEventJournal records
   -> project serializable ConstructSnapshot
-  -> add scenario bootstrap preflight and result contracts
+  -> add ScenarioBootstrapCommand and bootstrap preflight
   -> reject bootstrap before construct completion with construct_incomplete
   -> accept scenario_001_raise_the_host after completion
   -> reject duplicate bootstrap with duplicate_scenario_bootstrap
   -> project ScenarioBootstrapSnapshot with RTS boundary placeholders only
   -> expose additive GameHost diagnostics
   -> add DOM-free fixture matrix
-  -> keep full RTS gameplay deferred until descriptor, event, snapshot, and bootstrap replay parity pass
+  -> keep full RTS gameplay deferred until descriptor, timeline, event, snapshot, and bootstrap replay parity pass
 ```
 
 Minimum next build checklist:
@@ -111,9 +113,11 @@ Minimum next build checklist:
 - Reject duplicate `construct_complete` with reason `duplicate_construct_complete`.
 - Add `phantom-command-construct-event-journal-kit`.
 - Add `phantom-command-construct-snapshot-contract-kit`.
+- Add `phantom-command-scenario-bootstrap-command-kit`.
 - Add `phantom-command-scenario-bootstrap-preflight-kit`.
 - Add `phantom-command-scenario-bootstrap-result-kit`.
 - Add `phantom-command-scenario-bootstrap-gate-kit`.
+- Add `phantom-command-scenario-bootstrap-journal-kit`.
 - Add `phantom-command-scenario-bootstrap-snapshot-kit`.
 - Add `phantom-command-gamehost-construct-diagnostics-kit`.
 - Add `phantom-command-fixture-script-runner-kit`.
@@ -127,3 +131,7 @@ Minimum next build checklist:
 - Add `phantom-command-gamehost-diagnostics-smoke-kit`.
 - Keep `construct-spiral-intro-kit` defaults unchanged.
 - Defer full RTS gameplay until descriptor, timeline, event, snapshot, and bootstrap gate parity pass.
+
+## Automation continuity
+
+Continue the repo-breakdown rotation. Do not pause or stop the scheduled breakdown task from this repo state.
