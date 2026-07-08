@@ -1,16 +1,18 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T06:19:51-04:00`
+**Timestamp:** `2026-07-08T07:50:47-04:00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Smooth Ring Handoff V6 Source Authority + Scenario Bootstrap Fixture Gate
+PhantomCommand Construct Result + Scenario Bootstrap Fixture Gate
 ```
 
 ## Goal
 
 Preserve the current live visual while moving source authority, descriptor parity, completion idempotency, bootstrap gating, snapshots, and replay proof out of the inline `game.html` runtime.
+
+The next cut should prove that `smooth-ring-handoff-v6` can transition from visual construct completion into a typed scenario bootstrap result without depending on DOM, canvas, Three.js, or HUD text mutation.
 
 ## Checklist
 
@@ -25,19 +27,19 @@ Preserve the current live visual while moving source authority, descriptor parit
 - [ ] Add delay and settle descriptor generation.
 - [ ] Add handoff/margin descriptors proving current timing parity.
 - [ ] Add a parity report for ring count, gaps, part counts, total pieces, and total build seconds.
-- [ ] Add ConstructEventEnvelope.
-- [ ] Add ConstructEventResult.
+- [ ] Add `ConstructEventEnvelope`.
+- [ ] Add `ConstructEventResult`.
 - [ ] Add construct event reducer.
 - [ ] Accept `construct_complete` exactly once.
 - [ ] Reject duplicate `construct_complete` with `duplicate_construct_complete`.
-- [ ] Add ConstructEventJournal.
-- [ ] Add serializable ConstructSnapshot.
-- [ ] Add ScenarioBootstrapCommand.
-- [ ] Add ScenarioBootstrapPreflight.
+- [ ] Add `ConstructEventJournal`.
+- [ ] Add serializable `ConstructSnapshot`.
+- [ ] Add `ScenarioBootstrapCommand`.
+- [ ] Add `ScenarioBootstrapPreflight`.
 - [ ] Reject bootstrap before completion with `construct_incomplete`.
 - [ ] Accept `scenario_001_raise_the_host` after completion.
 - [ ] Reject duplicate bootstrap with `duplicate_scenario_bootstrap`.
-- [ ] Add serializable ScenarioBootstrapSnapshot with RTS boundary placeholders only.
+- [ ] Add serializable `ScenarioBootstrapSnapshot` with RTS boundary placeholders only.
 - [ ] Expand `window.GameHost.getState()` additively without breaking `skipConstruct` or `restartConstruct`.
 - [ ] Add DOM-free fixture smoke for profile parity.
 - [ ] Add DOM-free fixture smoke for ring descriptors.
@@ -59,11 +61,12 @@ Preserve the current live visual while moving source authority, descriptor parit
 2. Descriptor parity second
    - derive rings from the profile
    - derive pieces from rings
-   - derive timing and transition margins
+   - derive delays, settle windows, and transition margins
    - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
 
-3. Event authority third
+3. Construct result authority third
    - create construct_complete envelope/result/reducer
+   - accept first completion
    - reject duplicate completion
    - project ConstructSnapshot
 
@@ -71,13 +74,28 @@ Preserve the current live visual while moving source authority, descriptor parit
    - reject bootstrap before completion
    - accept scenario_001_raise_the_host after completion
    - reject duplicate bootstrap
-   - project ScenarioBootstrapSnapshot
+   - project ScenarioBootstrapSnapshot with RTS placeholders only
 
 5. Legacy host compatibility last
    - keep skipConstruct
    - keep restartConstruct
    - keep getState
    - add diagnostics without breaking current consumers
+```
+
+## Required result reasons
+
+```txt
+construct_complete_accepted
+duplicate_construct_complete
+construct_restarted
+construct_skipped
+unknown_construct_event
+scenario_bootstrap_accepted
+construct_incomplete
+duplicate_scenario_bootstrap
+unknown_scenario
+source_fingerprint_mismatch
 ```
 
 ## Do not do yet
