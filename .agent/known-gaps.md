@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T02:50:33-04:00`
+**Timestamp:** `2026-07-08T04:40:21-04:00`
 
 ## Critical gaps
 
@@ -36,6 +36,7 @@
 - Construct animation and camera orbit are embedded directly in game.html.
 - HUD state mutation happens inside the render/runtime monolith.
 - Render code consumes inline constants instead of reusable descriptors.
+- Renderer handoff cannot yet consume source-owned construct descriptors only.
 ```
 
 ## Gameplay/system gaps
@@ -46,9 +47,10 @@
 - The Grim Reaper Totem exists as a visual totem only.
 - Necropolis, undead units, resources, enemies, waves, objectives, combat, and progression are still deferred domains.
 - No scenario bootstrap gate safely transitions from construct_complete to a playable RTS slice.
+- No command journal replay contract exists for the construct -> RTS transition.
 ```
 
-## Documentation gaps closed in this pass
+## Documentation gaps closed
 
 ```txt
 - Added root .agent/START_HERE.md.
@@ -57,4 +59,20 @@
 - Added root .agent/next-steps.md.
 - Added root .agent/validation.md.
 - Added architecture, render, gameplay, tracker, and turn-ledger audit files.
+- Added construct-source-audit/source-authority-fixture-gate.md.
+- Added 2026-07-08T04-40-21-04-00 tracker and turn-ledger entries.
+```
+
+## Gap priority order
+
+```txt
+1. Source profile ownership.
+2. Descriptor parity proof.
+3. Inner-first transition margin proof.
+4. ConstructEventResult idempotency.
+5. ScenarioBootstrapResult gating.
+6. Snapshot contracts.
+7. Additive GameHost diagnostics.
+8. Renderer descriptor handoff.
+9. RTS gameplay expansion.
 ```
