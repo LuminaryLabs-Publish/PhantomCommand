@@ -1,35 +1,35 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T07:50:47-04:00`
+**Timestamp:** `2026-07-08T09:19:43-04:00`
 
 ## Summary
 
-`PhantomCommand` is playable as a static two-route proof: a menu route in `index.html` and a Three.js construct scene in `game.html`.
+`PhantomCommand` is a playable static two-route proof: `index.html` is the menu and `game.html` is the live Three.js construct scene.
 
-The repo has a useful generic `construct-spiral-intro-kit`, but the live scene still depends on a large inline runtime in `game.html` for the actual `smooth-ring-handoff-v6` construct.
+The live scene is visually useful and source-readable, but it still keeps the canonical `smooth-ring-handoff-v6` profile, descriptor generation, timing, completion phase, and `GameHost` output inside `game.html`.
 
-This pass keeps the source-authority direction intact and narrows the next ledge: fixture-readable construct completion and scenario bootstrap results are required before full RTS expansion.
+This pass keeps runtime files unchanged and narrows the next implementation ledge into a concrete source-profile plus construct/scenario result wire map.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-HorrorCorridor      tracked
-AetherVale          tracked
-TheOpenAbove        tracked
+HorrorCorridor      tracked with root .agent
+AetherVale          tracked with root .agent
+TheOpenAbove        tracked with root .agent
 TheCavalryOfRome    excluded by rule
-PhantomCommand      selected follow-up
-PrehistoricRush     tracked
-ZombieOrchard       tracked
-IntoTheMeadow       tracked
-MyCozyIsland        tracked
-TheUnmappedHouse    tracked
+PhantomCommand      selected fallback follow-up
+PrehistoricRush     tracked with root .agent
+ZombieOrchard       tracked with root .agent
+IntoTheMeadow       tracked with root .agent
+MyCozyIsland        tracked with root .agent
+TheUnmappedHouse    tracked with root .agent
 ```
 
-No checked non-excluded Publish repo was fully new, central-ledger absent, or missing root `.agent/START_HERE.md` state.
+No checked non-excluded Publish repo was fully new, central-ledger absent, undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected as the fallback follow-up target because it still has a high-value authority gap between the visual construct completion and a future RTS scenario bootstrap.
+`PhantomCommand` was selected as the oldest eligible fallback follow-up because its prior root alignment was older than the latest checked eligible repos and the live source profile / construct result / scenario bootstrap authority seam remains unresolved.
 
 ## Current interaction loop
 
@@ -86,6 +86,7 @@ browser-render-host
 webgl-canvas-host
 three-render-scene
 scene-fog-lighting
+stone-material-palette
 camera-navigation
 keyboard-pan-input
 wheel-zoom-input
@@ -125,6 +126,7 @@ construct-event-reducer
 construct-completion-idempotency
 construct-event-journal
 construct-snapshot-contract
+construct-diagnostics-projection
 scenario-bootstrap-command
 scenario-bootstrap-preflight
 scenario-bootstrap-result
@@ -146,6 +148,7 @@ serve index.html menu
 route Start button to game.html
 route Open Scene link to game.html
 copy static files into dist during build
+serve GitHub Pages from main workflow artifact
 ```
 
 ### Live inline runtime services
@@ -155,12 +158,14 @@ create Three.js renderer
 create scene, fog, lights, camera, materials, HUD, and input state
 create smooth-ring-handoff-v6 source constants inline
 create ring descriptors inline
+create piece counts inline from circumference
 create wedge geometry inline
+create seam meshes inline
 create center disc, Grim Reaper Totem, and Phantom Commander inline
 animate radial/drop construct pieces
 track progress and phase
 pan, zoom, skip, restart
-publish GameHost diagnostics
+publish construct diagnostics through window.GameHost
 ```
 
 ### Implemented kit services
@@ -174,6 +179,16 @@ construct-spiral-intro-kit
   -> tick progress
   -> emit snapshots
   -> expose schedule, pending, active, settled, newlyActive, and newlySettled pieces
+  -> report per-piece progress and status
+
+construct-spiral-intro-kit-smoke
+  -> assert kit id and domain path
+  -> install generated ring pieces
+  -> assert schedule ordering
+  -> tick until complete
+  -> assert active count cap
+  -> assert active ring window
+  -> assert all pieces settled
 ```
 
 ### Needed fixture-gate services
@@ -185,6 +200,8 @@ source fingerprint service
 source snapshot service
 ring descriptor generator
 piece descriptor generator
+delay descriptor generator
+settle descriptor generator
 transition margin descriptor generator
 profile parity report
 construct event envelope factory
@@ -254,6 +271,6 @@ phantom-command-fixture-script-runner-kit
 
 ## Main architectural read
 
-The current runtime is visually useful but source-authority weak.
+The repo already has a generic construct scheduling kit and smoke test, but the live `game.html` proof does not yet consume a source-owned PhantomCommand profile. That creates two authorities: generic kit behavior in `src/kits/construct-spiral-intro-kit/index.js`, and live v6 behavior in `game.html`.
 
-The next implementation cut should not rework rendering first and should not start full RTS gameplay. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`, then use that result authority to gate `scenario_001_raise_the_host`.
+The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source and result authority that reproduces the live v6 values, then use those records to gate `scenario_001_raise_the_host` safely.
