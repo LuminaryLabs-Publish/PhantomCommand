@@ -1,13 +1,16 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T12-41-31-04-00",
-  "status": "source-profile-implementation-boundary-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T12-41-31-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T12-41-31-04-00-dsk-domain-breakdown.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-08T12-41-31-04-00-gamehost-source-profile-readback.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-08T12-41-31-04-00-source-profile-implementation-boundary.md",
+  "updatedAt": "2026-07-08T14-08-24-04-00",
+  "status": "source-profile-module-fixture-map-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T14-08-24-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T14-08-24-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T14-08-24-04-00-source-profile-module-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-08T14-08-24-04-00-gamehost-source-diagnostics-readback.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T14-08-24-04-00-construct-completion-source-profile-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T14-08-24-04-00-module-fixture-implementation-map.md",
+  "previousTracker": ".agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T12-41-31-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -47,7 +50,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "oldest eligible tracked Publish repo follow-up selected because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams"
+    "reason": "oldest eligible tracked Publish repo follow-up selected because the previous PhantomCommand root alignment was older than sampled non-Cavalry repos and source profile parity remains unresolved"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -75,10 +78,10 @@
     "targetSourceProfileLoop": [
       "load source-owned smooth-ring-handoff-v6 profile",
       "normalize construct profile values",
-      "emit source fingerprint and source snapshot",
       "emit ring descriptors matching live game.html math",
       "emit piece descriptors matching live game.html math",
       "emit delay, settle, and transition margin descriptors",
+      "emit source fingerprint and source snapshot",
       "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
       "project additive GameHost source diagnostics",
       "run DOM-free source-profile fixture"
@@ -197,12 +200,12 @@
     "nextNeeded": [
       "own live smooth-ring-handoff-v6 profile outside game.html",
       "normalize profile values",
-      "emit source fingerprint",
-      "emit source snapshot",
       "emit serializable ring descriptors",
       "emit serializable piece descriptors",
       "emit serializable delay and settle descriptors",
       "emit serializable timeline margin descriptors",
+      "emit source fingerprint",
+      "emit source snapshot",
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
       "prove total build seconds 19.923",
@@ -322,5 +325,5 @@
     "snapshot-shape",
     "gamehost-shape"
   ],
-  "nextSafeLedge": "PhantomCommand Source Profile Implementation Boundary"
+  "nextSafeLedge": "PhantomCommand Source Profile Module Fixture Map"
 }
