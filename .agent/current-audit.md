@@ -1,30 +1,30 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T04:40:21-04:00`
+**Timestamp:** `2026-07-08T06:19:51-04:00`
 
 ## Summary
 
 `PhantomCommand` is playable as a static two-route proof: a menu route in `index.html` and a Three.js construct scene in `game.html`.
 
-The repo has a useful generic `construct-spiral-intro-kit`, but the live scene still depends on a large inline runtime in `game.html` for the actual sequential-ring-v5 construct.
+The repo has a useful generic `construct-spiral-intro-kit`, but the live scene still depends on a large inline runtime in `game.html` for the actual `smooth-ring-handoff-v6` construct.
 
-This pass confirms the next highest-value internal-doc focus is not new RTS gameplay yet. The next cut should preserve the public construct visual while extracting source authority, descriptor parity, event results, scenario bootstrap gating, and DOM-free fixture replay.
+This pass corrects the internal docs from the older `sequential-ring-v5` target to the current `smooth-ring-handoff-v6` runtime evidence. The next cut should preserve the public construct visual while extracting source authority, descriptor parity, event results, scenario bootstrap gating, and DOM-free fixture replay.
 
 ## Selection audit
 
 Full `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-IntoTheMeadow
-HorrorCorridor
-AetherVale
-ZombieOrchard
-TheUnmappedHouse
-MyCozyIsland
-TheOpenAbove
-PhantomCommand      selected by oldest eligible follow-up rotation
-TheCavalryOfRome   excluded by rule
-PrehistoricRush
+HorrorCorridor      tracked
+AetherVale          tracked
+TheOpenAbove        tracked
+TheCavalryOfRome    excluded by rule
+PhantomCommand      selected follow-up
+PrehistoricRush     tracked
+ZombieOrchard       tracked
+IntoTheMeadow       tracked
+MyCozyIsland        tracked
+TheUnmappedHouse    tracked
 ```
 
 Central ledger state already tracks `PhantomCommand`, so this run treated it as a follow-up documentation pass rather than a first-time intake.
@@ -37,7 +37,7 @@ open index.html
   -> Start or Open Scene routes to game.html
   -> game.html imports Three.js from CDN
   -> inline runtime creates renderer, scene, camera, fog, lights, materials, HUD, and input state
-  -> inline constants define sequential-ring-v5
+  -> inline constants define smooth-ring-handoff-v6
   -> inline ring math creates 10 no-gap construct rings
   -> inline wedge geometry creates 92 stone pieces
   -> construct(seq) animates each piece by ring delay and part delay
@@ -47,6 +47,29 @@ open index.html
   -> R/Restart restarts
   -> HUD reports constructed count, phase, build id, and progress
   -> window.GameHost exposes skipConstruct(), restartConstruct(), and getState()
+```
+
+## Current runtime evidence
+
+```txt
+BUILD_ID: smooth-ring-handoff-v6
+RING_COUNT: 10
+FIRST_INNER_RADIUS: 10
+FIRST_RING_WIDTH: 7
+RING_WIDTH_GROWTH: 1.25
+MAX_RING_WIDTH: 120
+RING_GAP_BASE: 0
+RING_GAP_GROWTH: 0
+MOVE_SECONDS: 2.6
+DROP_START_SECONDS: 0.08
+RING_HANDOFF: 0.72
+PART_STAGGER: 0.025
+PREWARM_SECONDS: 0.45
+START_RADIUS_MULTIPLIER: 1.38
+START_HEIGHT_BASE: 24
+ringParts: [5,5,5,5,6,8,10,12,16,20]
+totalPieces: 92
+totalBuildSeconds: 19.923
 ```
 
 ## Current domains
@@ -68,7 +91,7 @@ button-input
 hud-diagnostics
 gamehost-authority
 inline-construct-runtime
-sequential-ring-v5-profile
+smooth-ring-handoff-v6-profile
 construct-source-authority
 construct-profile-normalization
 construct-profile-parity
@@ -126,11 +149,11 @@ copy index.html, game.html, docs, and config into dist during static build
 ```txt
 create Three.js renderer
 create scene, fog, lights, camera, materials, HUD, and input state
-create ring constants inline
+create smooth-ring-handoff-v6 source constants inline
 create ring descriptors inline
 create wedge geometry inline
 create center disc, Grim Reaper Totem, and Phantom Commander inline
-animate radial construct pieces
+animate radial/drop construct pieces
 track progress and phase
 pan, zoom, skip, restart
 publish GameHost diagnostics
@@ -152,7 +175,7 @@ construct-spiral-intro-kit
 ### Needed fixture-gate services
 
 ```txt
-source-owned sequential-ring-v5 profile
+source-owned smooth-ring-handoff-v6 profile
 source profile normalizer
 source fingerprint service
 source snapshot service
@@ -185,7 +208,7 @@ construct-spiral-intro-kit-smoke
 Inline runtime kits to extract:
 
 ```txt
-inline-sequential-ring-v5-profile
+inline-smooth-ring-handoff-v6-profile
 inline-ring-descriptor-runtime
 inline-piece-descriptor-runtime
 inline-piece-delay-runtime
@@ -200,7 +223,7 @@ inline-gamehost-construct-runtime
 Next-cut local kits:
 
 ```txt
-phantom-command-source-construct-profile-kit
+phantom-command-smooth-handoff-profile-kit
 phantom-command-ring-descriptor-kit
 phantom-command-piece-descriptor-kit
 phantom-command-inner-first-timeline-contract-kit
@@ -217,4 +240,4 @@ phantom-command-fixture-script-runner-kit
 
 The current runtime is visually useful but source-authority weak.
 
-The next implementation cut should not rework rendering first. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`: 10 rings, zero gaps, ring parts `[5,5,5,5,6,8,10,12,16,20]`, 92 pieces, `sequential-ring-v5`, and `GameHost` compatibility.
+The next implementation cut should not rework rendering first. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`: 10 rings, zero gaps, ring parts `[5,5,5,5,6,8,10,12,16,20]`, 92 pieces, `smooth-ring-handoff-v6`, total build seconds `19.923`, and `GameHost` compatibility.
