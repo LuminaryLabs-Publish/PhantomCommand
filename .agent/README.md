@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T21-50-56-04-00`
+**Latest documented run:** `2026-07-07T23-09-45-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T23-09-45-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -55,35 +55,37 @@ Tracked entries:
 .agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T23-09-45-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Construct Descriptor Journal + Scenario Gate Replay Lock` slice.
+Build the `PhantomCommand Descriptor Fixture Matrix + Bootstrap Result Gate` slice.
 
 ```txt
 menu and game visuals stay unchanged
   -> source-own sequential-ring-v5 constants
+  -> normalize construct profile values
   -> derive live-compatible ring descriptors
   -> derive live-compatible piece descriptors
   -> derive delay and settle descriptors
   -> prove ten rings, zero gaps, live part counts, 92 pieces, and 31.915 total build seconds
   -> prove positive inner-first timing margins
-  -> add construct event envelopes
-  -> add construct event results
+  -> add ConstructEventEnvelope records
+  -> add ConstructEventResult records
   -> accept construct_complete exactly once
-  -> reject duplicate construct_complete with stable reason duplicate_construct_complete
+  -> reject duplicate construct_complete with duplicate_construct_complete
   -> append construct event journal entries
-  -> project ConstructSnapshot
+  -> project serializable ConstructSnapshot
   -> add scenario bootstrap preflight and result contracts
-  -> reject bootstrap before construct completion with reason construct_incomplete
+  -> reject bootstrap before construct completion with construct_incomplete
   -> accept scenario_001_raise_the_host after completion
-  -> reject duplicate bootstrap with reason duplicate_scenario_bootstrap
-  -> project ScenarioBootstrapSnapshot with placeholder RTS boundary data only
+  -> reject duplicate bootstrap with duplicate_scenario_bootstrap
+  -> project ScenarioBootstrapSnapshot with RTS boundary placeholders only
   -> expose additive GameHost diagnostics
-  -> add DOM-free smoke fixtures
-  -> keep full RTS gameplay deferred until descriptor, event, snapshot, and bootstrap replay parity passes
+  -> add DOM-free fixture matrix
+  -> keep full RTS gameplay deferred until descriptor, event, snapshot, and bootstrap replay parity pass
 ```
 
 Minimum next build checklist:
@@ -92,10 +94,11 @@ Minimum next build checklist:
 - Preserve current `game.html` visual behavior.
 - Add `phantom-command-source-construct-profile-kit`.
 - Move the live `sequential-ring-v5` constants into a source-owned profile object.
+- Export a profile fingerprint and source snapshot.
 - Add `phantom-command-ring-descriptor-kit`.
 - Reproduce ten rings, zero gaps, live ring widths, and live part counts.
 - Add `phantom-command-piece-descriptor-kit`.
-- Emit stable piece ids, ring indices, part indices, part counts, angle/span data, deterministic seed data, delay, and settle time.
+- Emit stable piece ids, ring indices, part indices, part counts, angle/span data, mid radius, and deterministic seed data.
 - Add `phantom-command-piece-delay-policy-kit`.
 - Add `phantom-command-piece-settle-policy-kit`.
 - Add `phantom-command-inner-first-timeline-contract-kit`.
