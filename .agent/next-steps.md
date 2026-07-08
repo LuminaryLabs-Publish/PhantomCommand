@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T07:50:47-04:00`
+**Timestamp:** `2026-07-08T09:19:43-04:00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Construct Result + Scenario Bootstrap Fixture Gate
+PhantomCommand Source Profile + Construct/Scenario Result Wire Map
 ```
 
 ## Goal
@@ -54,23 +54,28 @@ The next cut should prove that `smooth-ring-handoff-v6` can transition from visu
 
 ```txt
 1. Source profile first
-   - create phantom-command-smooth-handoff-profile-kit
+   - create src/kits/phantom-command-smooth-handoff-profile-kit/index.js
    - mirror current game.html constants exactly
    - expose normalized profile and fingerprint
+   - expose profile snapshot
 
 2. Descriptor parity second
-   - derive rings from the profile
+   - create src/kits/phantom-command-ring-descriptor-kit/index.js
+   - derive rings from the source profile
+   - create src/kits/phantom-command-piece-descriptor-kit/index.js
    - derive pieces from rings
    - derive delays, settle windows, and transition margins
    - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
 
 3. Construct result authority third
+   - create src/kits/phantom-command-construct-result-kit/index.js
    - create construct_complete envelope/result/reducer
    - accept first completion
    - reject duplicate completion
    - project ConstructSnapshot
 
 4. Scenario bootstrap fourth
+   - create src/kits/phantom-command-scenario-bootstrap-kit/index.js
    - reject bootstrap before completion
    - accept scenario_001_raise_the_host after completion
    - reject duplicate bootstrap
