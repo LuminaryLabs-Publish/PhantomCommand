@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T20-31-21-04-00`
+**Latest documented run:** `2026-07-07T21-50-56-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -54,12 +54,13 @@ Tracked entries:
 .agent/trackers/2026-07-07T17-49-34-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Source Descriptor Parity + Scenario Bootstrap Gate Fixture Lock` slice.
+Build the `PhantomCommand Construct Descriptor Journal + Scenario Gate Replay Lock` slice.
 
 ```txt
 menu and game visuals stay unchanged
@@ -67,12 +68,13 @@ menu and game visuals stay unchanged
   -> derive live-compatible ring descriptors
   -> derive live-compatible piece descriptors
   -> derive delay and settle descriptors
-  -> prove ten rings, zero gaps, live part counts, and 92 pieces
+  -> prove ten rings, zero gaps, live part counts, 92 pieces, and 31.915 total build seconds
   -> prove positive inner-first timing margins
   -> add construct event envelopes
   -> add construct event results
   -> accept construct_complete exactly once
   -> reject duplicate construct_complete with stable reason duplicate_construct_complete
+  -> append construct event journal entries
   -> project ConstructSnapshot
   -> add scenario bootstrap preflight and result contracts
   -> reject bootstrap before construct completion with reason construct_incomplete
