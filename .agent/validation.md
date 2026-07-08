@@ -1,28 +1,30 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T06:19:51-04:00`
+**Timestamp:** `2026-07-08T07:50:47-04:00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed full LuminaryLabs-Publish repo set through the GitHub installation.
-- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger search and latest ledger readback.
+- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Selected PhantomCommand as fallback follow-up because internal docs were stale against current game.html build evidence.
+- Selected PhantomCommand as fallback follow-up because construct completion and scenario bootstrap remain untyped authority seams.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
 - Read .agent/known-gaps.md.
 - Read .agent/validation.md.
+- Read .agent/kit-registry.json.
 - Read README.md.
 - Read package.json.
 - Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added construct-source-audit/smooth-handoff-v6-source-drift.md.
+- Added architecture-audit/2026-07-08T07-50-47-04-00-dsk-domain-breakdown.md.
+- Added render-audit/2026-07-08T07-50-47-04-00-construct-render-handoff.md.
+- Added scenario-bootstrap-audit/construct-result-fixture-matrix.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -87,8 +89,10 @@ node <new fixture> for ring descriptor parity
 node <new fixture> for piece descriptor parity
 node <new fixture> for handoff/timeline margin parity
 node <new fixture> for ConstructEventResult idempotency
+node <new fixture> for ConstructSnapshot serialization
 node <new fixture> for ScenarioBootstrapResult gating
-node <new fixture> for snapshot shape
+node <new fixture> for ScenarioBootstrapSnapshot serialization
+node <new fixture> for legacy GameHost compatibility shape
 browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
 ```
