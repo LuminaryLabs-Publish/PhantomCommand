@@ -1,18 +1,18 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T14-08-24-04-00`
+**Timestamp:** `2026-07-08T15-58-59-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Source Profile Module Fixture Map
+PhantomCommand Source Profile Consumer Splice Map + Fixture Gate
 ```
 
 ## Goal
 
 Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, profile parity report, and additive GameHost diagnostics out of inline `game.html`.
 
-The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Scenario bootstrap reducers come after this source-profile boundary passes.
+The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
 
 ## Checklist
 
@@ -34,7 +34,6 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-profile-parity-report-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js`.
-- [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()` after fixture proof exists.
 - [ ] Add `tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Fixture proves profile build id parity.
 - [ ] Fixture proves ring count parity.
@@ -46,6 +45,8 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Fixture proves source fingerprint stability.
 - [ ] Fixture proves source snapshot serialization.
 - [ ] Fixture proves additive GameHost compatibility shape.
+- [ ] Import only the diagnostics helper into `game.html` after fixture proof.
+- [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
@@ -76,16 +77,21 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
    - create profile parity report kit
    - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
 
-6. GameHost additive diagnostics sixth
+6. GameHost source diagnostics sixth
    - keep skipConstruct
    - keep restartConstruct
    - keep legacy getState fields
-   - add nested sourceProfile diagnostics only
+   - prepare nested sourceProfile diagnostics only
 
 7. DOM-free fixture seventh
    - fixture imports source modules only
    - fixture does not import game.html, DOM, canvas, or Three.js
    - fixture validates source profile parity rows
+
+8. Browser consumer splice eighth
+   - import sourceProfile diagnostics helper into game.html
+   - expose sourceProfile through GameHost getState
+   - do not change the visible construct in the same pass
 ```
 
 ## Required profile values
@@ -121,10 +127,11 @@ ring_part_counts_match_live_array
 piece_descriptor_count_matches_92
 timeline_total_build_seconds_matches_19_923
 handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025
-profile_snapshot_is_serializable
-profile_fingerprint_is_stable
+ring_start_times_match_live_formula
+source_snapshot_is_serializable
+source_fingerprint_is_stable
 profile_parity_report_has_no_errors
-gamehost_additive_diagnostics_keep_legacy_surface
+gamehost_source_diagnostics_shape_is_additive
 fixture_runs_without_dom_canvas_or_three
 ```
 
@@ -143,6 +150,7 @@ fixture_runs_without_dom_canvas_or_three
 
 ```txt
 source-profile fixture passes
+  -> GameHost sourceProfile diagnostics passes
   -> ConstructEventEnvelope
   -> ConstructEventResult
   -> ConstructEventJournal
