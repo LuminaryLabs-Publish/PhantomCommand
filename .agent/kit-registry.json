@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T19:08:52-04:00",
-  "status": "construct-event-source-gate-scenario-bootstrap-replay-lock-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T20:31:21-04:00",
+  "status": "source-descriptor-parity-scenario-bootstrap-gate-fixture-lock-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -31,20 +31,20 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live sequential-ring-v5 source profile, ring descriptors, piece descriptors, piece delays, animation, HUD, camera, construct completion phase, and construct-only GameHost. The next cut should source-own construct descriptors, add event/result authority, expose ConstructSnapshot, gate ScenarioBootstrapSnapshot, and prove the path with DOM-free fixtures before RTS gameplay expansion."
+    "primaryGap": "game.html still owns the live sequential-ring-v5 source profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove the path with DOM-free fixtures before RTS gameplay expansion."
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "central ledger oldest eligible tracked Publish repo by latest review timestamp",
     "latestEligibleTimestampsChecked": {
-      "PhantomCommand": "2026-07-07T17:49:34-04:00",
-      "PrehistoricRush": "2026-07-07T18:00:19-04:00",
-      "MyCozyIsland": "2026-07-07T18:10:03-04:00",
-      "IntoTheMeadow": "2026-07-07T18:19:15-04:00",
-      "ZombieOrchard": "2026-07-07T18:28:54-04:00",
-      "HorrorCorridor": "2026-07-07T18:41:07-04:00",
-      "TheOpenAbove": "2026-07-07T18:49:32-04:00",
-      "AetherVale": "2026-07-07T19:01:37-04:00"
+      "PhantomCommand": "2026-07-07T19:08:52-04:00",
+      "PrehistoricRush": "2026-07-07T19:18:58-04:00",
+      "MyCozyIsland": "2026-07-07T19:29:28-04:00",
+      "IntoTheMeadow": "2026-07-07T19:42:05-04:00",
+      "ZombieOrchard": "2026-07-07T19:51:43-04:00",
+      "HorrorCorridor": "2026-07-07T20:00:46-04:00",
+      "TheOpenAbove": "2026-07-07T20:10:49-04:00",
+      "AetherVale": "2026-07-07T20:21:40-04:00"
     }
   },
   "interactionLoops": {
@@ -62,16 +62,21 @@
       "publish construct-only GameHost state",
       "finish at command platform online"
     ],
-    "targetConstructAuthority": [
+    "targetSourceDescriptorParity": [
       "load source-owned sequential-ring-v5 profile",
-      "emit source ring and piece descriptors matching live game.html math",
-      "validate zero gaps and part-count parity",
-      "emit inner-first timeline guards proving positive margins",
-      "run construct intro from descriptors without changing the visible scene",
+      "emit source ring descriptors matching live game.html math",
+      "emit source piece descriptors matching live game.html math",
+      "emit delay and settle descriptors",
+      "validate zero gaps, live ring part counts, 92 total pieces, and positive inner-first timing margins",
+      "feed descriptors back into the current visible construct runtime without changing visuals"
+    ],
+    "targetConstructAuthority": [
       "publish ConstructSnapshot",
-      "emit ConstructEventResult records",
+      "emit ConstructEventEnvelope records",
+      "reduce ConstructEventResult records",
       "accept construct_complete exactly once",
-      "reject duplicate construct_complete with stable reason metadata"
+      "reject duplicate construct_complete with stable reason metadata",
+      "append ConstructEventJournal records"
     ],
     "targetScenarioBootstrap": [
       "reject scenario bootstrap before construct completion",
@@ -85,8 +90,9 @@
       "source construct profile service",
       "ring descriptor service",
       "piece descriptor service",
-      "piece delay policy service",
+      "piece delay and settle policy service",
       "inner-first timeline contract service",
+      "profile parity report service",
       "construct event envelope service",
       "construct event result service",
       "construct event reducer service",
@@ -108,7 +114,7 @@
     "webgl-canvas-host",
     "inline-construct-runtime",
     "sequential-ring-v5-profile",
-    "source-construct-profile",
+    "construct-source-authority",
     "construct-profile-config",
     "construct-profile-parity",
     "construct-descriptor-authority",
@@ -123,28 +129,23 @@
     "piece-seed-policy",
     "piece-angle-policy",
     "piece-delay-policy",
+    "piece-settle-policy",
     "wedge-geometry-generation",
     "stone-material-detail",
     "construct-animation-timeline",
     "inner-first-timeline-contract",
-    "ring-settle-boundary-policy",
+    "ring-transition-margin-policy",
     "construct-event-envelope",
     "construct-event-result",
     "construct-event-reducer",
-    "construct-completion-event",
     "construct-completion-idempotency",
     "construct-event-journal",
     "construct-snapshot-contract",
-    "construct-fixture-parity",
-    "construct-smoke-testing",
     "scenario-bootstrap-preflight",
     "scenario-bootstrap-gate",
     "scenario-bootstrap-result",
     "scenario-bootstrap-snapshot",
-    "scenario-config-loading",
-    "scenario-state-composition",
     "scenario-mode-state-machine",
-    "scenario-fixture-replay",
     "camera-navigation",
     "keyboard-pan-input",
     "button-input",
@@ -152,6 +153,14 @@
     "hud-diagnostics",
     "gamehost-authority",
     "gamehost-diagnostics",
+    "fixture-script-runner",
+    "construct-profile-parity-smoke",
+    "ring-descriptor-parity-smoke",
+    "piece-descriptor-parity-smoke",
+    "inner-first-timeline-smoke",
+    "construct-event-reducer-smoke",
+    "scenario-bootstrap-gate-smoke",
+    "legacy-gamehost-compatibility-smoke",
     "radial-map-generation",
     "center-pressure-ring-model",
     "player-start-placement",
@@ -175,7 +184,6 @@
     "objective-tracking",
     "experience-progression",
     "unlock-registry",
-    "idempotency-ledger",
     "command-journal-replay",
     "behavior-smoke-testing"
   ],
@@ -204,7 +212,9 @@
       "own live sequential-ring-v5 profile outside game.html",
       "emit serializable ring descriptors",
       "emit serializable piece descriptors",
+      "emit serializable delay and settle descriptors",
       "prove zero gaps and live part-count parity",
+      "prove 92 total pieces",
       "prove inner-first ring timing with positive transition margins",
       "emit accepted/rejected construct event envelopes",
       "emit construct event results",
@@ -275,301 +285,48 @@
       "blockers": [
         "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, inner-first timing margins, construct_complete, bootstrap preflight, or GameHost shape."
       ]
-    },
-    {
-      "id": "phantom-command-source-construct-profile-kit",
-      "status": "recommended-next-source-authority-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-source-construct-profile-kit/index.js"
-      ],
-      "provides": [
-        "getSequentialRingV5Profile",
-        "assertProfileBuildId",
-        "exportConstructConstants",
-        "validateRingCount",
-        "validateWidthPolicy",
-        "validateNoGapProfile",
-        "validateTimingProfile"
-      ],
-      "requires": [
-        "live sequential-ring-v5 constants from game.html"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-ring-descriptor-kit",
-      "status": "recommended-next-parity-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-ring-descriptor-kit/index.js"
-      ],
-      "provides": [
-        "computeRingWidths",
-        "computeNoGapRadii",
-        "computeRingPartCounts",
-        "emitRingDescriptors",
-        "assertTenRings",
-        "assertZeroGaps",
-        "assertWidthGrowth",
-        "assertPartCountParity"
-      ],
-      "requires": [
-        "source construct profile"
-      ],
-      "blockers": [
-        "Ring descriptors are still created inline in game.html."
-      ]
-    },
-    {
-      "id": "phantom-command-piece-descriptor-kit",
-      "status": "recommended-next-parity-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-piece-descriptor-kit/index.js"
-      ],
-      "provides": [
-        "emitPieceDescriptors",
-        "emitPieceIds",
-        "emitPieceAngles",
-        "emitPieceSeeds",
-        "emitPieceDelays",
-        "emitPieceSettleTimes",
-        "assertPieceTotal"
-      ],
-      "requires": [
-        "ring descriptors",
-        "source construct profile"
-      ],
-      "blockers": [
-        "Piece descriptors are still created inline in game.html."
-      ]
-    },
-    {
-      "id": "phantom-command-piece-delay-policy-kit",
-      "status": "recommended-next-policy-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-piece-delay-policy-kit/index.js"
-      ],
-      "provides": [
-        "computePieceDelaySeconds",
-        "computePieceSettleSeconds",
-        "assertRingDelayPolicy",
-        "assertPartDelayPolicy"
-      ],
-      "requires": [
-        "source construct profile",
-        "piece descriptors"
-      ],
-      "blockers": [
-        "Delay policy is still embedded in makePiece() and construct()."
-      ]
-    },
-    {
-      "id": "phantom-command-inner-first-timeline-contract-kit",
-      "status": "recommended-next-contract-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-inner-first-timeline-contract-kit/index.js"
-      ],
-      "provides": [
-        "computeRingFirstStart",
-        "computeRingLastStart",
-        "computeRingFirstSettle",
-        "computeRingLastSettle",
-        "computeOuterStartMarginSeconds",
-        "assertInnerRingSettlesBeforeOuterRingStarts",
-        "emitTimelineGuards"
-      ],
-      "requires": [
-        "source construct profile",
-        "ring descriptors",
-        "piece descriptors"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-construct-event-envelope-kit",
-      "status": "recommended-next-contract-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-construct-event-envelope-kit/index.js"
-      ],
-      "provides": [
-        "createConstructEventEnvelope",
-        "normalizeConstructEventSource",
-        "normalizeConstructEventReason",
-        "assertConstructEventShape"
-      ],
-      "requires": [
-        "construct snapshot",
-        "event source metadata"
-      ],
-      "blockers": [
-        "Completion is currently a boolean transition inside construct()."
-      ]
-    },
-    {
-      "id": "phantom-command-construct-event-result-kit",
-      "status": "recommended-next-result-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-construct-event-result-kit/index.js"
-      ],
-      "provides": [
-        "createAcceptedConstructEventResult",
-        "createRejectedConstructEventResult",
-        "assertConstructEventResultShape",
-        "normalizeConstructEventResultReason"
-      ],
-      "requires": [
-        "construct event envelope",
-        "construct event reducer"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-construct-event-reducer-kit",
-      "status": "recommended-next-reducer-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-construct-event-reducer-kit/index.js"
-      ],
-      "provides": [
-        "reduceConstructEvent",
-        "acceptConstructComplete",
-        "rejectDuplicateConstructComplete",
-        "emitConstructEventResult"
-      ],
-      "requires": [
-        "construct event envelope",
-        "construct completion idempotency"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-construct-event-journal-kit",
-      "status": "recommended-next-journal-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-construct-event-journal-kit/index.js"
-      ],
-      "provides": [
-        "appendConstructEventResult",
-        "countAcceptedConstructCompletions",
-        "countRejectedConstructEvents",
-        "projectConstructEventJournalSummary"
-      ],
-      "requires": [
-        "construct event result"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-construct-snapshot-contract-kit",
-      "status": "recommended-next-snapshot-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-construct-snapshot-contract-kit/index.js"
-      ],
-      "provides": [
-        "createConstructSnapshot",
-        "projectConstructProgress",
-        "projectTimelineGuards",
-        "projectEventJournalCounts",
-        "assertConstructSnapshotShape"
-      ],
-      "requires": [
-        "source construct profile",
-        "ring descriptors",
-        "piece descriptors",
-        "construct event journal"
-      ],
-      "blockers": [
-        "GameHost currently exposes only a smaller getState() object."
-      ]
-    },
-    {
-      "id": "phantom-command-scenario-bootstrap-preflight-kit",
-      "status": "recommended-next-gate-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-scenario-bootstrap-preflight-kit/index.js"
-      ],
-      "provides": [
-        "preflightScenarioBootstrap",
-        "rejectConstructIncomplete",
-        "rejectDuplicateScenarioBootstrap",
-        "acceptScenarioBootstrap"
-      ],
-      "requires": [
-        "construct snapshot",
-        "scenario id"
-      ],
-      "blockers": [
-        "Scenario bootstrap path does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-scenario-bootstrap-result-kit",
-      "status": "recommended-next-result-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-scenario-bootstrap-result-kit/index.js"
-      ],
-      "provides": [
-        "createAcceptedScenarioBootstrapResult",
-        "createRejectedScenarioBootstrapResult",
-        "assertScenarioBootstrapResultShape",
-        "normalizeScenarioBootstrapReason"
-      ],
-      "requires": [
-        "scenario bootstrap preflight",
-        "construct snapshot"
-      ],
-      "blockers": [
-        "Does not exist yet."
-      ]
-    },
-    {
-      "id": "phantom-command-scenario-bootstrap-snapshot-kit",
-      "status": "recommended-next-snapshot-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-scenario-bootstrap-snapshot-kit/index.js"
-      ],
-      "provides": [
-        "createScenarioBootstrapSnapshot",
-        "projectScenarioId",
-        "projectMode",
-        "projectRtsBoundaryPlaceholders",
-        "assertScenarioBootstrapSnapshotShape"
-      ],
-      "requires": [
-        "accepted scenario bootstrap result"
-      ],
-      "blockers": [
-        "RTS state must stay placeholder-only until construct/bootstrap fixture parity passes."
-      ]
-    },
-    {
-      "id": "phantom-command-gamehost-construct-diagnostics-kit",
-      "status": "recommended-next-diagnostics-kit",
-      "sourceFiles": [
-        "src/kits/phantom-command-gamehost-construct-diagnostics-kit/index.js"
-      ],
-      "provides": [
-        "getConstructSnapshot",
-        "getScenarioBootstrapSnapshot",
-        "getDiagnostics",
-        "preserveLegacyGetState"
-      ],
-      "requires": [
-        "construct snapshot",
-        "scenario bootstrap snapshot"
-      ],
-      "blockers": [
-        "GameHost diagnostics are currently construct-only."
-      ]
     }
+  ],
+  "inlineRuntimeKitsToExtract": [
+    "inline-sequential-ring-v5-profile",
+    "inline-ring-descriptor-runtime",
+    "inline-piece-descriptor-runtime",
+    "inline-piece-delay-runtime",
+    "inline-wedge-geometry-runtime",
+    "inline-construct-animation-runtime",
+    "inline-construct-hud-runtime",
+    "inline-camera-navigation-runtime",
+    "inline-gamehost-construct-runtime"
+  ],
+  "nextCutKits": [
+    "phantom-command-source-construct-profile-kit",
+    "phantom-command-ring-descriptor-kit",
+    "phantom-command-piece-descriptor-kit",
+    "phantom-command-piece-delay-policy-kit",
+    "phantom-command-piece-settle-policy-kit",
+    "phantom-command-inner-first-timeline-contract-kit",
+    "phantom-command-ring-transition-margin-kit",
+    "phantom-command-profile-parity-report-kit",
+    "phantom-command-construct-event-envelope-kit",
+    "phantom-command-construct-event-result-kit",
+    "phantom-command-construct-event-reducer-kit",
+    "phantom-command-construct-completion-idempotency-kit",
+    "phantom-command-construct-event-journal-kit",
+    "phantom-command-construct-snapshot-contract-kit",
+    "phantom-command-scenario-bootstrap-preflight-kit",
+    "phantom-command-scenario-bootstrap-result-kit",
+    "phantom-command-scenario-bootstrap-gate-kit",
+    "phantom-command-scenario-bootstrap-snapshot-kit",
+    "phantom-command-gamehost-construct-diagnostics-kit",
+    "phantom-command-fixture-script-runner-kit",
+    "phantom-command-construct-profile-parity-fixture-kit",
+    "phantom-command-ring-descriptor-parity-smoke-kit",
+    "phantom-command-piece-descriptor-parity-smoke-kit",
+    "phantom-command-inner-first-timeline-smoke-kit",
+    "phantom-command-construct-event-reducer-smoke-kit",
+    "phantom-command-construct-snapshot-smoke-kit",
+    "phantom-command-scenario-bootstrap-gate-smoke-kit",
+    "phantom-command-gamehost-diagnostics-smoke-kit"
   ],
   "fixtureMatrix": [
     "profile build id parity",
@@ -577,6 +334,8 @@
     "zero gap parity",
     "ring part count parity",
     "total piece parity",
+    "piece delay parity",
+    "piece settle parity",
     "inner-first positive margin parity",
     "construct_complete accepted once",
     "duplicate construct_complete rejected",
@@ -587,7 +346,7 @@
     "ScenarioBootstrapSnapshot shape",
     "legacy GameHost getState compatibility"
   ],
-  "nextBuildTarget": "PhantomCommand Construct Event Source Gate + Scenario Bootstrap Replay Lock",
+  "nextBuildTarget": "PhantomCommand Source Descriptor Parity + Scenario Bootstrap Gate Fixture Lock",
   "deferredKits": [
     "phantom-command-scenario-config-loader-kit",
     "phantom-command-radial-map-kit",
