@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T18-29-21-04-00`
+**Last aligned:** `2026-07-08T18-41-41-04-00`
 
 ## Purpose
 
@@ -12,27 +12,27 @@ Read this file before changing runtime code.
 
 ## Current selection result
 
-The full accessible `LuminaryLabs-Publish` repository list was compared against tracked repo-ledger state in `LuminaryLabs-Dev/LuminaryLabs` and sampled root `.agent/START_HERE.md` state.
+The accessible `LuminaryLabs-Publish` repository set was checked against central `LuminaryLabs-Dev/LuminaryLabs` repo-ledger state and sampled root `.agent/START_HERE.md` state.
 
-No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, recently added but undocumented, or missing sampled root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, absent from central tracking, recently added but undocumented, or missing sampled root `.agent/START_HERE.md` state.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest sampled root-agent fallback. Its current unresolved high-value seam is still the source-profile fixture gate, but this pass narrows it from a broad consumer splice into exact fixture-row acceptance, browser readback, and scenario-bootstrap blocker contracts.
+`PhantomCommand` was selected because central repo-ledger state still pointed at `2026-07-08T15-58-59-04-00` while repo-local state had already advanced to `2026-07-08T18-29-21-04-00`. This pass keeps one-repo scope and advances the same source-profile gate into an exact fixture manifest + central ledger sync handoff.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled alignment 2026-07-08T17-49-51-04-00
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled alignment 2026-07-08T18-19-43-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled alignment 2026-07-08T18-09-21-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled alignment 2026-07-08T17-09-48-04-00
-LuminaryLabs-Publish/PhantomCommand      selected fallback / previous sampled alignment 2026-07-08T15-58-59-04-00
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled alignment 2026-07-08T16-51-11-04-00
+LuminaryLabs-Publish/AetherVale          tracked / latest central update 2026-07-08T17-49-51-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / latest central update 2026-07-08T18-19-43-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / latest central update 2026-07-08T18-09-21-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / latest central update 2026-07-08T17-09-48-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / central ledger catch-up + source-profile fixture manifest
+LuminaryLabs-Publish/PrehistoricRush     tracked / latest central update 2026-07-08T16-51-11-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled alignment 2026-07-08T17-31-22-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled alignment 2026-07-08T16-19-57-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled alignment 2026-07-08T16-20-00-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / latest central update 2026-07-08T17-31-22-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / latest central update 2026-07-08T16-19-57-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / latest central update 2026-07-08T16-20-00-04-00
 ```
 
 ## Current product read
@@ -83,6 +83,7 @@ source-owned smooth-ring-handoff-v6 profile
   -> createGameHostSourceProfileDiagnostics
   -> DOM-free fixture rows
   -> game.html additive sourceProfile consumer readback
+  -> central ledger and repo-local kit registry point at the same fixture gate
   -> ConstructEventResult blocker remains deferred until sourceProfile parity is proven
 ```
 
@@ -93,14 +94,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-08T18-29-21-04-00-source-profile-fixture-dsk-breakdown.md
-.agent/render-audit/2026-07-08T18-29-21-04-00-gamehost-source-profile-readback-gate.md
-.agent/gameplay-audit/2026-07-08T18-29-21-04-00-construct-result-bootstrap-blocker.md
-.agent/source-profile-audit/2026-07-08T18-29-21-04-00-fixture-row-acceptance-contract.md
-.agent/scenario-bootstrap-audit/2026-07-08T18-29-21-04-00-construct-complete-command-boundary.md
-.agent/deploy-audit/2026-07-08T18-29-21-04-00-fixture-check-integration.md
-.agent/trackers/2026-07-08T18-29-21-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T18-29-21-04-00.md
+.agent/architecture-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest-dsk-breakdown.md
+.agent/render-audit/2026-07-08T18-41-41-04-00-gamehost-source-profile-consumer-readback.md
+.agent/gameplay-audit/2026-07-08T18-41-41-04-00-construct-result-bootstrap-blocker.md
+.agent/source-profile-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest.md
+.agent/scenario-bootstrap-audit/2026-07-08T18-41-41-04-00-scenario-bootstrap-blocker-contract.md
+.agent/deploy-audit/2026-07-08T18-41-41-04-00-fixture-script-build-integration.md
+.agent/trackers/2026-07-08T18-41-41-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T18-41-41-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -140,7 +141,7 @@ Do not add scenario bootstrap, unit control, economy, wave, objective, or render
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Source Profile Fixture Row Acceptance + GameHost Readback Gate
+PhantomCommand Source Profile Fixture Manifest + Central Ledger Sync Gate
 ```
 
-Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, and unchanged legacy GameHost compatibility.
+Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, and central ledger readback points to the same latest repo-local fixture gate.
