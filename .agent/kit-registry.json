@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T06:19:51-04:00",
-  "status": "smooth-ring-handoff-v6-source-authority-scenario-bootstrap-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T06-19-51-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T07:50:47-04:00",
+  "status": "construct-result-scenario-bootstrap-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T07-50-47-04-00/project-breakdown.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true
@@ -41,7 +41,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "tracked Publish repo follow-up selected because the internal docs and central ledger were stale against current game.html build evidence"
+    "reason": "tracked Publish repo follow-up selected because construct completion and scenario bootstrap remain untyped authority seams"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -66,28 +66,21 @@
       "handle pan, zoom, skip, restart, resize, and blur",
       "publish construct-only GameHost state"
     ],
-    "targetSourceAuthorityLoop": [
+    "targetAuthorityLoop": [
       "load source-owned smooth-ring-handoff-v6 profile",
       "normalize construct profile values",
       "emit source fingerprint and source snapshot",
       "emit ring descriptors matching live game.html math",
       "emit piece descriptors matching live game.html math",
-      "emit delay and settle descriptors",
-      "emit transition margin descriptors",
+      "emit delay, settle, and transition margin descriptors",
       "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
-      "feed descriptors back into current visual construct runtime without changing visuals"
-    ],
-    "targetResultLoop": [
-      "publish ConstructSnapshot",
-      "emit ConstructEventEnvelope records",
-      "reduce ConstructEventResult records",
       "accept construct_complete exactly once",
       "reject duplicate construct_complete with stable reason duplicate_construct_complete",
-      "append ConstructEventJournal records",
+      "project ConstructSnapshot",
       "reject scenario bootstrap before construct completion with reason construct_incomplete",
       "accept scenario_001_raise_the_host after construct completion",
       "reject duplicate bootstrap with reason duplicate_scenario_bootstrap",
-      "compose ScenarioBootstrapSnapshot with RTS boundary placeholders only"
+      "project ScenarioBootstrapSnapshot with RTS boundary placeholders only"
     ]
   },
   "domains": {
@@ -112,27 +105,14 @@
     "constructSource": [
       "smooth-ring-handoff-v6-profile",
       "construct-source-authority",
-      "construct-profile-config",
       "construct-profile-normalization",
       "construct-profile-parity",
       "construct-source-fingerprint",
       "construct-source-snapshot",
-      "construct-descriptor-authority",
-      "ring-count-policy",
-      "ring-width-policy",
-      "ring-growth-policy",
-      "no-gap-radius-policy",
-      "ring-part-count-policy",
       "ring-descriptor-generation",
       "piece-descriptor-generation",
-      "piece-id-policy",
-      "piece-seed-policy",
-      "piece-angle-policy",
       "piece-delay-policy",
       "piece-settle-policy",
-      "wedge-geometry-generation",
-      "stone-material-detail",
-      "construct-animation-timeline",
       "inner-first-timeline-contract",
       "ring-transition-margin-policy"
     ],
@@ -154,7 +134,7 @@
       "scenario-bootstrap-journal",
       "scenario-bootstrap-snapshot",
       "scenario-mode-state-machine",
-      "scenario-boundary-placeholder"
+      "rts-boundary-placeholder"
     ],
     "fixtures": [
       "fixture-script-runner",
@@ -169,31 +149,14 @@
       "legacy-gamehost-compatibility-smoke"
     ],
     "deferredRts": [
-      "radial-map-generation",
-      "center-pressure-ring-model",
-      "player-start-placement",
-      "resource-node-placement",
-      "enemy-camp-placement",
-      "wave-lane-placement",
-      "grave-field-economy",
-      "bone-yard-economy",
-      "soul-well-economy",
-      "undead-unit-state",
-      "enemy-unit-state",
+      "undead-roster",
       "necropolis-building-state",
-      "building-construction",
-      "building-production",
-      "rts-selection",
-      "rts-command-validation",
-      "rts-movement-request",
-      "rts-attack-request",
       "world-economy-ledger",
+      "unit-selection",
+      "rts-command-validation",
       "combat-resolution",
       "objective-tracking",
-      "experience-progression",
-      "unlock-registry",
-      "command-journal-replay",
-      "behavior-smoke-testing"
+      "command-journal-replay"
     ]
   },
   "services": {
@@ -221,16 +184,6 @@
       "report pending, active, settled, newly active, and newly settled pieces",
       "report per-piece progress and status"
     ],
-    "currentSmoke": [
-      "assert construct-spiral-intro-kit id",
-      "assert domain path",
-      "install generated ring pieces",
-      "assert schedule ordering",
-      "tick until complete",
-      "assert active count cap",
-      "assert active ring window",
-      "assert all pieces settled"
-    ],
     "nextNeeded": [
       "own live smooth-ring-handoff-v6 profile outside game.html",
       "normalize profile values",
@@ -243,20 +196,16 @@
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
       "prove total build seconds 19.923",
-      "prove handoff timing with stable margin descriptors",
       "emit accepted and rejected construct event envelopes",
       "emit construct event results",
-      "emit construct_complete exactly once",
       "reject duplicate construct completion with stable reason duplicate_construct_complete",
-      "append construct event journal entries",
       "project ConstructSnapshot without DOM or Three.js dependency",
       "preflight scenario bootstrap with explicit accepted/rejected result",
       "reject scenario bootstrap before construct completion with stable reason construct_incomplete",
       "accept scenario bootstrap after construct completion",
       "reject duplicate scenario bootstrap with stable reason duplicate_scenario_bootstrap",
       "project ScenarioBootstrapSnapshot with RTS boundary placeholders only",
-      "expand window.GameHost diagnostics without breaking current surface",
-      "add fixture smoke for descriptor parity, completion idempotency, bootstrap gating, snapshot shape, and legacy GameHost compatibility"
+      "expand window.GameHost diagnostics without breaking current surface"
     ]
   },
   "kits": [
@@ -284,10 +233,6 @@
         "getPieceProgress",
         "getPieceStatus"
       ],
-      "requires": [
-        "piece descriptors",
-        "dt tick source"
-      ],
       "blockers": [
         "Default spiral/window schedule is not the live smooth-ring-handoff-v6 no-gap handoff profile."
       ]
@@ -307,9 +252,6 @@
         "assertActiveCountCap",
         "assertActiveRingWindow",
         "assertAllPiecesSettled"
-      ],
-      "requires": [
-        "construct-spiral-intro-kit"
       ],
       "blockers": [
         "Does not validate live smooth-ring-handoff-v6 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, handoff timing margins, construct_complete, bootstrap preflight, or GameHost shape."
@@ -337,7 +279,6 @@
     "phantom-command-piece-delay-policy-kit",
     "phantom-command-piece-settle-policy-kit",
     "phantom-command-handoff-timeline-contract-kit",
-    "phantom-command-ring-transition-margin-kit",
     "phantom-command-profile-parity-report-kit",
     "phantom-command-construct-event-envelope-kit",
     "phantom-command-construct-event-result-kit",
@@ -351,65 +292,8 @@
     "phantom-command-scenario-bootstrap-gate-kit",
     "phantom-command-scenario-bootstrap-journal-kit",
     "phantom-command-scenario-bootstrap-snapshot-kit",
-    "phantom-command-gamehost-construct-diagnostics-kit",
-    "phantom-command-fixture-script-runner-kit",
-    "phantom-command-construct-profile-parity-fixture-kit",
-    "phantom-command-ring-descriptor-parity-smoke-kit",
-    "phantom-command-piece-descriptor-parity-smoke-kit",
-    "phantom-command-handoff-timeline-smoke-kit",
-    "phantom-command-construct-event-reducer-smoke-kit",
-    "phantom-command-construct-snapshot-smoke-kit",
-    "phantom-command-scenario-bootstrap-gate-smoke-kit",
-    "phantom-command-gamehost-diagnostics-smoke-kit"
+    "phantom-command-gamehost-diagnostics-adapter-kit",
+    "phantom-command-fixture-script-runner-kit"
   ],
-  "deferredKits": [
-    "phantom-command-scenario-config-loader-kit",
-    "phantom-command-radial-map-kit",
-    "phantom-command-center-pressure-ring-kit",
-    "phantom-command-player-start-kit",
-    "phantom-command-resource-node-kit",
-    "phantom-command-enemy-camp-kit",
-    "phantom-command-wave-lane-kit",
-    "phantom-command-grave-field-economy-kit",
-    "phantom-command-bone-yard-economy-kit",
-    "phantom-command-soul-well-economy-kit",
-    "phantom-command-undead-roster-kit",
-    "phantom-command-necropolis-building-kit",
-    "phantom-command-building-production-kit",
-    "phantom-command-selection-kit",
-    "phantom-command-rts-command-contract-kit",
-    "phantom-command-command-acceptance-kit",
-    "phantom-command-world-economy-ledger-kit",
-    "phantom-command-combat-resolution-kit",
-    "phantom-command-objective-tracker-kit",
-    "phantom-command-xp-progression-kit",
-    "phantom-command-unlock-registry-kit",
-    "phantom-command-command-journal-replay-kit"
-  ],
-  "recommendedNextSlice": {
-    "name": "PhantomCommand Smooth Ring Handoff V6 Source Authority + Scenario Bootstrap Fixture Gate",
-    "goal": "Preserve the live construct visuals while moving smooth-ring-handoff-v6 source authority, descriptor parity, construct completion result idempotency, scenario bootstrap gating, GameHost diagnostics, and replay smoke out of the inline game.html monolith.",
-    "acceptance": [
-      "index.html menu still routes to game.html",
-      "game.html visual output remains smooth-ring-handoff-v6",
-      "window.GameHost.skipConstruct remains available",
-      "window.GameHost.restartConstruct remains available",
-      "window.GameHost.getState remains available",
-      "profile reports buildId smooth-ring-handoff-v6",
-      "profile reports ringCount 10",
-      "ring descriptors report zero gaps",
-      "ring descriptors report [5,5,5,5,6,8,10,12,16,20]",
-      "piece descriptors report 92 pieces",
-      "timing descriptors report totalBuildSeconds 19.923",
-      "handoff descriptors report RING_HANDOFF 0.72 and PART_STAGGER 0.025",
-      "first construct_complete is accepted",
-      "duplicate construct_complete is rejected with duplicate_construct_complete",
-      "bootstrap before completion is rejected with construct_incomplete",
-      "bootstrap after completion is accepted",
-      "second bootstrap is rejected with duplicate_scenario_bootstrap",
-      "ConstructSnapshot is serializable",
-      "ScenarioBootstrapSnapshot is serializable",
-      "DOM-free fixture passes without browser, DOM, canvas, or Three.js"
-    ]
-  }
+  "nextSafeLedge": "PhantomCommand Construct Result + Scenario Bootstrap Fixture Gate"
 }
