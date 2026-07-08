@@ -1,9 +1,13 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T10-58-46-04-00",
-  "status": "construct-scenario-acceptance-matrix-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T10-58-46-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T12-41-31-04-00",
+  "status": "source-profile-implementation-boundary-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T12-41-31-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T12-41-31-04-00-dsk-domain-breakdown.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-08T12-41-31-04-00-gamehost-source-profile-readback.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-08T12-41-31-04-00-source-profile-implementation-boundary.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -39,11 +43,11 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove the construct-to-scenario acceptance matrix with DOM-free fixtures before full RTS gameplay expansion."
+    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own the smooth-ring-handoff-v6 profile, add descriptor parity, add source fingerprint/snapshot, expose additive GameHost source diagnostics, and prove a DOM-free source-profile fixture before full scenario bootstrap or RTS gameplay expansion."
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "tracked Publish repo follow-up selected because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams"
+    "reason": "oldest eligible tracked Publish repo follow-up selected because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -68,7 +72,7 @@
       "handle pan, zoom, skip, restart, resize, and blur",
       "publish construct-only GameHost state"
     ],
-    "targetAuthorityLoop": [
+    "targetSourceProfileLoop": [
       "load source-owned smooth-ring-handoff-v6 profile",
       "normalize construct profile values",
       "emit source fingerprint and source snapshot",
@@ -76,6 +80,10 @@
       "emit piece descriptors matching live game.html math",
       "emit delay, settle, and transition margin descriptors",
       "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
+      "project additive GameHost source diagnostics",
+      "run DOM-free source-profile fixture"
+    ],
+    "laterScenarioLoop": [
       "accept construct_complete exactly once",
       "reject duplicate construct_complete with stable reason duplicate_construct_complete",
       "project ConstructSnapshot",
@@ -144,15 +152,11 @@
       "ring-parity-fixture",
       "piece-parity-fixture",
       "timeline-parity-fixture",
+      "source-profile-fixture",
+      "gamehost-shape-fixture",
       "construct-idempotency-fixture",
-      "construct-reset-fixture",
-      "construct-skip-fixture",
       "scenario-early-reject-fixture",
-      "scenario-accepted-fixture",
-      "scenario-duplicate-reject-fixture",
-      "scenario-unknown-reject-fixture",
-      "snapshot-shape-fixture",
-      "gamehost-shape-fixture"
+      "scenario-accepted-fixture"
     ],
     "deferredRts": [
       "undead-roster",
@@ -202,16 +206,8 @@
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
       "prove total build seconds 19.923",
-      "emit accepted and rejected construct event envelopes",
-      "emit construct event results",
-      "reject duplicate construct completion with stable reason duplicate_construct_complete",
-      "project ConstructSnapshot without DOM or Three.js dependency",
-      "preflight scenario bootstrap with explicit accepted/rejected result",
-      "reject scenario bootstrap before construct completion with stable reason construct_incomplete",
-      "accept scenario bootstrap after construct completion",
-      "reject duplicate scenario bootstrap with stable reason duplicate_scenario_bootstrap",
-      "project ScenarioBootstrapSnapshot with RTS boundary placeholders only",
-      "expand window.GameHost diagnostics without breaking current surface"
+      "project additive GameHost source diagnostics",
+      "run DOM-free source-profile fixture"
     ]
   },
   "kits": [
@@ -260,7 +256,7 @@
         "assertAllPiecesSettled"
       ],
       "blockers": [
-        "Does not validate live smooth-ring-handoff-v6 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, handoff timing margins, construct_complete, bootstrap preflight, or GameHost shape."
+        "Does not validate live smooth-ring-handoff-v6 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, handoff timing margins, GameHost source diagnostics, construct_complete, or bootstrap preflight."
       ]
     }
   ],
@@ -286,6 +282,8 @@
     "phantom-command-piece-settle-policy-kit",
     "phantom-command-handoff-timeline-contract-kit",
     "phantom-command-profile-parity-report-kit",
+    "phantom-command-gamehost-source-diagnostics-kit",
+    "phantom-command-source-profile-fixture-kit",
     "phantom-command-construct-event-envelope-kit",
     "phantom-command-construct-event-result-kit",
     "phantom-command-construct-event-reducer-kit",
@@ -297,15 +295,23 @@
     "phantom-command-scenario-bootstrap-result-kit",
     "phantom-command-scenario-bootstrap-gate-kit",
     "phantom-command-scenario-bootstrap-journal-kit",
-    "phantom-command-scenario-bootstrap-snapshot-kit",
-    "phantom-command-gamehost-diagnostics-adapter-kit",
-    "phantom-command-fixture-script-runner-kit"
+    "phantom-command-scenario-bootstrap-snapshot-kit"
   ],
-  "acceptanceMatrix": [
-    "profile-parity",
-    "ring-parity",
-    "piece-parity",
-    "timeline-parity",
+  "sourceProfileFixtureRows": [
+    "profile_build_id_matches_live_game_html",
+    "profile_ring_count_matches_10",
+    "profile_gap_policy_matches_zero_gap",
+    "ring_part_counts_match_live_array",
+    "piece_descriptor_count_matches_92",
+    "timeline_total_build_seconds_matches_19_923",
+    "handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025",
+    "profile_snapshot_is_serializable",
+    "profile_fingerprint_is_stable",
+    "profile_parity_report_has_no_errors",
+    "gamehost_additive_diagnostics_keep_legacy_surface",
+    "fixture_runs_without_dom_canvas_or_three"
+  ],
+  "laterAcceptanceMatrix": [
     "construct-idempotency",
     "construct-reset",
     "construct-skip",
@@ -316,5 +322,5 @@
     "snapshot-shape",
     "gamehost-shape"
   ],
-  "nextSafeLedge": "PhantomCommand Construct Scenario Acceptance Matrix"
+  "nextSafeLedge": "PhantomCommand Source Profile Implementation Boundary"
 }
