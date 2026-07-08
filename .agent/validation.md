@@ -1,14 +1,16 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T15-58-59-04-00`
+**Timestamp:** `2026-07-08T18-29-21-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Compared accessible LuminaryLabs-Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
+- Listed accessible LuminaryLabs-Publish repos through the GitHub installation.
+- Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
+- Sampled root .agent/START_HERE.md state for the checked non-Cavalry repos needed to confirm fallback eligibility.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as oldest eligible fallback because source-profile consumer splice remains unresolved.
+- Selected PhantomCommand as oldest sampled eligible fallback because source-profile fixture acceptance remains unresolved.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -16,15 +18,16 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read README.md.
-- Read package.json.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T15-58-59-04-00-source-profile-consumer-dsk-breakdown.md.
-- Added render-audit/2026-07-08T15-58-59-04-00-gamehost-source-consumer-readback.md.
-- Added gameplay-audit/2026-07-08T15-58-59-04-00-construct-to-bootstrap-consumer-gate.md.
-- Added source-profile-audit/2026-07-08T15-58-59-04-00-consumer-splice-map.md.
+- Added architecture-audit/2026-07-08T18-29-21-04-00-source-profile-fixture-dsk-breakdown.md.
+- Added render-audit/2026-07-08T18-29-21-04-00-gamehost-source-profile-readback-gate.md.
+- Added gameplay-audit/2026-07-08T18-29-21-04-00-construct-result-bootstrap-blocker.md.
+- Added source-profile-audit/2026-07-08T18-29-21-04-00-fixture-row-acceptance-contract.md.
+- Added scenario-bootstrap-audit/2026-07-08T18-29-21-04-00-construct-complete-command-boundary.md.
+- Added deploy-audit/2026-07-08T18-29-21-04-00-fixture-check-integration.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -54,9 +57,9 @@ README.md declares:
 - game.html is the opening construct scene.
 - GitHub Pages deployment uses .github/workflows/deploy-pages.yml.
 
-package.json declares:
-- build runs node scripts/build-static.mjs.
-- dev/start run Vite on port 4173.
+package/source readback declares:
+- build copies static files into dist.
+- game.html imports Three.js from CDN.
 
 game.html declares:
 - BUILD_ID smooth-ring-handoff-v6
@@ -107,6 +110,8 @@ source_snapshot_is_serializable
 source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
+legacy_gamehost_fields_are_unchanged
+scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
 ```
 
