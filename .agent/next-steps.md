@@ -1,6 +1,6 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T02:50:33-04:00`
+**Timestamp:** `2026-07-08T04:40:21-04:00`
 
 ## Next safe ledge
 
@@ -47,6 +47,38 @@ Preserve the current live visual while moving source authority, descriptor parit
 - [ ] Add DOM-free fixture smoke for scenario bootstrap gating.
 - [ ] Add DOM-free fixture smoke for snapshot shape.
 - [ ] Add DOM-free fixture smoke for legacy GameHost compatibility.
+
+## Recommended build order
+
+```txt
+1. Source profile first
+   - create phantom-command-source-construct-profile-kit
+   - mirror current game.html constants exactly
+   - expose normalized profile and fingerprint
+
+2. Descriptor parity second
+   - derive rings from the profile
+   - derive pieces from rings
+   - derive timing and transition margins
+   - prove 10 rings, zero gaps, 92 pieces, and 31.915 seconds
+
+3. Event authority third
+   - create construct_complete envelope/result/reducer
+   - reject duplicate completion
+   - project ConstructSnapshot
+
+4. Scenario bootstrap fourth
+   - reject bootstrap before completion
+   - accept scenario_001_raise_the_host after completion
+   - reject duplicate bootstrap
+   - project ScenarioBootstrapSnapshot
+
+5. Legacy host compatibility last
+   - keep skipConstruct
+   - keep restartConstruct
+   - keep getState
+   - add diagnostics without breaking current consumers
+```
 
 ## Do not do yet
 
