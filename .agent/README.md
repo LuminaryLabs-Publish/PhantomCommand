@@ -1,8 +1,8 @@
 # PhantomCommand Agent Notes
 
-**Latest documented run:** `2026-07-07T19-08-52-04-00`
+**Latest documented run:** `2026-07-07T20-31-21-04-00`
 
-**Latest tracker:** `.agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md`
+**Latest tracker:** `.agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md`
 
 **Kit registry:** `.agent/kit-registry.json`
 
@@ -53,18 +53,20 @@ Tracked entries:
 .agent/trackers/2026-07-07T16-30-00-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T17-49-34-04-00/project-breakdown.md
 .agent/trackers/2026-07-07T19-08-52-04-00/project-breakdown.md
+.agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md
 .agent/kit-registry.json
 ```
 
 ## Highest-value next action
 
-Build the `PhantomCommand Construct Event Source Gate + Scenario Bootstrap Replay Lock` slice.
+Build the `PhantomCommand Source Descriptor Parity + Scenario Bootstrap Gate Fixture Lock` slice.
 
 ```txt
 menu and game visuals stay unchanged
   -> source-own sequential-ring-v5 constants
   -> derive live-compatible ring descriptors
   -> derive live-compatible piece descriptors
+  -> derive delay and settle descriptors
   -> prove ten rings, zero gaps, live part counts, and 92 pieces
   -> prove positive inner-first timing margins
   -> add construct event envelopes
@@ -93,8 +95,10 @@ Minimum next build checklist:
 - Add `phantom-command-piece-descriptor-kit`.
 - Emit stable piece ids, ring indices, part indices, part counts, angle/span data, deterministic seed data, delay, and settle time.
 - Add `phantom-command-piece-delay-policy-kit`.
+- Add `phantom-command-piece-settle-policy-kit`.
 - Add `phantom-command-inner-first-timeline-contract-kit`.
 - Compute `firstStart`, `lastStart`, `firstSettle`, `lastSettle`, and `marginSeconds` for every ring transition.
+- Add `phantom-command-profile-parity-report-kit`.
 - Add `phantom-command-construct-event-envelope-kit`.
 - Add `phantom-command-construct-event-result-kit`.
 - Add `phantom-command-construct-event-reducer-kit`.
@@ -107,8 +111,10 @@ Minimum next build checklist:
 - Add `phantom-command-scenario-bootstrap-gate-kit`.
 - Add `phantom-command-scenario-bootstrap-snapshot-kit`.
 - Add `phantom-command-gamehost-construct-diagnostics-kit`.
+- Add `phantom-command-fixture-script-runner-kit`.
 - Add `phantom-command-construct-profile-parity-fixture-kit`.
-- Add `phantom-command-live-ring-descriptor-smoke-kit`.
+- Add `phantom-command-ring-descriptor-parity-smoke-kit`.
+- Add `phantom-command-piece-descriptor-parity-smoke-kit`.
 - Add `phantom-command-inner-first-timeline-smoke-kit`.
 - Add `phantom-command-construct-event-reducer-smoke-kit`.
 - Add `phantom-command-construct-snapshot-smoke-kit`.
