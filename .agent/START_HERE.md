@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T07:50:47-04:00`
+**Last aligned:** `2026-07-08T09:19:43-04:00`
 
 ## Purpose
 
@@ -12,19 +12,34 @@ Read this file before changing runtime code.
 
 ## Current selection result
 
-The full accessible `LuminaryLabs-Publish` repository list was compared against the tracked/documented repo ledger in `LuminaryLabs-Dev/LuminaryLabs`.
+The full accessible `LuminaryLabs-Publish` repository list was compared against tracked repo-ledger state in `LuminaryLabs-Dev/LuminaryLabs`.
 
-No checked non-Cavalry Publish repo was fully new, absent from the central ledger, or missing root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected as a fallback follow-up target because it still has an unresolved construct-result and scenario-bootstrap authority seam: the current scene reaches `command online` visually, but construct completion and scenario bootstrap are not yet typed command/result records that can be fixture-tested without DOM, canvas, or Three.js.
+`PhantomCommand` was selected as the oldest eligible fallback follow-up because its root alignment was older than the latest checked eligible repos and it still has a high-value source-authority seam between the inline `smooth-ring-handoff-v6` visual proof, the generic `construct-spiral-intro-kit`, and the future scenario bootstrap gate.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
+
+## Publish repos checked
+
+```txt
+LuminaryLabs-Publish/AetherVale          ledgered with root .agent; last seen 2026-07-08T08:51:48-04:00
+LuminaryLabs-Publish/HorrorCorridor      ledgered with root .agent; last seen 2026-07-08T08:29:35-04:00
+LuminaryLabs-Publish/IntoTheMeadow       ledgered with root .agent; last seen 2026-07-08T09:11:03-04:00
+LuminaryLabs-Publish/MyCozyIsland        ledgered with root .agent; last seen 2026-07-08T08:58:57-04:00
+LuminaryLabs-Publish/PhantomCommand      selected fallback follow-up
+LuminaryLabs-Publish/PrehistoricRush     ledgered with root .agent; last seen 2026-07-08T08:11:28-04:00
+LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
+LuminaryLabs-Publish/TheOpenAbove        ledgered with root .agent; last seen 2026-07-08T08:39:41-04:00
+LuminaryLabs-Publish/TheUnmappedHouse    ledgered with root .agent; last seen 2026-07-08T08:21:49-04:00
+LuminaryLabs-Publish/ZombieOrchard       ledgered with root .agent; last seen 2026-07-08T08:02:32-04:00
+```
 
 ## Current product read
 
 `PhantomCommand` is a static Vite / Three.js single-player PvE undead RTS prototype.
 
-The current public surface is:
+The live public surface is still:
 
 ```txt
 index.html
@@ -32,9 +47,11 @@ index.html
   -> inline smooth-ring-handoff-v6 construct proof
 ```
 
-`index.html` renders the main menu and routes Start / Open Scene into `game.html`.
+`README.md` describes `index.html` as the main menu, `game.html` as the opening construct scene, and GitHub Pages deployment from `main` through `.github/workflows/deploy-pages.yml`.
 
-`game.html` imports Three.js from CDN and owns the opening construct proof inline: renderer, camera, scene, fog, lights, HUD, input, construct constants, ring descriptors, wedge geometry, construct timing, skip/restart, and `window.GameHost`.
+`package.json` exposes `start`, `dev`, `build`, and `preview`; `build` runs `node scripts/build-static.mjs`.
+
+`game.html` imports Three.js from CDN and owns the live renderer, scene, fog, lights, camera, HUD, input, construct constants, ring descriptors, wedge geometry, timeline, skip/restart controls, and `window.GameHost` inline.
 
 ## Current live construct evidence
 
@@ -53,8 +70,8 @@ legacy GameHost: skipConstruct, restartConstruct, getState
 ```txt
 open index.html
   -> Start/Open Scene routes to game.html
-  -> Three.js scene initializes inline
-  -> smooth-ring-handoff-v6 constants define the construct
+  -> game.html imports Three.js from CDN
+  -> inline smooth-ring-handoff-v6 constants define the construct
   -> inline ring math derives 10 no-gap rings
   -> inline wedge factory creates 92 stone pieces
   -> requestAnimationFrame drives construct(seq)
@@ -62,6 +79,28 @@ open index.html
   -> HUD mutates count, progress, phase, and status
   -> GameHost exposes skipConstruct/restartConstruct/getState
   -> visual phase becomes command online
+```
+
+## Target proof loop
+
+```txt
+source-owned smooth-ring-handoff-v6 profile
+  -> normalized profile
+  -> source fingerprint
+  -> source snapshot
+  -> ring descriptors
+  -> piece descriptors
+  -> delay/settle/timeline margin descriptors
+  -> parity report against game.html live values
+  -> ConstructEventEnvelope
+  -> ConstructEventResult
+  -> ConstructEventJournal
+  -> ConstructSnapshot
+  -> ScenarioBootstrapCommand
+  -> ScenarioBootstrapResult
+  -> ScenarioBootstrapSnapshot
+  -> additive GameHost diagnostics
+  -> DOM-free fixture rows
 ```
 
 ## First files to read
@@ -72,25 +111,15 @@ open index.html
 .agent/next-steps.md
 .agent/validation.md
 .agent/architecture-audit/domain-service-breakdown.md
-.agent/architecture-audit/2026-07-08T07-50-47-04-00-dsk-domain-breakdown.md
+.agent/architecture-audit/2026-07-08T09-19-43-04-00-dsk-domain-breakdown.md
 .agent/render-audit/construct-render-audit.md
-.agent/render-audit/2026-07-08T07-50-47-04-00-construct-render-handoff.md
+.agent/render-audit/2026-07-08T09-19-43-04-00-render-source-authority-map.md
 .agent/gameplay-audit/construct-to-rts-gap.md
 .agent/construct-source-audit/source-authority-fixture-gate.md
-.agent/construct-source-audit/smooth-handoff-v6-source-drift.md
-.agent/scenario-bootstrap-audit/construct-result-fixture-matrix.md
-.agent/trackers/2026-07-08T07-50-47-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T07-50-47-04-00.md
+.agent/scenario-bootstrap-audit/2026-07-08T09-19-43-04-00-source-wire-map.md
+.agent/trackers/2026-07-08T09-19-43-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T09-19-43-04-00.md
 .agent/kit-registry.json
-```
-
-## Prior high-value entries
-
-```txt
-.agent/trackers/2026-07-08T06-19-51-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T06-19-51-04-00.md
-.agent/trackers/2026-07-08T04-40-21-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T04-40-21-04-00.md
 ```
 
 ## Source files to inspect next
@@ -115,7 +144,7 @@ The repo should prove the PhantomCommand game slice. Extract reusable construct,
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Construct Result + Scenario Bootstrap Fixture Gate
+PhantomCommand Source Profile + Construct/Scenario Result Wire Map
 ```
 
-Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding source profile parity, construct event result idempotency, scenario bootstrap gating, serializable snapshots, and DOM-free fixtures.
+Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding profile parity, construct result idempotency, scenario bootstrap gating, serializable snapshots, and DOM-free fixtures.
