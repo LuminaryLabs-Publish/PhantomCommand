@@ -1,35 +1,35 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T10-58-46-04-00`
+**Timestamp:** `2026-07-08T12-41-31-04-00`
 
 ## Summary
 
 `PhantomCommand` is a playable static two-route proof: `index.html` is the menu and `game.html` is the live Three.js construct scene.
 
-The visual construct proof is stable enough to preserve. The missing piece is typed authority between visual construct completion and the first RTS scenario bootstrap.
+The visible construct proof is stable enough to preserve. The next technical risk is that the live `smooth-ring-handoff-v6` profile is still inline in `game.html`, so scenario bootstrap would currently depend on DOM/browser source instead of a fixture-readable source profile.
 
-This pass keeps runtime files unchanged and narrows the next implementation ledge into a concrete construct-to-scenario acceptance matrix.
+This pass keeps runtime files unchanged and narrows the next implementation ledge into a source-profile implementation boundary.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow       tracked with root .agent
-LuminaryLabs-Publish/HorrorCorridor      tracked with root .agent
-LuminaryLabs-Publish/AetherVale          tracked with root .agent
-LuminaryLabs-Publish/ZombieOrchard       tracked with root .agent
-LuminaryLabs-Publish/TheUnmappedHouse    tracked with root .agent
-LuminaryLabs-Publish/MyCozyIsland        tracked with root .agent
-LuminaryLabs-Publish/TheOpenAbove        tracked with root .agent
-LuminaryLabs-Publish/PhantomCommand      selected fallback follow-up
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled follow-up 2026-07-08T12:01:23-04:00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled follow-up 2026-07-08T12:29:17-04:00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled follow-up 2026-07-08T12:21:20-04:00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:40:00-04:00
+LuminaryLabs-Publish/PhantomCommand      selected fallback / previous central update 2026-07-08T10:58:46-04:00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled follow-up 2026-07-08T12:09:27-04:00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PrehistoricRush     tracked with root .agent
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:49:04-04:00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled follow-up 2026-07-08T11:28:38-04:00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled follow-up 2026-07-08T11:19:53-04:00
 ```
 
-No checked non-excluded Publish repo was fully new, central-ledger absent, undocumented, or missing root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected because the current source profile, construct completion result, and scenario bootstrap gate are still unresolved.
+`PhantomCommand` was selected because the current source profile, descriptor parity, construct completion result, and scenario bootstrap gate are still unresolved, and its prior follow-up was the oldest sampled eligible central ledger entry.
 
 ## Current interaction loop
 
@@ -41,6 +41,7 @@ open index.html
   -> inline runtime creates renderer, scene, camera, fog, lights, materials, HUD, and input state
   -> inline constants define smooth-ring-handoff-v6
   -> inline ring math creates 10 no-gap construct rings
+  -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
   -> inline wedge geometry creates 92 stone pieces
   -> construct(seq) animates each piece by ring delay and part delay
   -> WASD/arrows pan the camera
@@ -191,7 +192,7 @@ construct-spiral-intro-kit-smoke
   -> assert all pieces settled
 ```
 
-### Needed acceptance-matrix services
+### Needed source-profile services
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
@@ -204,17 +205,8 @@ delay descriptor generator
 settle descriptor generator
 transition margin descriptor generator
 profile parity report
-construct event envelope factory
-construct result reducer
-construct completion idempotency guard
-construct journal projector
-construct snapshot projector
-scenario bootstrap command factory
-scenario bootstrap preflight service
-scenario bootstrap result reducer
-scenario bootstrap snapshot projector
-legacy GameHost diagnostics adapter
-DOM-free fixture runner
+additive GameHost source diagnostics adapter
+DOM-free source profile fixture runner
 ```
 
 ## Kits
@@ -253,6 +245,8 @@ phantom-command-piece-delay-policy-kit
 phantom-command-piece-settle-policy-kit
 phantom-command-handoff-timeline-contract-kit
 phantom-command-profile-parity-report-kit
+phantom-command-gamehost-source-diagnostics-kit
+phantom-command-source-profile-fixture-kit
 phantom-command-construct-event-envelope-kit
 phantom-command-construct-event-result-kit
 phantom-command-construct-event-reducer-kit
@@ -265,12 +259,10 @@ phantom-command-scenario-bootstrap-result-kit
 phantom-command-scenario-bootstrap-gate-kit
 phantom-command-scenario-bootstrap-journal-kit
 phantom-command-scenario-bootstrap-snapshot-kit
-phantom-command-gamehost-diagnostics-adapter-kit
-phantom-command-fixture-script-runner-kit
 ```
 
 ## Main architectural read
 
 The repo already has a generic construct scheduling kit and smoke test, but the live `game.html` proof does not yet consume a source-owned PhantomCommand profile.
 
-The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source and result authority that reproduces the live v6 values, accepts construct completion once, gates scenario bootstrap, and exposes additive diagnostics through `GameHost`.
+The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source-profile and descriptor parity modules that reproduce the live v6 values, then expose additive GameHost diagnostics. Construct event reducers and scenario bootstrap gates should come after the source-profile fixture passes.
