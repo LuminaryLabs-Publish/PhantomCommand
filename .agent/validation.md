@@ -1,14 +1,14 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T10-58-46-04-00`
+**Timestamp:** `2026-07-08T12-41-31-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Listed accessible LuminaryLabs-Publish repo set through the GitHub installation.
-- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
+- Compared accessible LuminaryLabs-Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Selected PhantomCommand as fallback follow-up because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams.
+- Excluded LuminaryLabs-Publish/TheCavalryOfRome.
+- Selected PhantomCommand as oldest eligible fallback because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -21,9 +21,9 @@
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T10-58-46-04-00-scenario-acceptance-dsk-breakdown.md.
-- Added render-audit/2026-07-08T10-58-46-04-00-gamehost-render-readback.md.
-- Added scenario-bootstrap-audit/2026-07-08T10-58-46-04-00-construct-scenario-acceptance-matrix.md.
+- Added architecture-audit/2026-07-08T12-41-31-04-00-dsk-domain-breakdown.md.
+- Added render-audit/2026-07-08T12-41-31-04-00-gamehost-source-profile-readback.md.
+- Added scenario-bootstrap-audit/2026-07-08T12-41-31-04-00-source-profile-implementation-boundary.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -37,7 +37,7 @@
 - npm run build was not run.
 - npm start was not run.
 - node tests/construct-spiral-intro-kit-smoke.mjs was not run.
-- New source acceptance fixture was not run because this pass did not implement it.
+- node tests/phantom-command-source-profile-fixture.mjs was not run because this pass did not implement it.
 - Browser smoke was not run.
 - GitHub Pages deploy was not checked after this docs-only pass.
 - No Playwright or DOM automation was run.
@@ -86,7 +86,7 @@ construct-spiral-intro-kit declares:
 npm install
 npm run build
 node tests/construct-spiral-intro-kit-smoke.mjs
-node tests/phantom-command-source-acceptance-fixture.mjs
+node tests/phantom-command-source-profile-fixture.mjs
 browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
 ```
@@ -94,19 +94,18 @@ post-deploy Pages route check
 ## New fixture target
 
 ```txt
-profile-parity fixture
-ring-parity fixture
-piece-parity fixture
-timeline-parity fixture
-construct-idempotency fixture
-construct-reset fixture
-construct-skip fixture
-scenario-early-reject fixture
-scenario-accepted fixture
-scenario-duplicate-reject fixture
-scenario-unknown-reject fixture
-snapshot-shape fixture
-gamehost-shape fixture
+profile_build_id_matches_live_game_html
+profile_ring_count_matches_10
+profile_gap_policy_matches_zero_gap
+ring_part_counts_match_live_array
+piece_descriptor_count_matches_92
+timeline_total_build_seconds_matches_19_923
+handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025
+profile_snapshot_is_serializable
+profile_fingerprint_is_stable
+profile_parity_report_has_no_errors
+gamehost_additive_diagnostics_keep_legacy_surface
+fixture_runs_without_dom_canvas_or_three
 ```
 
 ## Current proof status
@@ -123,4 +122,6 @@ runtime implementation changed: no
 build proof: missing
 browser proof: missing
 fixture replay proof: missing
+branch created: no
+pushed to main: yes
 ```
