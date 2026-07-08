@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T15-58-59-04-00`
+**Timestamp:** `2026-07-08T18-29-21-04-00`
 
 ## Critical source-profile gaps
 
@@ -12,16 +12,29 @@
 - game.html still owns wedge geometry, material, construct animation, HUD mutation, input, camera, and GameHost state inline.
 - construct-spiral-intro-kit exists, but it is generic spiral/window scheduling and not the live no-gap smooth-ring-handoff-v6 authority.
 - There is no source-owned smooth-ring-handoff-v6 profile file.
+- There is no normalizer proving exact live default values.
 - There is no ring descriptor module that reproduces the live no-gap ring descriptors.
 - There is no piece descriptor module that reproduces the live 92-piece construct.
 - There is no timeline contract module proving ringStartTimes, per-piece delays, and totalBuildSeconds.
 - There is no stable source fingerprint for the live construct profile.
 - There is no serializable source snapshot proving what profile produced the construct.
-- There is no descriptor parity fixture proving [5,5,5,5,6,8,10,12,16,20].
+- There is no profile parity report separating ok, warning, error, unsupported, and missing rows.
+- There is no DOM-free fixture proving [5,5,5,5,6,8,10,12,16,20].
 - There is no DOM-free fixture proving 92 live pieces.
 - There is no DOM-free fixture proving total build seconds 19.923.
 - GameHost does not yet expose sourceProfile, profileFingerprint, sourceSnapshot, descriptor parity, timing parity, or fixture status.
 - game.html has no additive consumer splice for source-profile diagnostics.
+```
+
+## Fixture acceptance gaps
+
+```txt
+- Fixture rows are named but not implemented in source.
+- Fixture rows do not yet load source modules independently of game.html.
+- Fixture rows do not yet prove the browser route consumes the same source profile.
+- Fixture rows do not yet assert legacy GameHost shape compatibility.
+- Fixture rows do not yet block scenario bootstrap until construct source parity passes.
+- npm run build does not yet include the source-profile fixture.
 ```
 
 ## Construct / scenario gaps
@@ -39,13 +52,13 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now the Source Profile Consumer Splice Map + Fixture Gate.
+- The immediate next ledge is now the Source Profile Fixture Row Acceptance + GameHost Readback Gate.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
 - game.html must consume source-profile diagnostics only after DOM-free fixture proof.
 - Construct result authority must happen before scenario bootstrap.
-- Scenario bootstrap must happen before unit control, economy, wave, or objective domains.
+- Scenario bootstrap must stay blocked until construct_complete is emitted by a typed result.
 - The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until live profile parity fixtures exist.
 ```
 
@@ -83,7 +96,7 @@
 - Root .agent/validation.md refreshed.
 - Timestamped tracker added.
 - Timestamped turn-ledger entry added.
-- Architecture, render, gameplay, and source-profile audits added.
+- Architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits added.
 - Central LuminaryLabs ledger updated.
 - Central internal change log added.
 ```
