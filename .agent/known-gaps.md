@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T09:19:43-04:00`
+**Timestamp:** `2026-07-08T10-58-46-04-00`
 
 ## Critical gaps
 
@@ -30,11 +30,12 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The current next target is now an implementation wire map, not another generic extraction note.
+- The next target is now an acceptance matrix with fixture rows.
+- The matrix defines profile parity, ring parity, piece parity, timing parity, construct idempotency, scenario bootstrap gating, snapshot serialization, and GameHost compatibility rows.
 - Source-profile parity must happen before construct result authority.
 - Construct result authority must happen before scenario bootstrap.
 - Scenario bootstrap must happen before unit control, economy, combat, wave, or objective domains.
-- The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until the live profile has parity fixtures.
+- The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until live profile parity fixtures exist.
 ```
 
 ## Visual/render gaps
@@ -48,6 +49,7 @@
 - Render code consumes inline constants instead of reusable descriptors.
 - Renderer handoff cannot yet consume source-owned construct descriptors only.
 - There is no render-source parity snapshot tying the visible build to the source profile.
+- GameHost readback does not yet expose sourceProfile, profileParity, constructResult, scenarioBootstrap, or fixtureSummary projections.
 ```
 
 ## Gameplay/system gaps
@@ -70,10 +72,10 @@
 - Root .agent/next-steps.md refreshed.
 - Root .agent/validation.md refreshed.
 - Root .agent/kit-registry.json refreshed.
-- Added 2026-07-08T09-19-43-04-00 architecture DSK/domain breakdown.
-- Added 2026-07-08T09-19-43-04-00 render source authority map.
-- Added 2026-07-08T09-19-43-04-00 scenario bootstrap source wire map.
-- Added 2026-07-08T09-19-43-04-00 tracker and turn-ledger entries.
+- Added 2026-07-08T10-58-46-04-00 architecture DSK/domain breakdown.
+- Added 2026-07-08T10-58-46-04-00 GameHost render readback audit.
+- Added 2026-07-08T10-58-46-04-00 construct scenario acceptance matrix.
+- Added 2026-07-08T10-58-46-04-00 tracker and turn-ledger entries.
 ```
 
 ## Gap priority order
@@ -91,6 +93,7 @@
 10. ScenarioBootstrapResult gating.
 11. ScenarioBootstrapSnapshot projection.
 12. Additive GameHost diagnostics.
-13. Renderer descriptor handoff.
-14. RTS gameplay expansion.
+13. DOM-free fixture matrix.
+14. Renderer descriptor handoff.
+15. RTS gameplay expansion.
 ```
