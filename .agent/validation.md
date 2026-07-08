@@ -1,26 +1,28 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T02:50:33-04:00`
+**Timestamp:** `2026-07-08T04:40:21-04:00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed full LuminaryLabs-Publish repo set through the GitHub installation.
-- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger search results.
-- Confirmed PhantomCommand is tracked centrally but was missing root .agent/START_HERE.md.
+- Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger search and latest-summary readback.
+- Confirmed PhantomCommand is tracked centrally and already has root .agent state.
+- Selected PhantomCommand as oldest eligible follow-up rotation target among checked non-excluded repos.
+- Read .agent/START_HERE.md.
+- Read .agent/current-audit.md.
+- Read .agent/next-steps.md.
+- Read .agent/known-gaps.md.
+- Read .agent/validation.md.
 - Read README.md.
-- Read package.json.
-- Read index.html.
 - Read game.html.
-- Read scripts/build-static.mjs.
-- Read .agent/kit-registry.json.
-- Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
-- Added required repo-local .agent audit files.
-- Added new timestamped tracker entry.
-- Added new timestamped turn-ledger entry.
-- Updated central repo ledger with latest root-agent normalization state.
+- Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
+- Updated required repo-local .agent audit files.
+- Added construct-source-audit/source-authority-fixture-gate.md.
+- Added a new timestamped tracker entry.
+- Added a new timestamped turn-ledger entry.
+- Updated central repo ledger with latest follow-up state.
 - Added central internal change-log entry.
 ```
 
@@ -45,19 +47,14 @@ README.md declares:
 - game.html is the opening construct scene.
 - GitHub Pages deployment uses .github/workflows/deploy-pages.yml.
 
-package.json declares:
-- type module
-- start/dev use Vite on port 4173
-- build uses node scripts/build-static.mjs
-
-scripts/build-static.mjs declares:
-- dist is rebuilt from scratch
-- index.html, game.html, docs, and config are copied if present
-
 game.html declares:
 - BUILD_ID sequential-ring-v5
 - RING_COUNT 10
-- zero ring gap base/growth
+- RING_GAP_BASE 0
+- RING_GAP_GROWTH 0
+- inline ringParts() policy
+- inline makePiece() wedge construction
+- inline construct(seq) progress and phase mutation
 - window.GameHost.skipConstruct
 - window.GameHost.restartConstruct
 - window.GameHost.getState
@@ -66,12 +63,7 @@ construct-spiral-intro-kit declares:
 - CONSTRUCT_SPIRAL_INTRO_KIT_ID construct-spiral-intro-kit
 - CONSTRUCT_SPIRAL_INTRO_DOMAIN_PATH n:sequence:construct:spiral-intro
 - installPieces/reset/update/snapshot service surface
-
-tests/construct-spiral-intro-kit-smoke.mjs declares:
-- kit id and domain assertions
-- schedule ordering assertions
-- update loop until complete
-- active cap and active ring window assertions
+- pending/active/settled/newlyActive/newlySettled piece query surface
 ```
 
 ## Next validation needed
@@ -81,8 +73,28 @@ npm install
 npm run build
 node tests/construct-spiral-intro-kit-smoke.mjs
 node <new fixture> for sequential-ring-v5 profile parity
+node <new fixture> for ring descriptor parity
+node <new fixture> for piece descriptor parity
+node <new fixture> for inner-first transition margins
 node <new fixture> for ConstructEventResult idempotency
 node <new fixture> for ScenarioBootstrapResult gating
+node <new fixture> for snapshot shape
 browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
+```
+
+## Current proof status
+
+```txt
+repo-list comparison: performed
+central ledger comparison: performed
+source readback: performed
+root .agent updated: performed
+tracker created: performed
+turn ledger created: performed
+central change-log created: performed
+runtime implementation changed: no
+build proof: missing
+browser proof: missing
+fixture replay proof: missing
 ```
