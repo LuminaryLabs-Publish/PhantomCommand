@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T06:19:51-04:00`
+**Timestamp:** `2026-07-08T07:50:47-04:00`
 
 ## Critical gaps
 
@@ -27,13 +27,13 @@
 - RTS gameplay domains are documented but not yet safely connected to the construct proof.
 ```
 
-## Documentation/source drift closed in this pass
+## New gap narrowed in this pass
 
 ```txt
-- Internal docs no longer point the current live profile at sequential-ring-v5.
-- Current evidence now identifies smooth-ring-handoff-v6 as the live build id.
-- Runtime constants, ring part counts, total pieces, and total build seconds now match inspected game.html evidence.
-- The next ledge now targets smooth-ring-handoff-v6 source authority rather than the older sequential-ring-v5 wording.
+- The next implementation target is no longer just source extraction.
+- The handoff must prove source parity and then emit ConstructEventResult and ScenarioBootstrapResult records.
+- The future RTS mode must start only after scenario bootstrap is accepted.
+- Full unit control, economy, waves, combat, and objectives remain deferred until the bootstrap fixture gate passes.
 ```
 
 ## Visual/render gaps
@@ -70,7 +70,8 @@
 - Added architecture, render, gameplay, tracker, and turn-ledger audit files.
 - Added construct-source-audit/source-authority-fixture-gate.md.
 - Added construct-source-audit/smooth-handoff-v6-source-drift.md.
-- Added 2026-07-08T06-19-51-04-00 tracker and turn-ledger entries.
+- Added scenario-bootstrap-audit/construct-result-fixture-matrix.md.
+- Added 2026-07-08T07-50-47-04-00 architecture, render, tracker, and turn-ledger entries.
 ```
 
 ## Gap priority order
@@ -81,9 +82,10 @@
 3. Total build seconds parity proof.
 4. Handoff/margin proof.
 5. ConstructEventResult idempotency.
-6. ScenarioBootstrapResult gating.
-7. Snapshot contracts.
-8. Additive GameHost diagnostics.
-9. Renderer descriptor handoff.
-10. RTS gameplay expansion.
+6. ConstructSnapshot projection.
+7. ScenarioBootstrapResult gating.
+8. ScenarioBootstrapSnapshot projection.
+9. Additive GameHost diagnostics.
+10. Renderer descriptor handoff.
+11. RTS gameplay expansion.
 ```
