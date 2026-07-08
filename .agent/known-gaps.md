@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T12-41-31-04-00`
+**Timestamp:** `2026-07-08T14-08-24-04-00`
 
 ## Critical source-profile gaps
 
@@ -12,6 +12,9 @@
 - game.html still owns wedge geometry, material, construct animation, HUD mutation, input, camera, and GameHost state inline.
 - construct-spiral-intro-kit exists, but it is generic spiral/window scheduling and not the live no-gap smooth-ring-handoff-v6 authority.
 - There is no source-owned smooth-ring-handoff-v6 profile file.
+- There is no ring descriptor module that reproduces the live no-gap ring descriptors.
+- There is no piece descriptor module that reproduces the live 92-piece construct.
+- There is no timeline contract module proving ringStartTimes, per-piece delays, and totalBuildSeconds.
 - There is no stable source fingerprint for the live construct profile.
 - There is no serializable source snapshot proving what profile produced the construct.
 - There is no descriptor parity fixture proving [5,5,5,5,6,8,10,12,16,20].
@@ -36,7 +39,7 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now narrower than the full scenario acceptance matrix.
+- The immediate next ledge is now the Source Profile Module Fixture Map.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
@@ -78,10 +81,11 @@
 - Root .agent/next-steps.md refreshed.
 - Root .agent/validation.md refreshed.
 - Root .agent/kit-registry.json refreshed.
-- Added 2026-07-08T12-41-31-04-00 architecture DSK/domain breakdown.
-- Added 2026-07-08T12-41-31-04-00 GameHost source profile readback audit.
-- Added 2026-07-08T12-41-31-04-00 source profile implementation boundary audit.
-- Added 2026-07-08T12-41-31-04-00 tracker and turn-ledger entries.
+- Added 2026-07-08T14-08-24-04-00 architecture DSK/domain breakdown.
+- Added 2026-07-08T14-08-24-04-00 GameHost source diagnostics readback audit.
+- Added 2026-07-08T14-08-24-04-00 construct completion/source-profile gameplay audit.
+- Added 2026-07-08T14-08-24-04-00 source-profile module fixture implementation map.
+- Added 2026-07-08T14-08-24-04-00 tracker and turn-ledger entries.
 ```
 
 ## Gap priority order
@@ -89,12 +93,12 @@
 ```txt
 1. Smooth-ring-handoff-v6 source profile ownership.
 2. Profile normalization.
-3. Source fingerprint.
-4. Source snapshot projection.
-5. Ring descriptor parity proof.
-6. Piece descriptor parity proof.
-7. Total build seconds parity proof.
-8. Handoff/margin proof.
+3. Ring descriptor module.
+4. Piece descriptor module.
+5. Handoff/timeline descriptor module.
+6. Source fingerprint.
+7. Source snapshot projection.
+8. Descriptor parity report.
 9. Additive GameHost source diagnostics.
 10. DOM-free source-profile fixture.
 11. ConstructEventResult idempotency.
