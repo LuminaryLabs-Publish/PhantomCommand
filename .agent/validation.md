@@ -1,11 +1,11 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T09:19:43-04:00`
+**Timestamp:** `2026-07-08T10-58-46-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Listed full LuminaryLabs-Publish repo set through the GitHub installation.
+- Listed accessible LuminaryLabs-Publish repo set through the GitHub installation.
 - Compared Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
 - Selected PhantomCommand as fallback follow-up because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams.
@@ -19,12 +19,11 @@
 - Read package.json.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T09-19-43-04-00-dsk-domain-breakdown.md.
-- Added render-audit/2026-07-08T09-19-43-04-00-render-source-authority-map.md.
-- Added scenario-bootstrap-audit/2026-07-08T09-19-43-04-00-source-wire-map.md.
+- Added architecture-audit/2026-07-08T10-58-46-04-00-scenario-acceptance-dsk-breakdown.md.
+- Added render-audit/2026-07-08T10-58-46-04-00-gamehost-render-readback.md.
+- Added scenario-bootstrap-audit/2026-07-08T10-58-46-04-00-construct-scenario-acceptance-matrix.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -38,6 +37,7 @@
 - npm run build was not run.
 - npm start was not run.
 - node tests/construct-spiral-intro-kit-smoke.mjs was not run.
+- New source acceptance fixture was not run because this pass did not implement it.
 - Browser smoke was not run.
 - GitHub Pages deploy was not checked after this docs-only pass.
 - No Playwright or DOM automation was run.
@@ -78,11 +78,6 @@ construct-spiral-intro-kit declares:
 - DEFAULT_CONSTRUCT_SPIRAL_INTRO_CONFIG for generic active/spiral/window behavior
 - installPieces/reset/update/snapshot service surface
 - pending/active/settled/newlyActive/newlySettled piece query surface
-
-construct-spiral-intro-kit-smoke declares:
-- smoke data uses [5,5,5,6,8,10,12,15,18,22,26,32]
-- smoke validates generic schedule ordering, active count cap, active ring window, and eventual completion
-- smoke does not validate live smooth-ring-handoff-v6 values
 ```
 
 ## Next validation needed
@@ -91,17 +86,27 @@ construct-spiral-intro-kit-smoke declares:
 npm install
 npm run build
 node tests/construct-spiral-intro-kit-smoke.mjs
-node <new fixture> for smooth-ring-handoff-v6 profile parity
-node <new fixture> for ring descriptor parity
-node <new fixture> for piece descriptor parity
-node <new fixture> for handoff/timeline margin parity
-node <new fixture> for ConstructEventResult idempotency
-node <new fixture> for ConstructSnapshot serialization
-node <new fixture> for ScenarioBootstrapResult gating
-node <new fixture> for ScenarioBootstrapSnapshot serialization
-node <new fixture> for legacy GameHost compatibility shape
+node tests/phantom-command-source-acceptance-fixture.mjs
 browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
+```
+
+## New fixture target
+
+```txt
+profile-parity fixture
+ring-parity fixture
+piece-parity fixture
+timeline-parity fixture
+construct-idempotency fixture
+construct-reset fixture
+construct-skip fixture
+scenario-early-reject fixture
+scenario-accepted fixture
+scenario-duplicate-reject fixture
+scenario-unknown-reject fixture
+snapshot-shape fixture
+gamehost-shape fixture
 ```
 
 ## Current proof status
