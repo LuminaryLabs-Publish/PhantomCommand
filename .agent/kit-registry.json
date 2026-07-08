@@ -1,21 +1,25 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T14-08-24-04-00",
-  "status": "source-profile-module-fixture-map-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T14-08-24-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T14-08-24-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T14-08-24-04-00-source-profile-module-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-08T14-08-24-04-00-gamehost-source-diagnostics-readback.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T14-08-24-04-00-construct-completion-source-profile-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T14-08-24-04-00-module-fixture-implementation-map.md",
-  "previousTracker": ".agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T12-41-31-04-00.md",
+  "updatedAt": "2026-07-08T15-58-59-04-00",
+  "status": "source-profile-consumer-splice-map-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T15-58-59-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T15-58-59-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T15-58-59-04-00-source-profile-consumer-dsk-breakdown.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-08T15-58-59-04-00-gamehost-source-consumer-readback.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T15-58-59-04-00-construct-to-bootstrap-consumer-gate.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T15-58-59-04-00-consumer-splice-map.md",
+  "previousTracker": ".agent/trackers/2026-07-08T14-08-24-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T14-08-24-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
     "onlyPushMain": true,
     "doNotCreateBranches": true
+  },
+  "selection": {
+    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
+    "reason": "oldest eligible tracked Publish repo follow-up selected because the previous PhantomCommand central alignment was older than the observed non-Cavalry follow-ups and the source-profile consumer splice remains unresolved"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -27,18 +31,7 @@
     "liveBuildId": "smooth-ring-handoff-v6",
     "expectedLiveRingCount": 10,
     "expectedLiveGapPolicy": "zero-gap",
-    "expectedLiveRingPartCounts": [
-      5,
-      5,
-      5,
-      5,
-      6,
-      8,
-      10,
-      12,
-      16,
-      20
-    ],
+    "expectedLiveRingPartCounts": [5, 5, 5, 5, 6, 8, 10, 12, 16, 20],
     "expectedLiveTotalPieces": 92,
     "expectedLiveTotalBuildSeconds": 19.923,
     "currentGameHostSurface": [
@@ -46,17 +39,13 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own the smooth-ring-handoff-v6 profile, add descriptor parity, add source fingerprint/snapshot, expose additive GameHost source diagnostics, and prove a DOM-free source-profile fixture before full scenario bootstrap or RTS gameplay expansion."
-  },
-  "selection": {
-    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "oldest eligible tracked Publish repo follow-up selected because the previous PhantomCommand root alignment was older than sampled non-Cavalry repos and source profile parity remains unresolved"
+    "primaryGap": "game.html still owns the live profile and also renders it. The next cut should source-own the profile, prove DOM-free parity, and splice additive sourceProfile diagnostics into GameHost before scenario bootstrap."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
       "load index.html menu",
       "route to game.html through Start or Open Scene",
-      "watch smooth-ring-handoff-v6 construct form around Grim Reaper Totem",
+      "watch smooth-ring-handoff-v6 construct form",
       "pan with WASD or arrows",
       "zoom with mouse wheel",
       "skip with Space or Skip button",
@@ -75,7 +64,7 @@
       "handle pan, zoom, skip, restart, resize, and blur",
       "publish construct-only GameHost state"
     ],
-    "targetSourceProfileLoop": [
+    "targetSourceProfileConsumerLoop": [
       "load source-owned smooth-ring-handoff-v6 profile",
       "normalize construct profile values",
       "emit ring descriptors matching live game.html math",
@@ -84,16 +73,8 @@
       "emit source fingerprint and source snapshot",
       "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
       "project additive GameHost source diagnostics",
-      "run DOM-free source-profile fixture"
-    ],
-    "laterScenarioLoop": [
-      "accept construct_complete exactly once",
-      "reject duplicate construct_complete with stable reason duplicate_construct_complete",
-      "project ConstructSnapshot",
-      "reject scenario bootstrap before construct completion with reason construct_incomplete",
-      "accept scenario_001_raise_the_host after construct completion",
-      "reject duplicate bootstrap with reason duplicate_scenario_bootstrap",
-      "project ScenarioBootstrapSnapshot with RTS boundary placeholders only"
+      "run DOM-free source-profile fixture",
+      "splice sourceProfile diagnostics into game.html without removing legacy fields"
     ]
   },
   "domains": {
@@ -117,59 +98,25 @@
     ],
     "constructSource": [
       "smooth-ring-handoff-v6-profile",
-      "construct-source-authority",
       "construct-profile-normalization",
-      "construct-profile-parity",
       "construct-source-fingerprint",
       "construct-source-snapshot",
       "ring-descriptor-generation",
       "piece-descriptor-generation",
-      "piece-delay-policy",
-      "piece-settle-policy",
-      "inner-first-timeline-contract",
-      "ring-transition-margin-policy"
+      "handoff-timeline-contract",
+      "profile-parity-report"
     ],
-    "constructResult": [
-      "construct-event-envelope",
+    "hostConsumer": [
+      "gamehost-source-diagnostics",
+      "legacy-gamehost-compatibility",
+      "source-profile-consumer-splice",
+      "gamehost-shape-fixture"
+    ],
+    "deferred": [
       "construct-event-result",
-      "construct-event-reducer",
       "construct-completion-idempotency",
-      "construct-event-journal",
-      "construct-snapshot-contract",
-      "construct-diagnostics-projection",
-      "legacy-gamehost-compatibility"
-    ],
-    "scenarioBootstrap": [
-      "scenario-bootstrap-command",
-      "scenario-bootstrap-preflight",
-      "scenario-bootstrap-result",
       "scenario-bootstrap-gate",
-      "scenario-bootstrap-journal",
-      "scenario-bootstrap-snapshot",
-      "scenario-mode-state-machine",
       "rts-boundary-placeholder"
-    ],
-    "fixtures": [
-      "fixture-script-runner",
-      "profile-parity-fixture",
-      "ring-parity-fixture",
-      "piece-parity-fixture",
-      "timeline-parity-fixture",
-      "source-profile-fixture",
-      "gamehost-shape-fixture",
-      "construct-idempotency-fixture",
-      "scenario-early-reject-fixture",
-      "scenario-accepted-fixture"
-    ],
-    "deferredRts": [
-      "undead-roster",
-      "necropolis-building-state",
-      "world-economy-ledger",
-      "unit-selection",
-      "rts-command-validation",
-      "combat-resolution",
-      "objective-tracking",
-      "command-journal-replay"
     ]
   },
   "services": {
@@ -202,25 +149,22 @@
       "normalize profile values",
       "emit serializable ring descriptors",
       "emit serializable piece descriptors",
-      "emit serializable delay and settle descriptors",
-      "emit serializable timeline margin descriptors",
+      "emit serializable timeline descriptors",
       "emit source fingerprint",
       "emit source snapshot",
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
       "prove total build seconds 19.923",
       "project additive GameHost source diagnostics",
-      "run DOM-free source-profile fixture"
+      "splice sourceProfile diagnostics into game.html after fixture proof"
     ]
   },
-  "kits": [
+  "implementedKits": [
     {
       "id": "construct-spiral-intro-kit",
       "status": "implemented-source-kit-keep-default-compatible",
       "domainPath": "n:sequence:construct:spiral-intro",
-      "sourceFiles": [
-        "src/kits/construct-spiral-intro-kit/index.js"
-      ],
+      "sourceFiles": ["src/kits/construct-spiral-intro-kit/index.js"],
       "provides": [
         "createConstructSpiralIntroPieceId",
         "createConstructSpiralIntroSchedule",
@@ -237,30 +181,12 @@
         "newlySettledPieces",
         "getPieceProgress",
         "getPieceStatus"
-      ],
-      "blockers": [
-        "Default spiral/window schedule is not the live smooth-ring-handoff-v6 no-gap handoff profile."
       ]
     },
     {
       "id": "construct-spiral-intro-kit-smoke",
       "status": "implemented-generic-smoke-keep-as-regression-guard",
-      "sourceFiles": [
-        "tests/construct-spiral-intro-kit-smoke.mjs"
-      ],
-      "provides": [
-        "assertKitId",
-        "assertDomainPath",
-        "installGeneratedRingPieces",
-        "assertScheduleOrdering",
-        "tickUntilComplete",
-        "assertActiveCountCap",
-        "assertActiveRingWindow",
-        "assertAllPiecesSettled"
-      ],
-      "blockers": [
-        "Does not validate live smooth-ring-handoff-v6 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, handoff timing margins, GameHost source diagnostics, construct_complete, or bootstrap preflight."
-      ]
+      "sourceFiles": ["tests/construct-spiral-intro-kit-smoke.mjs"]
     }
   ],
   "inlineRuntimeKitsToExtract": [
@@ -281,24 +207,14 @@
     "phantom-command-source-profile-snapshot-kit",
     "phantom-command-ring-descriptor-kit",
     "phantom-command-piece-descriptor-kit",
-    "phantom-command-piece-delay-policy-kit",
-    "phantom-command-piece-settle-policy-kit",
     "phantom-command-handoff-timeline-contract-kit",
     "phantom-command-profile-parity-report-kit",
     "phantom-command-gamehost-source-diagnostics-kit",
     "phantom-command-source-profile-fixture-kit",
+    "phantom-command-gamehost-source-consumer-kit",
     "phantom-command-construct-event-envelope-kit",
     "phantom-command-construct-event-result-kit",
-    "phantom-command-construct-event-reducer-kit",
-    "phantom-command-construct-completion-idempotency-kit",
-    "phantom-command-construct-event-journal-kit",
-    "phantom-command-construct-snapshot-contract-kit",
-    "phantom-command-scenario-bootstrap-command-kit",
-    "phantom-command-scenario-bootstrap-preflight-kit",
-    "phantom-command-scenario-bootstrap-result-kit",
-    "phantom-command-scenario-bootstrap-gate-kit",
-    "phantom-command-scenario-bootstrap-journal-kit",
-    "phantom-command-scenario-bootstrap-snapshot-kit"
+    "phantom-command-scenario-bootstrap-gate-kit"
   ],
   "sourceProfileFixtureRows": [
     "profile_build_id_matches_live_game_html",
@@ -308,22 +224,12 @@
     "piece_descriptor_count_matches_92",
     "timeline_total_build_seconds_matches_19_923",
     "handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025",
-    "profile_snapshot_is_serializable",
-    "profile_fingerprint_is_stable",
+    "ring_start_times_match_live_formula",
+    "source_snapshot_is_serializable",
+    "source_fingerprint_is_stable",
     "profile_parity_report_has_no_errors",
-    "gamehost_additive_diagnostics_keep_legacy_surface",
+    "gamehost_source_diagnostics_shape_is_additive",
     "fixture_runs_without_dom_canvas_or_three"
   ],
-  "laterAcceptanceMatrix": [
-    "construct-idempotency",
-    "construct-reset",
-    "construct-skip",
-    "scenario-early-reject",
-    "scenario-accepted",
-    "scenario-duplicate-reject",
-    "scenario-unknown-reject",
-    "snapshot-shape",
-    "gamehost-shape"
-  ],
-  "nextSafeLedge": "PhantomCommand Source Profile Module Fixture Map"
+  "nextSafeLedge": "PhantomCommand Source Profile Consumer Splice Map + Fixture Gate"
 }
