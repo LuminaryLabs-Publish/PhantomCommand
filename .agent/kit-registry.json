@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T20:31:21-04:00",
-  "status": "source-descriptor-parity-scenario-bootstrap-gate-fixture-lock-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T20-31-21-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-07T21:50:56-04:00",
+  "status": "construct-descriptor-journal-scenario-gate-replay-lock-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-07T21-50-56-04-00/project-breakdown.md",
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -24,6 +24,8 @@
       16,
       20
     ],
+    "expectedLiveRingCount": 10,
+    "expectedLiveGapPolicy": "zero-gap",
     "expectedLiveTotalPieces": 92,
     "expectedLiveTotalBuildSeconds": 31.915,
     "currentGameHostSurface": [
@@ -37,71 +39,58 @@
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "central ledger oldest eligible tracked Publish repo by latest review timestamp",
     "latestEligibleTimestampsChecked": {
-      "PhantomCommand": "2026-07-07T19:08:52-04:00",
-      "PrehistoricRush": "2026-07-07T19:18:58-04:00",
-      "MyCozyIsland": "2026-07-07T19:29:28-04:00",
-      "IntoTheMeadow": "2026-07-07T19:42:05-04:00",
-      "ZombieOrchard": "2026-07-07T19:51:43-04:00",
-      "HorrorCorridor": "2026-07-07T20:00:46-04:00",
-      "TheOpenAbove": "2026-07-07T20:10:49-04:00",
-      "AetherVale": "2026-07-07T20:21:40-04:00"
+      "PhantomCommand": "2026-07-07T20:31:21-04:00",
+      "PrehistoricRush": "2026-07-07T20:38:27-04:00",
+      "MyCozyIsland": "2026-07-07T20:50:10-04:00",
+      "IntoTheMeadow": "2026-07-07T20:59:30-04:00",
+      "ZombieOrchard": "2026-07-07T21:09:57-04:00",
+      "HorrorCorridor": "2026-07-07T21:18:45-04:00",
+      "TheOpenAbove": "2026-07-07T21:29:47-04:00",
+      "AetherVale": "2026-07-07T21:39:36-04:00"
     }
   },
   "interactionLoops": {
-    "current": [
+    "currentPlayerLoop": [
       "load index.html menu",
-      "route to game.html",
+      "route to game.html through Start or Open Scene",
+      "watch sequential-ring-v5 construct form around Grim Reaper Totem",
+      "pan with WASD or arrows",
+      "zoom with mouse wheel",
+      "skip with Space or Skip button",
+      "restart with R or Restart button",
+      "finish at command online"
+    ],
+    "currentRuntimeLoop": [
       "import Three.js from CDN",
       "initialize renderer, scene, fog, lights, camera, HUD, materials, and input state inline",
       "define sequential-ring-v5 constants inline",
       "compute ten contiguous no-gap ring descriptors inline",
       "compute ring part counts from circumference inline",
       "create wedge meshes, seams, center disc, Grim Reaper Totem, and Phantom Commander inline",
-      "animate each piece by ringIndex * RING_STAGGER + partIndex * PART_STAGGER",
-      "handle pan, zoom, skip, and restart",
-      "publish construct-only GameHost state",
-      "finish at command platform online"
+      "animate pieces by ringIndex * RING_STAGGER + partIndex * PART_STAGGER",
+      "mutate HUD from construct(seq)",
+      "handle pan, zoom, skip, restart, resize, and blur",
+      "publish construct-only GameHost state"
     ],
-    "targetSourceDescriptorParity": [
+    "targetSourceAuthorityLoop": [
       "load source-owned sequential-ring-v5 profile",
-      "emit source ring descriptors matching live game.html math",
-      "emit source piece descriptors matching live game.html math",
+      "emit ring descriptors matching live game.html math",
+      "emit piece descriptors matching live game.html math",
       "emit delay and settle descriptors",
-      "validate zero gaps, live ring part counts, 92 total pieces, and positive inner-first timing margins",
-      "feed descriptors back into the current visible construct runtime without changing visuals"
+      "validate zero gaps, live ring part counts, 92 total pieces, 31.915 total build seconds, and positive inner-first timing margins",
+      "feed descriptors back into current visual construct runtime without changing visuals"
     ],
-    "targetConstructAuthority": [
+    "targetResultLoop": [
       "publish ConstructSnapshot",
       "emit ConstructEventEnvelope records",
       "reduce ConstructEventResult records",
       "accept construct_complete exactly once",
-      "reject duplicate construct_complete with stable reason metadata",
-      "append ConstructEventJournal records"
-    ],
-    "targetScenarioBootstrap": [
-      "reject scenario bootstrap before construct completion",
+      "reject duplicate construct_complete with stable reason duplicate_construct_complete",
+      "append ConstructEventJournal records",
+      "reject scenario bootstrap before construct completion with reason construct_incomplete",
       "accept scenario_001_raise_the_host after construct completion",
-      "reject duplicate bootstrap with stable reason metadata",
-      "compose ScenarioBootstrapSnapshot with RTS boundary placeholders only",
-      "transition GameHost mode to scenario_bootstrapped",
-      "defer RTS selection, units, buildings, economy, waves, combat, and objectives until bootstrap parity passes"
-    ],
-    "recommendedServiceLoop": [
-      "source construct profile service",
-      "ring descriptor service",
-      "piece descriptor service",
-      "piece delay and settle policy service",
-      "inner-first timeline contract service",
-      "profile parity report service",
-      "construct event envelope service",
-      "construct event result service",
-      "construct event reducer service",
-      "construct snapshot projector",
-      "scenario bootstrap preflight service",
-      "scenario bootstrap result service",
-      "scenario bootstrap snapshot projector",
-      "GameHost construct diagnostics service",
-      "DOM-free construct and bootstrap replay fixture harness"
+      "reject duplicate bootstrap with reason duplicate_scenario_bootstrap",
+      "compose ScenarioBootstrapSnapshot with RTS boundary placeholders only"
     ]
   },
   "domains": [
@@ -159,6 +148,7 @@
     "piece-descriptor-parity-smoke",
     "inner-first-timeline-smoke",
     "construct-event-reducer-smoke",
+    "construct-snapshot-smoke",
     "scenario-bootstrap-gate-smoke",
     "legacy-gamehost-compatibility-smoke",
     "radial-map-generation",
@@ -191,11 +181,14 @@
     "currentRuntime": [
       "serve static menu route",
       "serve static game route",
+      "route Start and Open Scene to game.html",
       "build Three.js renderer, scene, camera, lights, fog, HUD, materials, and input state inline",
+      "create live source constants inline",
       "create ring descriptors inline from constants",
+      "create piece counts from circumference inline",
       "create wedge geometry and seam meshes inline",
       "animate construct pieces through radial and drop interpolation",
-      "track progress, phase, total pieces, and completion",
+      "track progress, phase, total pieces, gaps, part counts, animation config, and completion",
       "allow pan, zoom, skip, and restart controls",
       "expose construct diagnostics through window.GameHost.getState"
     ],
@@ -208,18 +201,31 @@
       "emit snapshots",
       "report pending, active, settled, newly active, and newly settled pieces"
     ],
+    "currentSmoke": [
+      "assert construct-spiral-intro-kit id",
+      "assert domain path",
+      "install generated ring pieces",
+      "assert schedule ordering",
+      "tick until complete",
+      "assert active count cap",
+      "assert active ring window",
+      "assert all pieces settled"
+    ],
     "nextNeeded": [
       "own live sequential-ring-v5 profile outside game.html",
       "emit serializable ring descriptors",
       "emit serializable piece descriptors",
       "emit serializable delay and settle descriptors",
+      "emit serializable timeline margin descriptors",
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
+      "prove total build seconds 31.915",
       "prove inner-first ring timing with positive transition margins",
-      "emit accepted/rejected construct event envelopes",
+      "emit accepted and rejected construct event envelopes",
       "emit construct event results",
       "emit construct_complete exactly once",
       "reject duplicate construct completion with stable reason duplicate_construct_complete",
+      "append construct event journal entries",
       "project ConstructSnapshot without DOM or Three.js dependency",
       "preflight scenario bootstrap with explicit accepted/rejected result",
       "reject scenario bootstrap before construct completion with stable reason construct_incomplete",
@@ -283,7 +289,7 @@
         "construct-spiral-intro-kit"
       ],
       "blockers": [
-        "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, inner-first timing margins, construct_complete, bootstrap preflight, or GameHost shape."
+        "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, inner-first timing margins, construct_complete, bootstrap preflight, or GameHost shape."
       ]
     }
   ],
@@ -328,25 +334,6 @@
     "phantom-command-scenario-bootstrap-gate-smoke-kit",
     "phantom-command-gamehost-diagnostics-smoke-kit"
   ],
-  "fixtureMatrix": [
-    "profile build id parity",
-    "ring count parity",
-    "zero gap parity",
-    "ring part count parity",
-    "total piece parity",
-    "piece delay parity",
-    "piece settle parity",
-    "inner-first positive margin parity",
-    "construct_complete accepted once",
-    "duplicate construct_complete rejected",
-    "ConstructSnapshot shape",
-    "early scenario bootstrap rejected",
-    "post-completion scenario bootstrap accepted",
-    "duplicate scenario bootstrap rejected",
-    "ScenarioBootstrapSnapshot shape",
-    "legacy GameHost getState compatibility"
-  ],
-  "nextBuildTarget": "PhantomCommand Source Descriptor Parity + Scenario Bootstrap Gate Fixture Lock",
   "deferredKits": [
     "phantom-command-scenario-config-loader-kit",
     "phantom-command-radial-map-kit",
@@ -371,9 +358,30 @@
     "phantom-command-unlock-registry-kit",
     "phantom-command-command-journal-replay-kit"
   ],
-  "validationStatus": {
-    "runtimeSourceChanged": false,
-    "localBuildRun": false,
-    "localSmokeRun": false
+  "recommendedNextSlice": {
+    "name": "PhantomCommand Construct Descriptor Journal + Scenario Gate Replay Lock",
+    "goal": "Preserve the live construct visuals while moving sequential-ring-v5 source authority, descriptor parity, event result idempotency, scenario bootstrap gating, GameHost diagnostics, and replay smoke out of the inline game.html monolith.",
+    "acceptance": [
+      "index.html menu still routes to game.html",
+      "game.html visual output remains sequential-ring-v5",
+      "window.GameHost.skipConstruct remains available",
+      "window.GameHost.restartConstruct remains available",
+      "window.GameHost.getState remains available",
+      "profile reports buildId sequential-ring-v5",
+      "profile reports ringCount 10",
+      "ring descriptors report zero gaps",
+      "ring descriptors report [5,5,5,5,6,8,10,12,16,20]",
+      "piece descriptors report 92 pieces",
+      "timing descriptors report totalBuildSeconds 31.915",
+      "every ring transition reports positive marginSeconds",
+      "first construct_complete is accepted",
+      "duplicate construct_complete is rejected with duplicate_construct_complete",
+      "bootstrap before completion is rejected with construct_incomplete",
+      "bootstrap after completion is accepted",
+      "second bootstrap is rejected with duplicate_scenario_bootstrap",
+      "ConstructSnapshot is serializable",
+      "ScenarioBootstrapSnapshot is serializable",
+      "DOM-free fixture passes without browser, DOM, canvas, or Three.js"
+    ]
   }
 }
