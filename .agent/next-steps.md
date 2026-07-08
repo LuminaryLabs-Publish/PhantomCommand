@@ -1,16 +1,16 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T12-41-31-04-00`
+**Timestamp:** `2026-07-08T14-08-24-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Source Profile Implementation Boundary
+PhantomCommand Source Profile Module Fixture Map
 ```
 
 ## Goal
 
-Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, descriptor parity, source fingerprint, source snapshot, and additive GameHost diagnostics out of inline `game.html`.
+Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, profile parity report, and additive GameHost diagnostics out of inline `game.html`.
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Scenario bootstrap reducers come after this source-profile boundary passes.
 
@@ -23,16 +23,18 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Keep existing `window.GameHost.getState()` fields unchanged.
 - [ ] Add `src/kits/phantom-command-smooth-handoff-profile-kit/index.js`.
 - [ ] Mirror current `game.html` constants exactly.
-- [ ] Add profile normalization.
+- [ ] Add `normalizeSmoothHandoffProfile(profile)`.
+- [ ] Add `src/kits/phantom-command-ring-descriptor-kit/index.js`.
+- [ ] Add `derivePhantomCommandRingDescriptors(profile)`.
+- [ ] Add `src/kits/phantom-command-piece-descriptor-kit/index.js`.
+- [ ] Add `derivePhantomCommandPieceDescriptors(profile, rings)`.
+- [ ] Add `src/kits/phantom-command-handoff-timeline-contract-kit/index.js`.
+- [ ] Add delay, settle, handoff, prewarm, ringStartTimes, and total-build descriptor helpers.
 - [ ] Add `src/kits/phantom-command-source-profile-fingerprint-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-ring-descriptor-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-piece-descriptor-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-handoff-timeline-contract-kit/index.js`.
-- [ ] Add delay, settle, handoff, prewarm, and total-build descriptor helpers.
 - [ ] Add `src/kits/phantom-command-profile-parity-report-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js`.
-- [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
+- [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()` after fixture proof exists.
 - [ ] Add `tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Fixture proves profile build id parity.
 - [ ] Fixture proves ring count parity.
@@ -56,24 +58,31 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
    - mirror current game.html constants exactly
    - export normalizeSmoothHandoffProfile()
 
-2. Fingerprint and snapshot second
+2. Ring and piece descriptors second
+   - create ring descriptor kit
+   - create piece descriptor kit
+   - preserve zero gaps, exact part counts, and 92 pieces
+
+3. Timeline contract third
+   - create handoff/timeline contract kit
+   - prove ringStartTimes, part delays, moveSeconds, ringHandoff, partStagger, and totalBuildSeconds
+
+4. Fingerprint and snapshot fourth
    - create source-profile fingerprint kit
    - create source-profile snapshot kit
    - ensure stable JSON output
 
-3. Descriptor parity third
-   - create ring descriptor kit
-   - create piece descriptor kit
-   - create handoff/timing descriptor kit
+5. Descriptor parity fifth
+   - create profile parity report kit
    - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
 
-4. GameHost additive diagnostics fourth
+6. GameHost additive diagnostics sixth
    - keep skipConstruct
    - keep restartConstruct
    - keep legacy getState fields
    - add nested sourceProfile diagnostics only
 
-5. DOM-free fixture fifth
+7. DOM-free fixture seventh
    - fixture imports source modules only
    - fixture does not import game.html, DOM, canvas, or Three.js
    - fixture validates source profile parity rows
