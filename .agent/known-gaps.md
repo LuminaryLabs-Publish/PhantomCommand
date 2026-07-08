@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T18-29-21-04-00`
+**Timestamp:** `2026-07-08T18-41-41-04-00`
 
 ## Critical source-profile gaps
 
@@ -24,6 +24,7 @@
 - There is no DOM-free fixture proving total build seconds 19.923.
 - GameHost does not yet expose sourceProfile, profileFingerprint, sourceSnapshot, descriptor parity, timing parity, or fixture status.
 - game.html has no additive consumer splice for source-profile diagnostics.
+- Central ledger and repo-local root agent state can drift unless the next fixture gate includes a ledger readback row.
 ```
 
 ## Fixture acceptance gaps
@@ -34,6 +35,7 @@
 - Fixture rows do not yet prove the browser route consumes the same source profile.
 - Fixture rows do not yet assert legacy GameHost shape compatibility.
 - Fixture rows do not yet block scenario bootstrap until construct source parity passes.
+- Fixture rows do not yet assert central ledger/readback alignment with the latest repo-local tracker.
 - npm run build does not yet include the source-profile fixture.
 ```
 
@@ -52,11 +54,12 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now the Source Profile Fixture Row Acceptance + GameHost Readback Gate.
+- The immediate next ledge is now Source Profile Fixture Manifest + Central Ledger Sync Gate.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
 - game.html must consume source-profile diagnostics only after DOM-free fixture proof.
+- The central ledger should be updated in the same pass as repo-local .agent docs and should point at the same latest tracker.
 - Construct result authority must happen before scenario bootstrap.
 - Scenario bootstrap must stay blocked until construct_complete is emitted by a typed result.
 - The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until live profile parity fixtures exist.
@@ -94,6 +97,7 @@
 - Root .agent/known-gaps.md refreshed.
 - Root .agent/next-steps.md refreshed.
 - Root .agent/validation.md refreshed.
+- Root .agent/kit-registry.json refreshed.
 - Timestamped tracker added.
 - Timestamped turn-ledger entry added.
 - Architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits added.
