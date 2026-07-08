@@ -1,9 +1,13 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-07T23:09:45-04:00",
-  "status": "descriptor-fixture-matrix-bootstrap-result-gate-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-07T23-09-45-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T00:41:39-04:00",
+  "status": "construct-source-authority-scenario-bootstrap-fixture-gate-breakdown",
+  "sourceTracker": ".agent/trackers/2026-07-08T00-41-39-04-00/project-breakdown.md",
+  "automationContinuity": {
+    "continueRotation": true,
+    "doNotPauseScheduledTask": true
+  },
   "currentRuntime": {
     "type": "static-vite-three-app",
     "entrypoints": [
@@ -39,14 +43,15 @@
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "central ledger oldest eligible tracked Publish repo by latest review timestamp",
     "latestEligibleTimestampsChecked": {
-      "PhantomCommand": "2026-07-07T21:50:56-04:00",
-      "PrehistoricRush": "2026-07-07T21:59:06-04:00",
-      "MyCozyIsland": "2026-07-07T22:11:41-04:00",
-      "IntoTheMeadow": "2026-07-07T22:20:00-04:00",
-      "ZombieOrchard": "2026-07-07T22:31:24-04:00",
-      "HorrorCorridor": "2026-07-07T22:41:23-04:00",
-      "TheOpenAbove": "2026-07-07T22:50:39-04:00",
-      "AetherVale": "2026-07-07T22:59:19-04:00"
+      "PhantomCommand": "2026-07-07T23:09:45-04:00",
+      "PrehistoricRush": "2026-07-07T23:21:18-04:00",
+      "MyCozyIsland": "2026-07-07T23:31:44-04:00",
+      "IntoTheMeadow": "2026-07-07T23:40:40-04:00",
+      "ZombieOrchard": "2026-07-07T23:48:44-04:00",
+      "HorrorCorridor": "2026-07-08T00:00:20-04:00",
+      "TheUnmappedHouse": "2026-07-08T00:08:03-04:00",
+      "TheOpenAbove": "2026-07-08T00:21:15-04:00",
+      "AetherVale": "2026-07-08T00:28:42-04:00"
     }
   },
   "interactionLoops": {
@@ -75,6 +80,7 @@
     "targetSourceAuthorityLoop": [
       "load source-owned sequential-ring-v5 profile",
       "normalize construct profile values",
+      "emit source fingerprint and source snapshot",
       "emit ring descriptors matching live game.html math",
       "emit piece descriptors matching live game.html math",
       "emit delay and settle descriptors",
@@ -120,6 +126,8 @@
       "construct-profile-config",
       "construct-profile-normalization",
       "construct-profile-parity",
+      "construct-source-fingerprint",
+      "construct-source-snapshot",
       "construct-descriptor-authority",
       "ring-count-policy",
       "ring-width-policy",
@@ -237,6 +245,8 @@
     "nextNeeded": [
       "own live sequential-ring-v5 profile outside game.html",
       "normalize profile values",
+      "emit source fingerprint",
+      "emit source snapshot",
       "emit serializable ring descriptors",
       "emit serializable piece descriptors",
       "emit serializable delay and settle descriptors",
@@ -331,6 +341,8 @@
   ],
   "nextCutKits": [
     "phantom-command-source-construct-profile-kit",
+    "phantom-command-source-profile-fingerprint-kit",
+    "phantom-command-source-profile-snapshot-kit",
     "phantom-command-ring-descriptor-kit",
     "phantom-command-piece-descriptor-kit",
     "phantom-command-piece-delay-policy-kit",
@@ -344,9 +356,11 @@
     "phantom-command-construct-completion-idempotency-kit",
     "phantom-command-construct-event-journal-kit",
     "phantom-command-construct-snapshot-contract-kit",
+    "phantom-command-scenario-bootstrap-command-kit",
     "phantom-command-scenario-bootstrap-preflight-kit",
     "phantom-command-scenario-bootstrap-result-kit",
     "phantom-command-scenario-bootstrap-gate-kit",
+    "phantom-command-scenario-bootstrap-journal-kit",
     "phantom-command-scenario-bootstrap-snapshot-kit",
     "phantom-command-gamehost-construct-diagnostics-kit",
     "phantom-command-fixture-script-runner-kit",
@@ -384,7 +398,7 @@
     "phantom-command-command-journal-replay-kit"
   ],
   "recommendedNextSlice": {
-    "name": "PhantomCommand Descriptor Fixture Matrix + Bootstrap Result Gate",
+    "name": "PhantomCommand Construct Source Authority + Scenario Bootstrap Fixture Gate",
     "goal": "Preserve the live construct visuals while moving sequential-ring-v5 source authority, descriptor parity, construct completion result idempotency, scenario bootstrap gating, GameHost diagnostics, and replay smoke out of the inline game.html monolith.",
     "acceptance": [
       "index.html menu still routes to game.html",
