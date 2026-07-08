@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T02:50:33-04:00`
+**Timestamp:** `2026-07-08T04:40:21-04:00`
 
 ## Summary
 
@@ -8,24 +8,26 @@
 
 The repo has a useful generic `construct-spiral-intro-kit`, but the live scene still depends on a large inline runtime in `game.html` for the actual sequential-ring-v5 construct.
 
+This pass confirms the next highest-value internal-doc focus is not new RTS gameplay yet. The next cut should preserve the public construct visual while extracting source authority, descriptor parity, event results, scenario bootstrap gating, and DOM-free fixture replay.
+
 ## Selection audit
 
 Full `LuminaryLabs-Publish` repo list checked:
 
 ```txt
+IntoTheMeadow
 HorrorCorridor
 AetherVale
-TheOpenAbove
-TheCavalryOfRome  excluded by rule
-PhantomCommand      selected
-PrehistoricRush
 ZombieOrchard
-IntoTheMeadow
-MyCozyIsland
 TheUnmappedHouse
+MyCozyIsland
+TheOpenAbove
+PhantomCommand      selected by oldest eligible follow-up rotation
+TheCavalryOfRome   excluded by rule
+PrehistoricRush
 ```
 
-Central ledger state showed `PhantomCommand` was tracked, but root `.agent` audit entrypoints were missing in the publish repo.
+Central ledger state already tracks `PhantomCommand`, so this run treated it as a follow-up documentation pass rather than a first-time intake.
 
 ## Current interaction loop
 
@@ -147,17 +149,28 @@ construct-spiral-intro-kit
   -> expose schedule, pending, active, settled, newlyActive, and newlySettled pieces
 ```
 
-### Implemented smoke services
+### Needed fixture-gate services
 
 ```txt
-construct-spiral-intro-kit-smoke
-  -> assert kit id and domain path
-  -> install generated ring pieces
-  -> assert schedule ordering
-  -> tick until complete
-  -> assert active count cap
-  -> assert active ring window
-  -> assert all pieces settled
+source-owned sequential-ring-v5 profile
+source profile normalizer
+source fingerprint service
+source snapshot service
+ring descriptor generator
+piece descriptor generator
+transition margin descriptor generator
+profile parity report
+construct event envelope factory
+construct result reducer
+construct completion idempotency guard
+construct journal projector
+construct snapshot projector
+scenario bootstrap command factory
+scenario bootstrap preflight service
+scenario bootstrap result reducer
+scenario bootstrap snapshot projector
+legacy GameHost diagnostics adapter
+DOM-free fixture runner
 ```
 
 ## Current kits
@@ -184,8 +197,24 @@ inline-camera-navigation-runtime
 inline-gamehost-construct-runtime
 ```
 
+Next-cut local kits:
+
+```txt
+phantom-command-source-construct-profile-kit
+phantom-command-ring-descriptor-kit
+phantom-command-piece-descriptor-kit
+phantom-command-inner-first-timeline-contract-kit
+phantom-command-profile-parity-report-kit
+phantom-command-construct-event-result-kit
+phantom-command-construct-snapshot-contract-kit
+phantom-command-scenario-bootstrap-result-kit
+phantom-command-scenario-bootstrap-snapshot-kit
+phantom-command-gamehost-diagnostics-adapter-kit
+phantom-command-fixture-script-runner-kit
+```
+
 ## Main architectural read
 
 The current runtime is visually useful but source-authority weak.
 
-The most important cut is not more RTS content yet. The next cut should preserve the existing construct visual while moving profile, descriptors, timing, completion, bootstrap, and fixture replay out of `game.html` into stable data-first kits.
+The next implementation cut should not rework rendering first. It should create deterministic, DOM-free profile and result authority that exactly reproduces the live values now embedded in `game.html`: 10 rings, zero gaps, ring parts `[5,5,5,5,6,8,10,12,16,20]`, 92 pieces, `sequential-ring-v5`, and `GameHost` compatibility.
