@@ -1,9 +1,9 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T00:41:39-04:00",
-  "status": "construct-source-authority-scenario-bootstrap-fixture-gate-breakdown",
-  "sourceTracker": ".agent/trackers/2026-07-08T00-41-39-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T06:19:51-04:00",
+  "status": "smooth-ring-handoff-v6-source-authority-scenario-bootstrap-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T06-19-51-04-00/project-breakdown.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true
@@ -15,7 +15,7 @@
       "game.html"
     ],
     "buildScript": "node scripts/build-static.mjs",
-    "liveBuildId": "sequential-ring-v5",
+    "liveBuildId": "smooth-ring-handoff-v6",
     "expectedLiveRingCount": 10,
     "expectedLiveGapPolicy": "zero-gap",
     "expectedLiveRingPartCounts": [
@@ -31,34 +31,23 @@
       20
     ],
     "expectedLiveTotalPieces": 92,
-    "expectedLiveTotalBuildSeconds": 31.915,
+    "expectedLiveTotalBuildSeconds": 19.923,
     "currentGameHostSurface": [
       "window.GameHost.skipConstruct",
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live sequential-ring-v5 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove it with a DOM-free fixture matrix before full RTS gameplay expansion."
+    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove it with a DOM-free fixture matrix before full RTS gameplay expansion."
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "central ledger oldest eligible tracked Publish repo by latest review timestamp",
-    "latestEligibleTimestampsChecked": {
-      "PhantomCommand": "2026-07-07T23:09:45-04:00",
-      "PrehistoricRush": "2026-07-07T23:21:18-04:00",
-      "MyCozyIsland": "2026-07-07T23:31:44-04:00",
-      "IntoTheMeadow": "2026-07-07T23:40:40-04:00",
-      "ZombieOrchard": "2026-07-07T23:48:44-04:00",
-      "HorrorCorridor": "2026-07-08T00:00:20-04:00",
-      "TheUnmappedHouse": "2026-07-08T00:08:03-04:00",
-      "TheOpenAbove": "2026-07-08T00:21:15-04:00",
-      "AetherVale": "2026-07-08T00:28:42-04:00"
-    }
+    "reason": "tracked Publish repo follow-up selected because the internal docs and central ledger were stale against current game.html build evidence"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
       "load index.html menu",
       "route to game.html through Start or Open Scene",
-      "watch sequential-ring-v5 construct form around Grim Reaper Totem",
+      "watch smooth-ring-handoff-v6 construct form around Grim Reaper Totem",
       "pan with WASD or arrows",
       "zoom with mouse wheel",
       "skip with Space or Skip button",
@@ -68,24 +57,24 @@
     "currentRuntimeLoop": [
       "import Three.js from CDN",
       "initialize renderer, scene, fog, lights, camera, HUD, materials, and input state inline",
-      "define sequential-ring-v5 constants inline",
+      "define smooth-ring-handoff-v6 constants inline",
       "compute ten contiguous no-gap ring descriptors inline",
       "compute ring part counts from circumference inline",
       "create wedge meshes, seams, center disc, Grim Reaper Totem, and Phantom Commander inline",
-      "animate pieces by ringIndex * RING_STAGGER + partIndex * PART_STAGGER",
+      "animate pieces by ringStartTimes and partIndex * PART_STAGGER",
       "mutate HUD from construct(seq)",
       "handle pan, zoom, skip, restart, resize, and blur",
       "publish construct-only GameHost state"
     ],
     "targetSourceAuthorityLoop": [
-      "load source-owned sequential-ring-v5 profile",
+      "load source-owned smooth-ring-handoff-v6 profile",
       "normalize construct profile values",
       "emit source fingerprint and source snapshot",
       "emit ring descriptors matching live game.html math",
       "emit piece descriptors matching live game.html math",
       "emit delay and settle descriptors",
       "emit transition margin descriptors",
-      "validate zero gaps, live ring part counts, 92 total pieces, 31.915 total build seconds, and positive inner-first timing margins",
+      "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
       "feed descriptors back into current visual construct runtime without changing visuals"
     ],
     "targetResultLoop": [
@@ -121,7 +110,7 @@
       "inline-construct-runtime"
     ],
     "constructSource": [
-      "sequential-ring-v5-profile",
+      "smooth-ring-handoff-v6-profile",
       "construct-source-authority",
       "construct-profile-config",
       "construct-profile-normalization",
@@ -172,7 +161,7 @@
       "construct-profile-parity-smoke",
       "ring-descriptor-parity-smoke",
       "piece-descriptor-parity-smoke",
-      "inner-first-timeline-smoke",
+      "handoff-timeline-smoke",
       "construct-event-reducer-smoke",
       "construct-snapshot-smoke",
       "scenario-bootstrap-gate-smoke",
@@ -243,7 +232,7 @@
       "assert all pieces settled"
     ],
     "nextNeeded": [
-      "own live sequential-ring-v5 profile outside game.html",
+      "own live smooth-ring-handoff-v6 profile outside game.html",
       "normalize profile values",
       "emit source fingerprint",
       "emit source snapshot",
@@ -253,8 +242,8 @@
       "emit serializable timeline margin descriptors",
       "prove zero gaps and live part-count parity",
       "prove 92 total pieces",
-      "prove total build seconds 31.915",
-      "prove inner-first ring timing with positive transition margins",
+      "prove total build seconds 19.923",
+      "prove handoff timing with stable margin descriptors",
       "emit accepted and rejected construct event envelopes",
       "emit construct event results",
       "emit construct_complete exactly once",
@@ -300,7 +289,7 @@
         "dt tick source"
       ],
       "blockers": [
-        "Default spiral/window schedule is not the live sequential-ring-v5 no-gap inner-first profile."
+        "Default spiral/window schedule is not the live smooth-ring-handoff-v6 no-gap handoff profile."
       ]
     },
     {
@@ -323,12 +312,12 @@
         "construct-spiral-intro-kit"
       ],
       "blockers": [
-        "Does not validate live sequential-ring-v5 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, inner-first timing margins, construct_complete, bootstrap preflight, or GameHost shape."
+        "Does not validate live smooth-ring-handoff-v6 constants, zero gaps, live ring widths, live part counts, total pieces, total build seconds, handoff timing margins, construct_complete, bootstrap preflight, or GameHost shape."
       ]
     }
   ],
   "inlineRuntimeKitsToExtract": [
-    "inline-sequential-ring-v5-profile",
+    "inline-smooth-ring-handoff-v6-profile",
     "inline-ring-descriptor-runtime",
     "inline-piece-descriptor-runtime",
     "inline-piece-delay-runtime",
@@ -340,14 +329,14 @@
     "inline-gamehost-construct-runtime"
   ],
   "nextCutKits": [
-    "phantom-command-source-construct-profile-kit",
+    "phantom-command-smooth-handoff-profile-kit",
     "phantom-command-source-profile-fingerprint-kit",
     "phantom-command-source-profile-snapshot-kit",
     "phantom-command-ring-descriptor-kit",
     "phantom-command-piece-descriptor-kit",
     "phantom-command-piece-delay-policy-kit",
     "phantom-command-piece-settle-policy-kit",
-    "phantom-command-inner-first-timeline-contract-kit",
+    "phantom-command-handoff-timeline-contract-kit",
     "phantom-command-ring-transition-margin-kit",
     "phantom-command-profile-parity-report-kit",
     "phantom-command-construct-event-envelope-kit",
@@ -367,7 +356,7 @@
     "phantom-command-construct-profile-parity-fixture-kit",
     "phantom-command-ring-descriptor-parity-smoke-kit",
     "phantom-command-piece-descriptor-parity-smoke-kit",
-    "phantom-command-inner-first-timeline-smoke-kit",
+    "phantom-command-handoff-timeline-smoke-kit",
     "phantom-command-construct-event-reducer-smoke-kit",
     "phantom-command-construct-snapshot-smoke-kit",
     "phantom-command-scenario-bootstrap-gate-smoke-kit",
@@ -398,21 +387,21 @@
     "phantom-command-command-journal-replay-kit"
   ],
   "recommendedNextSlice": {
-    "name": "PhantomCommand Construct Source Authority + Scenario Bootstrap Fixture Gate",
-    "goal": "Preserve the live construct visuals while moving sequential-ring-v5 source authority, descriptor parity, construct completion result idempotency, scenario bootstrap gating, GameHost diagnostics, and replay smoke out of the inline game.html monolith.",
+    "name": "PhantomCommand Smooth Ring Handoff V6 Source Authority + Scenario Bootstrap Fixture Gate",
+    "goal": "Preserve the live construct visuals while moving smooth-ring-handoff-v6 source authority, descriptor parity, construct completion result idempotency, scenario bootstrap gating, GameHost diagnostics, and replay smoke out of the inline game.html monolith.",
     "acceptance": [
       "index.html menu still routes to game.html",
-      "game.html visual output remains sequential-ring-v5",
+      "game.html visual output remains smooth-ring-handoff-v6",
       "window.GameHost.skipConstruct remains available",
       "window.GameHost.restartConstruct remains available",
       "window.GameHost.getState remains available",
-      "profile reports buildId sequential-ring-v5",
+      "profile reports buildId smooth-ring-handoff-v6",
       "profile reports ringCount 10",
       "ring descriptors report zero gaps",
       "ring descriptors report [5,5,5,5,6,8,10,12,16,20]",
       "piece descriptors report 92 pieces",
-      "timing descriptors report totalBuildSeconds 31.915",
-      "every ring transition reports positive marginSeconds",
+      "timing descriptors report totalBuildSeconds 19.923",
+      "handoff descriptors report RING_HANDOFF 0.72 and PART_STAGGER 0.025",
       "first construct_complete is accepted",
       "duplicate construct_complete is rejected with duplicate_construct_complete",
       "bootstrap before completion is rejected with construct_incomplete",
