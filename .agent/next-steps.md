@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T04:40:21-04:00`
+**Timestamp:** `2026-07-08T06:19:51-04:00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Construct Source Authority + Scenario Bootstrap Fixture Gate
+PhantomCommand Smooth Ring Handoff V6 Source Authority + Scenario Bootstrap Fixture Gate
 ```
 
 ## Goal
@@ -15,15 +15,15 @@ Preserve the current live visual while moving source authority, descriptor parit
 ## Checklist
 
 - [ ] Keep `index.html -> game.html` routing unchanged.
-- [ ] Keep visible sequential-ring-v5 construct behavior unchanged.
-- [ ] Add a source-owned sequential-ring-v5 profile outside `game.html`.
+- [ ] Keep visible `smooth-ring-handoff-v6` construct behavior unchanged.
+- [ ] Add a source-owned `smooth-ring-handoff-v6` profile outside `game.html`.
 - [ ] Add profile normalization.
 - [ ] Add a source fingerprint service.
 - [ ] Add a source snapshot service.
 - [ ] Add ring descriptor generation from the source profile.
 - [ ] Add piece descriptor generation from the ring descriptors.
 - [ ] Add delay and settle descriptor generation.
-- [ ] Add transition-margin descriptors proving inner-first timing.
+- [ ] Add handoff/margin descriptors proving current timing parity.
 - [ ] Add a parity report for ring count, gaps, part counts, total pieces, and total build seconds.
 - [ ] Add ConstructEventEnvelope.
 - [ ] Add ConstructEventResult.
@@ -42,7 +42,7 @@ Preserve the current live visual while moving source authority, descriptor parit
 - [ ] Add DOM-free fixture smoke for profile parity.
 - [ ] Add DOM-free fixture smoke for ring descriptors.
 - [ ] Add DOM-free fixture smoke for piece descriptors.
-- [ ] Add DOM-free fixture smoke for inner-first timeline margins.
+- [ ] Add DOM-free fixture smoke for handoff/timeline margins.
 - [ ] Add DOM-free fixture smoke for construct completion idempotency.
 - [ ] Add DOM-free fixture smoke for scenario bootstrap gating.
 - [ ] Add DOM-free fixture smoke for snapshot shape.
@@ -52,7 +52,7 @@ Preserve the current live visual while moving source authority, descriptor parit
 
 ```txt
 1. Source profile first
-   - create phantom-command-source-construct-profile-kit
+   - create phantom-command-smooth-handoff-profile-kit
    - mirror current game.html constants exactly
    - expose normalized profile and fingerprint
 
@@ -60,7 +60,7 @@ Preserve the current live visual while moving source authority, descriptor parit
    - derive rings from the profile
    - derive pieces from rings
    - derive timing and transition margins
-   - prove 10 rings, zero gaps, 92 pieces, and 31.915 seconds
+   - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
 
 3. Event authority third
    - create construct_complete envelope/result/reducer
@@ -94,17 +94,17 @@ Preserve the current live visual while moving source authority, descriptor parit
 
 ```txt
 index.html still routes to game.html
-game.html visual output remains sequential-ring-v5
+game.html visual output remains smooth-ring-handoff-v6
 window.GameHost.skipConstruct remains available
 window.GameHost.restartConstruct remains available
 window.GameHost.getState remains available
-profile reports buildId sequential-ring-v5
+profile reports buildId smooth-ring-handoff-v6
 profile reports ringCount 10
 ring descriptors report zero gaps
 ring descriptors report [5,5,5,5,6,8,10,12,16,20]
 piece descriptors report 92 pieces
-timing descriptors report totalBuildSeconds 31.915
-every ring transition reports positive marginSeconds
+timing descriptors report totalBuildSeconds 19.923
+handoff descriptors report RING_HANDOFF 0.72 and PART_STAGGER 0.025
 first construct_complete is accepted
 duplicate construct_complete is rejected with duplicate_construct_complete
 bootstrap before completion is rejected with construct_incomplete
