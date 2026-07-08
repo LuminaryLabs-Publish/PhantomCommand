@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T12-41-31-04-00`
+**Last aligned:** `2026-07-08T14-08-24-04-00`
 
 ## Purpose
 
@@ -14,25 +14,25 @@ Read this file before changing runtime code.
 
 The full accessible `LuminaryLabs-Publish` repository list was compared against tracked repo-ledger state in `LuminaryLabs-Dev/LuminaryLabs`.
 
-No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, or missing sampled root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, absent from the central ledger, undocumented, recently added but undocumented, or missing sampled root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected as the oldest eligible fallback because its previous central follow-up was older than the sampled non-Cavalry Publish repos, and the current public route still needs source-profile ownership before scenario bootstrap or RTS gameplay expansion.
+`PhantomCommand` was selected as the oldest eligible fallback because its previous root alignment was older than the sampled non-Cavalry Publish repos, and the current public route still needs source-profile module ownership before scenario bootstrap or RTS gameplay expansion.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled follow-up 2026-07-08T12:01:23-04:00
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled follow-up 2026-07-08T12:29:17-04:00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled follow-up 2026-07-08T12:21:20-04:00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:40:00-04:00
-LuminaryLabs-Publish/PhantomCommand      selected fallback / previous central update 2026-07-08T10:58:46-04:00
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled follow-up 2026-07-08T12:09:27-04:00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest sampled alignment 2026-07-08T13-39-15-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest sampled alignment 2026-07-08T13-59-50-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest sampled alignment 2026-07-08T13-50-37-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest sampled alignment 2026-07-08T13-11-07-04-00
+LuminaryLabs-Publish/PhantomCommand      selected fallback / previous root alignment 2026-07-08T12-41-31-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest sampled alignment 2026-07-08T13-18-13-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled follow-up 2026-07-08T11:49:04-04:00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled follow-up 2026-07-08T11:28:38-04:00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled follow-up 2026-07-08T11:19:53-04:00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest sampled alignment 2026-07-08T13-31-29-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest sampled alignment 2026-07-08T12-59-11-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest sampled alignment 2026-07-08T12-51-50-04-00
 ```
 
 ## Current product read
@@ -82,16 +82,16 @@ open index.html
   -> visual phase becomes command online
 ```
 
-## Target source-profile boundary loop
+## Target source-profile module loop
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
   -> normalized profile
-  -> source fingerprint
-  -> source snapshot
   -> ring descriptors
   -> piece descriptors
-  -> timing descriptors
+  -> handoff/timeline descriptors
+  -> source fingerprint
+  -> source snapshot
   -> profile parity report
   -> additive GameHost source diagnostics
   -> DOM-free source-profile fixture
@@ -106,13 +106,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/next-steps.md
 .agent/validation.md
 .agent/architecture-audit/domain-service-breakdown.md
-.agent/architecture-audit/2026-07-08T12-41-31-04-00-dsk-domain-breakdown.md
+.agent/architecture-audit/2026-07-08T14-08-24-04-00-source-profile-module-dsk-map.md
 .agent/render-audit/construct-render-audit.md
-.agent/render-audit/2026-07-08T12-41-31-04-00-gamehost-source-profile-readback.md
+.agent/render-audit/2026-07-08T14-08-24-04-00-gamehost-source-diagnostics-readback.md
 .agent/gameplay-audit/construct-to-rts-gap.md
-.agent/scenario-bootstrap-audit/2026-07-08T12-41-31-04-00-source-profile-implementation-boundary.md
-.agent/trackers/2026-07-08T12-41-31-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T12-41-31-04-00.md
+.agent/gameplay-audit/2026-07-08T14-08-24-04-00-construct-completion-source-profile-loop.md
+.agent/source-profile-audit/2026-07-08T14-08-24-04-00-module-fixture-implementation-map.md
+.agent/trackers/2026-07-08T14-08-24-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T14-08-24-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -138,7 +139,7 @@ The repo should prove the PhantomCommand game slice. Extract reusable construct,
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Source Profile Implementation Boundary
+PhantomCommand Source Profile Module Fixture Map
 ```
 
 Keep `index.html -> game.html`, the `smooth-ring-handoff-v6` visual, and `window.GameHost.skipConstruct/restartConstruct/getState` stable while adding source-profile modules, descriptor parity, source fingerprints, source snapshots, additive GameHost diagnostics, and a DOM-free source-profile fixture. Do not start scenario bootstrap reducers until this source-profile boundary passes.
