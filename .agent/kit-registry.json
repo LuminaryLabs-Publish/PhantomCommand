@@ -1,12 +1,14 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T09:19:43-04:00",
-  "status": "source-profile-construct-scenario-result-wire-map-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T09-19-43-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-08T10-58-46-04-00",
+  "status": "construct-scenario-acceptance-matrix-planned",
+  "sourceTracker": ".agent/trackers/2026-07-08T10-58-46-04-00/project-breakdown.md",
   "automationContinuity": {
     "continueRotation": true,
-    "doNotPauseScheduledTask": true
+    "doNotPauseScheduledTask": true,
+    "onlyPushMain": true,
+    "doNotCreateBranches": true
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -37,7 +39,7 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove it with a DOM-free fixture matrix before full RTS gameplay expansion."
+    "primaryGap": "game.html still owns the live smooth-ring-handoff-v6 profile, ring descriptors, piece descriptors, delay and settle policy, animation, HUD, camera, construct completion phase, and construct-only GameHost inline. The next cut should source-own descriptor parity, add ConstructEventResult idempotency, expose ConstructSnapshot and ScenarioBootstrapSnapshot, and prove the construct-to-scenario acceptance matrix with DOM-free fixtures before full RTS gameplay expansion."
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
@@ -138,15 +140,19 @@
     ],
     "fixtures": [
       "fixture-script-runner",
-      "construct-profile-parity-smoke",
-      "ring-descriptor-parity-smoke",
-      "piece-descriptor-parity-smoke",
-      "handoff-timeline-smoke",
-      "construct-event-reducer-smoke",
-      "construct-snapshot-smoke",
-      "scenario-bootstrap-gate-smoke",
-      "gamehost-diagnostics-smoke",
-      "legacy-gamehost-compatibility-smoke"
+      "profile-parity-fixture",
+      "ring-parity-fixture",
+      "piece-parity-fixture",
+      "timeline-parity-fixture",
+      "construct-idempotency-fixture",
+      "construct-reset-fixture",
+      "construct-skip-fixture",
+      "scenario-early-reject-fixture",
+      "scenario-accepted-fixture",
+      "scenario-duplicate-reject-fixture",
+      "scenario-unknown-reject-fixture",
+      "snapshot-shape-fixture",
+      "gamehost-shape-fixture"
     ],
     "deferredRts": [
       "undead-roster",
@@ -295,5 +301,20 @@
     "phantom-command-gamehost-diagnostics-adapter-kit",
     "phantom-command-fixture-script-runner-kit"
   ],
-  "nextSafeLedge": "PhantomCommand Source Profile + Construct/Scenario Result Wire Map"
+  "acceptanceMatrix": [
+    "profile-parity",
+    "ring-parity",
+    "piece-parity",
+    "timeline-parity",
+    "construct-idempotency",
+    "construct-reset",
+    "construct-skip",
+    "scenario-early-reject",
+    "scenario-accepted",
+    "scenario-duplicate-reject",
+    "scenario-unknown-reject",
+    "snapshot-shape",
+    "gamehost-shape"
+  ],
+  "nextSafeLedge": "PhantomCommand Construct Scenario Acceptance Matrix"
 }
