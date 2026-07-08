@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T14-08-24-04-00`
+**Timestamp:** `2026-07-08T15-58-59-04-00`
 
 ## Validation performed in this pass
 
@@ -8,7 +8,7 @@
 - Compared accessible LuminaryLabs-Publish repo set against central LuminaryLabs-Dev/LuminaryLabs ledger/readback state.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as oldest eligible fallback because source profile parity, construct completion results, and scenario bootstrap remain untyped authority seams.
+- Selected PhantomCommand as oldest eligible fallback because source-profile consumer splice remains unresolved.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -21,10 +21,10 @@
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T14-08-24-04-00-source-profile-module-dsk-map.md.
-- Added render-audit/2026-07-08T14-08-24-04-00-gamehost-source-diagnostics-readback.md.
-- Added gameplay-audit/2026-07-08T14-08-24-04-00-construct-completion-source-profile-loop.md.
-- Added source-profile-audit/2026-07-08T14-08-24-04-00-module-fixture-implementation-map.md.
+- Added architecture-audit/2026-07-08T15-58-59-04-00-source-profile-consumer-dsk-breakdown.md.
+- Added render-audit/2026-07-08T15-58-59-04-00-gamehost-source-consumer-readback.md.
+- Added gameplay-audit/2026-07-08T15-58-59-04-00-construct-to-bootstrap-consumer-gate.md.
+- Added source-profile-audit/2026-07-08T15-58-59-04-00-consumer-splice-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -102,10 +102,11 @@ ring_part_counts_match_live_array
 piece_descriptor_count_matches_92
 timeline_total_build_seconds_matches_19_923
 handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025
-profile_snapshot_is_serializable
-profile_fingerprint_is_stable
+ring_start_times_match_live_formula
+source_snapshot_is_serializable
+source_fingerprint_is_stable
 profile_parity_report_has_no_errors
-gamehost_additive_diagnostics_keep_legacy_surface
+gamehost_source_diagnostics_shape_is_additive
 fixture_runs_without_dom_canvas_or_three
 ```
 
