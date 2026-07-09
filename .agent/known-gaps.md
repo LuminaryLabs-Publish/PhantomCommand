@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T04-50-00-04-00`
+**Timestamp:** `2026-07-09T07-10-00-04-00`
 
 ## Critical source-profile gaps
 
@@ -67,21 +67,10 @@
 - There is no render-source parity snapshot tying the visible build to the source profile.
 ```
 
-## Gameplay/system gaps
-
-```txt
-- The current player loop is a construct-viewer loop, not yet an RTS command loop.
-- The Phantom Commander exists as a visual figure only.
-- The Grim Reaper Totem exists as a visual totem only.
-- Necropolis, units, resources, enemies, waves, objectives, and progression are still deferred domains.
-- No scenario bootstrap gate safely transitions from construct_complete to a playable RTS slice.
-- No command journal replay contract exists for the construct -> RTS transition.
-```
-
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate.
+- The immediate next ledge is now SourceProfile Ledger Catch-up + Fixture Build Consumer Gate.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
