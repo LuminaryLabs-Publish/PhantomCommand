@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T10-20-44-04-00`
+**Timestamp:** `2026-07-09T10-29-02-04-00`
 
 ## Summary
 
@@ -8,24 +8,24 @@
 
 The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Ledger Parity + Build Gate Readback**.
 
 ## Selection audit
 
 ```txt
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
 LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T09-59-27-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T08-50-00-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
-LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T07-19-41-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
 LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T07-41-29-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T08-02-33-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T10-20-44-04-00
+LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
 ```
 
-No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, or otherwise undocumented.
+No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
 
 ## Current interaction loop
 
@@ -74,6 +74,7 @@ game.html:
   START_HEIGHT_BASE: 24
   ringParts: [5,5,5,5,6,8,10,12,16,20]
   totalPieces: 92
+  totalBuildSeconds: 19.923
   GameHost: skipConstruct, restartConstruct, getState
 
 construct-spiral-intro-kit:
@@ -120,6 +121,7 @@ gamehost-source-diagnostics
 gamehost-source-profile-readback
 gamehost-legacy-compatibility
 central-ledger-readback
+repo-local-agent-pointer-parity
 fixture-build-integration
 fixture-before-static-artifact
 construct-event-envelope-deferred
@@ -271,5 +273,5 @@ Scenario bootstrap, undead unit commands, economy, buildings, wave control, and 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture
+PhantomCommand SourceProfile Ledger Parity + Build Gate Readback
 ```
