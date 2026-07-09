@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T12-55-20-04-00`
+**Timestamp:** `2026-07-09T13-00-37-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Fixture Pointer Freeze + Build Gate Readback
+PhantomCommand SourceProfile Ledger Repair + Consumer Fixture Gate
 ```
 
 ## Goal
@@ -60,63 +60,35 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
+- [ ] Push only to `main`.
 
-## Recommended build order
+## Stop condition
+
+Stop the implementation slice only after these are fixture-readable:
 
 ```txt
-1. Source profile first
-   - create src/kits/phantom-command-smooth-handoff-profile-kit/index.js
-   - mirror current game.html constants exactly
-   - export normalizeSmoothHandoffProfile()
-
-2. Ring and piece descriptors second
-   - create ring descriptor kit
-   - create piece descriptor kit
-   - preserve zero gaps, exact part counts, and 92 pieces
-
-3. Timeline contract third
-   - create handoff/timeline contract kit
-   - prove ringStartTimes, part delays, moveSeconds, ringHandoff, partStagger, and totalBuildSeconds
-
-4. Fingerprint and snapshot fourth
-   - create source-profile fingerprint kit
-   - create source-profile snapshot kit
-   - ensure stable JSON output
-
-5. Descriptor parity fifth
-   - create profile parity report kit
-   - prove 10 rings, zero gaps, 92 pieces, and 19.923 seconds
-
-6. GameHost source diagnostics sixth
-   - keep skipConstruct
-   - keep restartConstruct
-   - keep legacy getState fields
-   - prepare nested sourceProfile diagnostics only
-
-7. DOM-free fixture seventh
-   - fixture imports source modules only
-   - fixture does not import game.html, DOM, canvas, or Three.js
-   - fixture validates source profile parity rows
-
-8. Consumer splice eighth
-   - import GameHost diagnostics adapter into game.html
-   - add sourceProfile readback under GameHost only
-   - keep visible scene unchanged
-
-9. Build gate ninth
-   - add check script
-   - make build run fixture before static copy
-   - only then treat Pages artifact as source-profile validated
+sourceProfile.buildId === smooth-ring-handoff-v6
+sourceProfile.ringCount === 10
+sourceProfile.ringGapBase === 0
+sourceProfile.ringGapGrowth === 0
+sourceProfile.ringPartCounts === [5,5,5,5,6,8,10,12,16,20]
+sourceProfile.totalPieces === 92
+sourceProfile.totalBuildSeconds === 19.923
+sourceProfile.ringStartTimes match legacy GameHost values
+profileParity.errors.length === 0
+legacy GameHost fields still exist
+constructResult remains deferred
+scenarioBootstrap remains deferred
 ```
 
-## Do not do next
+## Defer until after proof
 
 ```txt
-Do not start RTS gameplay.
-Do not add units.
-Do not add enemy AI.
-Do not add scenario bootstrap yet.
-Do not rewrite the visual construct.
-Do not replace the current GameHost fields.
-Do not create a branch.
+scenario bootstrap
+RTS controls
+resource economy
+renderer extraction
+camera rewrite
+unit control
+new visual pass
 ```
