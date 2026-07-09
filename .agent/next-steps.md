@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T04-24-06-04-00`
+**Timestamp:** `2026-07-09T04-38-39-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate
+PhantomCommand SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback
 ```
 
 ## Goal
@@ -14,7 +14,7 @@ Preserve the current live visual while moving the live `smooth-ring-handoff-v6` 
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
 
-Construct result authority should remain a documented precondition map until sourceProfile parity is proven.
+Construct result authority should remain a documented precondition map until sourceProfile parity and legacy GameHost consumer readback are proven.
 
 ## Checklist
 
@@ -55,6 +55,7 @@ Construct result authority should remain a documented precondition map until sou
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
 - [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
 - [ ] Add fixture script to validation path only after it exists and passes locally.
+- [ ] Ensure `npm run build` runs source-profile fixture proof before copying static artifacts.
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
@@ -104,7 +105,7 @@ Construct result authority should remain a documented precondition map until sou
 9. Fixture build integration ninth
    - wire the fixture into npm run build only after it passes standalone
    - keep current static-copy build behavior intact
-   - fail build on profile, descriptor, snapshot, or GameHost source diagnostic parity errors
+   - fail build on profile, descriptor, snapshot, or GameHost source diagnostic parity errors before static copy
 
 10. Central ledger sync tenth
    - ensure repo-local tracker, kit registry, and central repo-ledger all name the same latest source-profile fixture gate
