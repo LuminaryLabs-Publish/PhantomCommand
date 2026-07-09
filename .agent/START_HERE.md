@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T01-20-59-04-00`
+**Last aligned:** `2026-07-09T01-28-10-04-00`
 
 ## Purpose
 
@@ -18,16 +18,16 @@ No checked non-Cavalry Publish repo was fully new, absent from central tracking,
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible tracked fallback. Its previous central alignment was `2026-07-08T22-58-02-04-00`, older than the other checked non-excluded repos in this run.
+`PhantomCommand` was selected because the central ledger was stale at `2026-07-08T22-58-02-04-00` while repo-local `.agent` state had already advanced to `2026-07-09T01-20-59-04-00`. This pass refreshes repo-local docs and brings central tracking forward to the same SourceProfile consumer/readback gate.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-00-22-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-09-24-04-00
 LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-09T00-00-41-04-00
 LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-09T00-40-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T22-58-02-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / central ledger catch-up from 2026-07-08T22-58-02-04-00 and repo-local 2026-07-09T01-20-59-04-00
 LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-09T00-09-22-04-00
 LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T23-40-55-04-00
 LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-09T00-50-00-04-00
@@ -47,7 +47,7 @@ index.html
   -> inline smooth-ring-handoff-v6 construct scene
 ```
 
-The current player loop is still a construct-viewer loop: open menu, enter the construct scene, watch the stone platform assemble, pan/zoom, skip/restart, and stop at `command online`.
+The current player loop is a construct-viewer loop: open menu, enter the construct scene, watch the stone platform assemble, pan/zoom, skip/restart, and stop at `command online`.
 
 ## Current interaction loop
 
@@ -81,11 +81,11 @@ source-owned smooth-ring-handoff-v6 profile
   -> createPhantomCommandSourceSnapshot
   -> createPhantomCommandProfileParityReport
   -> createGameHostSourceProfileDiagnostics
+  -> central ledger latest-tracker readback
   -> DOM-free sourceProfile fixture rows
   -> package build fixture execution
   -> game.html additive sourceProfile consumer readback
   -> legacy GameHost compatibility proof
-  -> central ledger pointer parity proof
   -> ConstructEventEnvelope stays blocked until sourceProfile parity passes
   -> ConstructEventResult idempotency gate remains blocked until sourceProfile proof exists
   -> scenario bootstrap remains deferred
@@ -98,14 +98,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-build-readback-dsk-map.md
-.agent/render-audit/2026-07-09T01-20-59-04-00-gamehost-sourceprofile-readback-contract.md
-.agent/gameplay-audit/2026-07-09T01-20-59-04-00-construct-result-blocker-loop.md
-.agent/source-profile-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-row-acceptance-map.md
-.agent/scenario-bootstrap-audit/2026-07-09T01-20-59-04-00-bootstrap-remains-blocked-by-sourceprofile.md
-.agent/deploy-audit/2026-07-09T01-20-59-04-00-fixture-build-script-wire-map.md
-.agent/trackers/2026-07-09T01-20-59-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T01-20-59-04-00.md
+.agent/architecture-audit/2026-07-09T01-28-10-04-00-central-sourceprofile-ledger-freeze-dsk-map.md
+.agent/render-audit/2026-07-09T01-28-10-04-00-gamehost-sourceprofile-consumer-freeze.md
+.agent/gameplay-audit/2026-07-09T01-28-10-04-00-construct-result-sourceprofile-precondition.md
+.agent/source-profile-audit/2026-07-09T01-28-10-04-00-central-ledger-fixture-row-freeze.md
+.agent/scenario-bootstrap-audit/2026-07-09T01-28-10-04-00-bootstrap-precondition-freeze.md
+.agent/deploy-audit/2026-07-09T01-28-10-04-00-sourceprofile-build-gate-central-sync.md
+.agent/trackers/2026-07-09T01-28-10-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T01-28-10-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -145,7 +145,7 @@ Do not add scenario bootstrap, unit control, economy, wave, objective, or render
 ## Current next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate
+PhantomCommand Central SourceProfile Ledger Freeze + GameHost Consumer Fixture Gate
 ```
 
-Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, fixture build invocation, and construct-result/scenario-bootstrap precondition blockers.
+Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, fixture build invocation, and central ledger latest-tracker/readback parity.
