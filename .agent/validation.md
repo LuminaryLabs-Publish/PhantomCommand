@@ -1,16 +1,17 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T12-55-20-04-00`
+**Timestamp:** `2026-07-09T13-00-37-04-00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
+- Sampled repo-local .agent/START_HERE.md state for checked non-Cavalry repos.
 - Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, recently added but undocumented, or otherwise undocumented.
-- Confirmed PhantomCommand had repo-local .agent state at 2026-07-09T12-50-00-04-00 while central tracking still pointed at 2026-07-09T10-29-02-04-00.
+- Confirmed PhantomCommand had repo-local .agent state at 2026-07-09T12-55-20-04-00 while central tracking still pointed at 2026-07-09T12-38-16-04-00.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as the central-ledger stale fallback.
+- Selected PhantomCommand as the repo-local/central documentation consistency target.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -18,21 +19,19 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
-- Read index.html.
 - Read game.html.
-- Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T12-55-20-04-00-sourceprofile-fixture-pointer-freeze-dsk-map.md.
-- Added render-audit/2026-07-09T12-55-20-04-00-gamehost-sourceprofile-consumer-readback.md.
-- Added gameplay-audit/2026-07-09T12-55-20-04-00-construct-result-bootstrap-blocker-loop.md.
-- Added source-profile-audit/2026-07-09T12-55-20-04-00-live-profile-fixture-pointer-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T12-55-20-04-00-bootstrap-blocked-by-sourceprofile-fixture.md.
-- Added deploy-audit/2026-07-09T12-55-20-04-00-build-fixture-before-pages-map.md.
+- Added architecture-audit/2026-07-09T13-00-37-04-00-sourceprofile-ledger-repair-dsk-map.md.
+- Added render-audit/2026-07-09T13-00-37-04-00-gamehost-sourceprofile-consumer-map.md.
+- Added gameplay-audit/2026-07-09T13-00-37-04-00-construct-result-deferral-loop.md.
+- Added source-profile-audit/2026-07-09T13-00-37-04-00-live-profile-parity-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T13-00-37-04-00-bootstrap-remains-blocked.md.
+- Added deploy-audit/2026-07-09T13-00-37-04-00-sourceprofile-fixture-build-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
-- Updated central repo ledger with latest follow-up state.
+- Updated central repo ledger with latest state.
 - Added central internal change-log entry.
 ```
 
@@ -57,10 +56,6 @@ package/source readback declares:
 - npm run build calls node scripts/build-static.mjs.
 - vite dev/start/preview run on port 4173.
 
-index.html declares:
-- Start button routes to game.html.
-- Open Scene link routes to game.html.
-
 game.html declares:
 - BUILD_ID smooth-ring-handoff-v6
 - RING_COUNT 10
@@ -74,45 +69,23 @@ game.html declares:
 - inline construct(seq) progress and phase mutation
 - window.GameHost.skipConstruct
 - window.GameHost.restartConstruct
-- window.GameHost.getState
-
-construct-spiral-intro-kit declares:
-- CONSTRUCT_SPIRAL_INTRO_KIT_ID construct-spiral-intro-kit
-- CONSTRUCT_SPIRAL_INTRO_DOMAIN_PATH n:sequence:construct:spiral-intro
-- DEFAULT_CONSTRUCT_SPIRAL_INTRO_CONFIG for generic active/spiral/window behavior
-- installPieces/reset/update/snapshot service surface
-- pending/active/settled/newlyActive/newlySettled piece query surface
+- window.GameHost.getState legacy fields
 ```
 
-## Next validation needed
+## Required validation after the next implementation
 
-```txt
-npm install
+```bash
 node tests/phantom-command-source-profile-fixture.mjs
 node tests/construct-spiral-intro-kit-smoke.mjs
 npm run build
-browser smoke for index.html -> game.html -> GameHost surface
-post-deploy Pages route check
 ```
 
-## Fixture target
+## Current status
 
 ```txt
-profile_build_id_matches_live_game_html
-profile_ring_count_matches_10
-profile_gap_policy_matches_zero_gap
-ring_part_counts_match_live_array
-piece_descriptor_count_matches_92
-timeline_total_build_seconds_matches_19_923
-handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025
-ring_start_times_match_live_formula
-source_snapshot_is_serializable
-source_fingerprint_is_stable
-profile_parity_report_has_no_errors
-gamehost_source_diagnostics_shape_is_additive
-legacy_gamehost_fields_are_unchanged
-sourceprofile_consumer_readback_matches_fixture
-central_ledger_points_to_latest_source_profile_gate
-fixture_runs_without_dom_canvas_or_three
-fixture_build_gate_runs_before_static_artifact_upload
+runtime source changed: no
+branch created: no
+pull request created: no
+pushed to main: yes
+central ledger updated: yes
 ```
