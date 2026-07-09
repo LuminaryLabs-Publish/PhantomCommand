@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T10-29-02-04-00`
+**Timestamp:** `2026-07-09T12-38-16-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Ledger Parity + Build Gate Readback
+PhantomCommand Live SourceProfile Consumer Sync + Fixture Build Gate
 ```
 
 ## Goal
@@ -49,6 +49,7 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
 - [ ] Fixture proves profile parity report has no errors.
 - [ ] Fixture proves additive GameHost source diagnostics shape.
 - [ ] Fixture proves legacy GameHost fields remain unchanged.
+- [ ] Fixture proves sourceprofile_consumer_readback_matches_fixture.
 - [ ] Fixture proves construct result remains blocked until sourceProfile parity passes.
 - [ ] Fixture proves central ledger points at the latest tracker/audit after repo-local docs advance.
 - [ ] Fixture proves build integration can run without DOM/canvas/Three.js.
