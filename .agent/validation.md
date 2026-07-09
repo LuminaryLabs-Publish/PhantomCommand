@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T01-20-59-04-00`
+**Timestamp:** `2026-07-09T01-28-10-04-00`
 
 ## Validation performed in this pass
 
@@ -8,9 +8,9 @@
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Confirmed PhantomCommand was the oldest eligible sampled central alignment after excluding TheCavalryOfRome.
+- Confirmed PhantomCommand central ledger was stale relative to repo-local .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate follow-up.
+- Selected PhantomCommand for a Central SourceProfile Ledger Freeze + GameHost Consumer Fixture Gate follow-up.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -21,16 +21,14 @@
 - Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
-- Read scripts/build-static.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-build-readback-dsk-map.md.
-- Added render-audit/2026-07-09T01-20-59-04-00-gamehost-sourceprofile-readback-contract.md.
-- Added gameplay-audit/2026-07-09T01-20-59-04-00-construct-result-blocker-loop.md.
-- Added source-profile-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-row-acceptance-map.md.
-- Added scenario-bootstrap-audit/2026-07-09T01-20-59-04-00-bootstrap-remains-blocked-by-sourceprofile.md.
-- Added deploy-audit/2026-07-09T01-20-59-04-00-fixture-build-script-wire-map.md.
+- Added architecture-audit/2026-07-09T01-28-10-04-00-central-sourceprofile-ledger-freeze-dsk-map.md.
+- Added render-audit/2026-07-09T01-28-10-04-00-gamehost-sourceprofile-consumer-freeze.md.
+- Added gameplay-audit/2026-07-09T01-28-10-04-00-construct-result-sourceprofile-precondition.md.
+- Added source-profile-audit/2026-07-09T01-28-10-04-00-central-ledger-fixture-row-freeze.md.
+- Added scenario-bootstrap-audit/2026-07-09T01-28-10-04-00-bootstrap-precondition-freeze.md.
+- Added deploy-audit/2026-07-09T01-28-10-04-00-sourceprofile-build-gate-central-sync.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
