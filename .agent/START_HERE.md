@@ -2,139 +2,124 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T04-38-39-04-00`
+**Last aligned:** `2026-07-09T04-50-00-04-00`
 
 ## Purpose
 
 This `.agent/` folder is the repo-local operating memory for scheduled and manual breakdown work on `PhantomCommand`.
 
-Read this file before changing runtime code.
+Read this folder before changing runtime code.
 
 ## Current selection result
 
-The accessible `LuminaryLabs-Publish` repository set was checked against central `LuminaryLabs-Dev/LuminaryLabs` repo-ledger state and sampled root `.agent/START_HERE.md` state.
+The accessible `LuminaryLabs-Publish` organization repo list was compared against `LuminaryLabs-Dev/LuminaryLabs` repo-ledger entries and sampled root `.agent/START_HERE.md` state.
 
-No checked non-Cavalry Publish repo was fully new, absent from central tracking, recently added but undocumented, or missing sampled root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent` state, or otherwise undocumented.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected because the central ledger was stale relative to repo-local `.agent` state: central still pointed at `2026-07-09T01-28-10-04-00`, while the repo-local root had already advanced to `2026-07-09T04-24-06-04-00`. This pass advances both repo-local docs and central tracking to the current source-profile fixture/readback gate.
+`PhantomCommand` was selected because repo-local `.agent` state had advanced beyond the central ledger and the source-profile fixture/build consumer readback seam is still unresolved.
+
+This pass keeps runtime code unchanged and tightens the next implementation into a source-profile consumer freeze with a central-ledger parity row.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest observed 2026-07-09T04-19-00-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest observed 2026-07-09T02-50-39-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest observed 2026-07-09T03-29-29-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest 2026-07-09T04-30-54-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest 2026-07-09T02-50-39-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest 2026-07-09T03-29-29-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / central stale at 2026-07-09T01-28-10-04-00 / repo-local previous 2026-07-09T04-24-06-04-00
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest observed 2026-07-09T03-10-05-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest observed 2026-07-09T02-05-52-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest observed 2026-07-09T03-50-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest observed 2026-07-09T02-31-41-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest observed 2026-07-09T02-11-07-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / repo-local agent ahead of central ledger / source-profile consumer proof unresolved
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest 2026-07-09T03-10-05-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest 2026-07-09T02-05-52-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest 2026-07-09T03-50-12-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest 2026-07-09T02-31-41-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest 2026-07-09T02-11-07-04-00
 ```
 
 ## Current product read
 
-`PhantomCommand` is a static Vite / Three.js single-player PvE undead RTS prototype shell.
-
-The live public surface remains a two-route static proof:
+`PhantomCommand` is a static Vite/Three.js construct proof with two routes:
 
 ```txt
 index.html
   -> game.html
-  -> inline smooth-ring-handoff-v6 construct scene
+  -> inline Three.js smooth-ring-handoff-v6 construct runtime
 ```
 
-The current player loop is a construct-viewer loop: open menu, enter the construct scene, watch the stone platform assemble, pan/zoom, skip/restart, and stop at `command online`.
+The visible scene is stable and should not be rewritten first.
+
+The live construct still keeps its source constants, ring math, piece math, construct timeline, HUD mutation, camera control, and `GameHost` state inside `game.html`.
 
 ## Current interaction loop
 
 ```txt
 open index.html
-  -> main menu renders title, subtitle, Start button, and Open Scene link
+  -> menu renders Phantom Command route controls
   -> Start or Open Scene routes to game.html
   -> game.html imports Three.js from CDN
   -> inline runtime creates renderer, scene, fog, lights, camera, HUD, materials, and input state
-  -> inline smooth-ring-handoff-v6 constants create 10 no-gap construct rings
+  -> inline constants define smooth-ring-handoff-v6
+  -> inline ring math creates 10 no-gap rings
   -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
   -> inline wedge geometry creates 92 stone pieces
-  -> construct(seq) animates pieces by ringStartTimes and partIndex * PART_STAGGER
-  -> WASD/arrows pan the camera
-  -> mouse wheel zooms
-  -> Space/Skip completes the construct
-  -> R/Restart resets the construct
+  -> construct(seq) animates each piece by ring delay and part delay
+  -> WASD/arrows pan, wheel zooms, Space/Skip jumps to completion, R/Restart resets
   -> HUD reports constructed count, phase, build id, and progress
   -> window.GameHost exposes skipConstruct(), restartConstruct(), and getState()
 ```
 
-## Target proof loop
+## Next target loop
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
-  -> normalizeSmoothHandoffProfile
-  -> derivePhantomCommandRingDescriptors
-  -> derivePhantomCommandPieceDescriptors
-  -> derivePhantomCommandTimelineContract
-  -> derivePhantomCommandSourceFingerprint
-  -> createPhantomCommandSourceSnapshot
-  -> createPhantomCommandProfileParityReport
-  -> createGameHostSourceProfileDiagnostics
-  -> DOM-free sourceProfile fixture rows
-  -> package build fixture execution
-  -> game.html additive sourceProfile consumer readback
-  -> legacy GameHost compatibility proof
-  -> central ledger latest-tracker readback
-  -> ConstructEventResult stays blocked until sourceProfile parity passes
-  -> scenario bootstrap remains deferred
+  -> normalized profile
+  -> ring descriptors
+  -> piece descriptors
+  -> timeline descriptors
+  -> source fingerprint
+  -> source snapshot
+  -> profile parity report
+  -> DOM-free source-profile fixture rows
+  -> additive GameHost sourceProfile diagnostics
+  -> legacy GameHost compatibility check
+  -> game.html sourceProfile consumer readback
+  -> fixture build gate before static artifact copy
+  -> central ledger latest-tracker parity row
+  -> construct result and scenario bootstrap remain blocked until source parity passes
 ```
 
-## First files to read next
+## First files to read
 
 ```txt
 .agent/current-audit.md
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-dsk-map.md
-.agent/render-audit/2026-07-09T04-38-39-04-00-gamehost-sourceprofile-consumer-readback.md
-.agent/gameplay-audit/2026-07-09T04-38-39-04-00-construct-result-blocker-loop.md
-.agent/source-profile-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T04-38-39-04-00-bootstrap-remains-blocked.md
-.agent/deploy-audit/2026-07-09T04-38-39-04-00-fixture-build-before-static-artifact.md
-.agent/trackers/2026-07-09T04-38-39-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T04-38-39-04-00.md
+.agent/architecture-audit/2026-07-09T04-50-00-04-00-sourceprofile-consumer-freeze-dsk-map.md
+.agent/render-audit/2026-07-09T04-50-00-04-00-gamehost-sourceprofile-readback-freeze.md
+.agent/gameplay-audit/2026-07-09T04-50-00-04-00-construct-result-deferred-loop.md
+.agent/source-profile-audit/2026-07-09T04-50-00-04-00-consumer-fixture-central-parity.md
+.agent/scenario-bootstrap-audit/2026-07-09T04-50-00-04-00-bootstrap-blocker-after-sourceprofile.md
+.agent/deploy-audit/2026-07-09T04-50-00-04-00-fixture-build-central-ledger-gate.md
+.agent/trackers/2026-07-09T04-50-00-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T04-50-00-04-00.md
 .agent/kit-registry.json
 ```
 
-## Source files to inspect before implementation
+## Source files to inspect next
 
 ```txt
-README.md
 package.json
 index.html
 game.html
+scripts/build-static.mjs
 src/kits/construct-spiral-intro-kit/index.js
 tests/construct-spiral-intro-kit-smoke.mjs
-scripts/build-static.mjs
-.github/workflows/deploy-pages.yml
 ```
 
-## Source files to add next
+## Next safe ledge
 
 ```txt
-src/kits/phantom-command-smooth-handoff-profile-kit/index.js
-src/kits/phantom-command-ring-descriptor-kit/index.js
-src/kits/phantom-command-piece-descriptor-kit/index.js
-src/kits/phantom-command-handoff-timeline-contract-kit/index.js
-src/kits/phantom-command-source-profile-fingerprint-kit/index.js
-src/kits/phantom-command-source-profile-snapshot-kit/index.js
-src/kits/phantom-command-profile-parity-report-kit/index.js
-src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js
-tests/phantom-command-source-profile-fixture.mjs
+PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate
 ```
-
-## Main rule
-
-Do not begin RTS gameplay, scenario bootstrap, renderer extraction, or shared-kit promotion until the source-profile fixture and legacy GameHost consumer readback prove the live construct profile values without DOM/canvas/Three.js dependencies.
