@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T16-29-23-04-00",
-  "status": "central-ledger-sourceprofile-readback-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T16-29-23-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T16-29-23-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T16-29-23-04-00-central-ledger-sourceprofile-readback-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T16-29-23-04-00-gamehost-sourceprofile-readback-refresh.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T16-29-23-04-00-construct-proof-source-profile-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T16-29-23-04-00-live-v6-profile-ledger-parity.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T16-29-23-04-00-bootstrap-deferred-by-source-proof.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T16-29-23-04-00-sourceprofile-fixture-build-central-sync.md",
-  "previousTracker": ".agent/trackers/2026-07-09T16-25-16-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T16-25-16-04-00.md",
+  "updatedAt": "2026-07-09T18-41-55-04-00",
+  "status": "sourceprofile-handoff-ledger-refresh-gamehost-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T18-41-55-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T18-41-55-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T18-41-55-04-00-sourceprofile-handoff-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T18-41-55-04-00-gamehost-sourceprofile-consumer-readback.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T18-41-55-04-00-construct-sourceprofile-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T18-41-55-04-00-live-profile-fixture-contract.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T18-41-55-04-00-bootstrap-still-deferred.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T18-41-55-04-00-sourceprofile-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-09T16-29-23-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T16-29-23-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -20,8 +20,9 @@
     "doNotCreateBranches": true
   },
   "selection": {
+    "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after accessible Publish repo-list, central-ledger, and repo-local agent comparison; no checked non-Cavalry repo was missing, but PhantomCommand repo-local sourceprofile state had advanced beyond central tracking"
+    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-09T16-29-23-04-00"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -58,7 +59,7 @@
       "compute ten contiguous no-gap ring descriptors inline",
       "compute ring part counts from circumference inline",
       "create wedge meshes, seams, center disc, Grim Reaper Totem, and Phantom Commander inline",
-      "animate pieces by ringStartTimes and partIndex * PART_STAGGER",
+      "animate pieces by ringStartTimes and partIndex times PART_STAGGER",
       "mutate HUD from construct(seq)",
       "handle pan, zoom, skip, restart, resize, and blur",
       "publish construct-only GameHost state"
@@ -81,7 +82,7 @@
   },
   "domains": {
     "runtime": ["static-route-shell", "menu-route", "scene-route", "vite-static-build", "three-cdn-runtime", "browser-render-loop", "legacy-gamehost-diagnostics"],
-    "construct": ["inline-construct-profile", "ring-descriptor-inline-math", "piece-descriptor-inline-math", "construct-timeline-inline-math", "wedge-geometry-authoring", "material-palette", "lighting-and-fog", "hud-projection", "input-pan-control", "camera-orbit-zoom-control", "skip-restart-control"],
+    "construct": ["inline-construct-profile", "ring-descriptor-inline-math", "piece-descriptor-inline-math", "construct-timeline-inline-math", "wedge-geometry-authoring", "material-palette", "lighting-and-fog", "hud-projection", "keyboard-pan-control", "wheel-zoom-control", "skip-restart-control"],
     "implementedKits": ["construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
     "next": ["phantom-command-smooth-handoff-profile-kit", "phantom-command-ring-descriptor-kit", "phantom-command-piece-descriptor-kit", "phantom-command-handoff-timeline-contract-kit", "phantom-command-source-profile-fingerprint-kit", "phantom-command-source-profile-snapshot-kit", "phantom-command-profile-parity-report-kit", "phantom-command-gamehost-source-diagnostics-kit", "phantom-command-sourceprofile-consumer-readback-kit", "phantom-command-sourceprofile-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
   },
