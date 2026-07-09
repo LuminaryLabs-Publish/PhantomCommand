@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-08T18-41-41-04-00`
+**Timestamp:** `2026-07-08T20-52-00-04-00`
 
 ## Critical source-profile gaps
 
@@ -37,6 +37,7 @@
 - Fixture rows do not yet block scenario bootstrap until construct source parity passes.
 - Fixture rows do not yet assert central ledger/readback alignment with the latest repo-local tracker.
 - npm run build does not yet include the source-profile fixture.
+- There is no deploy/build gate proving fixture execution before Pages artifact upload.
 ```
 
 ## Construct / scenario gaps
@@ -54,7 +55,7 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now Source Profile Fixture Manifest + Central Ledger Sync Gate.
+- The immediate next ledge is now SourceProfile Consumer Readback + Fixture Build Gate.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
