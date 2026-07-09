@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T04-24-06-04-00",
-  "status": "sourceprofile-consumer-cutover-legacy-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T04-24-06-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T04-24-06-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T04-24-06-04-00-gamehost-sourceprofile-readback-cutover.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T04-24-06-04-00-construct-result-precondition-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-contract.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T04-24-06-04-00-bootstrap-stays-deferred.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T04-24-06-04-00-sourceprofile-fixture-build-validation-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-09T01-28-10-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T01-28-10-04-00.md",
+  "updatedAt": "2026-07-09T04-38-39-04-00",
+  "status": "sourceprofile-fixture-build-gate-legacy-gamehost-consumer-readback-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T04-38-39-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T04-38-39-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T04-38-39-04-00-gamehost-sourceprofile-consumer-readback.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T04-38-39-04-00-construct-result-blocker-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-contract.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T04-38-39-04-00-bootstrap-remains-blocked.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T04-38-39-04-00-fixture-build-before-static-artifact.md",
+  "previousTracker": ".agent/trackers/2026-07-09T04-24-06-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T04-24-06-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -21,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after repo-list and central-ledger comparison; HorrorCorridor already had fresh sampled root .agent state, and PhantomCommand remained the next eligible source-profile consumer fallback"
+    "reason": "selected after repo-list and central-ledger comparison; no checked non-Cavalry repo was missing, while PhantomCommand central ledger was stale relative to repo-local agent state and source-profile fixture/readback proof remains unresolved"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -52,7 +52,7 @@
       "window.GameHost.restartConstruct",
       "window.GameHost.getState"
     ],
-    "primaryGap": "game.html still owns the live profile and renders it. The next cut should source-own the profile, prove DOM-free parity, splice additive sourceProfile diagnostics into GameHost, wire fixture build proof, and keep central ledger pointers aligned before construct result or scenario bootstrap."
+    "primaryGap": "game.html still owns the live profile and renders it. The next cut should source-own the profile, prove DOM-free parity, splice additive sourceProfile diagnostics into GameHost, wire fixture build proof before static artifact copy, and keep central ledger pointers aligned before construct result or scenario bootstrap."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -137,6 +137,7 @@
     ],
     "deployBuild": [
       "fixture-build-integration",
+      "fixture-before-static-artifact-copy",
       "static-artifact-copy",
       "pages-workflow-upload"
     ],
@@ -210,6 +211,7 @@
     "phantom-command-fixture-build-integration-kit",
     "phantom-command-construct-event-envelope-kit",
     "phantom-command-construct-event-result-kit",
+    "phantom-command-construct-completion-idempotency-kit",
     "phantom-command-scenario-bootstrap-gate-kit",
     "phantom-command-scenario-bootstrap-blocker-kit"
   ],
@@ -233,5 +235,5 @@
     "fixture_runs_without_dom_canvas_or_three",
     "fixture_build_gate_runs_before_static_artifact_upload"
   ],
-  "nextSafeLedge": "PhantomCommand SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate"
+  "nextSafeLedge": "PhantomCommand SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback"
 }
