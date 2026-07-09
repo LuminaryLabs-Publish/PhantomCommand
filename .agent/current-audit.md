@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T07-10-00-04-00`
+**Timestamp:** `2026-07-09T07-19-41-04-00`
 
 ## Summary
 
@@ -8,21 +8,21 @@
 
 The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Readback Ledger + Fixture Build Consumer Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T06-28-53-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T06-51-11-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T07-05-52-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T06-01-30-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T05-11-22-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T05-20-42-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T05-38-20-04-00
 LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T06-20-00-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central-ledger fallback / previous central latest 2026-07-09T04-50-00-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PhantomCommand       selected / central ledger stale at 2026-07-09T04-50-00-04-00 / repo-local latest 2026-07-09T07-10-00-04-00
 LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T06-10-35-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T05-11-22-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T06-28-53-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T05-38-20-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T05-20-42-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, or otherwise undocumented.
@@ -238,12 +238,24 @@ phantom-command-scenario-bootstrap-blocker-kit
 
 The repo already has a generic construct scheduling kit and smoke test, but the live construct proof does not yet consume a source-owned PhantomCommand profile.
 
-The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source-profile, descriptor, fingerprint, snapshot, parity, central-ledger-readback, fixture-build, and GameHost diagnostic modules that reproduce the live v6 values, then splice those diagnostics into `game.html` additively.
+`game.html` remains the source authority for live constants, descriptors, timing, geometry, HUD, animation, and `GameHost` projection.
 
-Construct event/result work is a second step. It should only start after sourceProfile fixture rows prove that the visible build is sourced from stable records rather than inline browser constants.
+The next implementation should source-own the profile and prove exact parity before render extraction, construct result contracts, or scenario bootstrap work.
+
+## Main render read
+
+The render surface is visual and stable enough for now.
+
+The blocker is not animation polish. The blocker is that renderer-visible values are not traced to reusable source descriptors.
+
+## Main gameplay read
+
+The current interaction loop is a construct proof, not a full RTS loop.
+
+Scenario bootstrap, undead unit commands, economy, buildings, wave control, and combat should remain blocked until `construct_complete` can be emitted as an idempotent source-owned result.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate
+PhantomCommand SourceProfile Readback Ledger + Fixture Build Consumer Gate
 ```
