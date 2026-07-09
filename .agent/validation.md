@@ -1,17 +1,15 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T16-29-23-04-00`
+**Timestamp:** `2026-07-09T18-41-55-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
-- Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Sampled repo-local .agent/START_HERE.md state for checked non-Cavalry repos where needed.
-- Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, recently added but undocumented, or otherwise undocumented.
-- Confirmed PhantomCommand had repo-local source-profile docs newer than central repo-ledger state at read time.
+- Checked the current public LuminaryLabs-Publish repo list.
+- Compared the public repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
+- Confirmed no checked public non-Cavalry repo was new, ledger-absent, missing root agent state, recently added but undocumented, or otherwise undocumented.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as the documentation and central-ledger consistency target.
+- Selected PhantomCommand as the oldest eligible public documented fallback.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -23,17 +21,12 @@
 - Read game.html.
 - Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read central repo-ledger entries for Publish repo comparison.
-- Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T16-29-23-04-00-central-ledger-sourceprofile-readback-dsk-map.md.
-- Added render-audit/2026-07-09T16-29-23-04-00-gamehost-sourceprofile-readback-refresh.md.
-- Added gameplay-audit/2026-07-09T16-29-23-04-00-construct-proof-source-profile-loop.md.
-- Added source-profile-audit/2026-07-09T16-29-23-04-00-live-v6-profile-ledger-parity.md.
-- Added scenario-bootstrap-audit/2026-07-09T16-29-23-04-00-bootstrap-deferred-by-source-proof.md.
-- Added deploy-audit/2026-07-09T16-29-23-04-00-sourceprofile-fixture-build-central-sync.md.
-- Added a new timestamped tracker entry.
-- Added a new timestamped turn-ledger entry.
-- Updated central repo ledger with latest state.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
+- Read central repo-ledger entries for public Publish repo comparison.
+- Updated required repo-local .agent root docs.
+- Added timestamped tracker and turn-ledger entries.
+- Added architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits.
+- Updated central repo ledger.
 - Added central internal change-log entry.
 ```
 
@@ -51,7 +44,7 @@
 - No implementation source files were changed.
 ```
 
-## Current evidence from source inspection
+## Source evidence captured
 
 ```txt
 package/source readback declares:
