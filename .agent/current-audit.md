@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T16-25-16-04-00`
+**Timestamp:** `2026-07-09T16-29-23-04-00`
 
 ## Summary
 
@@ -8,16 +8,16 @@
 
 The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Central Sync + GameHost Fixture Readback Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand Central Ledger SourceProfile Readback + GameHost Fixture Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T15-56-42-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T16-00-13-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T14-16-00-04-00
 LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T15-09-09-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T13-00-37-04-00 before this update
+LuminaryLabs-Publish/PhantomCommand       selected / repo-local sourceprofile docs newer than central ledger / central latest 2026-07-09T13-00-37-04-00 before this update
 LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T15-31-40-04-00
 LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T13-18-48-04-00
 LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T15-39-08-04-00
@@ -25,7 +25,7 @@ LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / centra
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T13-38-15-04-00
 ```
 
-No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented. `PhantomCommand` was selected as the oldest eligible documented-selection fallback.
+No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented. `PhantomCommand` was selected as a central-ledger pointer repair target because repo-local source-profile audit state had advanced beyond the central ledger.
 
 ## Current interaction loop
 
@@ -137,4 +137,4 @@ Next-cut:
 
 ## Main finding
 
-Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion. The next useful pass is still source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()`.
+Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion. The next useful pass is still source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()` and keep the central ledger pointer synchronized with the repo-local audit set.
