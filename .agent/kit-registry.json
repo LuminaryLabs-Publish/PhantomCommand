@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T04-50-00-04-00",
-  "status": "sourceprofile-consumer-freeze-fixture-build-central-ledger-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T04-50-00-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T04-50-00-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T04-50-00-04-00-sourceprofile-consumer-freeze-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T04-50-00-04-00-gamehost-sourceprofile-readback-freeze.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T04-50-00-04-00-construct-result-deferred-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T04-50-00-04-00-consumer-fixture-central-parity.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T04-50-00-04-00-bootstrap-blocker-after-sourceprofile.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T04-50-00-04-00-fixture-build-central-ledger-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-09T04-38-39-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T04-38-39-04-00.md",
+  "updatedAt": "2026-07-09T07-10-00-04-00",
+  "status": "sourceprofile-ledger-catchup-fixture-build-consumer-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T07-10-00-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T07-10-00-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T07-10-00-04-00-sourceprofile-stale-ledger-catchup-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T07-10-00-04-00-gamehost-sourceprofile-readback-catchup.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T07-10-00-04-00-construct-proof-no-rts-expansion-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T07-10-00-04-00-sourceprofile-ledger-parity-fixture-gate.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T07-10-00-04-00-bootstrap-stays-blocked-after-ledger-catchup.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T07-10-00-04-00-build-script-fixture-splice-map.md",
+  "previousTracker": ".agent/trackers/2026-07-09T04-50-00-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T04-50-00-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -21,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after repo-list, central-ledger, and root-agent comparison; no checked non-Cavalry repo was missing, while PhantomCommand repo-local agent state was ahead of central tracking and source-profile fixture/readback proof remains unresolved"
+    "reason": "selected after repo-list, central-ledger, and root-agent comparison; no checked non-Cavalry repo was missing, and PhantomCommand had the oldest eligible central-ledger timestamp at first read while source-profile fixture/readback proof remains unresolved"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -218,5 +218,5 @@
     "fixture_runs_without_dom_canvas_or_three",
     "fixture_build_gate_runs_before_static_artifact_upload"
   ],
-  "nextSafeLedge": "PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate"
+  "nextSafeLedge": "PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate"
 }
