@@ -1,33 +1,31 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T04-50-00-04-00`
+**Timestamp:** `2026-07-09T07-10-00-04-00`
 
 ## Summary
 
 `PhantomCommand` remains a static Vite/Three.js construct proof with a menu route and a live `game.html` route.
 
-The visual construct should stay intact. The architectural blocker is not presentation polish; it is that the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timing math, HUD mutation, and `GameHost` projection are still owned by inline browser code.
+The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest 2026-07-09T04-30-54-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest 2026-07-09T02-50-39-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest 2026-07-09T03-29-29-04-00
-LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / repo-local .agent ahead of central ledger / source-profile proof unresolved
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest 2026-07-09T03-10-05-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest 2026-07-09T02-05-52-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest 2026-07-09T03-50-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest 2026-07-09T02-31-41-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest 2026-07-09T02-11-07-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T06-28-53-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T06-51-11-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T06-01-30-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T05-11-22-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T05-20-42-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T05-38-20-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T06-20-00-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central-ledger fallback / previous central latest 2026-07-09T04-50-00-04-00
+LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T06-10-35-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, or otherwise undocumented.
-
-`PhantomCommand` was selected because its repo-local `.agent` state had already advanced to `2026-07-09T04-38-39-04-00`, while the central ledger still lagged behind and the same source-profile fixture/build consumer proof remains unresolved.
 
 ## Current interaction loop
 
@@ -108,13 +106,12 @@ gamehost-source-diagnostics
 gamehost-source-profile-readback
 gamehost-legacy-compatibility
 central-ledger-readback
-source-profile-consumer-splice
 fixture-build-integration
 fixture-before-static-artifact
-construct-event-envelope
-construct-event-result
-construct-completion-idempotency
-scenario-bootstrap-gate
+construct-event-envelope-deferred
+construct-event-result-deferred
+construct-completion-idempotency-deferred
+scenario-bootstrap-gate-deferred
 scenario-bootstrap-blocker
 ```
 
@@ -248,5 +245,5 @@ Construct event/result work is a second step. It should only start after sourceP
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate
+PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate
 ```
