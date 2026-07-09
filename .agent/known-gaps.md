@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T16-29-23-04-00`
+**Timestamp:** `2026-07-09T18-41-55-04-00`
 
 ## Critical source-profile gaps
 
@@ -27,14 +27,12 @@
 - npm run build does not yet run a source-profile fixture before static artifact copy.
 ```
 
-## Central tracking gap refreshed here
+## Current central tracking gap
 
 ```txt
-- The central PhantomCommand ledger was older than repo-local source-profile audit state.
-- Repo-local START_HERE already pointed at a 2026-07-09T16-25-16-04-00 sourceprofile sync set.
-- Central repo-ledger/LuminaryLabs-Publish/PhantomCommand.md still pointed at 2026-07-09T13-00-37-04-00 at read time.
-- This run updates repo-local docs again and logs the new tracker centrally.
-- The next central entry should not treat source-profile parity as implemented until the fixture exists and runs.
+- PhantomCommand is again the oldest eligible public non-Cavalry central ledger entry after recent public repo refreshes.
+- This pass refreshes repo-local docs and central tracking to 2026-07-09T18-41-55-04-00.
+- The next central entry should not treat source-profile parity as implemented until the fixture exists and passes.
 ```
 
 ## Non-blocking gaps
