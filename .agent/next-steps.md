@@ -1,16 +1,16 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T18-41-41-04-00`
+**Timestamp:** `2026-07-08T20-52-00-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Source Profile Fixture Manifest + Central Ledger Sync Gate
+PhantomCommand SourceProfile Consumer Readback + Fixture Build Gate
 ```
 
 ## Goal
 
-Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, profile parity report, additive GameHost diagnostics, and central ledger readback into explicit source/fixture contracts.
+Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, profile parity report, additive GameHost diagnostics, central ledger readback, and fixture-build proof into explicit contracts.
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
 
@@ -49,6 +49,7 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Fixture proves additive GameHost source diagnostics shape.
 - [ ] Fixture proves legacy GameHost fields remain unchanged.
 - [ ] Fixture proves central ledger points at the latest tracker/audit after repo-local docs advance.
+- [ ] Fixture proves build integration can run without DOM/canvas/Three.js.
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
 - [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
 - [ ] Add fixture script to validation path only after it exists and passes locally.
@@ -98,11 +99,16 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
    - expose sourceProfile through GameHost getState
    - do not change the visible construct in the same pass
 
-9. Central ledger sync ninth
+9. Fixture build integration ninth
+   - wire the fixture into npm run build only after it passes standalone
+   - keep current static-copy build behavior intact
+   - fail build on profile, descriptor, snapshot, or GameHost source diagnostic parity errors
+
+10. Central ledger sync tenth
    - ensure repo-local tracker, kit registry, and central repo-ledger all name the same latest source-profile fixture gate
    - keep this check documentation/fixture-only; do not create branches or PRs
 
-10. Construct result blocker tenth
+11. Construct result blocker eleventh
    - document construct_complete result shape only after source parity passes
    - reject scenario bootstrap while sourceProfile parity is missing
    - keep RTS gameplay deferred
@@ -150,6 +156,7 @@ legacy_gamehost_fields_are_unchanged
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
+fixture_build_gate_runs_before_static_artifact_upload
 ```
 
 ## Do not do yet
@@ -168,6 +175,7 @@ fixture_runs_without_dom_canvas_or_three
 ```txt
 source-profile fixture passes
   -> GameHost sourceProfile diagnostics passes
+  -> fixture build gate passes
   -> central ledger points to latest source-profile tracker
   -> ConstructEventEnvelope
   -> ConstructEventResult
