@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T01-28-10-04-00`
+**Timestamp:** `2026-07-09T04-24-06-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Central SourceProfile Ledger Freeze + GameHost Consumer Fixture Gate
+PhantomCommand SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate
 ```
 
 ## Goal
