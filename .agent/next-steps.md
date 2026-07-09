@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T04-38-39-04-00`
+**Timestamp:** `2026-07-09T04-50-00-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback
+PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate
 ```
 
 ## Goal
@@ -14,7 +14,7 @@ Preserve the current live visual while moving the live `smooth-ring-handoff-v6` 
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
 
-Construct result authority should remain a documented precondition map until sourceProfile parity and legacy GameHost consumer readback are proven.
+Construct result authority and scenario bootstrap remain blocked until sourceProfile parity and legacy GameHost consumer readback are proven.
 
 ## Checklist
 
@@ -109,6 +109,7 @@ Construct result authority should remain a documented precondition map until sou
 
 10. Central ledger sync tenth
    - ensure repo-local tracker, kit registry, and central repo-ledger all name the same latest source-profile fixture gate
+   - add a fixture row that can read the central latest-tracker pointer
    - keep this check documentation/fixture-only; do not create branches or PRs
 
 11. Construct result blocker eleventh
@@ -156,6 +157,7 @@ source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
 legacy_gamehost_fields_are_unchanged
+sourceprofile_consumer_readback_matches_fixture
 construct_result_is_blocked_until_source_profile_parity_passes
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
@@ -172,21 +174,4 @@ fixture_build_gate_runs_before_static_artifact_upload
 - Do not remove window.GameHost compatibility.
 - Do not move reusable logic into NexusEngine or ProtoKits until the publish-local fixture proof is stable.
 - Do not work on Cavalry of Rome.
-```
-
-## After this ledge
-
-```txt
-source-profile fixture passes
-  -> GameHost sourceProfile diagnostics passes
-  -> fixture build gate passes
-  -> central ledger points to latest source-profile tracker
-  -> ConstructEventEnvelope
-  -> ConstructEventResult
-  -> ConstructEventJournal
-  -> ConstructSnapshot
-  -> ScenarioBootstrapCommand
-  -> ScenarioBootstrapResult
-  -> ScenarioBootstrapSnapshot
-  -> RTS boundary placeholders
 ```
