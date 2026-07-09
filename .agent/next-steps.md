@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T10-20-44-04-00`
+**Timestamp:** `2026-07-09T10-29-02-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture
+PhantomCommand SourceProfile Ledger Parity + Build Gate Readback
 ```
 
 ## Goal
@@ -55,7 +55,7 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
 - [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
 - [ ] Add fixture script to validation path only after it exists and passes locally.
-- [ ] Ensure `npm run build` runs source-profile fixture proof before copying static artifacts.
+- [ ] Ensure `npm run build` runs source-profile fixture before copying static artifacts.
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
