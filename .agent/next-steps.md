@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T16-29-23-04-00`
+**Timestamp:** `2026-07-09T18-41-55-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Central Ledger SourceProfile Readback + GameHost Fixture Gate
+PhantomCommand SourceProfile Handoff Ledger Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
@@ -14,15 +14,13 @@ Preserve the current live visual while moving the live `smooth-ring-handoff-v6` 
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
 
-Construct result authority and scenario bootstrap remain blocked until sourceProfile parity and legacy GameHost consumer readback are proven.
+Construct result authority and scenario bootstrap remain blocked until source-profile parity and legacy GameHost consumer readback are proven.
 
 ## Checklist
 
 - [ ] Keep `index.html -> game.html` routing unchanged.
 - [ ] Keep visible `smooth-ring-handoff-v6` construct behavior unchanged.
-- [ ] Keep `window.GameHost.skipConstruct` unchanged.
-- [ ] Keep `window.GameHost.restartConstruct` unchanged.
-- [ ] Keep existing `window.GameHost.getState()` fields unchanged.
+- [ ] Keep existing `window.GameHost` methods and fields unchanged.
 - [ ] Add `src/kits/phantom-command-smooth-handoff-profile-kit/index.js`.
 - [ ] Mirror current `game.html` constants exactly.
 - [ ] Add `normalizeSmoothHandoffProfile(profile)`.
@@ -32,30 +30,11 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
 - [ ] Add `derivePhantomCommandPieceDescriptors(profile, rings)`.
 - [ ] Add `src/kits/phantom-command-handoff-timeline-contract-kit/index.js`.
 - [ ] Add delay, settle, handoff, prewarm, ringStartTimes, and total-build descriptor helpers.
-- [ ] Add `src/kits/phantom-command-source-profile-fingerprint-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-profile-parity-report-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js`.
+- [ ] Add source fingerprint, source snapshot, profile parity report, and GameHost source diagnostics kits.
 - [ ] Add `tests/phantom-command-source-profile-fixture.mjs`.
-- [ ] Fixture proves profile build id parity.
-- [ ] Fixture proves ring count parity.
-- [ ] Fixture proves zero-gap policy.
-- [ ] Fixture proves ring part counts `[5,5,5,5,6,8,10,12,16,20]`.
-- [ ] Fixture proves piece descriptor count `92`.
-- [ ] Fixture proves total build seconds `19.923`.
-- [ ] Fixture proves handoff values `RING_HANDOFF = 0.72` and `PART_STAGGER = 0.025`.
-- [ ] Fixture proves source fingerprint stability.
-- [ ] Fixture proves source snapshot serialization.
-- [ ] Fixture proves profile parity report has no errors.
-- [ ] Fixture proves additive GameHost source diagnostics shape.
-- [ ] Fixture proves legacy GameHost fields remain unchanged.
-- [ ] Fixture proves sourceprofile_consumer_readback_matches_fixture.
-- [ ] Fixture proves construct result remains blocked until sourceProfile parity passes.
-- [ ] Fixture proves central ledger points at the latest tracker/audit after repo-local docs advance.
-- [ ] Fixture proves build integration can run without DOM/canvas/Three.js.
+- [ ] Prove build id, ring count, zero-gap policy, ring part counts, 92 pieces, total build seconds, handoff values, fingerprint, snapshot serialization, parity report, GameHost source diagnostics, and legacy compatibility.
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
 - [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
-- [ ] Add fixture script to validation path only after it exists and passes locally.
 - [ ] Ensure `npm run build` runs source-profile fixture before copying static artifacts.
 - [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
