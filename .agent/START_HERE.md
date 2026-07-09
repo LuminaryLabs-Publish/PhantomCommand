@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T10-20-44-04-00`
+**Last aligned:** `2026-07-09T10-29-02-04-00`
 
 ## Purpose
 
@@ -14,27 +14,27 @@ Read this folder before changing runtime code.
 
 The accessible `LuminaryLabs-Publish` organization repo list was compared against `LuminaryLabs-Dev/LuminaryLabs` repo-ledger entries and sampled repo-local `.agent` state.
 
-No checked non-Cavalry Publish repo was fully new, absent from central tracking, missing root `.agent` state, or otherwise undocumented.
+No checked non-Cavalry Publish repo was fully new, absent from central tracking, missing root `.agent` state, recently added but undocumented, or otherwise undocumented.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible central-ledger fallback among the checked non-Cavalry repos. Its central ledger was still at `2026-07-09T07-19-41-04-00`, older than the other observed same-day ledgers.
+`PhantomCommand` was selected as the oldest eligible central-ledger fallback among the checked non-Cavalry repos. Its central ledger had just been aligned to `2026-07-09T10-20-44-04-00`, but it remains the oldest current fallback after the latest Publish repo comparison.
 
-This pass keeps runtime code unchanged and refreshes the next implementation target around source-profile consumer/build-gate proof before any RTS or scenario bootstrap work.
+This pass keeps runtime code unchanged and refreshes the next implementation target around source-profile ledger parity, additive GameHost readback, and fixture build-gate proof before any RTS or scenario bootstrap work.
 
 ## Publish repos checked
 
 ```txt
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
 LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T09-59-27-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T08-50-00-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
-LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T07-19-41-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
 LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T07-41-29-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T08-02-33-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T10-20-44-04-00
+LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
 ```
 
 ## Current product read
@@ -96,14 +96,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T10-20-44-04-00-sourceprofile-consumer-build-gate-dsk-map.md
-.agent/render-audit/2026-07-09T10-20-44-04-00-gamehost-sourceprofile-readback-fixture.md
-.agent/gameplay-audit/2026-07-09T10-20-44-04-00-construct-profile-gate-loop.md
-.agent/source-profile-audit/2026-07-09T10-20-44-04-00-live-v6-profile-parity-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T10-20-44-04-00-scenario-bootstrap-remains-blocked.md
-.agent/deploy-audit/2026-07-09T10-20-44-04-00-sourceprofile-fixture-build-gate.md
-.agent/trackers/2026-07-09T10-20-44-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T10-20-44-04-00.md
+.agent/architecture-audit/2026-07-09T10-29-02-04-00-sourceprofile-ledger-parity-dsk-map.md
+.agent/render-audit/2026-07-09T10-29-02-04-00-gamehost-sourceprofile-consumer-readback.md
+.agent/gameplay-audit/2026-07-09T10-29-02-04-00-construct-profile-result-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T10-29-02-04-00-live-v6-ledger-parity-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T10-29-02-04-00-construct-result-precondition-freeze.md
+.agent/deploy-audit/2026-07-09T10-29-02-04-00-sourceprofile-fixture-build-gate.md
+.agent/trackers/2026-07-09T10-29-02-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T10-29-02-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -116,10 +116,4 @@ game.html
 scripts/build-static.mjs
 src/kits/construct-spiral-intro-kit/index.js
 tests/construct-spiral-intro-kit-smoke.mjs
-```
-
-## Next safe ledge
-
-```txt
-PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture
 ```
