@@ -1,17 +1,17 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T07-19-41-04-00`
+**Timestamp:** `2026-07-09T10-20-44-04-00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Sampled root .agent/START_HERE.md state for the non-Cavalry Publish repos.
+- Sampled/root-agent status was checked through central ledger readback and PhantomCommand repo-local .agent readback.
 - Confirmed PhantomCommand is tracked centrally and has root .agent state.
-- Observed central PhantomCommand ledger lagging behind repo-local .agent state.
+- Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, or otherwise undocumented.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Readback Ledger + Fixture Build Consumer Gate pass.
+- Selected PhantomCommand as the oldest eligible central-ledger fallback.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -19,20 +19,18 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
-- Read README.md.
 - Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read tests/construct-spiral-intro-kit-smoke.mjs.
-- Read scripts/build-static.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T07-19-41-04-00-sourceprofile-readback-ledger-dsk-map.md.
-- Added render-audit/2026-07-09T07-19-41-04-00-gamehost-sourceprofile-consumer-readback.md.
-- Added gameplay-audit/2026-07-09T07-19-41-04-00-construct-proof-sourceprofile-gate-loop.md.
-- Added source-profile-audit/2026-07-09T07-19-41-04-00-sourceprofile-central-ledger-parity-gate.md.
-- Added scenario-bootstrap-audit/2026-07-09T07-19-41-04-00-scenario-bootstrap-remains-blocked.md.
-- Added deploy-audit/2026-07-09T07-19-41-04-00-sourceprofile-fixture-build-splice-map.md.
+- Added architecture-audit/2026-07-09T10-20-44-04-00-sourceprofile-consumer-build-gate-dsk-map.md.
+- Added render-audit/2026-07-09T10-20-44-04-00-gamehost-sourceprofile-readback-fixture.md.
+- Added gameplay-audit/2026-07-09T10-20-44-04-00-construct-profile-gate-loop.md.
+- Added source-profile-audit/2026-07-09T10-20-44-04-00-live-v6-profile-parity-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T10-20-44-04-00-scenario-bootstrap-remains-blocked.md.
+- Added deploy-audit/2026-07-09T10-20-44-04-00-sourceprofile-fixture-build-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -60,11 +58,6 @@ package/source readback declares:
 - npm run build calls node scripts/build-static.mjs.
 - vite dev/start/preview run on port 4173.
 
-README/source readback declares:
-- GitHub Pages deploys from main through .github/workflows/deploy-pages.yml.
-- index.html is the main menu and game.html is the opening construct scene.
-- docs/ carries broader game design, economy, config, and implementation plan material.
-
 index.html declares:
 - menu copy for a single-player PvE RTS prototype.
 - Start button and Open Scene link route to game.html.
@@ -90,11 +83,6 @@ construct-spiral-intro-kit declares:
 - DEFAULT_CONSTRUCT_SPIRAL_INTRO_CONFIG for generic active/spiral/window behavior
 - installPieces/reset/update/snapshot service surface
 - pending/active/settled/newlyActive/newlySettled piece query surface
-
-build-static declares:
-- dist is removed and recreated.
-- index.html, game.html, docs, and config are copied if present.
-- no fixture script is run before copy yet.
 ```
 
 ## Next validation needed
@@ -137,7 +125,7 @@ fixture_build_gate_runs_before_static_artifact_upload
 ```txt
 repo-list comparison: performed
 central-ledger comparison: performed
-root .agent sampling: performed
+root .agent sampling/readback: performed
 source readback: performed
 root .agent update: performed
 architecture audit update: created
