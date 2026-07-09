@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T12-55-20-04-00`
+**Timestamp:** `2026-07-09T13-00-37-04-00`
 
 ## Critical source-profile gaps
 
@@ -30,55 +30,28 @@
 ## Central tracking gap narrowed here
 
 ```txt
-- Central LuminaryLabs tracking still pointed at 2026-07-09T10-29-02-04-00 before this pass.
-- Repo-local PhantomCommand .agent state had advanced to 2026-07-09T12-50-00-04-00.
-- This pass refreshes repo-local docs and central pointers to 2026-07-09T12-55-20-04-00.
-- The next implementation should include a fixture row proving central_ledger_points_to_latest_source_profile_gate.
+- Repo-local .agent state had advanced beyond the central PhantomCommand ledger.
+- This run updates repo-local docs again and logs the new tracker centrally.
+- The next central entry should not treat source-profile parity as implemented until the fixture exists and runs.
 ```
 
-## Fixture acceptance gaps
+## Non-blocking gaps
 
 ```txt
-- Fixture rows are named but not implemented in source.
-- Fixture rows do not yet load source modules independently of game.html.
-- Fixture rows do not yet prove the browser route consumes the same source profile.
-- Fixture rows do not yet assert legacy GameHost shape compatibility.
-- Fixture rows do not yet assert sourceprofile_consumer_readback_matches_fixture.
-- Fixture rows do not yet block scenario bootstrap until construct source parity passes.
-- Fixture rows do not yet assert central ledger/readback alignment with the latest repo-local tracker.
-- npm run build does not yet include the source-profile fixture.
-- There is no deploy/build gate proving fixture execution before Pages artifact upload.
+- Scenario bootstrap remains conceptual.
+- Construct result authority remains blocked until sourceProfile parity exists.
+- RTS unit/economy loops are not implemented.
+- Renderer extraction is not required before source-profile fixture proof.
+- The page is still a static inline prototype, but that is acceptable for the current proof boundary.
 ```
 
-## Construct / scenario gaps
+## Do not do next
 
 ```txt
-- Construct completion is represented as visual/HUD phase, not a typed idempotent ConstructEventResult.
-- Duplicate construct completion is not rejected through a stable result reason.
-- Scenario bootstrap does not exist as a command/result gate.
-- Early bootstrap is not rejected with construct_incomplete.
-- Duplicate bootstrap is not rejected with duplicate_scenario_bootstrap.
-- ConstructSnapshot and ScenarioBootstrapSnapshot are not stable standalone contracts.
-- RTS gameplay domains are documented but not yet safely connected to the construct proof.
-```
-
-## Visual/render gaps
-
-```txt
-- Three.js render setup is embedded directly in game.html.
-- Wedge geometry creation is embedded directly in game.html.
-- Stone material palette is embedded directly in game.html.
-- Construct animation and camera orbit are embedded directly in game.html.
-- HUD state mutation happens inside the render/runtime monolith.
-- Render code consumes inline constants instead of reusable descriptors.
-- Renderer handoff cannot yet consume source-owned construct descriptors only.
-- There is no render-source parity snapshot tying the visible build to the source profile.
-```
-
-## Gap narrowed in this pass
-
-```txt
-- Repo-local documentation now points at the latest source-profile fixture pointer freeze.
-- Central ledger sync is part of this run.
-- No runtime code was changed.
+- Do not create a new branch.
+- Do not work on Cavalry of Rome.
+- Do not replace the visible construct with another animation model.
+- Do not extract the full renderer before profile parity exists.
+- Do not build scenario bootstrap before construct sourceProfile proof exists.
+- Do not add RTS gameplay before the current construct is source-owned and fixture-readable.
 ```
