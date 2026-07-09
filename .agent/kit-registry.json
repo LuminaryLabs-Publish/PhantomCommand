@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T16-25-16-04-00",
-  "status": "sourceprofile-central-sync-gamehost-fixture-readback-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T16-25-16-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T16-25-16-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T16-25-16-04-00-sourceprofile-central-sync-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T16-25-16-04-00-gamehost-sourceprofile-consumer-readback.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T16-25-16-04-00-construct-proof-blocker-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T16-25-16-04-00-live-v6-source-parity-contract.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T16-25-16-04-00-bootstrap-still-blocked.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T16-25-16-04-00-sourceprofile-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-09T16-20-45-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T16-20-45-04-00.md",
+  "updatedAt": "2026-07-09T16-29-23-04-00",
+  "status": "central-ledger-sourceprofile-readback-gamehost-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T16-29-23-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T16-29-23-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T16-29-23-04-00-central-ledger-sourceprofile-readback-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T16-29-23-04-00-gamehost-sourceprofile-readback-refresh.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T16-29-23-04-00-construct-proof-source-profile-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T16-29-23-04-00-live-v6-profile-ledger-parity.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T16-29-23-04-00-bootstrap-deferred-by-source-proof.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T16-29-23-04-00-sourceprofile-fixture-build-central-sync.md",
+  "previousTracker": ".agent/trackers/2026-07-09T16-25-16-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T16-25-16-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -21,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after accessible Publish repo-list, central-ledger, and repo-local agent comparison; no checked non-Cavalry repo was missing and PhantomCommand had the oldest eligible documented-selection central tracker among checked repos"
+    "reason": "selected after accessible Publish repo-list, central-ledger, and repo-local agent comparison; no checked non-Cavalry repo was missing, but PhantomCommand repo-local sourceprofile state had advanced beyond central tracking"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -32,6 +32,7 @@
     "expectedLiveGapPolicy": "zero-gap",
     "expectedLiveRingPartCounts": [5, 5, 5, 5, 6, 8, 10, 12, 16, 20],
     "expectedLiveTotalPieces": 92,
+    "expectedLiveTotalBuildSeconds": 19.923,
     "currentGameHostSurface": [
       "window.GameHost.skipConstruct",
       "window.GameHost.restartConstruct",
@@ -69,7 +70,7 @@
       "emit piece descriptors matching live game.html math",
       "emit delay, settle, and transition margin descriptors",
       "emit source fingerprint and source snapshot",
-      "validate zero gaps, live ring part counts, 92 total pieces, and current handoff timing",
+      "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
       "project additive GameHost source diagnostics",
       "run DOM-free source-profile fixture",
       "splice sourceProfile diagnostics into game.html without removing legacy fields",
