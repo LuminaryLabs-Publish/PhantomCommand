@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T07-19-41-04-00`
+**Timestamp:** `2026-07-09T10-20-44-04-00`
 
 ## Critical source-profile gaps
 
@@ -25,7 +25,6 @@
 - GameHost does not yet expose sourceProfile, profileFingerprint, sourceSnapshot, descriptor parity, timing parity, or fixture status.
 - game.html has no additive consumer splice for source-profile diagnostics.
 - npm run build does not yet run a source-profile fixture before static artifact copy.
-- The central ledger drifted behind repo-local .agent state and needs same-pass parity rows to prevent future mismatch.
 ```
 
 ## Fixture acceptance gaps
@@ -70,7 +69,7 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now SourceProfile Readback Ledger + Fixture Build Consumer Gate.
+- The immediate next ledge is now SourceProfile Consumer Build Gate + GameHost Readback Fixture.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
