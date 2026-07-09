@@ -1,17 +1,17 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T04-38-39-04-00`
+**Timestamp:** `2026-07-09T04-50-00-04-00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Observed central PhantomCommand ledger lagging at 2026-07-09T01-28-10-04-00.
-- Observed repo-local PhantomCommand root .agent had already advanced to 2026-07-09T04-24-06-04-00.
+- Sampled root .agent/START_HERE.md state for the non-Cavalry Publish repos.
+- Confirmed PhantomCommand is tracked centrally and has root .agent state.
+- Observed central PhantomCommand ledger lagging behind repo-local .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback pass.
+- Selected PhantomCommand for a SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate pass.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -21,16 +21,15 @@
 - Read package.json.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read scripts/build-static.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-dsk-map.md.
-- Added render-audit/2026-07-09T04-38-39-04-00-gamehost-sourceprofile-consumer-readback.md.
-- Added gameplay-audit/2026-07-09T04-38-39-04-00-construct-result-blocker-loop.md.
-- Added source-profile-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T04-38-39-04-00-bootstrap-remains-blocked.md.
-- Added deploy-audit/2026-07-09T04-38-39-04-00-fixture-build-before-static-artifact.md.
+- Added architecture-audit/2026-07-09T04-50-00-04-00-sourceprofile-consumer-freeze-dsk-map.md.
+- Added render-audit/2026-07-09T04-50-00-04-00-gamehost-sourceprofile-readback-freeze.md.
+- Added gameplay-audit/2026-07-09T04-50-00-04-00-construct-result-deferred-loop.md.
+- Added source-profile-audit/2026-07-09T04-50-00-04-00-consumer-fixture-central-parity.md.
+- Added scenario-bootstrap-audit/2026-07-09T04-50-00-04-00-bootstrap-blocker-after-sourceprofile.md.
+- Added deploy-audit/2026-07-09T04-50-00-04-00-fixture-build-central-ledger-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -55,11 +54,11 @@
 
 ```txt
 package/source readback declares:
-- build copies static files into dist through node scripts/build-static.mjs.
-- vite dev/preview run on port 4173.
+- npm run build calls node scripts/build-static.mjs.
+- vite dev/start/preview run on port 4173.
 
-index/game route readback declares:
-- main menu routes to game.html.
+route readback declares:
+- index.html is the menu route.
 - game.html owns the live smooth-ring-handoff-v6 construct inline.
 
 game.html declares:
@@ -101,7 +100,7 @@ browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
 ```
 
-## New fixture target
+## Fixture target
 
 ```txt
 profile_build_id_matches_live_game_html
@@ -117,6 +116,7 @@ source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
 legacy_gamehost_fields_are_unchanged
+sourceprofile_consumer_readback_matches_fixture
 construct_result_is_blocked_until_source_profile_parity_passes
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
@@ -124,20 +124,26 @@ fixture_runs_without_dom_canvas_or_three
 fixture_build_gate_runs_before_static_artifact_upload
 ```
 
-## Current proof status
+## Pass status
 
 ```txt
 repo-list comparison: performed
-central ledger comparison: performed
+central-ledger comparison: performed
+root .agent sampling: performed
 source readback: performed
-root .agent updated: performed
-tracker created: performed
-turn ledger created: performed
-central change-log created: performed
-runtime implementation changed: no
-build proof: missing
-browser proof: missing
-fixture replay proof: missing
+root .agent update: performed
+architecture audit update: created
+render audit update: created
+gameplay audit update: created
+source-profile audit update: created
+scenario-bootstrap audit update: created
+deploy audit update: created
+turn ledger update: created
+central ledger update: performed
+central change-log update: created
+runtime source changed: no
 branch created: no
-pushed to main: yes
+pull request created: no
+local npm build: not run
+browser smoke: not run
 ```
