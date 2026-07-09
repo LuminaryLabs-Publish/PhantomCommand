@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T18-41-41-04-00`
+**Last aligned:** `2026-07-08T20-52-00-04-00`
 
 ## Purpose
 
@@ -18,21 +18,21 @@ No checked non-Cavalry Publish repo was fully new, absent from central tracking,
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected because central repo-ledger state still pointed at `2026-07-08T15-58-59-04-00` while repo-local state had already advanced to `2026-07-08T18-29-21-04-00`. This pass keeps one-repo scope and advances the same source-profile gate into an exact fixture manifest + central ledger sync handoff.
+`PhantomCommand` was selected as the oldest eligible fallback by sampled central alignment timestamp. The central ledger still pointed at `2026-07-08T18-41-41-04-00`, older than the other checked non-excluded repos, and the live source-profile fixture/consumer-readback gate remains unresolved.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/AetherVale          tracked / latest central update 2026-07-08T17-49-51-04-00
-LuminaryLabs-Publish/HorrorCorridor      tracked / latest central update 2026-07-08T18-19-43-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / latest central update 2026-07-08T18-09-21-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / latest central update 2026-07-08T17-09-48-04-00
-LuminaryLabs-Publish/PhantomCommand      selected / central ledger catch-up + source-profile fixture manifest
-LuminaryLabs-Publish/PrehistoricRush     tracked / latest central update 2026-07-08T16-51-11-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent observed / latest central 2026-07-08T20-30-19-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent observed / latest central 2026-07-08T18-58-10-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent observed / latest central 2026-07-08T20-10-32-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/TheOpenAbove        tracked / latest central update 2026-07-08T17-31-22-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / latest central update 2026-07-08T16-19-57-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / latest central update 2026-07-08T16-20-00-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / oldest sampled central 2026-07-08T18-41-41-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent observed / latest central 2026-07-08T19-30-31-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent observed / latest central 2026-07-08T19-21-15-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent observed / latest central 2026-07-08T20-21-59-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent observed / latest central 2026-07-08T19-50-20-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent observed / latest central 2026-07-08T18-51-55-04-00
 ```
 
 ## Current product read
@@ -87,21 +87,21 @@ source-owned smooth-ring-handoff-v6 profile
   -> ConstructEventResult blocker remains deferred until sourceProfile parity is proven
 ```
 
-## First files to read
+## First files to read next
 
 ```txt
 .agent/current-audit.md
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest-dsk-breakdown.md
-.agent/render-audit/2026-07-08T18-41-41-04-00-gamehost-source-profile-consumer-readback.md
-.agent/gameplay-audit/2026-07-08T18-41-41-04-00-construct-result-bootstrap-blocker.md
-.agent/source-profile-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest.md
-.agent/scenario-bootstrap-audit/2026-07-08T18-41-41-04-00-scenario-bootstrap-blocker-contract.md
-.agent/deploy-audit/2026-07-08T18-41-41-04-00-fixture-script-build-integration.md
-.agent/trackers/2026-07-08T18-41-41-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T18-41-41-04-00.md
+.agent/architecture-audit/2026-07-08T20-52-00-04-00-source-profile-consumer-readback-dsk-map.md
+.agent/render-audit/2026-07-08T20-52-00-04-00-gamehost-sourceprofile-shape-contract.md
+.agent/gameplay-audit/2026-07-08T20-52-00-04-00-construct-to-scenario-blocker-loop.md
+.agent/source-profile-audit/2026-07-08T20-52-00-04-00-fixture-row-consumer-readback-contract.md
+.agent/scenario-bootstrap-audit/2026-07-08T20-52-00-04-00-bootstrap-deferral-contract.md
+.agent/deploy-audit/2026-07-08T20-52-00-04-00-fixture-build-validation-gate.md
+.agent/trackers/2026-07-08T20-52-00-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-08T20-52-00-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -136,12 +136,12 @@ tests/phantom-command-source-profile-fixture.mjs
 
 Keep `index.html -> game.html`, the live `smooth-ring-handoff-v6` visual, `window.GameHost.skipConstruct`, `window.GameHost.restartConstruct`, and legacy `window.GameHost.getState()` fields stable.
 
-Do not add scenario bootstrap, unit control, economy, wave, objective, or render extraction until source-profile fixture rows prove profile constants, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, parity report, and additive GameHost readback.
+Do not add scenario bootstrap, unit control, economy, wave, objective, or render extraction until source-profile fixture rows prove profile constants, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, parity report, additive GameHost readback, and central ledger pointer parity.
 
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Source Profile Fixture Manifest + Central Ledger Sync Gate
+PhantomCommand SourceProfile Consumer Readback + Fixture Build Gate
 ```
 
 Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, and central ledger readback points to the same latest repo-local fixture gate.
