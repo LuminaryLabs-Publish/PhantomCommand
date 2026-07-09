@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T10-20-44-04-00`
+**Timestamp:** `2026-07-09T10-29-02-04-00`
 
 ## Validation performed in this pass
 
@@ -9,7 +9,7 @@
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Sampled/root-agent status was checked through central ledger readback and PhantomCommand repo-local .agent readback.
 - Confirmed PhantomCommand is tracked centrally and has root .agent state.
-- Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, or otherwise undocumented.
+- Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, recently added but undocumented, or otherwise undocumented.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
 - Selected PhantomCommand as the oldest eligible central-ledger fallback.
 - Read .agent/START_HERE.md.
@@ -21,16 +21,17 @@
 - Read package.json.
 - Read index.html.
 - Read game.html.
+- Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T10-20-44-04-00-sourceprofile-consumer-build-gate-dsk-map.md.
-- Added render-audit/2026-07-09T10-20-44-04-00-gamehost-sourceprofile-readback-fixture.md.
-- Added gameplay-audit/2026-07-09T10-20-44-04-00-construct-profile-gate-loop.md.
-- Added source-profile-audit/2026-07-09T10-20-44-04-00-live-v6-profile-parity-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T10-20-44-04-00-scenario-bootstrap-remains-blocked.md.
-- Added deploy-audit/2026-07-09T10-20-44-04-00-sourceprofile-fixture-build-gate.md.
+- Added architecture-audit/2026-07-09T10-29-02-04-00-sourceprofile-ledger-parity-dsk-map.md.
+- Added render-audit/2026-07-09T10-29-02-04-00-gamehost-sourceprofile-consumer-readback.md.
+- Added gameplay-audit/2026-07-09T10-29-02-04-00-construct-profile-result-blocker-loop.md.
+- Added source-profile-audit/2026-07-09T10-29-02-04-00-live-v6-ledger-parity-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T10-29-02-04-00-construct-result-precondition-freeze.md.
+- Added deploy-audit/2026-07-09T10-29-02-04-00-sourceprofile-fixture-build-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
