@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T12-50-00-04-00`
+**Timestamp:** `2026-07-09T12-55-20-04-00`
 
 ## Summary
 
@@ -8,19 +8,19 @@
 
 The visual construct should stay intact. The architectural blocker is still proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Ledger Catch-up + Build Fixture Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Fixture Pointer Freeze + Build Gate Readback**.
 
 ## Selection audit
 
 ```txt
 LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T12-08-46-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-20-08-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-25-39-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T11-30-50-04-00
 LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T10-40-00-04-00
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T11-00-39-04-00
 LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T11-39-50-04-00
 LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T11-50-08-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / central stale fallback / repo-local latest 2026-07-09T12-38-16-04-00 / central latest 2026-07-09T10-29-02-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / repo-local 2026-07-09T12-50-00-04-00 / central stale 2026-07-09T10-29-02-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T12-00-36-04-00
 ```
@@ -51,6 +51,10 @@ open index.html
 package.json:
   start/dev/preview use Vite on port 4173
   build calls node scripts/build-static.mjs
+
+scripts/build-static.mjs:
+  copies index.html, game.html, docs, and config into dist
+  does not run a fixture gate before copy
 
 index.html:
   menu says Single-player PvE RTS prototype
@@ -228,7 +232,7 @@ inline-camera-navigation-runtime
 inline-gamehost-construct-runtime
 ```
 
-### Next-cut local kits
+### Next-cut kits
 
 ```txt
 phantom-command-smooth-handoff-profile-kit
@@ -250,10 +254,8 @@ phantom-command-scenario-bootstrap-gate-kit
 phantom-command-scenario-bootstrap-blocker-kit
 ```
 
-## Main architectural read
+## Main finding
 
-The repo already has a generic construct scheduling kit and smoke test, but the live construct proof does not yet consume a source-owned PhantomCommand profile.
+`PhantomCommand` should not add RTS gameplay next.
 
-`game.html` remains the source authority for live constants, descriptors, timing, geometry, HUD, animation, and `GameHost` projection.
-
-The next implementation should source-own the profile, prove exact parity through DOM-free fixture rows, add only additive `GameHost.getState().sourceProfile` diagnostics, and wire the fixture into build before render extraction, construct result contracts, or scenario bootstrap work.
+The next implementation should first source-own the `smooth-ring-handoff-v6` profile and prove exact descriptor/timeline parity through DOM-free fixtures, then add additive `GameHost.getState().sourceProfile` readback without breaking legacy fields.
