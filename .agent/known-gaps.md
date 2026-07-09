@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T12-50-00-04-00`
+**Timestamp:** `2026-07-09T12-55-20-04-00`
 
 ## Critical source-profile gaps
 
@@ -31,8 +31,8 @@
 
 ```txt
 - Central LuminaryLabs tracking still pointed at 2026-07-09T10-29-02-04-00 before this pass.
-- Repo-local PhantomCommand .agent state had already advanced to 2026-07-09T12-38-16-04-00.
-- This pass refreshes repo-local docs and central pointers to 2026-07-09T12-50-00-04-00.
+- Repo-local PhantomCommand .agent state had advanced to 2026-07-09T12-50-00-04-00.
+- This pass refreshes repo-local docs and central pointers to 2026-07-09T12-55-20-04-00.
 - The next implementation should include a fixture row proving central_ledger_points_to_latest_source_profile_gate.
 ```
 
@@ -78,31 +78,7 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now SourceProfile Consumer Ledger Catch-up + Build Fixture Gate.
-- Source-profile ownership must happen before construct result authority.
-- Descriptor parity must happen before render extraction.
-- GameHost source diagnostics must be additive and preserve the legacy surface.
-- game.html must consume source-profile diagnostics only after DOM-free fixture proof.
-- npm run build should run the source-profile fixture before static artifact copy after the fixture exists.
-- The central ledger must be updated in the same pass as repo-local .agent docs and should point at the same latest tracker.
-- The fixture should include a central_ledger_points_to_latest_source_profile_gate row.
-- Construct result authority must happen before scenario bootstrap.
-- Scenario bootstrap must stay blocked until construct_complete is emitted by a typed result.
-- The generic construct-spiral-intro-kit should remain as a regression guard, not be treated as the live v6 proof until live profile parity fixtures exist.
-```
-
-## Documentation refreshed
-
-```txt
-- Root .agent/START_HERE.md refreshed.
-- Root .agent/current-audit.md refreshed.
-- Root .agent/known-gaps.md refreshed.
-- Root .agent/next-steps.md refreshed.
-- Root .agent/validation.md refreshed.
-- Root .agent/kit-registry.json refreshed.
-- Timestamped tracker added.
-- Timestamped turn-ledger entry added.
-- Architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits added.
-- Central LuminaryLabs ledger updated.
-- Central internal change log added.
+- Repo-local documentation now points at the latest source-profile fixture pointer freeze.
+- Central ledger sync is part of this run.
+- No runtime code was changed.
 ```
