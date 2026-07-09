@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T22-58-02-04-00`
+**Timestamp:** `2026-07-09T01-20-59-04-00`
 
 ## Summary
 
@@ -8,28 +8,28 @@
 
 The visible construct should be preserved. The active risk remains source authority and consumer proof: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline math, HUD mutation, and `GameHost` projection are still coupled to `game.html`.
 
-This pass keeps runtime files unchanged and narrows the next implementation to **Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate**.
+This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate**.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-08T22-38-17-04-00
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-08T22-51-43-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-08T21-31-35-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T21-18-39-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest central 2026-07-08T21-00-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest central 2026-07-08T21-58-34-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-08T22-19-38-04-00
-LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T20-52-00-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-00-22-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-09T00-00-41-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-09T00-40-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-08T21-50-56-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T22-58-02-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-09T00-09-22-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T23-40-55-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-09T00-50-00-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest central 2026-07-09T00-20-08-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest central 2026-07-08T23-19-33-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected because it was the oldest eligible fallback and the source-profile fixture gate remains unresolved.
+`PhantomCommand` was selected because it was the oldest eligible fallback and the source-profile fixture build/readback gate remains unresolved.
 
 ## Current interaction loop
 
@@ -185,6 +185,7 @@ profile parity report
 additive GameHost source diagnostics adapter
 DOM-free source profile fixture runner
 game.html sourceProfile consumer readback
+legacy GameHost compatibility fixture
 central ledger latest-tracker readback
 fixture build integration
 construct complete event blocker map
