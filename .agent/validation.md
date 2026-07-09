@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T13-00-37-04-00`
+**Timestamp:** `2026-07-09T16-20-45-04-00`
 
 ## Validation performed in this pass
 
@@ -9,9 +9,9 @@
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Sampled repo-local .agent/START_HERE.md state for checked non-Cavalry repos.
 - Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, recently added but undocumented, or otherwise undocumented.
-- Confirmed PhantomCommand had repo-local .agent state at 2026-07-09T12-55-20-04-00 while central tracking still pointed at 2026-07-09T12-38-16-04-00.
+- Confirmed PhantomCommand had the oldest eligible central tracker state among checked documented repos at read time.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as the repo-local/central documentation consistency target.
+- Selected PhantomCommand as the documentation consistency target.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -20,15 +20,17 @@
 - Read .agent/kit-registry.json.
 - Read package.json.
 - Read game.html.
+- Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T13-00-37-04-00-sourceprofile-ledger-repair-dsk-map.md.
-- Added render-audit/2026-07-09T13-00-37-04-00-gamehost-sourceprofile-consumer-map.md.
-- Added gameplay-audit/2026-07-09T13-00-37-04-00-construct-result-deferral-loop.md.
-- Added source-profile-audit/2026-07-09T13-00-37-04-00-live-profile-parity-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T13-00-37-04-00-bootstrap-remains-blocked.md.
-- Added deploy-audit/2026-07-09T13-00-37-04-00-sourceprofile-fixture-build-gate.md.
+- Added architecture-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-row-refresh-dsk-map.md.
+- Added render-audit/2026-07-09T16-20-45-04-00-gamehost-sourceprofile-readback-contract.md.
+- Added gameplay-audit/2026-07-09T16-20-45-04-00-construct-proof-blocker-loop.md.
+- Added source-profile-audit/2026-07-09T16-20-45-04-00-live-v6-source-parity-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T16-20-45-04-00-bootstrap-still-blocked.md.
+- Added deploy-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-build-wire-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest state.
@@ -70,6 +72,12 @@ game.html declares:
 - window.GameHost.skipConstruct
 - window.GameHost.restartConstruct
 - window.GameHost.getState legacy fields
+
+construct-spiral-intro-kit declares:
+- generic scheduling defaults, active windows, max active pieces, schedule sorting, state transitions, and snapshots
+- no live smooth-ring-handoff-v6 profile constants
+- no zero-gap live ring descriptor parity helper
+- no 92-piece profile fixture
 ```
 
 ## Required validation after the next implementation
