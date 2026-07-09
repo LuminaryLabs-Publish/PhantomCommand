@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T12-38-16-04-00`
+**Timestamp:** `2026-07-09T12-50-00-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Live SourceProfile Consumer Sync + Fixture Build Gate
+PhantomCommand SourceProfile Consumer Ledger Catch-up + Build Fixture Gate
 ```
 
 ## Goal
