@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T16-20-45-04-00`
+**Timestamp:** `2026-07-09T16-25-16-04-00`
 
 ## Critical source-profile gaps
 
@@ -18,40 +18,26 @@
 - There is no timeline contract module proving ringStartTimes, per-piece delays, totalBuildSeconds, and prewarm behavior.
 - There is no stable source fingerprint for the live construct profile.
 - There is no serializable source snapshot proving what profile produced the construct.
-- There is no profile parity report separating ok, warning, error, unsupported, and missing rows.
-- There is no DOM-free fixture proving [5,5,5,5,6,8,10,12,16,20].
-- There is no DOM-free fixture proving 92 live pieces.
-- There is no DOM-free fixture proving total build seconds 19.923.
-- GameHost does not yet expose sourceProfile, profileFingerprint, sourceSnapshot, descriptor parity, timing parity, or fixture status.
-- game.html has no additive consumer splice for source-profile diagnostics.
-- npm run build does not yet run a source-profile fixture before static artifact copy.
+- There is no DOM-free fixture for ring counts, gap policy, piece count, start times, and total build time.
+- window.GameHost.getState() does not expose additive sourceProfile diagnostics yet.
+- scripts/build-static.mjs copies static assets without running fixture proof first.
+- scenario bootstrap, economy, unit command, construct result authority, and RTS gameplay should remain blocked until source-profile parity passes.
 ```
 
-## Central tracking gap refreshed here
+## Practical risk
+
+Without source-profile parity, future agents can change `game.html` visuals and diagnostics independently from the source-owned DSK contracts. That makes the route visually stable but not reliably composable.
+
+## Safe order
 
 ```txt
-- The central PhantomCommand ledger was older than the rest of the active checked Publish repo rotation.
-- This run updates repo-local docs again and logs the new tracker centrally.
-- The next central entry should not treat source-profile parity as implemented until the fixture exists and runs.
-```
-
-## Non-blocking gaps
-
-```txt
-- Scenario bootstrap remains conceptual.
-- Construct result authority remains blocked until sourceProfile parity exists.
-- RTS unit/economy loops are not implemented.
-- Renderer extraction is not required before source-profile fixture proof.
-- The page is still a static inline prototype, but that is acceptable for the current proof boundary.
-```
-
-## Do not do next
-
-```txt
-- Do not create a new branch.
-- Do not work on Cavalry of Rome.
-- Do not replace the visible construct with another animation model.
-- Do not extract the full renderer before profile parity exists.
-- Do not build scenario bootstrap before construct sourceProfile proof exists.
-- Do not add RTS gameplay before the current construct is source-owned and fixture-readable.
+source profile
+  -> descriptors
+  -> timeline
+  -> fingerprint
+  -> fixture rows
+  -> GameHost additive diagnostics
+  -> build gate
+  -> central ledger parity
+  -> only then scenario bootstrap or command-result work
 ```
