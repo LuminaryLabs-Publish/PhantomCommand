@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T22-58-02-04-00`
+**Timestamp:** `2026-07-09T01-20-59-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate
+PhantomCommand SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate
 ```
 
 ## Goal
