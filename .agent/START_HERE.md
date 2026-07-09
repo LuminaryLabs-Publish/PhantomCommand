@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T12-50-00-04-00`
+**Last aligned:** `2026-07-09T12-55-20-04-00`
 
 ## Purpose
 
@@ -18,21 +18,21 @@ No checked non-Cavalry Publish repo was fully new, central-ledger absent, missin
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected because central tracking still pointed at `2026-07-09T10-29-02-04-00` while repo-local state had already advanced to `2026-07-09T12-38-16-04-00`. This run refreshes repo-local pointers and catches the central ledger up to the latest source-profile fixture target.
+`PhantomCommand` was selected because repo-local `.agent` state had already advanced past the central ledger. This run freezes repo-local pointers and catches central tracking up around the same source-profile fixture/build-gate target.
 
-This pass keeps runtime code unchanged and locks the next implementation target around source-owned `smooth-ring-handoff-v6` profile parity, additive `GameHost` source-profile readback, DOM-free fixture rows, build fixture gating, and deferred scenario bootstrap.
+This pass keeps runtime code unchanged and keeps the next implementation target focused on source-owned `smooth-ring-handoff-v6` profile parity, additive `GameHost` source-profile readback, DOM-free fixture rows, build fixture gating, and deferred scenario bootstrap.
 
 ## Publish repos checked
 
 ```txt
 LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T12-08-46-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-20-08-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-25-39-04-00
 LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T11-30-50-04-00
 LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T10-40-00-04-00
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T11-00-39-04-00
 LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T11-39-50-04-00
 LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T11-50-08-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / central stale fallback / repo-local 2026-07-09T12-38-16-04-00 / central 2026-07-09T10-29-02-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / repo-local 2026-07-09T12-50-00-04-00 / central stale 2026-07-09T10-29-02-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T12-00-36-04-00
 ```
@@ -96,14 +96,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T12-50-00-04-00-sourceprofile-consumer-ledger-catchup-dsk-map.md
-.agent/render-audit/2026-07-09T12-50-00-04-00-gamehost-sourceprofile-readback-freeze.md
-.agent/gameplay-audit/2026-07-09T12-50-00-04-00-construct-result-scenario-deferral-loop.md
-.agent/source-profile-audit/2026-07-09T12-50-00-04-00-live-profile-ledger-fixture-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T12-50-00-04-00-bootstrap-remains-blocked-until-construct-result.md
-.agent/deploy-audit/2026-07-09T12-50-00-04-00-sourceprofile-fixture-before-build-map.md
-.agent/trackers/2026-07-09T12-50-00-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T12-50-00-04-00.md
+.agent/architecture-audit/2026-07-09T12-55-20-04-00-sourceprofile-fixture-pointer-freeze-dsk-map.md
+.agent/render-audit/2026-07-09T12-55-20-04-00-gamehost-sourceprofile-consumer-readback.md
+.agent/gameplay-audit/2026-07-09T12-55-20-04-00-construct-result-bootstrap-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T12-55-20-04-00-live-profile-fixture-pointer-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T12-55-20-04-00-bootstrap-blocked-by-sourceprofile-fixture.md
+.agent/deploy-audit/2026-07-09T12-55-20-04-00-build-fixture-before-pages-map.md
+.agent/trackers/2026-07-09T12-55-20-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T12-55-20-04-00.md
 .agent/kit-registry.json
 ```
 
