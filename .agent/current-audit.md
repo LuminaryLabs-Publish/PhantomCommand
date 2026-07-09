@@ -1,35 +1,33 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T04-38-39-04-00`
+**Timestamp:** `2026-07-09T04-50-00-04-00`
 
 ## Summary
 
-`PhantomCommand` remains a static two-route proof: `index.html` is the menu and `game.html` is the live Three.js construct scene.
+`PhantomCommand` remains a static Vite/Three.js construct proof with a menu route and a live `game.html` route.
 
-The visible construct should be preserved. The active risk remains source authority and consumer proof: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline math, HUD mutation, and `GameHost` projection are still coupled to `game.html`.
+The visual construct should stay intact. The architectural blocker is not presentation polish; it is that the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timing math, HUD mutation, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate**.
 
 ## Selection audit
 
-Full accessible `LuminaryLabs-Publish` repo list checked:
-
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest observed 2026-07-09T04-19-00-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest observed 2026-07-09T02-50-39-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest observed 2026-07-09T03-29-29-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest 2026-07-09T04-30-54-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest 2026-07-09T02-50-39-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest 2026-07-09T03-29-29-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / central stale at 2026-07-09T01-28-10-04-00 / repo-local previous 2026-07-09T04-24-06-04-00
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest observed 2026-07-09T03-10-05-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest observed 2026-07-09T02-05-52-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest observed 2026-07-09T03-50-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest observed 2026-07-09T02-31-41-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest observed 2026-07-09T02-11-07-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / repo-local .agent ahead of central ledger / source-profile proof unresolved
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest 2026-07-09T03-10-05-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest 2026-07-09T02-05-52-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest 2026-07-09T03-50-12-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest 2026-07-09T02-31-41-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest 2026-07-09T02-11-07-04-00
 ```
 
-No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
+No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, or otherwise undocumented.
 
-`PhantomCommand` was selected because the central ledger lagged behind repo-local `.agent` state and the source-profile fixture/build consumer readback gate remains unresolved.
+`PhantomCommand` was selected because its repo-local `.agent` state had already advanced to `2026-07-09T04-38-39-04-00`, while the central ledger still lagged behind and the same source-profile fixture/build consumer proof remains unresolved.
 
 ## Current interaction loop
 
@@ -72,7 +70,7 @@ totalPieces: 92
 totalBuildSeconds: 19.923
 ```
 
-## Domains
+## Domains in use
 
 ```txt
 static-app-shell
@@ -120,7 +118,7 @@ scenario-bootstrap-gate
 scenario-bootstrap-blocker
 ```
 
-## Services
+## Services in use
 
 ### App shell services
 
@@ -172,7 +170,7 @@ construct-spiral-intro-kit-smoke
   -> assert all pieces settled
 ```
 
-### Needed source-profile fixture services
+### Needed source-profile consumer services
 
 ```txt
 source-owned smooth-ring-handoff-v6 profile
@@ -246,3 +244,9 @@ The repo already has a generic construct scheduling kit and smoke test, but the 
 The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source-profile, descriptor, fingerprint, snapshot, parity, central-ledger-readback, fixture-build, and GameHost diagnostic modules that reproduce the live v6 values, then splice those diagnostics into `game.html` additively.
 
 Construct event/result work is a second step. It should only start after sourceProfile fixture rows prove that the visible build is sourced from stable records rather than inline browser constants.
+
+## Next safe ledge
+
+```txt
+PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate
+```
