@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T10-29-02-04-00`
+**Timestamp:** `2026-07-09T12-38-16-04-00`
 
 ## Validation performed in this pass
 
@@ -26,12 +26,12 @@
 - Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T10-29-02-04-00-sourceprofile-ledger-parity-dsk-map.md.
-- Added render-audit/2026-07-09T10-29-02-04-00-gamehost-sourceprofile-consumer-readback.md.
-- Added gameplay-audit/2026-07-09T10-29-02-04-00-construct-profile-result-blocker-loop.md.
-- Added source-profile-audit/2026-07-09T10-29-02-04-00-live-v6-ledger-parity-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T10-29-02-04-00-construct-result-precondition-freeze.md.
-- Added deploy-audit/2026-07-09T10-29-02-04-00-sourceprofile-fixture-build-gate.md.
+- Added architecture-audit/2026-07-09T12-38-16-04-00-live-sourceprofile-consumer-sync-dsk-map.md.
+- Added render-audit/2026-07-09T12-38-16-04-00-gamehost-sourceprofile-render-readback.md.
+- Added gameplay-audit/2026-07-09T12-38-16-04-00-construct-result-deferral-loop.md.
+- Added source-profile-audit/2026-07-09T12-38-16-04-00-live-profile-fixture-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T12-38-16-04-00-scenario-bootstrap-remains-blocked.md.
+- Added deploy-audit/2026-07-09T12-38-16-04-00-sourceprofile-fixture-build-script-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
