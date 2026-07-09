@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T20-52-00-04-00`
+**Timestamp:** `2026-07-08T22-58-02-04-00`
 
 ## Validation performed in this pass
 
@@ -10,7 +10,7 @@
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
 - Confirmed PhantomCommand was the oldest eligible sampled central alignment after excluding TheCavalryOfRome.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Consumer Readback + Fixture Build Gate follow-up.
+- Selected PhantomCommand for a Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate follow-up.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -20,14 +20,15 @@
 - Read package.json.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T20-52-00-04-00-source-profile-consumer-readback-dsk-map.md.
-- Added render-audit/2026-07-08T20-52-00-04-00-gamehost-sourceprofile-shape-contract.md.
-- Added gameplay-audit/2026-07-08T20-52-00-04-00-construct-to-scenario-blocker-loop.md.
-- Added source-profile-audit/2026-07-08T20-52-00-04-00-fixture-row-consumer-readback-contract.md.
-- Added scenario-bootstrap-audit/2026-07-08T20-52-00-04-00-bootstrap-deferral-contract.md.
-- Added deploy-audit/2026-07-08T20-52-00-04-00-fixture-build-validation-gate.md.
+- Added architecture-audit/2026-07-08T22-58-02-04-00-construct-result-source-readiness-dsk-map.md.
+- Added render-audit/2026-07-08T22-58-02-04-00-gamehost-sourceprofile-consumer-readback.md.
+- Added gameplay-audit/2026-07-08T22-58-02-04-00-construct-result-idempotency-precondition.md.
+- Added source-profile-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-row-map.md.
+- Added scenario-bootstrap-audit/2026-07-08T22-58-02-04-00-scenario-bootstrap-stays-blocked.md.
+- Added deploy-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -105,6 +106,7 @@ source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
 legacy_gamehost_fields_are_unchanged
+construct_result_is_blocked_until_source_profile_parity_passes
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
