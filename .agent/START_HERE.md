@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T04-50-00-04-00`
+**Last aligned:** `2026-07-09T07-10-00-04-00`
 
 ## Purpose
 
@@ -12,29 +12,29 @@ Read this folder before changing runtime code.
 
 ## Current selection result
 
-The accessible `LuminaryLabs-Publish` organization repo list was compared against `LuminaryLabs-Dev/LuminaryLabs` repo-ledger entries and sampled root `.agent/START_HERE.md` state.
+The accessible `LuminaryLabs-Publish` organization repo list was compared against `LuminaryLabs-Dev/LuminaryLabs` repo-ledger entries and sampled repo-local `.agent/START_HERE.md` state.
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent` state, or otherwise undocumented.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected because repo-local `.agent` state had advanced beyond the central ledger and the source-profile fixture/build consumer readback seam is still unresolved.
+`PhantomCommand` was selected as the oldest eligible central-ledger fallback at first read. The previous central ledger for this repo pointed at `2026-07-09T04-50-00-04-00`, while later same-day catch-up passes had advanced other Publish repo ledgers.
 
-This pass keeps runtime code unchanged and tightens the next implementation into a source-profile consumer freeze with a central-ledger parity row.
+This pass keeps runtime code unchanged and narrows the next implementation to a source-profile ledger catch-up, additive `GameHost` sourceProfile readback, and fixture build gate.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest 2026-07-09T04-30-54-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest 2026-07-09T02-50-39-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest 2026-07-09T03-29-29-04-00
-LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / repo-local agent ahead of central ledger / source-profile consumer proof unresolved
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest 2026-07-09T03-10-05-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest 2026-07-09T02-05-52-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest 2026-07-09T03-50-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / central latest 2026-07-09T02-31-41-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central latest 2026-07-09T02-11-07-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T06-28-53-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T06-51-11-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T06-01-30-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T05-11-22-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T05-20-42-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T05-38-20-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T06-20-00-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central-ledger fallback / previous central latest 2026-07-09T04-50-00-04-00
+LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T06-10-35-04-00
 ```
 
 ## Current product read
@@ -96,14 +96,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T04-50-00-04-00-sourceprofile-consumer-freeze-dsk-map.md
-.agent/render-audit/2026-07-09T04-50-00-04-00-gamehost-sourceprofile-readback-freeze.md
-.agent/gameplay-audit/2026-07-09T04-50-00-04-00-construct-result-deferred-loop.md
-.agent/source-profile-audit/2026-07-09T04-50-00-04-00-consumer-fixture-central-parity.md
-.agent/scenario-bootstrap-audit/2026-07-09T04-50-00-04-00-bootstrap-blocker-after-sourceprofile.md
-.agent/deploy-audit/2026-07-09T04-50-00-04-00-fixture-build-central-ledger-gate.md
-.agent/trackers/2026-07-09T04-50-00-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T04-50-00-04-00.md
+.agent/architecture-audit/2026-07-09T07-10-00-04-00-sourceprofile-stale-ledger-catchup-dsk-map.md
+.agent/render-audit/2026-07-09T07-10-00-04-00-gamehost-sourceprofile-readback-catchup.md
+.agent/gameplay-audit/2026-07-09T07-10-00-04-00-construct-proof-no-rts-expansion-loop.md
+.agent/source-profile-audit/2026-07-09T07-10-00-04-00-sourceprofile-ledger-parity-fixture-gate.md
+.agent/scenario-bootstrap-audit/2026-07-09T07-10-00-04-00-bootstrap-stays-blocked-after-ledger-catchup.md
+.agent/deploy-audit/2026-07-09T07-10-00-04-00-build-script-fixture-splice-map.md
+.agent/trackers/2026-07-09T07-10-00-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T07-10-00-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -121,5 +121,5 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate
+PhantomCommand SourceProfile Ledger Catch-up + Fixture Build Consumer Gate
 ```
