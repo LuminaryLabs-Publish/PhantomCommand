@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-08T20-52-00-04-00`
+**Timestamp:** `2026-07-08T22-58-02-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Readback + Fixture Build Gate
+PhantomCommand Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate
 ```
 
 ## Goal
@@ -13,6 +13,8 @@ PhantomCommand SourceProfile Consumer Readback + Fixture Build Gate
 Preserve the current live visual while moving the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, profile parity report, additive GameHost diagnostics, central ledger readback, and fixture-build proof into explicit contracts.
 
 The next cut should prove profile parity without depending on DOM, canvas, Three.js, HUD mutation, or browser timing. Only after fixture proof should `game.html` consume those helpers additively through `window.GameHost.getState().sourceProfile`.
+
+Construct result authority should remain a documented precondition map until sourceProfile parity is proven.
 
 ## Checklist
 
@@ -34,7 +36,6 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-profile-parity-report-kit/index.js`.
 - [ ] Add `src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js`.
-- [ ] Add `src/kits/phantom-command-central-ledger-readback-kit/index.js` only if local fixture needs central pointer validation.
 - [ ] Add `tests/phantom-command-source-profile-fixture.mjs`.
 - [ ] Fixture proves profile build id parity.
 - [ ] Fixture proves ring count parity.
@@ -48,6 +49,7 @@ The next cut should prove profile parity without depending on DOM, canvas, Three
 - [ ] Fixture proves profile parity report has no errors.
 - [ ] Fixture proves additive GameHost source diagnostics shape.
 - [ ] Fixture proves legacy GameHost fields remain unchanged.
+- [ ] Fixture proves construct result remains blocked until sourceProfile parity passes.
 - [ ] Fixture proves central ledger points at the latest tracker/audit after repo-local docs advance.
 - [ ] Fixture proves build integration can run without DOM/canvas/Three.js.
 - [ ] Import only the diagnostics helper into `game.html` after fixture proof.
@@ -153,6 +155,7 @@ source_fingerprint_is_stable
 profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
 legacy_gamehost_fields_are_unchanged
+construct_result_is_blocked_until_source_profile_parity_passes
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
