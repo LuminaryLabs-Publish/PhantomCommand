@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T04-24-06-04-00`
+**Last aligned:** `2026-07-09T04-38-39-04-00`
 
 ## Purpose
 
@@ -18,18 +18,16 @@ No checked non-Cavalry Publish repo was fully new, absent from central tracking,
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`HorrorCorridor` was sampled first and already showed a newer root `.agent` alignment at `2026-07-09T04-19-00-04-00`, so `PhantomCommand` was selected as the next eligible stale source-profile fallback.
-
-This pass refreshes repo-local docs and central tracking around the SourceProfile consumer cutover and legacy GameHost fixture gate.
+`PhantomCommand` was selected because the central ledger was stale relative to repo-local `.agent` state: central still pointed at `2026-07-09T01-28-10-04-00`, while the repo-local root had already advanced to `2026-07-09T04-24-06-04-00`. This pass advances both repo-local docs and central tracking to the current source-profile fixture/readback gate.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / sampled root latest 2026-07-09T04-19-00-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest observed 2026-07-09T04-19-00-04-00
 LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest observed 2026-07-09T02-50-39-04-00
 LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest observed 2026-07-09T03-29-29-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / previous repo-local latest 2026-07-09T01-28-10-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / central stale at 2026-07-09T01-28-10-04-00 / repo-local previous 2026-07-09T04-24-06-04-00
 LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest observed 2026-07-09T03-10-05-04-00
 LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest observed 2026-07-09T02-05-52-04-00
 LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest observed 2026-07-09T03-50-12-04-00
@@ -99,14 +97,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-dsk-map.md
-.agent/render-audit/2026-07-09T04-24-06-04-00-gamehost-sourceprofile-readback-cutover.md
-.agent/gameplay-audit/2026-07-09T04-24-06-04-00-construct-result-precondition-loop.md
-.agent/source-profile-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T04-24-06-04-00-bootstrap-stays-deferred.md
-.agent/deploy-audit/2026-07-09T04-24-06-04-00-sourceprofile-fixture-build-validation-gate.md
-.agent/trackers/2026-07-09T04-24-06-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T04-24-06-04-00.md
+.agent/architecture-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-dsk-map.md
+.agent/render-audit/2026-07-09T04-38-39-04-00-gamehost-sourceprofile-consumer-readback.md
+.agent/gameplay-audit/2026-07-09T04-38-39-04-00-construct-result-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T04-38-39-04-00-bootstrap-remains-blocked.md
+.agent/deploy-audit/2026-07-09T04-38-39-04-00-fixture-build-before-static-artifact.md
+.agent/trackers/2026-07-09T04-38-39-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T04-38-39-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -139,12 +137,4 @@ tests/phantom-command-source-profile-fixture.mjs
 
 ## Main rule
 
-Keep `index.html -> game.html`, the live `smooth-ring-handoff-v6` visual, `window.GameHost.skipConstruct`, `window.GameHost.restartConstruct`, and legacy `window.GameHost.getState()` fields stable.
-
-Do not add scenario bootstrap, unit control, economy, wave, objective, or render extraction until source-profile fixture rows prove profile constants, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, fixture build integration, and central ledger pointer parity.
-
-## Current next safe ledge
-
-```txt
-PhantomCommand SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate
-```
+Do not begin RTS gameplay, scenario bootstrap, renderer extraction, or shared-kit promotion until the source-profile fixture and legacy GameHost consumer readback prove the live construct profile values without DOM/canvas/Three.js dependencies.
