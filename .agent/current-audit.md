@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T04-24-06-04-00`
+**Timestamp:** `2026-07-09T04-38-39-04-00`
 
 ## Summary
 
@@ -8,18 +8,18 @@
 
 The visible construct should be preserved. The active risk remains source authority and consumer proof: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline math, HUD mutation, and `GameHost` projection are still coupled to `game.html`.
 
-This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate**.
+This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback**.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / sampled root latest 2026-07-09T04-19-00-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / central latest observed 2026-07-09T04-19-00-04-00
 LuminaryLabs-Publish/AetherVale          tracked / root .agent present / central latest observed 2026-07-09T02-50-39-04-00
 LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / central latest observed 2026-07-09T03-29-29-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / previous repo-local latest 2026-07-09T01-28-10-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / tracked / root .agent present / central stale at 2026-07-09T01-28-10-04-00 / repo-local previous 2026-07-09T04-24-06-04-00
 LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / central latest observed 2026-07-09T03-10-05-04-00
 LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / central latest observed 2026-07-09T02-05-52-04-00
 LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / central latest observed 2026-07-09T03-50-12-04-00
@@ -29,7 +29,7 @@ LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / central
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected because the source-profile consumer readback/build gate remains unresolved and its previous repo-local alignment was older than the latest sampled HorrorCorridor root state.
+`PhantomCommand` was selected because the central ledger lagged behind repo-local `.agent` state and the source-profile fixture/build consumer readback gate remains unresolved.
 
 ## Current interaction loop
 
@@ -112,6 +112,7 @@ gamehost-legacy-compatibility
 central-ledger-readback
 source-profile-consumer-splice
 fixture-build-integration
+fixture-before-static-artifact
 construct-event-envelope
 construct-event-result
 construct-completion-idempotency
@@ -187,7 +188,7 @@ DOM-free source profile fixture runner
 game.html sourceProfile consumer readback
 legacy GameHost compatibility fixture
 central ledger latest-tracker readback
-fixture build integration
+fixture build integration before static artifact copy
 construct complete event blocker map
 scenario bootstrap blocker map
 ```
