@@ -1,34 +1,33 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T18-41-41-04-00`
+**Timestamp:** `2026-07-08T20-52-00-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Listed/checked the accessible LuminaryLabs-Publish repo set available through the GitHub connector and known Publish repo paths.
+- Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Confirmed the central PhantomCommand ledger was behind repo-local .agent state before this pass.
+- Confirmed PhantomCommand was the oldest eligible sampled central alignment after excluding TheCavalryOfRome.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a central-ledger-sync + source-profile fixture manifest follow-up.
+- Selected PhantomCommand for a SourceProfile Consumer Readback + Fixture Build Gate follow-up.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
 - Read .agent/known-gaps.md.
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
-- Read README.md.
 - Read package.json.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest-dsk-breakdown.md.
-- Added render-audit/2026-07-08T18-41-41-04-00-gamehost-source-profile-consumer-readback.md.
-- Added gameplay-audit/2026-07-08T18-41-41-04-00-construct-result-bootstrap-blocker.md.
-- Added source-profile-audit/2026-07-08T18-41-41-04-00-source-profile-fixture-manifest.md.
-- Added scenario-bootstrap-audit/2026-07-08T18-41-41-04-00-scenario-bootstrap-blocker-contract.md.
-- Added deploy-audit/2026-07-08T18-41-41-04-00-fixture-script-build-integration.md.
+- Added architecture-audit/2026-07-08T20-52-00-04-00-source-profile-consumer-readback-dsk-map.md.
+- Added render-audit/2026-07-08T20-52-00-04-00-gamehost-sourceprofile-shape-contract.md.
+- Added gameplay-audit/2026-07-08T20-52-00-04-00-construct-to-scenario-blocker-loop.md.
+- Added source-profile-audit/2026-07-08T20-52-00-04-00-fixture-row-consumer-readback-contract.md.
+- Added scenario-bootstrap-audit/2026-07-08T20-52-00-04-00-bootstrap-deferral-contract.md.
+- Added deploy-audit/2026-07-08T20-52-00-04-00-fixture-build-validation-gate.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -52,12 +51,6 @@
 ## Current evidence from source inspection
 
 ```txt
-README.md declares:
-- PhantomCommand is a single-player PvE RTS prototype.
-- index.html is the main menu.
-- game.html is the opening construct scene.
-- GitHub Pages deployment uses .github/workflows/deploy-pages.yml.
-
 package/source readback declares:
 - build copies static files into dist through node scripts/build-static.mjs.
 - vite dev/preview run on port 4173.
@@ -89,9 +82,9 @@ construct-spiral-intro-kit declares:
 
 ```txt
 npm install
-npm run build
-node tests/construct-spiral-intro-kit-smoke.mjs
 node tests/phantom-command-source-profile-fixture.mjs
+node tests/construct-spiral-intro-kit-smoke.mjs
+npm run build
 browser smoke for index.html -> game.html -> GameHost surface
 post-deploy Pages route check
 ```
@@ -115,6 +108,7 @@ legacy_gamehost_fields_are_unchanged
 central_ledger_points_to_latest_source_profile_gate
 scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
+fixture_build_gate_runs_before_static_artifact_upload
 ```
 
 ## Current proof status
