@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T01-20-59-04-00`
+**Timestamp:** `2026-07-09T01-28-10-04-00`
 
 ## Summary
 
@@ -8,18 +8,18 @@
 
 The visible construct should be preserved. The active risk remains source authority and consumer proof: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline math, HUD mutation, and `GameHost` projection are still coupled to `game.html`.
 
-This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate**.
+This pass keeps runtime files unchanged and narrows the next implementation to **Central SourceProfile Ledger Freeze + GameHost Consumer Fixture Gate**.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-00-22-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-09-24-04-00
 LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-09T00-00-41-04-00
 LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-09T00-40-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T22-58-02-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / central ledger catch-up from 2026-07-08T22-58-02-04-00 and repo-local 2026-07-09T01-20-59-04-00
 LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-09T00-09-22-04-00
 LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T23-40-55-04-00
 LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-09T00-50-00-04-00
@@ -29,7 +29,7 @@ LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest 
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
 
-`PhantomCommand` was selected because it was the oldest eligible fallback and the source-profile fixture build/readback gate remains unresolved.
+`PhantomCommand` was selected because central tracking was stale relative to repo-local `.agent` state and the source-profile consumer readback/build gate remains unresolved.
 
 ## Current interaction loop
 
