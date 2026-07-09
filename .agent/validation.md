@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-08T22-58-02-04-00`
+**Timestamp:** `2026-07-09T01-20-59-04-00`
 
 ## Validation performed in this pass
 
@@ -10,7 +10,7 @@
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
 - Confirmed PhantomCommand was the oldest eligible sampled central alignment after excluding TheCavalryOfRome.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate follow-up.
+- Selected PhantomCommand for a SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate follow-up.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -18,17 +18,19 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
+- Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read tests/construct-spiral-intro-kit-smoke.mjs.
-- Read repo-ledger/LuminaryLabs-Publish/PhantomCommand.md in the central ledger.
+- Read scripts/build-static.mjs.
+- Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-08T22-58-02-04-00-construct-result-source-readiness-dsk-map.md.
-- Added render-audit/2026-07-08T22-58-02-04-00-gamehost-sourceprofile-consumer-readback.md.
-- Added gameplay-audit/2026-07-08T22-58-02-04-00-construct-result-idempotency-precondition.md.
-- Added source-profile-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-row-map.md.
-- Added scenario-bootstrap-audit/2026-07-08T22-58-02-04-00-scenario-bootstrap-stays-blocked.md.
-- Added deploy-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-gate.md.
+- Added architecture-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-build-readback-dsk-map.md.
+- Added render-audit/2026-07-09T01-20-59-04-00-gamehost-sourceprofile-readback-contract.md.
+- Added gameplay-audit/2026-07-09T01-20-59-04-00-construct-result-blocker-loop.md.
+- Added source-profile-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-row-acceptance-map.md.
+- Added scenario-bootstrap-audit/2026-07-09T01-20-59-04-00-bootstrap-remains-blocked-by-sourceprofile.md.
+- Added deploy-audit/2026-07-09T01-20-59-04-00-fixture-build-script-wire-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -55,6 +57,11 @@
 package/source readback declares:
 - build copies static files into dist through node scripts/build-static.mjs.
 - vite dev/preview run on port 4173.
+
+index.html declares:
+- main menu static app shell.
+- Start button routes to game.html.
+- Open Scene link routes to game.html.
 
 game.html declares:
 - BUILD_ID smooth-ring-handoff-v6
