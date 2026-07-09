@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T13-00-37-04-00`
+**Last aligned:** `2026-07-09T16-20-45-04-00`
 
 ## Purpose
 
@@ -18,23 +18,23 @@ No checked non-Cavalry Publish repo was fully new, central-ledger absent, missin
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the documentation consistency target because repo-local `.agent` state had advanced to `2026-07-09T12-55-20-04-00` while the central `LuminaryLabs-Dev/LuminaryLabs` ledger still pointed at `2026-07-09T12-38-16-04-00`. This run refreshes repo-local pointers and central tracking together.
+`PhantomCommand` was selected as the oldest eligible documented-selection fallback. Central tracking still pointed at `2026-07-09T13-00-37-04-00`, while the rest of the checked Publish set had newer or non-eligible tracker state.
 
-This pass keeps runtime code unchanged and locks the next implementation target around source-owned `smooth-ring-handoff-v6` profile parity, additive `GameHost` source-profile readback, DOM-free fixture rows, build fixture gating, and deferred scenario bootstrap.
+This pass keeps runtime code unchanged and refreshes the next implementation target around source-owned `smooth-ring-handoff-v6` profile parity, additive `GameHost` source-profile readback, DOM-free fixture rows, build fixture gating, and deferred scenario bootstrap.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T12-08-46-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-30-09-04-00
-LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T11-30-50-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T10-40-00-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T11-00-39-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T11-39-50-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T11-50-08-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / repo-local 2026-07-09T12-55-20-04-00 / central 2026-07-09T12-38-16-04-00 before this run
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T15-56-42-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T14-16-00-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T15-09-09-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T12-00-36-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T13-00-37-04-00 before this run
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T15-31-40-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T13-18-48-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T15-39-08-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T14-39-07-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T13-38-15-04-00
 ```
 
 ## Current product read
@@ -96,14 +96,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T13-00-37-04-00-sourceprofile-ledger-repair-dsk-map.md
-.agent/render-audit/2026-07-09T13-00-37-04-00-gamehost-sourceprofile-consumer-map.md
-.agent/gameplay-audit/2026-07-09T13-00-37-04-00-construct-result-deferral-loop.md
-.agent/source-profile-audit/2026-07-09T13-00-37-04-00-live-profile-parity-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T13-00-37-04-00-bootstrap-remains-blocked.md
-.agent/deploy-audit/2026-07-09T13-00-37-04-00-sourceprofile-fixture-build-gate.md
-.agent/trackers/2026-07-09T13-00-37-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T13-00-37-04-00.md
+.agent/architecture-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-row-refresh-dsk-map.md
+.agent/render-audit/2026-07-09T16-20-45-04-00-gamehost-sourceprofile-readback-contract.md
+.agent/gameplay-audit/2026-07-09T16-20-45-04-00-construct-proof-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T16-20-45-04-00-live-v6-source-parity-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T16-20-45-04-00-bootstrap-still-blocked.md
+.agent/deploy-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-build-wire-map.md
+.agent/trackers/2026-07-09T16-20-45-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T16-20-45-04-00.md
 .agent/kit-registry.json
 ```
 
