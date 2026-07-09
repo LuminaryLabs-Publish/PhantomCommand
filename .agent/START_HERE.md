@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-08T22-58-02-04-00`
+**Last aligned:** `2026-07-09T01-20-59-04-00`
 
 ## Purpose
 
@@ -18,21 +18,21 @@ No checked non-Cavalry Publish repo was fully new, absent from central tracking,
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible tracked fallback by central alignment timestamp. Its previous central alignment was `2026-07-08T20-52-00-04-00`, older than the other checked non-excluded repos in this run.
+`PhantomCommand` was selected as the oldest eligible tracked fallback. Its previous central alignment was `2026-07-08T22-58-02-04-00`, older than the other checked non-excluded repos in this run.
 
 ## Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-08T22-38-17-04-00
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-08T22-51-43-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-08T21-31-35-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T21-18-39-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest central 2026-07-08T21-00-12-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest central 2026-07-08T21-58-34-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-08T22-19-38-04-00
-LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T20-52-00-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-09T01-00-22-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-09T00-00-41-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-09T00-40-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-08T21-50-56-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T22-58-02-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-09T00-09-22-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T23-40-55-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-09T00-50-00-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest central 2026-07-09T00-20-08-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest central 2026-07-08T23-19-33-04-00
 ```
 
 ## Current product read
@@ -81,10 +81,12 @@ source-owned smooth-ring-handoff-v6 profile
   -> createPhantomCommandSourceSnapshot
   -> createPhantomCommandProfileParityReport
   -> createGameHostSourceProfileDiagnostics
-  -> DOM-free fixture rows
+  -> DOM-free sourceProfile fixture rows
+  -> package build fixture execution
   -> game.html additive sourceProfile consumer readback
-  -> fixture build gate
-  -> ConstructEventEnvelope shape only after source parity passes
+  -> legacy GameHost compatibility proof
+  -> central ledger pointer parity proof
+  -> ConstructEventEnvelope stays blocked until sourceProfile parity passes
   -> ConstructEventResult idempotency gate remains blocked until sourceProfile proof exists
   -> scenario bootstrap remains deferred
 ```
@@ -96,14 +98,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-08T22-58-02-04-00-construct-result-source-readiness-dsk-map.md
-.agent/render-audit/2026-07-08T22-58-02-04-00-gamehost-sourceprofile-consumer-readback.md
-.agent/gameplay-audit/2026-07-08T22-58-02-04-00-construct-result-idempotency-precondition.md
-.agent/source-profile-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-row-map.md
-.agent/scenario-bootstrap-audit/2026-07-08T22-58-02-04-00-scenario-bootstrap-stays-blocked.md
-.agent/deploy-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-gate.md
-.agent/trackers/2026-07-08T22-58-02-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-08T22-58-02-04-00.md
+.agent/architecture-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-build-readback-dsk-map.md
+.agent/render-audit/2026-07-09T01-20-59-04-00-gamehost-sourceprofile-readback-contract.md
+.agent/gameplay-audit/2026-07-09T01-20-59-04-00-construct-result-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-row-acceptance-map.md
+.agent/scenario-bootstrap-audit/2026-07-09T01-20-59-04-00-bootstrap-remains-blocked-by-sourceprofile.md
+.agent/deploy-audit/2026-07-09T01-20-59-04-00-fixture-build-script-wire-map.md
+.agent/trackers/2026-07-09T01-20-59-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T01-20-59-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -138,12 +140,12 @@ tests/phantom-command-source-profile-fixture.mjs
 
 Keep `index.html -> game.html`, the live `smooth-ring-handoff-v6` visual, `window.GameHost.skipConstruct`, `window.GameHost.restartConstruct`, and legacy `window.GameHost.getState()` fields stable.
 
-Do not add scenario bootstrap, unit control, economy, wave, objective, or render extraction until source-profile fixture rows prove profile constants, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, parity report, additive GameHost readback, unchanged legacy GameHost compatibility, fixture build integration, and central ledger pointer parity.
+Do not add scenario bootstrap, unit control, economy, wave, objective, or render extraction until source-profile fixture rows prove profile constants, ring descriptors, piece descriptors, timeline descriptors, source fingerprint, source snapshot, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, fixture build integration, and central ledger pointer parity.
 
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate
+PhantomCommand SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate
 ```
 
 Stop that ledge when DOM-free fixture rows prove build id, ring count, zero gaps, part counts, 92 pieces, 19.923 total seconds, handoff values, ring start times, source fingerprint stability, source snapshot serialization, parity report shape, additive GameHost source diagnostics, unchanged legacy GameHost compatibility, fixture build invocation, and construct-result/scenario-bootstrap precondition blockers.
