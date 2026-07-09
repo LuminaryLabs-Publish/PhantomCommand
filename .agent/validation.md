@@ -1,17 +1,16 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T04-50-00-04-00`
+**Timestamp:** `2026-07-09T07-10-00-04-00`
 
 ## Validation performed in this pass
 
 ```txt
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Sampled root .agent/START_HERE.md state for the non-Cavalry Publish repos.
+- Sampled repo-local .agent/START_HERE.md state for PhantomCommand.
 - Confirmed PhantomCommand is tracked centrally and has root .agent state.
-- Observed central PhantomCommand ledger lagging behind repo-local .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Consumer Freeze + Fixture Build Central Ledger Gate pass.
+- Selected PhantomCommand as the oldest eligible central-ledger fallback at first read.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -19,17 +18,19 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
+- Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read scripts/build-static.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T04-50-00-04-00-sourceprofile-consumer-freeze-dsk-map.md.
-- Added render-audit/2026-07-09T04-50-00-04-00-gamehost-sourceprofile-readback-freeze.md.
-- Added gameplay-audit/2026-07-09T04-50-00-04-00-construct-result-deferred-loop.md.
-- Added source-profile-audit/2026-07-09T04-50-00-04-00-consumer-fixture-central-parity.md.
-- Added scenario-bootstrap-audit/2026-07-09T04-50-00-04-00-bootstrap-blocker-after-sourceprofile.md.
-- Added deploy-audit/2026-07-09T04-50-00-04-00-fixture-build-central-ledger-gate.md.
+- Added architecture-audit/2026-07-09T07-10-00-04-00-sourceprofile-stale-ledger-catchup-dsk-map.md.
+- Added render-audit/2026-07-09T07-10-00-04-00-gamehost-sourceprofile-readback-catchup.md.
+- Added gameplay-audit/2026-07-09T07-10-00-04-00-construct-proof-no-rts-expansion-loop.md.
+- Added source-profile-audit/2026-07-09T07-10-00-04-00-sourceprofile-ledger-parity-fixture-gate.md.
+- Added scenario-bootstrap-audit/2026-07-09T07-10-00-04-00-bootstrap-stays-blocked-after-ledger-catchup.md.
+- Added deploy-audit/2026-07-09T07-10-00-04-00-build-script-fixture-splice-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
