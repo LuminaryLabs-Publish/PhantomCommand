@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-08T20-52-00-04-00`
+**Timestamp:** `2026-07-08T22-58-02-04-00`
 
 ## Summary
 
@@ -8,23 +8,23 @@
 
 The visible construct should be preserved. The active risk remains source authority and consumer proof: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline math, HUD mutation, and `GameHost` projection are still coupled to `game.html`.
 
-This pass keeps runtime files unchanged and narrows the next implementation to **SourceProfile Consumer Readback + Fixture Build Gate**.
+This pass keeps runtime files unchanged and narrows the next implementation to **Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate**.
 
 ## Selection audit
 
 Full accessible `LuminaryLabs-Publish` repo list checked:
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent observed / latest central 2026-07-08T20-30-19-04-00
-LuminaryLabs-Publish/AetherVale          tracked / root .agent observed / latest central 2026-07-08T18-58-10-04-00
-LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent observed / latest central 2026-07-08T20-10-32-04-00
+LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent present / latest central 2026-07-08T22-38-17-04-00
+LuminaryLabs-Publish/HorrorCorridor      tracked / root .agent present / latest central 2026-07-08T22-51-43-04-00
+LuminaryLabs-Publish/AetherVale          tracked / root .agent present / latest central 2026-07-08T21-31-35-04-00
+LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent present / latest central 2026-07-08T21-18-39-04-00
+LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent present / latest central 2026-07-08T21-00-12-04-00
+LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent present / latest central 2026-07-08T21-58-34-04-00
+LuminaryLabs-Publish/TheOpenAbove        tracked / root .agent present / latest central 2026-07-08T22-19-38-04-00
+LuminaryLabs-Publish/PhantomCommand      selected / oldest eligible central alignment 2026-07-08T20-52-00-04-00
 LuminaryLabs-Publish/TheCavalryOfRome    excluded by rule
-LuminaryLabs-Publish/PhantomCommand      selected / oldest sampled central 2026-07-08T18-41-41-04-00
-LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent observed / latest central 2026-07-08T19-30-31-04-00
-LuminaryLabs-Publish/ZombieOrchard       tracked / root .agent observed / latest central 2026-07-08T19-21-15-04-00
-LuminaryLabs-Publish/IntoTheMeadow       tracked / root .agent observed / latest central 2026-07-08T20-21-59-04-00
-LuminaryLabs-Publish/MyCozyIsland        tracked / root .agent observed / latest central 2026-07-08T19-50-20-04-00
-LuminaryLabs-Publish/TheUnmappedHouse    tracked / root .agent observed / latest central 2026-07-08T18-51-55-04-00
+LuminaryLabs-Publish/PrehistoricRush     tracked / root .agent present / latest central 2026-07-08T21-50-56-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, undocumented, recently added but undocumented, or missing root `.agent/START_HERE.md` state.
@@ -242,3 +242,5 @@ phantom-command-scenario-bootstrap-blocker-kit
 The repo already has a generic construct scheduling kit and smoke test, but the live construct proof does not yet consume a source-owned PhantomCommand profile.
 
 The next implementation should not start RTS gameplay or rewrite rendering. It should create deterministic, DOM-free source-profile, descriptor, fingerprint, snapshot, parity, central-ledger-readback, fixture-build, and GameHost diagnostic modules that reproduce the live v6 values, then splice those diagnostics into `game.html` additively.
+
+Construct event/result work is a second step. It should only start after sourceProfile fixture rows prove that the visible build is sourced from stable records rather than inline browser constants.
