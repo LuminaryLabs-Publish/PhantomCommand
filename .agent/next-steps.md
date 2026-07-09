@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T16-25-16-04-00`
+**Timestamp:** `2026-07-09T16-29-23-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Central Sync + GameHost Fixture Readback Gate
+PhantomCommand Central Ledger SourceProfile Readback + GameHost Fixture Gate
 ```
 
 ## Goal
@@ -18,34 +18,78 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
 
 ## Checklist
 
-- [ ] Add `src/source-profile/smooth-ring-handoff-v6-profile.js`.
-- [ ] Add `src/source-profile/normalize-construct-profile.js`.
-- [ ] Add `src/source-profile/ring-descriptors.js`.
-- [ ] Add `src/source-profile/piece-descriptors.js`.
-- [ ] Add `src/source-profile/timeline-descriptors.js`.
-- [ ] Add `src/source-profile/source-fingerprint.js`.
-- [ ] Add `src/source-profile/source-snapshot.js`.
-- [ ] Add `src/source-profile/profile-parity-report.js`.
-- [ ] Add `src/source-profile/gamehost-sourceprofile-projection.js`.
-- [ ] Add `scripts/validate-source-profile.mjs`.
-- [ ] Fixture must assert ring count `10`.
-- [ ] Fixture must assert zero gaps.
-- [ ] Fixture must assert ring part counts `[5,5,5,5,6,8,10,12,16,20]`.
-- [ ] Fixture must assert total pieces `92`.
-- [ ] Fixture must assert `MOVE_SECONDS=2.6`, `RING_HANDOFF=0.72`, `PART_STAGGER=0.025`, and `PREWARM_SECONDS=0.45`.
-- [ ] Fixture must assert `totalBuildSeconds` remains compatible with legacy `GameHost.getState().animation.totalBuildTime`.
-- [ ] Splice additive `sourceProfile` into `window.GameHost.getState()` without removing legacy fields.
-- [ ] Update `scripts/build-static.mjs` so `npm run build` runs source-profile fixture before copying static files.
+- [ ] Keep `index.html -> game.html` routing unchanged.
+- [ ] Keep visible `smooth-ring-handoff-v6` construct behavior unchanged.
+- [ ] Keep `window.GameHost.skipConstruct` unchanged.
+- [ ] Keep `window.GameHost.restartConstruct` unchanged.
+- [ ] Keep existing `window.GameHost.getState()` fields unchanged.
+- [ ] Add `src/kits/phantom-command-smooth-handoff-profile-kit/index.js`.
+- [ ] Mirror current `game.html` constants exactly.
+- [ ] Add `normalizeSmoothHandoffProfile(profile)`.
+- [ ] Add `src/kits/phantom-command-ring-descriptor-kit/index.js`.
+- [ ] Add `derivePhantomCommandRingDescriptors(profile)`.
+- [ ] Add `src/kits/phantom-command-piece-descriptor-kit/index.js`.
+- [ ] Add `derivePhantomCommandPieceDescriptors(profile, rings)`.
+- [ ] Add `src/kits/phantom-command-handoff-timeline-contract-kit/index.js`.
+- [ ] Add delay, settle, handoff, prewarm, ringStartTimes, and total-build descriptor helpers.
+- [ ] Add `src/kits/phantom-command-source-profile-fingerprint-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-source-profile-snapshot-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-profile-parity-report-kit/index.js`.
+- [ ] Add `src/kits/phantom-command-gamehost-source-diagnostics-kit/index.js`.
+- [ ] Add `tests/phantom-command-source-profile-fixture.mjs`.
+- [ ] Fixture proves profile build id parity.
+- [ ] Fixture proves ring count parity.
+- [ ] Fixture proves zero-gap policy.
+- [ ] Fixture proves ring part counts `[5,5,5,5,6,8,10,12,16,20]`.
+- [ ] Fixture proves piece descriptor count `92`.
+- [ ] Fixture proves total build seconds `19.923`.
+- [ ] Fixture proves handoff values `RING_HANDOFF = 0.72` and `PART_STAGGER = 0.025`.
+- [ ] Fixture proves source fingerprint stability.
+- [ ] Fixture proves source snapshot serialization.
+- [ ] Fixture proves profile parity report has no errors.
+- [ ] Fixture proves additive GameHost source diagnostics shape.
+- [ ] Fixture proves legacy GameHost fields remain unchanged.
+- [ ] Fixture proves sourceprofile_consumer_readback_matches_fixture.
+- [ ] Fixture proves construct result remains blocked until sourceProfile parity passes.
+- [ ] Fixture proves central ledger points at the latest tracker/audit after repo-local docs advance.
+- [ ] Fixture proves build integration can run without DOM/canvas/Three.js.
+- [ ] Import only the diagnostics helper into `game.html` after fixture proof.
+- [ ] Add additive `sourceProfile` diagnostics under `window.GameHost.getState()`.
+- [ ] Add fixture script to validation path only after it exists and passes locally.
+- [ ] Ensure `npm run build` runs source-profile fixture before copying static artifacts.
+- [ ] Run `node tests/phantom-command-source-profile-fixture.mjs`.
+- [ ] Run `node tests/construct-spiral-intro-kit-smoke.mjs`.
 - [ ] Run `npm run build`.
-- [ ] Browser-smoke `index.html -> game.html`.
-- [ ] Keep no branches and push only to `main`.
+- [ ] Push only to `main`.
 
-## Do not do next
+## Stop condition
+
+Stop the implementation slice only after these are fixture-readable:
 
 ```txt
-- do not start scenario bootstrap
-- do not start economy or RTS units
-- do not replace the renderer
-- do not rewrite the visible construct scene
-- do not start command-result authority before source-profile parity
+sourceProfile.buildId === smooth-ring-handoff-v6
+sourceProfile.ringCount === 10
+sourceProfile.ringGapBase === 0
+sourceProfile.ringGapGrowth === 0
+sourceProfile.ringPartCounts === [5,5,5,5,6,8,10,12,16,20]
+sourceProfile.totalPieces === 92
+sourceProfile.totalBuildSeconds === 19.923
+sourceProfile.ringStartTimes match legacy GameHost values
+profileParity.errors.length === 0
+legacy GameHost fields still exist
+constructResult remains deferred
+scenarioBootstrap remains deferred
+central ledger latest tracker equals repo-local latest tracker
+```
+
+## Defer until after proof
+
+```txt
+scenario bootstrap
+RTS controls
+resource economy
+renderer extraction
+camera rewrite
+unit control
+new visual pass
 ```
