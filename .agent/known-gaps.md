@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T13-00-37-04-00`
+**Timestamp:** `2026-07-09T16-20-45-04-00`
 
 ## Critical source-profile gaps
 
@@ -15,7 +15,7 @@
 - There is no normalizer proving exact live default values.
 - There is no ring descriptor module that reproduces the live no-gap ring descriptors.
 - There is no piece descriptor module that reproduces the live 92-piece construct.
-- There is no timeline contract module proving ringStartTimes, per-piece delays, and totalBuildSeconds.
+- There is no timeline contract module proving ringStartTimes, per-piece delays, totalBuildSeconds, and prewarm behavior.
 - There is no stable source fingerprint for the live construct profile.
 - There is no serializable source snapshot proving what profile produced the construct.
 - There is no profile parity report separating ok, warning, error, unsupported, and missing rows.
@@ -27,10 +27,10 @@
 - npm run build does not yet run a source-profile fixture before static artifact copy.
 ```
 
-## Central tracking gap narrowed here
+## Central tracking gap refreshed here
 
 ```txt
-- Repo-local .agent state had advanced beyond the central PhantomCommand ledger.
+- The central PhantomCommand ledger was older than the rest of the active checked Publish repo rotation.
 - This run updates repo-local docs again and logs the new tracker centrally.
 - The next central entry should not treat source-profile parity as implemented until the fixture exists and runs.
 ```
