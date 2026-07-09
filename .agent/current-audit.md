@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T10-29-02-04-00`
+**Timestamp:** `2026-07-09T12-38-16-04-00`
 
 ## Summary
 
@@ -8,21 +8,21 @@
 
 The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Ledger Parity + Build Gate Readback**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand Live SourceProfile Consumer Sync + Fixture Build Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T09-59-27-04-00
-LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T08-50-00-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T07-41-29-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T08-02-33-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T10-20-44-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T12-08-46-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T12-20-08-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T11-30-50-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T10-40-00-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T11-00-39-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T11-39-50-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T11-50-08-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T10-29-02-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T12-00-36-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
@@ -256,22 +256,4 @@ The repo already has a generic construct scheduling kit and smoke test, but the 
 
 `game.html` remains the source authority for live constants, descriptors, timing, geometry, HUD, animation, and `GameHost` projection.
 
-The next implementation should source-own the profile and prove exact parity before render extraction, construct result contracts, or scenario bootstrap work.
-
-## Main render read
-
-The render surface is visual and stable enough for now.
-
-The blocker is not animation polish. The blocker is that renderer-visible values are not traced to reusable source descriptors.
-
-## Main gameplay read
-
-The current interaction loop is a construct proof, not a full RTS loop.
-
-Scenario bootstrap, undead unit commands, economy, buildings, wave control, and combat should remain blocked until `construct_complete` can be emitted as an idempotent source-owned result.
-
-## Next safe ledge
-
-```txt
-PhantomCommand SourceProfile Ledger Parity + Build Gate Readback
-```
+The next implementation should source-own the profile, prove exact parity through DOM-free fixture rows, and add only additive `GameHost.getState().sourceProfile` diagnostics before render extraction, construct result contracts, or scenario bootstrap work.
