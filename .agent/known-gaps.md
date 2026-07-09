@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T10-29-02-04-00`
+**Timestamp:** `2026-07-09T12-38-16-04-00`
 
 ## Critical source-profile gaps
 
@@ -69,7 +69,7 @@
 ## Gap narrowed in this pass
 
 ```txt
-- The immediate next ledge is now SourceProfile Ledger Parity + Build Gate Readback.
+- The immediate next ledge is now Live SourceProfile Consumer Sync + Fixture Build Gate.
 - Source-profile ownership must happen before construct result authority.
 - Descriptor parity must happen before render extraction.
 - GameHost source diagnostics must be additive and preserve the legacy surface.
