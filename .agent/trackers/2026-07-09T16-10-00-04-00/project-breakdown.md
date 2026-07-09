@@ -1,0 +1,187 @@
+# PhantomCommand Project Breakdown
+
+**Timestamp:** `2026-07-09T16-10-00-04-00`
+
+## Goal
+
+Refresh the repo-local `.agent` breakdown for `LuminaryLabs-Publish/PhantomCommand`, keep the live static route untouched, and align central tracking around the next source-profile proof pass.
+
+## Selection result
+
+`LuminaryLabs-Publish/PhantomCommand` was selected after comparing the accessible `LuminaryLabs-Publish` repo list against the central `LuminaryLabs-Dev/LuminaryLabs` ledger.
+
+No checked non-Cavalry Publish repo was new, absent from the ledger, missing a sampled root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
+
+`LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by rule.
+
+`PhantomCommand` was the oldest eligible central-ledger fallback in the sampled set, with central tracking still at `2026-07-09T13-00-37-04-00` before this pass.
+
+## Publish organization repositories observed
+
+```txt
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T15-56-42-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T14-16-00-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T15-09-09-04-00
+LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T13-00-37-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T15-31-40-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T13-18-48-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T15-39-08-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T14-39-07-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T13-38-15-04-00
+```
+
+## Current product read
+
+`PhantomCommand` is a static Vite / Three.js construct proof.
+
+The public route is simple:
+
+```txt
+index.html
+  -> menu copy and route controls
+  -> game.html
+  -> inline Three.js smooth-ring-handoff-v6 construct runtime
+```
+
+The live construct is visually stable and should remain unchanged until source-profile parity is proved.
+
+## Current interaction loop
+
+```txt
+open index.html
+  -> menu renders Phantom Command copy and route controls
+  -> Start or Open Scene routes to game.html
+  -> game.html imports Three.js from CDN
+  -> inline runtime creates renderer, scene, fog, lights, camera, HUD, materials, and input state
+  -> inline constants define smooth-ring-handoff-v6
+  -> inline ring math creates 10 no-gap construct rings
+  -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
+  -> inline wedge geometry creates 92 stone pieces
+  -> construct(seq) animates each piece by ring delay plus part delay
+  -> keyboard and buttons mutate skip/restart/pan state
+  -> mouse wheel mutates zoom target
+  -> frame loop advances construct, camera, tower, command figure, HUD, and renderer
+  -> window.GameHost.getState() reports legacy buildId, phase, progress, pieces, rings, ringParts, ringGaps, ringStartTimes, and animation constants
+```
+
+## Domains in use
+
+```txt
+static-route-shell
+menu-route
+scene-route
+vite-static-build
+three-cdn-runtime
+browser-render-loop
+inline-construct-profile
+ring-descriptor-inline-math
+piece-descriptor-inline-math
+construct-timeline-inline-math
+wedge-geometry-authoring
+material-palette
+lighting-and-fog
+hud-projection
+input-pan-control
+camera-orbit-zoom-control
+skip-restart-control
+legacy-gamehost-diagnostics
+construct-spiral-intro-kit
+construct-spiral-schedule
+construct-piece-state-machine
+source-profile-parity-next
+source-fingerprint-next
+source-snapshot-next
+profile-fixture-next
+central-ledger-sync
+```
+
+## Services the kits offer
+
+```txt
+construct-spiral-intro-kit:
+  create default intro timing config
+  normalize and sort piece schedules
+  compute piece ids
+  install pieces
+  reset sequence state
+  update active, settled, and pending states by dt
+  expose active, pending, settled, ring-window, time, progress, and estimated-total snapshots
+
+game.html inline runtime:
+  define live smooth-ring-handoff-v6 constants
+  derive ring widths, gaps, part counts, and start times
+  create wedge meshes and seam geometry
+  animate radial/drop/rotation placement
+  report HUD progress and phase
+  process pan, zoom, skip, and restart input
+  expose legacy window.GameHost state
+
+build-static script:
+  copy index.html, game.html, docs, and config into dist
+  currently does not gate build on source-profile parity fixture
+```
+
+## Kits
+
+```txt
+Implemented/source-backed:
+  construct-spiral-intro-kit
+  construct-spiral-schedule-kit
+  construct-piece-id-kit
+  construct-piece-state-kit
+  construct-sequence-update-kit
+
+Inline/runtime-implied:
+  legacy-inline-smooth-ring-handoff-profile
+  legacy-inline-ring-descriptor-runtime
+  legacy-inline-piece-descriptor-runtime
+  legacy-inline-timeline-runtime
+  legacy-inline-wedge-geometry-runtime
+  legacy-inline-hud-projection-runtime
+  legacy-inline-camera-input-runtime
+  legacy-inline-gamehost-diagnostics
+
+Next-cut:
+  phantom-command-smooth-handoff-profile-kit
+  phantom-command-ring-descriptor-kit
+  phantom-command-piece-descriptor-kit
+  phantom-command-handoff-timeline-contract-kit
+  phantom-command-source-profile-fingerprint-kit
+  phantom-command-source-profile-snapshot-kit
+  phantom-command-profile-parity-report-kit
+  phantom-command-gamehost-source-diagnostics-kit
+  phantom-command-sourceprofile-consumer-readback-kit
+  phantom-command-sourceprofile-fixture-kit
+  phantom-command-build-fixture-gate-kit
+  central-ledger-readback-kit
+
+Deferred:
+  construct-result-authority-kit
+  scenario-bootstrap-kit
+  phantom-rts-control-kit
+  resource-economy-kit
+  renderer-extraction-kit
+```
+
+## Main finding
+
+`PhantomCommand` should not start next with scenario bootstrap, RTS gameplay, economy, renderer extraction, camera rewrite, or new visual work.
+
+The blocker remains source-profile proof: `game.html` owns the live `smooth-ring-handoff-v6` constants, ring math, piece math, total-build timing, HUD mutation, and `GameHost` projection inline, while the generic `construct-spiral-intro-kit` does not yet prove parity with the live no-gap construct.
+
+## Next safe ledge
+
+```txt
+PhantomCommand SourceProfile Oldest-Fallback Refresh + Browser Consumer Fixture Gate
+```
+
+## Validation
+
+Documentation-only pass.
+
+Runtime source unchanged.
+
+No npm install, npm build, browser smoke, DOM-free fixture, branch, or PR was created.
+
+Updates target `main` only.
