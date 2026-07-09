@@ -1,14 +1,14 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T12-38-16-04-00`
+**Timestamp:** `2026-07-09T12-50-00-04-00`
 
 ## Summary
 
 `PhantomCommand` remains a static Vite/Three.js construct proof with a menu route and a live `game.html` route.
 
-The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
+The visual construct should stay intact. The architectural blocker is still proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand Live SourceProfile Consumer Sync + Fixture Build Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Ledger Catch-up + Build Fixture Gate**.
 
 ## Selection audit
 
@@ -20,7 +20,7 @@ LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / centra
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T11-00-39-04-00
 LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T11-39-50-04-00
 LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T11-50-08-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T10-29-02-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / central stale fallback / repo-local latest 2026-07-09T12-38-16-04-00 / central latest 2026-07-09T10-29-02-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T12-00-36-04-00
 ```
@@ -256,4 +256,4 @@ The repo already has a generic construct scheduling kit and smoke test, but the 
 
 `game.html` remains the source authority for live constants, descriptors, timing, geometry, HUD, animation, and `GameHost` projection.
 
-The next implementation should source-own the profile, prove exact parity through DOM-free fixture rows, and add only additive `GameHost.getState().sourceProfile` diagnostics before render extraction, construct result contracts, or scenario bootstrap work.
+The next implementation should source-own the profile, prove exact parity through DOM-free fixture rows, add only additive `GameHost.getState().sourceProfile` diagnostics, and wire the fixture into build before render extraction, construct result contracts, or scenario bootstrap work.
