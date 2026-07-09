@@ -1,31 +1,30 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T16-29-23-04-00`
+**Timestamp:** `2026-07-09T18-41-55-04-00`
 
 ## Summary
 
-`PhantomCommand` remains a static Vite/Three.js construct proof with a menu route and a live `game.html` route.
+`PhantomCommand` remains a static Vite / Three.js construct proof with a menu route and live `game.html` route.
 
-The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, input handling, and `GameHost` projection are still owned by inline browser code.
+The visible construct is stable. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera/input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand Central Ledger SourceProfile Readback + GameHost Fixture Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Handoff Ledger Refresh + GameHost Fixture Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T16-00-13-04-00
-LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T14-16-00-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T15-09-09-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T17-48-20-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T16-58-52-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T16-38-14-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible documented fallback / central latest 2026-07-09T16-29-23-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T18-30-30-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T18-11-58-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T18-20-18-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PhantomCommand       selected / repo-local sourceprofile docs newer than central ledger / central latest 2026-07-09T13-00-37-04-00 before this update
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T15-31-40-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T13-18-48-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T15-39-08-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T14-39-07-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T13-38-15-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T17-58-53-04-00
 ```
 
-No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented. `PhantomCommand` was selected as a central-ledger pointer repair target because repo-local source-profile audit state had advanced beyond the central ledger.
+No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
 
 ## Current interaction loop
 
@@ -63,8 +62,8 @@ wedge-geometry-authoring
 material-palette
 lighting-and-fog
 hud-projection
-input-pan-control
-camera-orbit-zoom-control
+keyboard-pan-control
+wheel-zoom-control
 skip-restart-control
 legacy-gamehost-diagnostics
 construct-spiral-intro-kit
@@ -83,58 +82,51 @@ central-ledger-sync
 
 ```txt
 construct-spiral-intro-kit:
-  create default intro timing config
-  normalize piece ids
-  normalize and sort piece schedules
-  install piece schedules
-  reset sequence state
-  update active, pending, and settled piece state by dt
-  expose snapshots with active count, pending count, settled count, ring window, time, progress, and estimated total seconds
+  normalize piece ids, schedules, active windows, state transitions, and snapshots
 
 game.html inline runtime:
-  define live smooth-ring-handoff-v6 constants
-  derive ring widths, zero gaps, part counts, and start times
-  create wedge geometry, seams, center disc, tower, and command figure
-  animate radial/drop/rotation placement
-  update HUD progress and phase
-  process pan, zoom, skip, restart, resize, and blur controls
-  expose legacy window.GameHost state
+  define live profile constants, derive rings/pieces/timing, create meshes, animate construct, mutate HUD, handle input, expose GameHost
 
 build-static script:
-  copy index.html, game.html, docs, and config into dist
-  currently does not gate build on source-profile parity fixture
+  copy static artifacts into dist without fixture gating
 ```
 
 ## Kits
 
-```txt
 Current:
-  construct-spiral-intro-kit
-  construct-spiral-schedule-kit
-  construct-piece-id-kit
-  construct-piece-state-kit
-  construct-sequence-update-kit
-  legacy-inline-smooth-ring-handoff-profile
-  legacy-inline-ring-descriptor-runtime
-  legacy-inline-piece-descriptor-runtime
-  legacy-inline-timeline-runtime
-  legacy-inline-gamehost-diagnostics
+
+```txt
+construct-spiral-intro-kit
+construct-spiral-schedule-kit
+construct-piece-id-kit
+construct-piece-state-kit
+construct-sequence-update-kit
+legacy-inline-smooth-ring-handoff-profile
+legacy-inline-ring-descriptor-runtime
+legacy-inline-piece-descriptor-runtime
+legacy-inline-timeline-runtime
+legacy-inline-gamehost-diagnostics
+```
 
 Next-cut:
-  phantom-command-smooth-handoff-profile-kit
-  phantom-command-ring-descriptor-kit
-  phantom-command-piece-descriptor-kit
-  phantom-command-handoff-timeline-contract-kit
-  phantom-command-source-profile-fingerprint-kit
-  phantom-command-source-profile-snapshot-kit
-  phantom-command-profile-parity-report-kit
-  phantom-command-gamehost-source-diagnostics-kit
-  phantom-command-sourceprofile-consumer-readback-kit
-  phantom-command-sourceprofile-fixture-kit
-  phantom-command-build-fixture-gate-kit
-  central-ledger-readback-kit
+
+```txt
+phantom-command-smooth-handoff-profile-kit
+phantom-command-ring-descriptor-kit
+phantom-command-piece-descriptor-kit
+phantom-command-handoff-timeline-contract-kit
+phantom-command-source-profile-fingerprint-kit
+phantom-command-source-profile-snapshot-kit
+phantom-command-profile-parity-report-kit
+phantom-command-gamehost-source-diagnostics-kit
+phantom-command-sourceprofile-consumer-readback-kit
+phantom-command-sourceprofile-fixture-kit
+phantom-command-build-fixture-gate-kit
+central-ledger-readback-kit
 ```
 
 ## Main finding
 
-Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion. The next useful pass is still source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()` and keep the central ledger pointer synchronized with the repo-local audit set.
+Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion.
+
+The next useful pass is source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()` and keep central ledger pointers synchronized with repo-local audit state.
