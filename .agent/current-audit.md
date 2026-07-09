@@ -1,14 +1,14 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T16-20-45-04-00`
+**Timestamp:** `2026-07-09T16-25-16-04-00`
 
 ## Summary
 
 `PhantomCommand` remains a static Vite/Three.js construct proof with a menu route and a live `game.html` route.
 
-The visual construct should stay intact. The architectural blocker is still proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are owned by inline browser code.
+The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Fixture Row Refresh + GameHost Consumer Readback Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Central Sync + GameHost Fixture Readback Gate**.
 
 ## Selection audit
 
@@ -79,70 +79,62 @@ build-fixture-gate-next
 central-ledger-sync
 ```
 
-## Services kits offer today
+## Kit services in use
 
 ```txt
 construct-spiral-intro-kit:
   create default intro timing config
+  normalize piece ids
   normalize and sort piece schedules
-  compute piece ids
-  install pieces
+  install piece schedules
   reset sequence state
-  update active/settled/pending states by dt
-  expose active, pending, settled, ring-window, time, and estimated-total snapshots
+  update active, pending, and settled piece state by dt
+  expose snapshots with active count, pending count, settled count, ring window, time, progress, and estimated total seconds
 
 game.html inline runtime:
   define live smooth-ring-handoff-v6 constants
-  derive ring widths, gaps, part counts, and start times
-  create wedge meshes and seam geometry
+  derive ring widths, zero gaps, part counts, and start times
+  create wedge geometry, seams, center disc, tower, and command figure
   animate radial/drop/rotation placement
-  report HUD progress and phase
-  process pan, zoom, skip, and restart input
+  update HUD progress and phase
+  process pan, zoom, skip, restart, resize, and blur controls
   expose legacy window.GameHost state
 
 build-static script:
-  copy static route into dist
+  copy index.html, game.html, docs, and config into dist
   currently does not gate build on source-profile parity fixture
 ```
 
-## Current kits
+## Kits
 
 ```txt
-construct-spiral-intro-kit
-construct-spiral-schedule-kit
-construct-piece-id-kit
-construct-piece-state-kit
-construct-sequence-update-kit
-legacy-inline-smooth-ring-handoff-profile
-legacy-inline-ring-descriptor-runtime
-legacy-inline-piece-descriptor-runtime
-legacy-inline-timeline-runtime
-legacy-inline-gamehost-diagnostics
-```
+Current:
+  construct-spiral-intro-kit
+  construct-spiral-schedule-kit
+  construct-piece-id-kit
+  construct-piece-state-kit
+  construct-sequence-update-kit
+  legacy-inline-smooth-ring-handoff-profile
+  legacy-inline-ring-descriptor-runtime
+  legacy-inline-piece-descriptor-runtime
+  legacy-inline-timeline-runtime
+  legacy-inline-gamehost-diagnostics
 
-## Next-cut kits
-
-```txt
-phantom-command-smooth-handoff-profile-kit
-phantom-command-ring-descriptor-kit
-phantom-command-piece-descriptor-kit
-phantom-command-handoff-timeline-contract-kit
-phantom-command-source-profile-fingerprint-kit
-phantom-command-source-profile-snapshot-kit
-phantom-command-profile-parity-report-kit
-phantom-command-gamehost-source-diagnostics-kit
-phantom-command-sourceprofile-consumer-readback-kit
-phantom-command-sourceprofile-fixture-kit
-phantom-command-build-fixture-gate-kit
-central-ledger-readback-kit
+Next-cut:
+  phantom-command-smooth-handoff-profile-kit
+  phantom-command-ring-descriptor-kit
+  phantom-command-piece-descriptor-kit
+  phantom-command-handoff-timeline-contract-kit
+  phantom-command-source-profile-fingerprint-kit
+  phantom-command-source-profile-snapshot-kit
+  phantom-command-profile-parity-report-kit
+  phantom-command-gamehost-source-diagnostics-kit
+  phantom-command-sourceprofile-consumer-readback-kit
+  phantom-command-sourceprofile-fixture-kit
+  phantom-command-build-fixture-gate-kit
+  central-ledger-readback-kit
 ```
 
 ## Main finding
 
-Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, or command result authority. The next useful pass is still source-profile proof: move the live constants and descriptor math into source-owned modules, prove parity without DOM/Three/browser timing, and only then splice additive diagnostics into `window.GameHost.getState()`.
-
-## Next safe ledge
-
-```txt
-PhantomCommand SourceProfile Fixture Row Refresh + GameHost Consumer Readback Gate
-```
+Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion. The next useful pass is still source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()`.
