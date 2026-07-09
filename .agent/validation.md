@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T12-50-00-04-00`
+**Timestamp:** `2026-07-09T12-55-20-04-00`
 
 ## Validation performed in this pass
 
@@ -8,7 +8,7 @@
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Confirmed no checked non-Cavalry repo was new, ledger-absent, missing sampled root agent state, recently added but undocumented, or otherwise undocumented.
-- Confirmed PhantomCommand had repo-local .agent state at 2026-07-09T12-38-16-04-00 while central tracking still pointed at 2026-07-09T10-29-02-04-00.
+- Confirmed PhantomCommand had repo-local .agent state at 2026-07-09T12-50-00-04-00 while central tracking still pointed at 2026-07-09T10-29-02-04-00.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
 - Selected PhantomCommand as the central-ledger stale fallback.
 - Read .agent/START_HERE.md.
@@ -18,16 +18,18 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
+- Read index.html.
 - Read game.html.
+- Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T12-50-00-04-00-sourceprofile-consumer-ledger-catchup-dsk-map.md.
-- Added render-audit/2026-07-09T12-50-00-04-00-gamehost-sourceprofile-readback-freeze.md.
-- Added gameplay-audit/2026-07-09T12-50-00-04-00-construct-result-scenario-deferral-loop.md.
-- Added source-profile-audit/2026-07-09T12-50-00-04-00-live-profile-ledger-fixture-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T12-50-00-04-00-bootstrap-remains-blocked-until-construct-result.md.
-- Added deploy-audit/2026-07-09T12-50-00-04-00-sourceprofile-fixture-before-build-map.md.
+- Added architecture-audit/2026-07-09T12-55-20-04-00-sourceprofile-fixture-pointer-freeze-dsk-map.md.
+- Added render-audit/2026-07-09T12-55-20-04-00-gamehost-sourceprofile-consumer-readback.md.
+- Added gameplay-audit/2026-07-09T12-55-20-04-00-construct-result-bootstrap-blocker-loop.md.
+- Added source-profile-audit/2026-07-09T12-55-20-04-00-live-profile-fixture-pointer-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T12-55-20-04-00-bootstrap-blocked-by-sourceprofile-fixture.md.
+- Added deploy-audit/2026-07-09T12-55-20-04-00-build-fixture-before-pages-map.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -54,6 +56,10 @@
 package/source readback declares:
 - npm run build calls node scripts/build-static.mjs.
 - vite dev/start/preview run on port 4173.
+
+index.html declares:
+- Start button routes to game.html.
+- Open Scene link routes to game.html.
 
 game.html declares:
 - BUILD_ID smooth-ring-handoff-v6
@@ -106,33 +112,7 @@ profile_parity_report_has_no_errors
 gamehost_source_diagnostics_shape_is_additive
 legacy_gamehost_fields_are_unchanged
 sourceprofile_consumer_readback_matches_fixture
-construct_result_is_blocked_until_source_profile_parity_passes
 central_ledger_points_to_latest_source_profile_gate
-scenario_bootstrap_is_blocked_until_construct_result_exists
 fixture_runs_without_dom_canvas_or_three
 fixture_build_gate_runs_before_static_artifact_upload
-```
-
-## Pass status
-
-```txt
-repo-list comparison: performed
-central-ledger comparison: performed
-root .agent sampling/readback: performed
-source readback: performed
-root .agent update: performed
-architecture audit update: created
-render audit update: created
-gameplay audit update: created
-source-profile audit update: created
-scenario-bootstrap audit update: created
-deploy audit update: created
-turn ledger update: created
-central ledger update: performed
-central change-log update: created
-runtime source changed: no
-branch created: no
-pull request created: no
-local npm build: not run
-browser smoke: not run
 ```
