@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-09T12-50-00-04-00`
+**Timestamp:** `2026-07-09T12-55-20-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Consumer Ledger Catch-up + Build Fixture Gate
+PhantomCommand SourceProfile Fixture Pointer Freeze + Build Gate Readback
 ```
 
 ## Goal
@@ -98,81 +98,25 @@ Construct result authority and scenario bootstrap remain blocked until sourcePro
    - fixture does not import game.html, DOM, canvas, or Three.js
    - fixture validates source profile parity rows
 
-8. Browser consumer splice eighth
-   - import sourceProfile diagnostics helper into game.html
-   - expose sourceProfile through GameHost getState
-   - do not change the visible construct in the same pass
+8. Consumer splice eighth
+   - import GameHost diagnostics adapter into game.html
+   - add sourceProfile readback under GameHost only
+   - keep visible scene unchanged
 
-9. Fixture build integration ninth
-   - wire the fixture into npm run build only after it passes standalone
-   - keep current static-copy build behavior intact
-   - fail build on profile, descriptor, snapshot, or GameHost source diagnostic parity errors before static copy
-
-10. Central ledger sync tenth
-   - ensure repo-local tracker, kit registry, and central repo-ledger all name the same latest source-profile fixture gate
-   - add a fixture row that can read the central latest-tracker pointer
-   - keep this check documentation/fixture-only; do not create branches or PRs
-
-11. Construct result blocker eleventh
-   - document construct_complete result shape only after source parity passes
-   - reject scenario bootstrap while sourceProfile parity is missing
-   - keep RTS gameplay deferred
+9. Build gate ninth
+   - add check script
+   - make build run fixture before static copy
+   - only then treat Pages artifact as source-profile validated
 ```
 
-## Required profile values
+## Do not do next
 
 ```txt
-buildId: smooth-ring-handoff-v6
-ringCount: 10
-firstInnerRadius: 10
-firstRingWidth: 7
-ringWidthGrowth: 1.25
-maxRingWidth: 120
-ringGapBase: 0
-ringGapGrowth: 0
-moveSeconds: 2.6
-dropStartSeconds: 0.08
-ringHandoff: 0.72
-partStagger: 0.025
-prewarmSeconds: 0.45
-startRadiusMultiplier: 1.38
-startHeightBase: 24
-ringPartCounts: [5,5,5,5,6,8,10,12,16,20]
-totalPieces: 92
-totalBuildSeconds: 19.923
-```
-
-## Fixture rows to implement first
-
-```txt
-profile_build_id_matches_live_game_html
-profile_ring_count_matches_10
-profile_gap_policy_matches_zero_gap
-ring_part_counts_match_live_array
-piece_descriptor_count_matches_92
-timeline_total_build_seconds_matches_19_923
-handoff_values_match_ring_handoff_0_72_and_part_stagger_0_025
-ring_start_times_match_live_formula
-source_snapshot_is_serializable
-source_fingerprint_is_stable
-profile_parity_report_has_no_errors
-gamehost_source_diagnostics_shape_is_additive
-legacy_gamehost_fields_are_unchanged
-sourceprofile_consumer_readback_matches_fixture
-construct_result_is_blocked_until_source_profile_parity_passes
-central_ledger_points_to_latest_source_profile_gate
-scenario_bootstrap_is_blocked_until_construct_result_exists
-fixture_runs_without_dom_canvas_or_three
-fixture_build_gate_runs_before_static_artifact_upload
-```
-
-## Do not do yet
-
-```txt
-- Do not add full RTS unit control before the source-profile fixture exists.
-- Do not add scenario bootstrap reducers before profile parity passes.
-- Do not replace the current construct visual in the same pass as source extraction.
-- Do not remove window.GameHost compatibility.
-- Do not move reusable logic into NexusEngine or ProtoKits until the publish-local fixture proof is stable.
-- Do not work on Cavalry of Rome.
+Do not start RTS gameplay.
+Do not add units.
+Do not add enemy AI.
+Do not add scenario bootstrap yet.
+Do not rewrite the visual construct.
+Do not replace the current GameHost fields.
+Do not create a branch.
 ```
