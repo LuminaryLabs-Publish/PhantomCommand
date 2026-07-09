@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T04-24-06-04-00`
+**Timestamp:** `2026-07-09T04-38-39-04-00`
 
 ## Validation performed in this pass
 
@@ -8,9 +8,10 @@
 - Listed the accessible LuminaryLabs-Publish repo set available through the GitHub connector.
 - Compared the Publish repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Confirmed PhantomCommand is tracked centrally and already has root .agent state.
-- Sampled HorrorCorridor root .agent state and observed it had already advanced to 2026-07-09T04-19-00-04-00.
+- Observed central PhantomCommand ledger lagging at 2026-07-09T01-28-10-04-00.
+- Observed repo-local PhantomCommand root .agent had already advanced to 2026-07-09T04-24-06-04-00.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand for a SourceProfile Consumer Cutover Map + Legacy GameHost Fixture Gate follow-up.
+- Selected PhantomCommand for a SourceProfile Fixture Build Gate + Legacy GameHost Consumer Readback pass.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -18,18 +19,18 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
-- Read README.md.
-- Read index.html.
 - Read game.html.
 - Read src/kits/construct-spiral-intro-kit/index.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
+- Read scripts/build-static.mjs.
 - Read central repo-ledger entries for Publish repo comparison.
 - Updated required repo-local .agent audit files.
-- Added architecture-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-dsk-map.md.
-- Added render-audit/2026-07-09T04-24-06-04-00-gamehost-sourceprofile-readback-cutover.md.
-- Added gameplay-audit/2026-07-09T04-24-06-04-00-construct-result-precondition-loop.md.
-- Added source-profile-audit/2026-07-09T04-24-06-04-00-sourceprofile-consumer-cutover-contract.md.
-- Added scenario-bootstrap-audit/2026-07-09T04-24-06-04-00-bootstrap-stays-deferred.md.
-- Added deploy-audit/2026-07-09T04-24-06-04-00-sourceprofile-fixture-build-validation-gate.md.
+- Added architecture-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-dsk-map.md.
+- Added render-audit/2026-07-09T04-38-39-04-00-gamehost-sourceprofile-consumer-readback.md.
+- Added gameplay-audit/2026-07-09T04-38-39-04-00-construct-result-blocker-loop.md.
+- Added source-profile-audit/2026-07-09T04-38-39-04-00-sourceprofile-fixture-build-gate-contract.md.
+- Added scenario-bootstrap-audit/2026-07-09T04-38-39-04-00-bootstrap-remains-blocked.md.
+- Added deploy-audit/2026-07-09T04-38-39-04-00-fixture-build-before-static-artifact.md.
 - Added a new timestamped tracker entry.
 - Added a new timestamped turn-ledger entry.
 - Updated central repo ledger with latest follow-up state.
@@ -57,15 +58,9 @@ package/source readback declares:
 - build copies static files into dist through node scripts/build-static.mjs.
 - vite dev/preview run on port 4173.
 
-README declares:
-- PhantomCommand is a single-player PvE RTS prototype.
-- current proof opens menu and loads a Three.js concentric-ring construct scene.
-- GitHub Pages deploy runs from main.
-
-index.html declares:
-- main menu static app shell.
-- Start button routes to game.html.
-- Open Scene link routes to game.html.
+index/game route readback declares:
+- main menu routes to game.html.
+- game.html owns the live smooth-ring-handoff-v6 construct inline.
 
 game.html declares:
 - BUILD_ID smooth-ring-handoff-v6
@@ -88,6 +83,11 @@ construct-spiral-intro-kit declares:
 - DEFAULT_CONSTRUCT_SPIRAL_INTRO_CONFIG for generic active/spiral/window behavior
 - installPieces/reset/update/snapshot service surface
 - pending/active/settled/newlyActive/newlySettled piece query surface
+
+build-static declares:
+- dist is removed and recreated.
+- index.html, game.html, docs, and config are copied if present.
+- no fixture script is run before copy yet.
 ```
 
 ## Next validation needed
