@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T07-19-41-04-00`
+**Timestamp:** `2026-07-09T10-20-44-04-00`
 
 ## Summary
 
@@ -8,21 +8,21 @@
 
 The visual construct should stay intact. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` source profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera control, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Readback Ledger + Fixture Build Consumer Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T07-05-52-04-00
-LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T06-01-30-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T06-20-00-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T09-59-27-04-00
+LuminaryLabs-Publish/AetherVale           tracked / root .agent present / central latest 2026-07-09T08-50-00-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T09-36-24-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/PhantomCommand       selected / central ledger stale at 2026-07-09T04-50-00-04-00 / repo-local latest 2026-07-09T07-10-00-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T06-10-35-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T05-11-22-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T06-28-53-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T05-38-20-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T05-20-42-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible central fallback / central latest 2026-07-09T07-19-41-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T09-10-50-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T07-41-29-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T09-50-00-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T08-29-38-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T08-02-33-04-00
 ```
 
 No checked non-Cavalry Publish repo was fully new, central-ledger absent, missing root `.agent/START_HERE.md`, or otherwise undocumented.
@@ -48,24 +48,38 @@ open index.html
 ## Current runtime evidence
 
 ```txt
-BUILD_ID: smooth-ring-handoff-v6
-RING_COUNT: 10
-FIRST_INNER_RADIUS: 10
-FIRST_RING_WIDTH: 7
-RING_WIDTH_GROWTH: 1.25
-MAX_RING_WIDTH: 120
-RING_GAP_BASE: 0
-RING_GAP_GROWTH: 0
-MOVE_SECONDS: 2.6
-DROP_START_SECONDS: 0.08
-RING_HANDOFF: 0.72
-PART_STAGGER: 0.025
-PREWARM_SECONDS: 0.45
-START_RADIUS_MULTIPLIER: 1.38
-START_HEIGHT_BASE: 24
-ringParts: [5,5,5,5,6,8,10,12,16,20]
-totalPieces: 92
-totalBuildSeconds: 19.923
+package.json:
+  start/dev/preview use Vite on port 4173
+  build calls node scripts/build-static.mjs
+
+index.html:
+  menu says Single-player PvE RTS prototype
+  Start button and Open Scene link route to game.html
+
+game.html:
+  BUILD_ID: smooth-ring-handoff-v6
+  RING_COUNT: 10
+  FIRST_INNER_RADIUS: 10
+  FIRST_RING_WIDTH: 7
+  RING_WIDTH_GROWTH: 1.25
+  MAX_RING_WIDTH: 120
+  RING_GAP_BASE: 0
+  RING_GAP_GROWTH: 0
+  MOVE_SECONDS: 2.6
+  DROP_START_SECONDS: 0.08
+  RING_HANDOFF: 0.72
+  PART_STAGGER: 0.025
+  PREWARM_SECONDS: 0.45
+  START_RADIUS_MULTIPLIER: 1.38
+  START_HEIGHT_BASE: 24
+  ringParts: [5,5,5,5,6,8,10,12,16,20]
+  totalPieces: 92
+  GameHost: skipConstruct, restartConstruct, getState
+
+construct-spiral-intro-kit:
+  implemented generic sequence kit
+  domain path: n:sequence:construct:spiral-intro
+  services: installPieces, reset, update, snapshot, schedule, piece queries
 ```
 
 ## Domains in use
@@ -257,5 +271,5 @@ Scenario bootstrap, undead unit commands, economy, buildings, wave control, and 
 ## Next safe ledge
 
 ```txt
-PhantomCommand SourceProfile Readback Ledger + Fixture Build Consumer Gate
+PhantomCommand SourceProfile Consumer Build Gate + GameHost Readback Fixture
 ```
