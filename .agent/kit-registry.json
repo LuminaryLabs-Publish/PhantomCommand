@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-08T22-58-02-04-00",
-  "status": "construct-result-source-readiness-sourceprofile-fixture-consumer-build-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-08T22-58-02-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-08T22-58-02-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-08T22-58-02-04-00-construct-result-source-readiness-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-08T22-58-02-04-00-gamehost-sourceprofile-consumer-readback.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-08T22-58-02-04-00-construct-result-idempotency-precondition.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-row-map.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-08T22-58-02-04-00-scenario-bootstrap-stays-blocked.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-08T22-58-02-04-00-sourceprofile-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-08T20-52-00-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T20-52-00-04-00.md",
+  "updatedAt": "2026-07-09T01-20-59-04-00",
+  "status": "sourceprofile-fixture-build-readback-gamehost-consumer-splice-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T01-20-59-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T01-20-59-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-build-readback-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T01-20-59-04-00-gamehost-sourceprofile-readback-contract.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T01-20-59-04-00-construct-result-blocker-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T01-20-59-04-00-sourceprofile-fixture-row-acceptance-map.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T01-20-59-04-00-bootstrap-remains-blocked-by-sourceprofile.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T01-20-59-04-00-fixture-build-script-wire-map.md",
+  "previousTracker": ".agent/trackers/2026-07-08T22-58-02-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-08T22-58-02-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -21,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected as the oldest eligible central alignment and because source-profile consumer readback plus construct-result readiness proof remains unresolved"
+    "reason": "selected as the oldest eligible central alignment and because source-profile fixture build readback plus GameHost consumer splice proof remains unresolved"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -215,5 +215,5 @@
     "fixture_runs_without_dom_canvas_or_three",
     "fixture_build_gate_runs_before_static_artifact_upload"
   ],
-  "nextSafeLedge": "PhantomCommand Construct Result Source Readiness Map + SourceProfile Fixture Consumer Build Gate"
+  "nextSafeLedge": "PhantomCommand SourceProfile Fixture Build Readback + GameHost Consumer Splice Gate"
 }
