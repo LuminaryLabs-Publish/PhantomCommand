@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T13-00-37-04-00",
-  "status": "sourceprofile-ledger-repair-consumer-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T13-00-37-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T13-00-37-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T13-00-37-04-00-sourceprofile-ledger-repair-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T13-00-37-04-00-gamehost-sourceprofile-consumer-map.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T13-00-37-04-00-construct-result-deferral-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T13-00-37-04-00-live-profile-parity-contract.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T13-00-37-04-00-bootstrap-remains-blocked.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T13-00-37-04-00-sourceprofile-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-09T12-55-20-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T12-55-20-04-00.md",
+  "updatedAt": "2026-07-09T16-20-45-04-00",
+  "status": "sourceprofile-fixture-row-refresh-gamehost-consumer-readback-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-09T16-20-45-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T16-20-45-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-row-refresh-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-09T16-20-45-04-00-gamehost-sourceprofile-readback-contract.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T16-20-45-04-00-construct-proof-blocker-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T16-20-45-04-00-live-v6-source-parity-contract.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T16-20-45-04-00-bootstrap-still-blocked.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-build-wire-map.md",
+  "previousTracker": ".agent/trackers/2026-07-09T13-00-37-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T13-00-37-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -21,7 +21,7 @@
   },
   "selection": {
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after accessible Publish repo-list, central-ledger, and repo-local agent comparison; no checked non-Cavalry repo was missing, while PhantomCommand repo-local .agent state was ahead of central tracking and needed documentation consistency repair"
+    "reason": "selected after accessible Publish repo-list, central-ledger, and repo-local agent comparison; no checked non-Cavalry repo was missing and PhantomCommand had the oldest eligible documented-selection central tracker among checked repos"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
