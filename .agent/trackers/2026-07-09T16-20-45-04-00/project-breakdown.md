@@ -1,22 +1,47 @@
-# PhantomCommand Project Breakdown
+# Project Breakdown: PhantomCommand SourceProfile Fixture Row Refresh
 
 **Timestamp:** `2026-07-09T16-20-45-04-00`
 
 ## Goal
 
-Refresh the repo-local `.agent` breakdown for `LuminaryLabs-Publish/PhantomCommand`, keep runtime source untouched, and align the next work around source-profile fixture rows plus `GameHost` consumer readback.
+Compare the full accessible `LuminaryLabs-Publish` repo list against central `LuminaryLabs-Dev/LuminaryLabs` tracking, select one eligible repo, update root `.agent` docs, identify interaction loop/domains/services/kits, and log the result centrally.
 
-## Selection result
+## Checklist
 
-`PhantomCommand` was selected after comparing the accessible `LuminaryLabs-Publish` repo list against the central `LuminaryLabs-Dev/LuminaryLabs` repo ledger.
+```txt
+[x] Listed accessible LuminaryLabs-Publish repositories.
+[x] Excluded LuminaryLabs-Publish/TheCavalryOfRome.
+[x] Compared checked repos against central LuminaryLabs-Dev/LuminaryLabs tracking.
+[x] Selected one repo only: PhantomCommand.
+[x] Read PhantomCommand .agent state.
+[x] Read central PhantomCommand repo ledger.
+[x] Read package.json, game.html, scripts/build-static.mjs, construct kit source, and smoke test.
+[x] Identified interaction loop.
+[x] Identified domains in use.
+[x] Identified kit services.
+[x] Identified implemented, inline, and target kits.
+[x] Updated required root .agent docs.
+[x] Added architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits.
+[x] Added timestamped tracker and turn ledger.
+[x] Updated central repo ledger.
+[x] Added central internal change-log entry.
+[ ] Did not edit runtime source.
+[ ] Did not run local/browser validation.
+```
 
-No checked non-Cavalry Publish repo was new, ledger-absent, root-agent-missing, recently added but undocumented, or otherwise undocumented.
+## Repo selected
 
-`LuminaryLabs-Publish/TheCavalryOfRome` remains excluded.
+```txt
+LuminaryLabs-Publish/PhantomCommand
+```
 
-`PhantomCommand` was the oldest eligible documented-selection fallback in the sampled central ledger set.
+## Selection reason
 
-## Publish organization repositories observed
+No checked non-Cavalry repo was new, missing from the central ledger, missing sampled root `.agent`, or otherwise undocumented.
+
+`PhantomCommand` was selected as the oldest eligible documented-selection fallback because its central ledger was at `2026-07-09T13-00-37-04-00` while the other checked non-Cavalry candidates had newer active tracker state or were not eligible.
+
+## Publish repositories observed
 
 ```txt
 LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T15-56-42-04-00
@@ -31,7 +56,7 @@ LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / centra
 LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T13-38-15-04-00
 ```
 
-## Current interaction loop
+## Interaction loop
 
 ```txt
 open index.html
@@ -112,12 +137,14 @@ build-static script:
 ## Kits
 
 ```txt
-Current:
+Implemented/source-backed:
   construct-spiral-intro-kit
   construct-spiral-schedule-kit
   construct-piece-id-kit
   construct-piece-state-kit
   construct-sequence-update-kit
+
+Inline/legacy:
   legacy-inline-smooth-ring-handoff-profile
   legacy-inline-ring-descriptor-runtime
   legacy-inline-piece-descriptor-runtime
@@ -141,7 +168,7 @@ Next-cut:
 
 ## Main finding
 
-Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, or command result authority. The next useful pass is still source-profile proof: move the live constants and descriptor math into source-owned modules, prove parity without DOM/Three/browser timing, and only then splice additive diagnostics into `window.GameHost.getState()`.
+`PhantomCommand` should not get scenario bootstrap, RTS gameplay, renderer replacement, or new visual work next. The stable construct proof is blocked by source-profile proof: `game.html` owns the live v6 profile, descriptors, timeline, and GameHost projection inline, while the existing construct kit is generic and does not prove live v6 parity.
 
 ## Next safe ledge
 
@@ -149,6 +176,25 @@ Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacemen
 PhantomCommand SourceProfile Fixture Row Refresh + GameHost Consumer Readback Gate
 ```
 
+## Files changed in repo-local .agent
+
+```txt
+.agent/START_HERE.md
+.agent/current-audit.md
+.agent/known-gaps.md
+.agent/next-steps.md
+.agent/validation.md
+.agent/kit-registry.json
+.agent/architecture-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-row-refresh-dsk-map.md
+.agent/render-audit/2026-07-09T16-20-45-04-00-gamehost-sourceprofile-readback-contract.md
+.agent/gameplay-audit/2026-07-09T16-20-45-04-00-construct-proof-blocker-loop.md
+.agent/source-profile-audit/2026-07-09T16-20-45-04-00-live-v6-source-parity-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T16-20-45-04-00-bootstrap-still-blocked.md
+.agent/deploy-audit/2026-07-09T16-20-45-04-00-sourceprofile-fixture-build-wire-map.md
+.agent/trackers/2026-07-09T16-20-45-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T16-20-45-04-00.md
+```
+
 ## Validation
 
-Documentation-only. Runtime source unchanged. No npm install, npm build, fixture run, browser smoke, branch, or PR was created.
+Docs-only pass. Runtime source was not changed, no local/browser/fixture validation was run, no branch or PR was created, and updates were pushed to `main`.
