@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T11-10-08-04-00`
+**Timestamp:** `2026-07-10T12-40-45-04-00`
 
 ## Summary
 
@@ -8,7 +8,7 @@
 
 The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` inline.
 
-This pass updates repo-local docs and central tracking around the next proof cut: campaign fixture readback ledger, action/result rows, render consumption rows, additive GameHost diagnostics, and build fixture gate.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/render readback, fixture ledger, additive GameHost diagnostics, and build fixture gate.
 
 Runtime source was not changed.
 
@@ -17,7 +17,7 @@ Runtime source was not changed.
 ```txt
 No checked public non-Cavalry repo was new, central-ledger absent, missing root .agent, recently added, or otherwise undocumented.
 LuminaryLabs-Publish/TheCavalryOfRome remained excluded by rule.
-PhantomCommand was selected as the oldest eligible documented fallback after HorrorCorridor advanced to 2026-07-10T10-58-54-04-00.
+PhantomCommand was selected as the oldest eligible documented fallback after HorrorCorridor advanced to 2026-07-10T12-29-26-04-00.
 ```
 
 ## Current interaction loop
@@ -98,6 +98,7 @@ pixel-campaign-runtime-kit: inline rings, lanes, pads, units, towers, waves, inp
 legacy-gamehost-diagnostics-kit: aggregate state, camera, startWave, build, setZoom.
 construct-spiral-intro-kit: legacy construct profile proof target, not current campaign authority.
 phantom-command-campaign-source-ledger-kit next: source-owned campaign rows.
+phantom-command-source-fingerprint-kit next: route/source descriptor fingerprints.
 phantom-command-action-result-kit next: select/build/order/start-wave/damage/reward/win/loss rows.
 phantom-command-simulation-frame-kit next: deterministic spawn/unit/tower/projectile frame summaries.
 phantom-command-render-readback-kit next: render consumption rows.
@@ -110,14 +111,14 @@ phantom-command-build-fixture-gate-kit next: build/check integration.
 
 Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, RTS system expansion, construct-profile work, or visual polish.
 
-The immediate blocker is campaign fixture readback. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` in one file.
+The immediate blocker is campaign source/action/render readback. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` in one file.
 
 It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
+PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
 ```
 
 ## Validation status
