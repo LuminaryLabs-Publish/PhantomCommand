@@ -28,6 +28,9 @@
 - Updated the required root .agent docs.
 - Added a timestamped tracker and turn-ledger entry.
 - Added architecture, render, gameplay, interaction, persistence, and deploy audits.
+- Updated the central repo ledger.
+- Added the central internal change-log entry.
+- Pushed only to main.
 - Created no branch or pull request.
 ```
 
@@ -103,7 +106,7 @@ npm run build: not run
 browser smoke: not run
 candidate resolver fixture: not run because it does not exist yet
 resume fidelity fixture: not run because it does not exist yet
-repo-local documentation pushed to main: in progress
-central ledger update: pending
-central internal change log: pending
+repo-local documentation pushed to main: yes
+central ledger updated: yes
+central internal change log added: yes
 ```
