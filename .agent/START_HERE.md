@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T05-21-20-04-00`
+**Last aligned:** `2026-07-10T06-59-18-04-00`
 
 ## Purpose
 
@@ -18,19 +18,19 @@ No checked public non-Cavalry repo was new, missing from the central ledger, mis
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T05-11-51-04-00`.
+`PhantomCommand` was selected as the oldest eligible public documented fallback. Its prior central tracking was `2026-07-10T05-21-20-04-00`.
 
 ## Public Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T04-58-56-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T04-50-40-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T04-40-52-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T04-29-10-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T04-22-00-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T04-11-36-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T05-11-51-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T03-59-57-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T06-48-54-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T06-30-49-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T06-21-03-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T06-08-36-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T05-49-25-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T05-40-17-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T05-28-12-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T05-21-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
@@ -68,25 +68,6 @@ open index.html
   -> GameHost exposes state, camera, startWave, build, getState, and setZoom
 ```
 
-## Target authority loop
-
-```txt
-campaign source manifest
-  -> descriptor fingerprint
-  -> ring/lane/pad descriptor kit
-  -> unit archetype descriptor kit
-  -> tower descriptor kit
-  -> wave descriptor kit
-  -> input/action intent contract
-  -> ActionResult rows
-  -> simulation frame summaries
-  -> render readback rows
-  -> additive GameHost campaign diagnostics
-  -> DOM-free campaign fixture
-  -> build fixture gate
-  -> central ledger latest-tracker sync
-```
-
 ## First files to read next
 
 ```txt
@@ -94,14 +75,14 @@ campaign source manifest
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T05-21-20-04-00-campaign-source-action-readback-dsk-map.md
-.agent/render-audit/2026-07-10T05-21-20-04-00-pixel-campaign-render-readback-gap.md
-.agent/gameplay-audit/2026-07-10T05-21-20-04-00-wave-build-order-action-loop.md
-.agent/interaction-audit/2026-07-10T05-21-20-04-00-select-build-order-action-result-map.md
-.agent/campaign-authority-audit/2026-07-10T05-21-20-04-00-source-action-fixture-contract.md
-.agent/deploy-audit/2026-07-10T05-21-20-04-00-campaign-fixture-build-gate.md
-.agent/trackers/2026-07-10T05-21-20-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T05-21-20-04-00.md
+.agent/architecture-audit/2026-07-10T06-59-18-04-00-campaign-source-ledger-readback-dsk-map.md
+.agent/render-audit/2026-07-10T06-59-18-04-00-pixel-campaign-render-source-ledger-gap.md
+.agent/gameplay-audit/2026-07-10T06-59-18-04-00-wave-build-order-action-result-loop.md
+.agent/interaction-audit/2026-07-10T06-59-18-04-00-select-build-order-fixture-map.md
+.agent/campaign-authority-audit/2026-07-10T06-59-18-04-00-source-action-render-fixture-contract.md
+.agent/deploy-audit/2026-07-10T06-59-18-04-00-campaign-fixture-check-build-gate.md
+.agent/trackers/2026-07-10T06-59-18-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T06-59-18-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -122,7 +103,7 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
 ```
 
 Build this before deeper camera rewrites, expanded enemy animation, economy expansion, renderer replacement, or additional campaign content.
