@@ -1,119 +1,88 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T17-08-36-04-00`
+**Timestamp:** `2026-07-10T18-40-13-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate
+PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
 ```
 
 ## Goal
 
-Make Continue truthful and deterministic. The menu must enable it only for a classified resumable save, and the campaign must hydrate a versioned full-state envelope whose restored fingerprint matches the state that was saved.
+Create one pure, deterministic resolver that both the menu and campaign startup can consume. It must inspect all six candidate slots, classify each value, choose at most one resumable candidate by an explicit precedence table, and return immutable provenance plus a truthful Continue capability result.
 
-Preserve current routes, visuals, controls, gameplay constants, and legacy `window.GameHost` fields while adding DOM-free persistence modules and immutable session diagnostics.
+Preserve current routes, visuals, controls, simulation constants, and legacy `window.GameHost` fields.
 
-## Full checklist
+## Plan ledger
 
-```txt
-[ ] Keep index.html and game.html route structure unchanged.
-[ ] Keep current campaign visuals, controls, constants, and fixed 1/60 simulation unchanged.
-[ ] Keep existing window.GameHost fields and methods compatible.
-[ ] Add src/campaign/save-candidate-registry.js.
-[ ] Define candidate key, storage layer, source owner, expected schema family, and priority.
-[ ] Add src/campaign/save-classifier.js.
-[ ] Classify absent, invalid-json, foreign-schema, legacy-completion-summary, resumable-current, resumable-migrated, unsupported-version, and checksum-failed candidates.
-[ ] Treat nexus.sceneSnapshot and phantom.command.campaign as foreign until explicit adapters exist.
-[ ] Treat the current { scene, souls, wave } phantomCommand.save payload as a legacy completion summary, not a resumable save.
-[ ] Enable Continue only when at least one candidate classifies as resumable-current or resumable-migrated.
-[ ] Expose the selected candidate and classification reason through PhantomMenu.getState().
-[ ] Add src/campaign/session-mode.js.
-[ ] Parse campaign=new and campaign=continue deterministically.
-[ ] Add src/campaign/save-envelope.js.
-[ ] Include schema, version, sourceRevision, sceneId, sessionId, savedAtMs, simulationTick, commandSequence, and checksum.
-[ ] Include uid, pid, and tid counters.
-[ ] Include time, souls, core, wave, waveActive, spawn queue, units, towers, pad occupancy, projectiles, effects, selected units, selected pad, tower type, paused, won, lost, and message.
-[ ] Include camera x, z, zoom, targetZoom, and any required resume-safe camera values.
-[ ] Decide explicitly whether transient pointer, drag, pressed-key, and accumulator state is reset or persisted.
-[ ] Add src/campaign/session-state-snapshot.js.
-[ ] Normalize object maps and arrays into a stable JSON-safe envelope.
-[ ] Add src/campaign/session-fingerprint.js.
-[ ] Produce stable before-save and after-hydration fingerprints.
-[ ] Add src/campaign/save-hydration.js.
-[ ] Return typed created, hydrated, rejected, migrated, and fallback-new results.
-[ ] Preserve the rejected candidate and reason in diagnostics.
-[ ] Use deterministic fallback-new behavior for invalid Continue requests.
-[ ] Add src/campaign/resume-result.js.
-[ ] Record selected candidate, classification, schema version, fingerprint, migration status, and fallback decision.
-[ ] Add src/campaign/gamehost-session-readback.js.
-[ ] Expose immutable additive session, persistence, source, and fixture blocks.
-[ ] Do not expose new mutable state references.
-[ ] Add tests/phantom-command-save-admission-fixture.mjs.
-[ ] Prove empty storage disables Continue.
-[ ] Prove malformed JSON disables Continue with invalid-json classification.
-[ ] Prove foreign nexus.sceneSnapshot does not enable Continue without an adapter.
-[ ] Prove foreign phantom.command.campaign does not enable Continue without an adapter.
-[ ] Prove legacy victory summary is classified but not hydrated.
-[ ] Prove current resumable envelope enables Continue.
-[ ] Prove candidate priority is deterministic across storage layers.
-[ ] Add tests/phantom-command-resume-fidelity-fixture.mjs.
-[ ] Save a nontrivial campaign state with units, towers, damaged core, active wave, camera, queues, and counters.
-[ ] Hydrate the envelope into a fresh runtime state factory.
-[ ] Prove saved and hydrated fingerprints match.
-[ ] Prove the next generated unit, projectile, and tower identifiers do not collide.
-[ ] Prove the next fixed-step update advances from the restored simulation tick.
-[ ] Prove rejected hydration does not partially mutate live state.
-[ ] Prove legacy GameHost fields remain present.
-[ ] Add both fixtures to npm run check only after each passes independently.
-[ ] Gate npm run build only after independent fixture proof.
-[ ] Run node tests/phantom-command-save-admission-fixture.mjs.
-[ ] Run node tests/phantom-command-resume-fidelity-fixture.mjs.
-[ ] Run node tests/construct-spiral-intro-kit-smoke.mjs if retained.
-[ ] Run npm run check.
-[ ] Run npm run build.
-[ ] Push only to main.
-```
+- [ ] Keep `index.html`, `game.html`, gameplay constants, and rendering unchanged.
+- [ ] Add `src/campaign/save-candidate-registry.js` with all three keys and both storage layers.
+- [ ] Give every slot a stable ID, owner, schema family, storage layer, and priority.
+- [ ] Add `src/campaign/save-candidate-resolver.js` as a DOM-free pure function.
+- [ ] Return one row per slot, including absent, unreadable, invalid-json, foreign-schema, legacy-summary, unsupported-version, checksum-failed, resumable-current, and resumable-migrated.
+- [ ] Define deterministic ordering across key and storage layer.
+- [ ] Never let malformed higher-priority data hide a valid lower-priority candidate without reporting the shadowing decision.
+- [ ] Return `continueEnabled`, `selectedCandidate`, `inspectedCandidates`, and `decisionReason`.
+- [ ] Make menu initialization call the resolver once, not two independent presence scans.
+- [ ] Expose immutable resolver output through `PhantomMenu.getState()`.
+- [ ] Refresh capability on the browser `storage` event or document why a reload is required.
+- [ ] Add `src/campaign/session-mode.js` and parse `campaign=new|continue`.
+- [ ] Make campaign startup consume the same resolver result before hydration work begins.
+- [ ] Treat the existing `{ scene, souls, wave }` payload as `legacy-completion-summary`, never resumable.
+- [ ] Treat `nexus.sceneSnapshot` and `phantom.command.campaign` as foreign until adapters exist.
+- [ ] Add `tests/phantom-command-candidate-resolver-fixture.mjs`.
+- [ ] Prove empty storage disables Continue.
+- [ ] Prove malformed JSON disables Continue and preserves its reason.
+- [ ] Prove each of the six slots is inspected exactly once.
+- [ ] Prove precedence is deterministic when several resumable candidates exist.
+- [ ] Prove a malformed candidate cannot silently shadow a valid candidate.
+- [ ] Prove foreign and legacy-summary candidates are visible but non-resumable.
+- [ ] Prove menu and campaign receive the same selected candidate ID and fingerprint.
+- [ ] Add the fixture to `npm run check` only after it passes independently.
+- [ ] Run `node tests/phantom-command-candidate-resolver-fixture.mjs`.
+- [ ] Run `npm run check`.
+- [ ] Run `npm run build`.
+- [ ] Push only to `main`.
 
 ## Acceptance rows
 
 ```txt
-menu.continueEnabled === false when no resumable candidate exists
-menu.continueEnabled === false for malformed, foreign, unsupported, or legacy-summary candidates
-menu.selectedSaveCandidate.classification === resumable-current | resumable-migrated
+candidateRegistry.slotCount === 6
+candidateResolution.inspectedCount === 6
+candidateResolution.continueEnabled === false when no resumable candidate exists
+candidateResolution.selectedCandidate === null for absent, malformed, foreign, unsupported, checksum-failed, and legacy-summary-only storage
+candidateResolution.selectedCandidate.classification === resumable-current | resumable-migrated
+candidateResolution.selectedCandidate.slotId is stable
+candidateResolution.decisionReason is present
+candidateResolution.rows preserve key and storageLayer
+menu.getState().continueCapability matches campaign startup resolution
 session.mode === new | continue
-session.result.status === created | hydrated | migrated | rejected | fallback-new
-session.save.schema is versioned
-session.save.sceneId === grave-ring
-session.save.sourceRevision is present
-session.save.checksum is verified
-session.beforeFingerprint === session.afterHydrationFingerprint
-session.hydration is atomic
-campaign.sourceWidth === 640
-campaign.sourceHeight === 360
-campaign.ringCount === 7
-campaign.laneCount === 4
-campaign.padCount === 58
-campaign.starterAllyCount === 6
-campaign.towerTypes === [spire, lantern, ward]
-campaign.waveCount === 6
-uid, pid, and tid counters resume without collisions
-simulation tick resumes deterministically
+legacy victory summary remains non-resumable
+current routes and campaign constants remain unchanged
 legacy window.GameHost fields remain available
-central latest tracker equals repo-local latest tracker
+```
+
+## Follow-on dependency order
+
+```txt
+Continue capability resolver
+  -> versioned full-state save envelope
+  -> atomic hydration
+  -> saved/hydrated fingerprint parity
+  -> identifier and fixed-step resume parity
+  -> command result journal
+  -> frame/render correlation
 ```
 
 ## Defer until after proof
 
 ```txt
-command journal and frame correlation implementation
-new campaign waves
-new unit or tower types
-economy expansion
+new waves, units, towers, or economy systems
 save/load UI redesign
 camera rewrite
 renderer replacement
 pixel art expansion
-multiplayer or RTS scenario expansion
+multiplayer expansion
 legacy construct-profile parity work
 ```
