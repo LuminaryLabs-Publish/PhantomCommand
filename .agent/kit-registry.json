@@ -1,42 +1,76 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T14-11-51-04-00",
-  "status": "campaign-action-result-source-ledger-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T14-11-51-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T14-11-51-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T14-11-51-04-00-campaign-action-result-source-ledger-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T14-11-51-04-00-campaign-render-action-result-readback-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T14-11-51-04-00-wave-build-order-action-result-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T14-11-51-04-00-select-build-order-result-attribution-map.md",
-  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T14-11-51-04-00-campaign-source-action-result-contract.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T14-11-51-04-00-legacy-construct-profile-demotion.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T14-11-51-04-00-campaign-action-result-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T12-40-45-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T12-40-45-04-00.md",
+  "updatedAt": "2026-07-10T15-38-40-04-00",
+  "status": "campaign-session-authority-command-correlation-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T15-38-40-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T15-38-40-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T15-38-40-04-00-campaign-session-command-correlation-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T15-38-40-04-00-session-frame-render-readback-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T15-38-40-04-00-new-continue-wave-command-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T15-38-40-04-00-command-intent-result-correlation-map.md",
+  "latestSessionAuthorityAudit": ".agent/session-authority-audit/2026-07-10T15-38-40-04-00-new-continue-save-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T15-38-40-04-00-session-fixture-check-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T14-11-51-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T14-11-51-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
-    "doNotCreateBranches": true
+    "doNotCreateBranches": true,
+    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp after HorrorCorridor advanced"
+    "reason": "all nine eligible non-Cavalry repositories were centrally tracked and had root agent state; PhantomCommand had the oldest prior central timestamp",
+    "priorCentralTimestamp": "2026-07-10T14-11-51-04-00",
+    "eligibleRepoCount": 9,
+    "accessibleRepoCount": 10
   },
   "currentRuntime": {
-    "type": "static-vite-canvas-campaign-game",
-    "entrypoints": ["index.html", "game.html"],
+    "type": "static-vite-pixel-isometric-campaign-game",
+    "entrypoints": [
+      "index.html",
+      "game.html"
+    ],
     "menuModule": "src/menu/graveyard-menu.js",
     "sceneModule": "src/campaign/campaign-scene.js",
     "sourceWidth": 640,
     "sourceHeight": 360,
     "ringCount": 7,
     "laneCount": 4,
-    "towerTypes": ["spire", "lantern", "ward"],
-    "unitArchetypes": ["guard", "archer", "runner", "shield", "zealot", "brute", "wraith"],
-    "waveCount": 6,
+    "generatedPadCount": 58,
     "starterAllyCount": 6,
+    "towerTypes": [
+      "spire",
+      "lantern",
+      "ward"
+    ],
+    "unitArchetypes": [
+      "guard",
+      "archer",
+      "runner",
+      "shield",
+      "zealot",
+      "brute",
+      "wraith"
+    ],
+    "waveCount": 6,
+    "simulationStep": "1/60",
+    "menuSessionTargets": [
+      "game.html?campaign=new",
+      "game.html?campaign=continue"
+    ],
+    "campaignReadsSessionMode": false,
+    "campaignHydratesSave": false,
+    "campaignSaveWrite": {
+      "key": "phantomCommand.save",
+      "when": "victory only",
+      "fields": [
+        "scene",
+        "souls",
+        "wave"
+      ]
+    },
     "currentGameHostSurface": [
       "window.GameHost.state",
       "window.GameHost.camera",
@@ -45,44 +79,167 @@
       "window.GameHost.getState",
       "window.GameHost.setZoom"
     ],
-    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, simulation, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action result, render, simulation, and GameHost parity before gameplay or visual expansion."
+    "primaryGap": "the menu emits new/continue session intent but the campaign always initializes fresh; save hydration, command result correlation, deterministic journal/replay, render readback, and immutable diagnostics are missing"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
-      "load index.html menu",
-      "start or continue campaign into game.html",
-      "pan with WASD/arrows",
-      "zoom with wheel",
-      "drag or click to select allies or pads",
-      "repeat selected pad click to build selected tower",
-      "right-click to order units or target enemies",
-      "press 1/2/3 to choose tower type",
-      "press Space to start wave",
-      "hold sanctum core through six waves"
+      "open menu",
+      "choose Begin or Continue",
+      "campaign initializes fresh regardless of session intent",
+      "select units or build pads",
+      "build towers",
+      "order allied units",
+      "start waves",
+      "survive fixed-step combat and economy loop",
+      "render world, HUD, minimap, modal, and CRT",
+      "write minimal victory completion payload"
     ],
-    "targetCampaignFixtureLoop": [
-      "load source-owned campaign ledger",
-      "derive ring/lane/pad descriptors",
-      "derive archetype, tower, and wave descriptors",
-      "emit action intent records for select/build/order/start-wave",
-      "emit accepted/rejected ActionResult rows and simulation frame summaries",
-      "emit render readback rows",
-      "project additive GameHost campaign diagnostics",
-      "run DOM-free campaign fixture",
-      "splice helpers into campaign-scene after fixture proof",
-      "gate build with campaign fixture",
+    "targetFixtureLoop": [
+      "parse new or continue intent",
+      "classify save envelope",
+      "create or hydrate deterministic campaign state",
+      "emit ordered command envelopes",
+      "emit accepted or rejected command results",
+      "advance correlated fixed-step frames",
+      "emit render consumer readback",
+      "expose immutable additive GameHost diagnostics",
+      "replay journal and compare final fingerprint",
+      "gate check and build",
       "sync central ledger"
     ]
   },
   "domains": {
-    "runtime": ["static-route-shell", "menu-route", "campaign-route", "vite-static-build", "static-artifact-copy", "low-resolution-source-canvas", "crt-display-renderer", "pixel-campaign-render-loop", "legacy-gamehost-campaign-diagnostics"],
-    "campaign": ["ring-map-domain", "lane-domain", "build-pad-domain", "unit-archetype-domain", "tower-archetype-domain", "wave-script-domain", "souls-economy-domain", "sanctum-core-health-domain", "selection-domain", "build-action-domain", "order-action-domain", "wave-start-action-domain", "unit-ai-domain", "enemy-pathing-domain", "ally-targeting-domain", "tower-targeting-domain", "projectile-domain", "damage-reward-domain", "effect-domain", "camera-pan-zoom-domain", "hud-projection-domain", "minimap-domain", "save-on-win-domain"],
-    "implementedKits": ["crt-renderer-kit", "graveyard-art-kit", "menu-route-kit", "campaign-route-shell-kit", "pixel-campaign-runtime-kit", "legacy-gamehost-diagnostics-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
-    "next": ["phantom-command-campaign-source-ledger-kit", "phantom-command-source-manifest-kit", "phantom-command-source-fingerprint-kit", "phantom-command-ring-lane-descriptor-kit", "phantom-command-build-pad-descriptor-kit", "phantom-command-unit-archetype-kit", "phantom-command-tower-archetype-kit", "phantom-command-wave-script-kit", "phantom-command-action-intent-kit", "phantom-command-action-result-kit", "phantom-command-simulation-frame-kit", "phantom-command-render-readback-kit", "phantom-command-gamehost-diagnostics-kit", "phantom-command-campaign-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
+    "routeAndMenu": [
+      "static-route-shell",
+      "menu-route",
+      "campaign-route",
+      "menu-selection-domain",
+      "menu-panel-domain",
+      "menu-settings-persistence-domain",
+      "menu-save-presence-domain",
+      "menu-transition-domain",
+      "menu-audio-domain",
+      "graveyard-art-domain",
+      "source-canvas-domain",
+      "crt-display-domain"
+    ],
+    "campaign": [
+      "campaign-session-intent-domain",
+      "campaign-save-schema-domain",
+      "campaign-save-hydration-domain",
+      "ring-map-domain",
+      "lane-domain",
+      "build-pad-domain",
+      "unit-archetype-domain",
+      "tower-archetype-domain",
+      "wave-script-domain",
+      "souls-economy-domain",
+      "sanctum-core-health-domain",
+      "selection-domain",
+      "build-action-domain",
+      "order-action-domain",
+      "wave-start-action-domain",
+      "unit-ai-domain",
+      "enemy-pathing-domain",
+      "ally-targeting-domain",
+      "tower-targeting-domain",
+      "projectile-domain",
+      "damage-reward-domain",
+      "effect-domain",
+      "win-loss-domain",
+      "save-on-win-domain"
+    ],
+    "runtimeAndProof": [
+      "keyboard-input-domain",
+      "pointer-input-domain",
+      "camera-pan-zoom-domain",
+      "fixed-step-simulation-domain",
+      "world-render-domain",
+      "hud-projection-domain",
+      "minimap-domain",
+      "modal-overlay-domain",
+      "gamehost-diagnostics-domain",
+      "campaign-static-check-domain",
+      "static-build-domain",
+      "github-pages-deploy-domain",
+      "central-ledger-sync-domain"
+    ]
+  },
+  "kits": {
+    "implemented": [
+      "crt-renderer-kit",
+      "graveyard-art-kit",
+      "menu-route-kit",
+      "menu-settings-persistence-kit",
+      "menu-save-presence-kit",
+      "menu-audio-kit",
+      "campaign-route-shell-kit",
+      "pixel-campaign-runtime-kit",
+      "fixed-step-campaign-simulation-kit",
+      "pixel-campaign-render-kit",
+      "legacy-gamehost-diagnostics-kit",
+      "campaign-static-check-kit",
+      "static-build-copy-kit",
+      "construct-spiral-intro-kit",
+      "construct-spiral-schedule-kit",
+      "construct-piece-id-kit",
+      "construct-piece-state-kit",
+      "construct-sequence-update-kit"
+    ],
+    "next": [
+      "phantom-command-campaign-session-mode-kit",
+      "phantom-command-save-schema-kit",
+      "phantom-command-save-hydration-kit",
+      "phantom-command-command-envelope-kit",
+      "phantom-command-action-result-kit",
+      "phantom-command-action-journal-kit",
+      "phantom-command-frame-correlation-kit",
+      "phantom-command-render-readback-kit",
+      "phantom-command-gamehost-readback-kit",
+      "phantom-command-session-fixture-kit",
+      "phantom-command-build-fixture-gate-kit",
+      "central-ledger-readback-kit"
+    ]
   },
   "services": {
-    "current": ["menu route", "settings persistence", "save detection", "static scene route", "CRT renderer", "campaign rings", "lanes", "pads", "archetypes", "towers", "waves", "input", "selection", "build", "order", "spawn", "unit AI", "tower AI", "projectiles", "damage", "reward", "HUD", "minimap", "GameHost state", "static artifact copy"],
-    "neededNext": ["source ledger", "descriptor fingerprint", "action intent rows", "ActionResult rows", "simulation frame rows", "render readback rows", "GameHost campaign diagnostics", "DOM-free campaign fixture", "build fixture gate", "central ledger readback"]
+    "current": [
+      "menu navigation",
+      "settings persistence",
+      "save presence detection",
+      "route transition",
+      "procedural menu audio",
+      "graveyard art composition",
+      "source canvas CRT presentation",
+      "campaign descriptors",
+      "selection",
+      "building",
+      "unit orders",
+      "wave spawning",
+      "fixed-step combat simulation",
+      "souls rewards",
+      "sanctum damage",
+      "world rendering",
+      "HUD",
+      "minimap",
+      "victory completion write",
+      "aggregate GameHost diagnostics",
+      "source-pattern checks",
+      "static artifact copy"
+    ],
+    "neededNext": [
+      "session mode parsing",
+      "versioned save envelope",
+      "save classification and hydration",
+      "command envelopes",
+      "typed action results",
+      "bounded ordered journal",
+      "deterministic replay",
+      "simulation/render frame correlation",
+      "immutable GameHost readback",
+      "DOM-free session fixture",
+      "check/build fixture gate",
+      "central ledger readback"
+    ]
   },
   "validation": {
     "runtimeSourceChangedThisPass": false,
@@ -91,6 +248,8 @@
     "npmCheckRun": false,
     "npmBuildRun": false,
     "fixtureRun": false,
-    "browserSmokeRun": false
+    "browserSmokeRun": false,
+    "localCloneAttempted": true,
+    "localCloneBlockedReason": "container DNS could not resolve github.com"
   }
 }
