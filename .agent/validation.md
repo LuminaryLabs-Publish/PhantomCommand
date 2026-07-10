@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T05-21-20-04-00`
+**Timestamp:** `2026-07-10T06-59-18-04-00`
 
 ## Validation performed in this pass
 
@@ -9,7 +9,7 @@
 - Compared the public repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
 - Confirmed no checked public non-Cavalry repo was new, ledger-absent, missing root agent state, recently added but undocumented, or otherwise undocumented.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as the oldest eligible public documented fallback after HorrorCorridor advanced.
+- Selected PhantomCommand as the oldest eligible public documented fallback.
 - Read .agent/START_HERE.md.
 - Read .agent/current-audit.md.
 - Read .agent/next-steps.md.
@@ -18,8 +18,6 @@
 - Read .agent/kit-registry.json.
 - Read package.json.
 - Read game.html.
-- Read scripts/build-static.mjs.
-- Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
 - Read central repo-ledger state for public Publish repo comparison.
 - Updated required repo-local .agent root docs.
@@ -68,10 +66,6 @@ campaign-scene.js declares:
 - 6 scripted waves.
 - souls, core, wave, selected units, selected pad, tower type, win/loss state.
 - selectAt, order, build, startWave, update, draw, render, and GameHost methods.
-
-build-static declares:
-- copies index.html, game.html, src, docs, and config into dist.
-- no campaign fixture gate yet.
 ```
 
 ## Required validation after the next implementation
