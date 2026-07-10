@@ -1,30 +1,39 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T14-11-51-04-00`
+**Timestamp:** `2026-07-10T15-38-40-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Checked the current public LuminaryLabs-Publish repo list.
-- Compared the public repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Confirmed no checked public non-Cavalry repo was new, ledger-absent, missing root agent state, recently added, or otherwise undocumented.
+- Enumerated all 10 accessible LuminaryLabs-Publish repositories.
+- Compared all nine eligible non-Cavalry repositories against central repo-ledger files.
+- Verified root .agent/START_HERE.md exists in all nine eligible repositories.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Selected PhantomCommand as the oldest eligible public documented fallback.
-- Read .agent/START_HERE.md.
-- Read .agent/current-audit.md.
-- Read .agent/next-steps.md.
-- Read .agent/known-gaps.md.
-- Read .agent/validation.md.
-- Read .agent/kit-registry.json.
-- Read central repo-ledger state for public Publish repo comparison.
+- Selected PhantomCommand as the oldest eligible documented fallback.
+- Read README.md.
 - Read package.json.
 - Read game.html.
+- Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
-- Updated required repo-local .agent root docs.
+- Read scripts/check-campaign.mjs.
+- Read the current root .agent docs and kit registry.
+- Verified menu Begin target is game.html?campaign=new.
+- Verified menu Continue target is game.html?campaign=continue.
+- Verified campaign-scene.js does not parse the session query parameter.
+- Verified campaign-scene.js does not hydrate a save.
+- Verified the campaign writes only a minimal victory payload.
+- Verified the 640 x 360 source canvas.
+- Verified 7 rings and 4 lanes.
+- Recomputed deterministic generated build-pad count as 58.
+- Verified 6 starter allies.
+- Verified 3 tower types, 7 unit archetypes, and 6 waves.
+- Verified fixed-step 1/60 simulation through an accumulator.
+- Verified direct mutable GameHost state exposure and aggregate getState output.
+- Updated required root .agent docs.
 - Added timestamped tracker and turn-ledger entries.
-- Added architecture, render, gameplay, interaction, campaign-authority, source-profile, and deploy audits.
-- Updated central repo ledger.
-- Added central internal change-log entry.
+- Added architecture, render, gameplay, interaction, session-authority, and deploy audits.
+- Pushed only to main.
+- Created no branch or pull request.
 ```
 
 ## Runtime validation not performed
@@ -34,38 +43,53 @@
 - npm run check was not run.
 - npm run build was not run.
 - npm start was not run.
-- node tests/construct-spiral-intro-kit-smoke.mjs was not run.
-- node tests/phantom-command-campaign-fixture.mjs was not run because this pass did not implement it.
 - Browser smoke was not run.
-- GitHub Pages deploy was not checked after this docs-only pass.
+- GitHub Pages deployment was not checked.
 - No Playwright or DOM automation was run.
-- No implementation source files were changed.
+- No session fixture was run because it does not exist yet.
+- No campaign behavioral fixture was run because it does not exist yet.
+- No runtime source file was changed.
 ```
+
+## Environment limitation
+
+A local validation clone was attempted through the execution container, but DNS resolution for `github.com` was unavailable. Repository inspection and all writes therefore used the authenticated GitHub connector.
 
 ## Source evidence captured
 
 ```txt
-campaign-scene.js declares:
-- 640 x 360 source canvas.
-- CRT display renderer.
-- 7 concentric rings.
-- 4 lane angles.
-- generated build pads.
-- guard, archer, runner, shield, zealot, brute, and wraith archetypes.
-- spire, lantern, and ward tower types.
-- 6 scripted waves.
-- souls, core, wave, selected units, selected pad, tower type, win/loss state.
-- selectAt, order, build, startWave, update, draw, render, and GameHost methods.
+menu save keys:
+  phantomCommand.save
+  nexus.sceneSnapshot
+  phantom.command.campaign
 
-package.json declares:
-- npm run check.
-- npm run build.
-- no campaign fixture script yet.
+menu routes:
+  Begin -> ./game.html?campaign=new
+  Continue -> ./game.html?campaign=continue
+
+campaign save read:
+  none
+
+campaign save write:
+  phantomCommand.save
+  { scene: "grave-ring", souls, wave }
+
+campaign constants:
+  source canvas 640 x 360
+  7 rings
+  4 lanes
+  58 generated pads
+  6 starter allies
+  3 tower types
+  7 unit archetypes
+  6 waves
+  fixed 1/60 simulation
 ```
 
 ## Required validation after the next implementation
 
 ```bash
+node tests/phantom-command-session-fixture.mjs
 node tests/phantom-command-campaign-fixture.mjs
 node tests/construct-spiral-intro-kit-smoke.mjs
 npm run check
@@ -80,9 +104,9 @@ branch created: no
 pull request created: no
 npm run check: not run
 npm run build: not run
-construct smoke: not run
-campaign fixture: not run because proof files do not exist yet
 browser smoke: not run
+session fixture: not run because it does not exist yet
+local clone validation: blocked by container DNS
 pushed to main: yes
-central ledger updated: yes
+central ledger update: pending until repo-local write set completes
 ```
