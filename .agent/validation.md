@@ -33,6 +33,8 @@
 - Updated required root .agent docs.
 - Added a timestamped tracker and turn-ledger entry.
 - Added architecture, render, gameplay, interaction, session-authority, persistence, and deploy audits.
+- Updated the central repo ledger.
+- Added the central internal change-log entry.
 - Pushed only to main.
 - Created no branch or pull request.
 ```
@@ -112,5 +114,6 @@ browser smoke: not run
 save admission fixture: not run because it does not exist yet
 resume fidelity fixture: not run because it does not exist yet
 repo-local documentation pushed to main: yes
-central ledger update: pending until the repo-local commit is recorded
+central ledger updated: yes
+central internal change log added: yes
 ```
