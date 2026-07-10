@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T06-59-18-04-00`
+**Timestamp:** `2026-07-10T08-20-42-04-00`
 
 ## Critical campaign-source gaps
 
@@ -13,7 +13,8 @@
 - unit archetypes are inline and have no source fingerprint.
 - tower archetypes are inline and have no source fingerprint.
 - wave scripts are inline and have no fixture rows.
-- build, select, order, start-wave, damage, reward, win, and loss actions have no ActionResult records.
+- select, build, order, start-wave, damage, reward, win, and loss actions have no ActionResult records.
+- no-op and rejected branches are silent.
 - simulation ticks have no deterministic frame summaries.
 - render pass has no source-consumption/readback ledger.
 - GameHost.getState() exposes only aggregate campaign counters and zoom.
@@ -51,7 +52,7 @@
 
 ```txt
 - pixel art animation frames are procedural rectangles today.
-- isometric camera zoom/pan is functional but lacks fixture-readback bounds.
+- isometric camera zoom/pan is functional but lacks fixture-readable bounds.
 - enemy and ally AI are compact and inline.
 - economy is minimal.
 - save only writes a small win payload.
