@@ -1,129 +1,85 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T17-08-36-04-00",
-  "status": "campaign-save-admission-resume-fidelity-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T17-08-36-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T17-08-36-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fidelity-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T17-08-36-04-00-session-provenance-render-readback-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T17-08-36-04-00-continue-hydrate-resume-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T17-08-36-04-00-continue-admission-result-map.md",
-  "latestSessionAuthorityAudit": ".agent/session-authority-audit/2026-07-10T17-08-36-04-00-save-candidate-classification-contract.md",
-  "latestPersistenceAudit": ".agent/persistence-audit/2026-07-10T17-08-36-04-00-resume-state-coverage-matrix.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fixture-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T15-38-40-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T15-38-40-04-00.md",
-  "automationContinuity": {
-    "continueRotation": true,
-    "onlyPushMain": true,
-    "doNotCreateBranches": true,
-    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
-  },
+  "updatedAt": "2026-07-10T18-40-13-04-00",
+  "status": "continue-capability-resolver-candidate-precedence-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T18-40-13-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T18-40-13-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T18-40-13-04-00-continue-capability-resolver-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T18-40-13-04-00-continue-provenance-render-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T18-40-13-04-00-new-continue-session-entry-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T18-40-13-04-00-menu-candidate-admission-map.md",
+  "latestPersistenceAudit": ".agent/persistence-audit/2026-07-10T18-40-13-04-00-six-slot-candidate-precedence-matrix.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T18-40-13-04-00-candidate-resolver-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T17-08-36-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "reason": "all nine eligible non-Cavalry repositories were centrally tracked and had root agent state; PhantomCommand was the oldest eligible documented fallback after accounting for fresh HorrorCorridor repo-local activity",
-    "priorCentralTimestamp": "2026-07-10T15-38-40-04-00",
+    "reason": "all nine eligible non-Cavalry repositories were tracked and documented; PhantomCommand had the oldest prior audit timestamp",
+    "priorTimestamp": "2026-07-10T17-08-36-04-00",
+    "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
-    "accessibleRepoCount": 10
+    "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
-  "currentNextSlice": "PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate",
-  "currentRuntime": {
+  "currentNextSlice": "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
+  "runtime": {
     "type": "static-vite-pixel-isometric-campaign-game",
-    "entrypoints": [
-      "index.html",
-      "game.html"
-    ],
+    "entrypoints": ["index.html", "game.html"],
     "menuModule": "src/menu/graveyard-menu.js",
-    "sceneModule": "src/campaign/campaign-scene.js",
-    "sourceWidth": 640,
-    "sourceHeight": 360,
-    "ringCount": 7,
-    "laneCount": 4,
-    "generatedPadCount": 58,
-    "starterAllyCount": 6,
-    "towerTypes": [
-      "spire",
-      "lantern",
-      "ward"
-    ],
-    "unitArchetypes": [
-      "guard",
-      "archer",
-      "runner",
-      "shield",
-      "zealot",
-      "brute",
-      "wraith"
-    ],
-    "waveCount": 6,
+    "campaignModule": "src/campaign/campaign-scene.js",
+    "sourceCanvas": [640, 360],
+    "rings": 7,
+    "lanes": 4,
+    "generatedPads": 58,
+    "starterAllies": 6,
+    "towerTypes": ["spire", "lantern", "ward"],
+    "unitArchetypes": ["guard", "archer", "runner", "shield", "zealot", "brute", "wraith"],
+    "waves": 6,
     "simulationStep": "1/60",
-    "menuSessionTargets": [
-      "game.html?campaign=new",
-      "game.html?campaign=continue"
-    ],
-    "saveCandidateKeys": [
-      "phantomCommand.save",
-      "nexus.sceneSnapshot",
-      "phantom.command.campaign"
-    ],
-    "saveCandidateStorageLayers": [
-      "localStorage",
-      "sessionStorage"
-    ],
-    "currentContinueAdmission": "any non-empty raw value under any candidate key",
+    "candidateKeys": ["phantomCommand.save", "nexus.sceneSnapshot", "phantom.command.campaign"],
+    "storageLayers": ["localStorage", "sessionStorage"],
+    "candidateSlotCount": 6,
+    "currentResolver": "Boolean presence only",
+    "menuResolverCallsAtConstruction": 2,
+    "storageRefresh": false,
     "campaignReadsSessionMode": false,
-    "campaignReadsSaveCandidates": false,
+    "campaignReadsCandidates": false,
     "campaignHydratesSave": false,
-    "campaignSaveWrite": {
+    "saveWrite": {
       "key": "phantomCommand.save",
       "when": "victory only",
       "classification": "legacy-completion-summary",
-      "fields": [
-        "scene",
-        "souls",
-        "wave"
-      ]
-    },
-    "currentGameHostSurface": [
-      "window.GameHost.state",
-      "window.GameHost.camera",
-      "window.GameHost.startWave",
-      "window.GameHost.build",
-      "window.GameHost.getState",
-      "window.GameHost.setZoom"
-    ],
-    "primaryGap": "Continue is enabled by unvalidated cross-schema key presence, while the campaign reads no candidate and the only saved payload is a non-resumable victory summary; no versioned full-state envelope or fingerprint-proven hydration exists"
+      "fields": ["scene", "souls", "wave"]
+    }
   },
   "interactionLoops": {
-    "currentPlayerLoop": [
+    "current": [
       "open menu",
-      "read settings and raw save-key presence",
+      "read settings",
+      "scan six candidate slots twice and collapse to Boolean",
       "choose Begin or Continue",
-      "campaign initializes fresh regardless of session intent",
+      "campaign initializes fresh regardless of route intent",
       "select units or build pads",
       "build towers",
-      "order allied units",
+      "order allies",
       "start waves",
-      "survive fixed-step combat and economy loop",
-      "render world, HUD, minimap, modal, and CRT",
-      "write minimal victory completion summary"
+      "advance fixed-step combat and economy",
+      "render world HUD minimap modal and CRT",
+      "write legacy victory summary"
     ],
-    "targetFixtureLoop": [
-      "enumerate save candidates",
-      "parse and classify each candidate",
-      "select a resumable candidate by deterministic priority",
+    "target": [
+      "enumerate six stable candidate slots once",
+      "parse and classify every candidate",
+      "select one candidate by deterministic precedence",
+      "project truthful Continue capability",
+      "share the same immutable result with campaign startup",
       "parse new or continue session intent",
-      "create or atomically hydrate full campaign state",
-      "compare saved and hydrated fingerprints",
-      "resume counters and fixed-step simulation deterministically",
+      "hydrate only a versioned resumable envelope",
       "emit immutable session and persistence readback",
-      "gate check and build with DOM-free fixtures",
-      "sync central ledger"
+      "gate check and build with DOM-free fixtures"
     ]
   },
   "domains": {
-    "routeAndMenu": [
+    "routeMenuPresentation": [
       "static-route-shell",
       "menu-route",
       "campaign-route",
@@ -131,17 +87,22 @@
       "menu-panel-domain",
       "menu-settings-persistence-domain",
       "menu-save-candidate-discovery-domain",
+      "menu-continue-capability-domain",
       "menu-transition-domain",
       "menu-audio-domain",
       "graveyard-art-domain",
       "source-canvas-domain",
       "crt-display-domain"
     ],
-    "sessionAndPersistence": [
+    "sessionPersistence": [
       "campaign-session-intent-domain",
       "campaign-save-key-domain",
-      "campaign-save-admission-domain-next",
-      "campaign-save-classification-domain-next",
+      "candidate-slot-enumeration-domain-next",
+      "candidate-parse-domain-next",
+      "candidate-schema-classification-domain-next",
+      "candidate-precedence-domain-next",
+      "continue-capability-projection-domain-next",
+      "candidate-provenance-domain-next",
       "campaign-save-envelope-domain-next",
       "campaign-save-hydration-domain-next",
       "campaign-resume-fidelity-domain-next",
@@ -170,7 +131,7 @@
       "win-loss-domain",
       "save-on-win-domain"
     ],
-    "runtimeAndProof": [
+    "runtimeProofDeploy": [
       "keyboard-input-domain",
       "pointer-input-domain",
       "camera-pan-zoom-domain",
@@ -207,20 +168,26 @@
       "construct-piece-state-kit",
       "construct-sequence-update-kit"
     ],
-    "next": [
-      "phantom-command-save-candidate-registry-kit",
+    "neededNext": [
+      "phantom-command-candidate-slot-registry-kit",
+      "phantom-command-save-candidate-resolver-kit",
       "phantom-command-save-classifier-kit",
+      "phantom-command-candidate-precedence-kit",
+      "phantom-command-continue-capability-kit",
+      "phantom-command-candidate-provenance-kit",
       "phantom-command-campaign-session-mode-kit",
+      "phantom-command-candidate-resolver-fixture-kit",
+      "phantom-command-build-fixture-gate-kit",
+      "central-ledger-readback-kit"
+    ],
+    "followOn": [
       "phantom-command-save-envelope-kit",
       "phantom-command-session-state-snapshot-kit",
       "phantom-command-save-hydration-kit",
       "phantom-command-session-fingerprint-kit",
       "phantom-command-resume-result-kit",
       "phantom-command-gamehost-session-readback-kit",
-      "phantom-command-save-admission-fixture-kit",
-      "phantom-command-resume-fidelity-fixture-kit",
-      "phantom-command-build-fixture-gate-kit",
-      "central-ledger-readback-kit"
+      "phantom-command-resume-fidelity-fixture-kit"
     ],
     "deferred": [
       "phantom-command-command-envelope-kit",
@@ -240,48 +207,35 @@
       "graveyard art composition",
       "source canvas CRT presentation",
       "campaign descriptors",
-      "selection",
-      "building",
-      "unit orders",
-      "wave spawning",
-      "fixed-step combat simulation",
-      "souls rewards",
-      "sanctum damage",
-      "world rendering",
-      "HUD",
-      "minimap",
+      "selection building and unit orders",
+      "wave spawning and fixed-step combat",
+      "souls rewards and sanctum damage",
+      "world HUD minimap and modal rendering",
       "victory completion-summary write",
       "aggregate GameHost diagnostics",
       "source-pattern checks",
       "static artifact copy"
     ],
     "neededNext": [
-      "save candidate enumeration",
-      "JSON parsing and schema-family classification",
-      "deterministic candidate priority",
-      "truthful Continue admission",
-      "session mode parsing",
-      "versioned full-state envelope",
-      "atomic save hydration",
-      "legacy-summary classification",
-      "foreign-schema rejection or adapter routing",
-      "state fingerprinting",
-      "resume counter and simulation parity",
-      "immutable GameHost session readback",
-      "DOM-free save-admission fixture",
-      "DOM-free resume-fidelity fixture",
-      "check and build fixture gate",
-      "central ledger readback"
+      "stable six-slot enumeration",
+      "single-pass candidate reads",
+      "JSON parsing and schema classification",
+      "deterministic key and storage precedence",
+      "truthful Continue capability",
+      "candidate provenance and decision reasons",
+      "shared menu and campaign resolution",
+      "DOM-free resolver fixtures",
+      "check and build gating"
     ]
   },
-  "currentBlocker": "The menu equates raw save-key presence with resumability. The campaign reads none of those candidates, and its only saved payload cannot reconstruct live state. Save admission, full-state envelope authority, atomic hydration, and fingerprint parity are missing.",
+  "currentBlocker": "Continue availability is a stale page-load Boolean produced by two independent six-slot scans. No authoritative resolver preserves candidate provenance, classification, precedence, or a result that both menu and campaign startup consume.",
   "validation": {
     "runtimeSourceChangedThisPass": false,
     "branchCreated": false,
     "pullRequestCreated": false,
     "npmCheckRun": false,
     "npmBuildRun": false,
-    "saveAdmissionFixtureRun": false,
+    "candidateResolverFixtureRun": false,
     "resumeFidelityFixtureRun": false,
     "browserSmokeRun": false
   }
