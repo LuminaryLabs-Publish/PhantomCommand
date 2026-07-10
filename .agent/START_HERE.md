@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T11-10-08-04-00`
+**Last aligned:** `2026-07-10T12-40-45-04-00`
 
 ## Purpose
 
@@ -18,7 +18,7 @@ No checked public non-Cavalry repo was new, missing from the central ledger, mis
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T10-58-54-04-00`.
+`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T12-29-26-04-00`.
 
 ## Current product read
 
@@ -33,7 +33,7 @@ index.html
 
 The active game route is a live pixel campaign scene. `game.html` is a thin route shell that imports `src/campaign/campaign-scene.js`.
 
-The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements concentric grave rings, enemy lanes, build pads, player guards/archers, tower placement, enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, save-on-win, and `window.GameHost` readback.
+The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements 7 concentric grave rings, 4 enemy lanes, generated build pads, player guards/archers, three tower types, six enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, save-on-win, and `window.GameHost` readback.
 
 ## Current interaction loop
 
@@ -61,15 +61,15 @@ open index.html
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T11-10-08-04-00-campaign-fixture-readback-ledger-dsk-map.md
-.agent/render-audit/2026-07-10T11-10-08-04-00-pixel-campaign-render-fixture-gap.md
-.agent/gameplay-audit/2026-07-10T11-10-08-04-00-wave-build-order-fixture-loop.md
-.agent/interaction-audit/2026-07-10T11-10-08-04-00-select-build-order-action-map.md
-.agent/campaign-authority-audit/2026-07-10T11-10-08-04-00-campaign-source-action-render-contract.md
-.agent/deploy-audit/2026-07-10T11-10-08-04-00-campaign-fixture-build-gate.md
-.agent/source-profile-audit/2026-07-10T11-10-08-04-00-legacy-construct-profile-demotion.md
-.agent/trackers/2026-07-10T11-10-08-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T11-10-08-04-00.md
+.agent/architecture-audit/2026-07-10T12-40-45-04-00-campaign-source-action-render-readback-dsk-map.md
+.agent/render-audit/2026-07-10T12-40-45-04-00-pixel-campaign-render-readback-ledger-gap.md
+.agent/gameplay-audit/2026-07-10T12-40-45-04-00-wave-build-order-result-loop.md
+.agent/interaction-audit/2026-07-10T12-40-45-04-00-select-build-order-action-result-map.md
+.agent/campaign-authority-audit/2026-07-10T12-40-45-04-00-campaign-source-action-render-readback-contract.md
+.agent/deploy-audit/2026-07-10T12-40-45-04-00-campaign-fixture-check-build-gate.md
+.agent/source-profile-audit/2026-07-10T12-40-45-04-00-legacy-construct-profile-still-demoted.md
+.agent/trackers/2026-07-10T12-40-45-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T12-40-45-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -91,7 +91,7 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
+PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
 ```
 
 Build this before camera rewrites, expanded enemy animation, economy expansion, renderer replacement, RTS scenario expansion, construct-profile work, or additional campaign content.
