@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T02-02-24-04-00",
-  "status": "sourceprofile-ledger-catchup-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T02-02-24-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T02-02-24-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T02-02-24-04-00-sourceprofile-ledger-catchup-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T02-02-24-04-00-gamehost-sourceprofile-ledger-readback.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T02-02-24-04-00-construct-sourceprofile-proof-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T02-02-24-04-00-live-v6-profile-ledger-contract.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-10T02-02-24-04-00-bootstrap-deferred-by-sourceprofile.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T02-02-24-04-00-sourceprofile-fixture-build-ledger-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T00-30-20-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T00-30-20-04-00.md",
+  "updatedAt": "2026-07-10T03-59-57-04-00",
+  "status": "campaign-scene-source-manifest-gamehost-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T03-59-57-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T03-59-57-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T03-59-57-04-00-campaign-scene-source-manifest-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T03-59-57-04-00-pixel-campaign-render-readback.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T03-59-57-04-00-wave-build-action-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T03-59-57-04-00-select-build-order-action-results.md",
+  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T03-59-57-04-00-campaign-source-fixture-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T03-59-57-04-00-campaign-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T02-02-24-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T02-02-24-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
@@ -21,78 +21,86 @@
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-10T00-30-20-04-00"
+    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-10T02-02-24-04-00 after HorrorCorridor advanced"
   },
   "currentRuntime": {
-    "type": "static-vite-three-app",
+    "type": "static-vite-canvas-campaign-game",
     "entrypoints": ["index.html", "game.html"],
+    "menuModule": "src/menu/graveyard-menu.js",
+    "sceneModule": "src/campaign/campaign-scene.js",
     "buildScript": "node scripts/build-static.mjs",
-    "liveBuildId": "smooth-ring-handoff-v6",
-    "expectedLiveRingCount": 10,
-    "expectedLiveGapPolicy": "zero-gap",
-    "expectedLiveRingPartCounts": [5, 5, 5, 5, 6, 8, 10, 12, 16, 20],
-    "expectedLiveTotalPieces": 92,
-    "expectedLiveTotalBuildSeconds": 19.923,
+    "sourceWidth": 640,
+    "sourceHeight": 360,
+    "ringCount": 7,
+    "laneCount": 4,
+    "towerTypes": ["spire", "lantern", "ward"],
+    "unitArchetypes": ["guard", "archer", "runner", "shield", "zealot", "brute", "wraith"],
+    "waveCount": 6,
     "currentGameHostSurface": [
-      "window.GameHost.skipConstruct",
-      "window.GameHost.restartConstruct",
-      "window.GameHost.getState"
+      "window.GameHost.state",
+      "window.GameHost.camera",
+      "window.GameHost.startWave",
+      "window.GameHost.build",
+      "window.GameHost.getState",
+      "window.GameHost.setZoom"
     ],
-    "primaryGap": "game.html still owns the live profile and renders it. The next cut should source-own the profile, prove DOM-free parity, splice additive sourceProfile diagnostics into GameHost, wire fixture build proof before static artifact copy, and keep central ledger pointers aligned before construct result or scenario bootstrap."
+    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action/render/GameHost parity before gameplay or visual expansion."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
       "load index.html menu",
-      "route to game.html through Start or Open Scene",
-      "watch smooth-ring-handoff-v6 construct form",
-      "pan with WASD or arrows",
-      "zoom with mouse wheel",
-      "skip with Space or Skip button",
-      "restart with R or Restart button",
-      "finish at command online"
+      "start or continue campaign into game.html",
+      "pan with WASD/arrows",
+      "zoom with wheel",
+      "drag or click to select allies or pads",
+      "double-select pad to build selected tower",
+      "right-click to order units or target enemies",
+      "press 1/2/3 to choose tower type",
+      "press Space to start wave",
+      "hold sanctum core through six waves"
     ],
     "currentRuntimeLoop": [
-      "import Three.js from CDN",
-      "initialize renderer, scene, fog, lights, camera, HUD, materials, and input state inline",
-      "define smooth-ring-handoff-v6 constants inline",
-      "compute ten contiguous no-gap ring descriptors inline",
-      "compute ring part counts from circumference inline",
-      "create wedge meshes, seams, center disc, Grim Reaper Totem, and Phantom Commander inline",
-      "animate pieces by ringStartTimes and partIndex times PART_STAGGER",
-      "mutate HUD from construct(seq)",
-      "handle pan, zoom, skip, restart, resize, and blur",
-      "publish construct-only GameHost state"
+      "create low-resolution source canvas",
+      "wrap display canvas through CRT renderer",
+      "declare rings, lanes, pads, archetypes, towers, waves, camera, input, and state inline",
+      "spawn starter guards and archers",
+      "advance wave spawn queue",
+      "advance unit AI and movement",
+      "advance towers and projectiles",
+      "apply damage and rewards",
+      "resolve wave clear, win, loss, and save-on-win",
+      "draw world, HUD, minimap, and CRT pass",
+      "publish aggregate GameHost state"
     ],
-    "targetSourceProfileConsumerLoop": [
-      "load source-owned smooth-ring-handoff-v6 profile",
-      "normalize construct profile values",
-      "emit ring descriptors matching live game.html math",
-      "emit piece descriptors matching live game.html math",
-      "emit delay, settle, and transition margin descriptors",
-      "emit source fingerprint and source snapshot",
-      "validate zero gaps, live ring part counts, 92 total pieces, 19.923 total build seconds, and current handoff timing",
-      "project additive GameHost source diagnostics",
-      "run DOM-free source-profile fixture",
-      "splice sourceProfile diagnostics into game.html without removing legacy fields",
-      "wire fixture build proof before static artifact upload",
-      "confirm central ledger latest tracker/audits point at the same source-profile fixture gate",
-      "keep construct result and scenario bootstrap blocked until source profile parity passes"
+    "targetCampaignFixtureLoop": [
+      "load source-owned campaign manifest",
+      "derive ring/lane/pad descriptors",
+      "derive archetype, tower, and wave descriptors",
+      "emit action intent records for select/build/order/start-wave",
+      "emit ActionResult rows and simulation frame summaries",
+      "emit render readback rows",
+      "project additive GameHost campaign diagnostics",
+      "run DOM-free campaign fixture",
+      "splice helpers into campaign-scene after fixture proof",
+      "gate build with campaign fixture",
+      "sync central ledger"
     ]
   },
   "domains": {
-    "runtime": ["static-route-shell", "menu-route", "scene-route", "vite-static-build", "static-artifact-copy", "three-cdn-runtime", "browser-render-loop", "legacy-gamehost-diagnostics"],
-    "construct": ["inline-smooth-ring-handoff-profile", "inline-ring-start-time-policy", "ring-descriptor-inline-math", "inline-ring-part-count-policy", "piece-descriptor-inline-math", "construct-timeline-inline-math", "wedge-geometry-authoring", "material-palette", "lighting-and-fog", "hud-projection", "keyboard-pan-control", "wheel-zoom-control", "skip-restart-control"],
-    "implementedKits": ["construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
-    "next": ["phantom-command-smooth-handoff-profile-kit", "phantom-command-profile-normalizer-kit", "phantom-command-ring-descriptor-kit", "phantom-command-piece-descriptor-kit", "phantom-command-handoff-timeline-contract-kit", "phantom-command-source-profile-fingerprint-kit", "phantom-command-source-profile-snapshot-kit", "phantom-command-profile-parity-report-kit", "phantom-command-gamehost-source-diagnostics-kit", "phantom-command-sourceprofile-consumer-readback-kit", "phantom-command-sourceprofile-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
+    "runtime": ["static-route-shell", "menu-route", "campaign-route", "vite-static-build", "static-artifact-copy", "low-resolution-source-canvas", "crt-display-renderer", "pixel-campaign-render-loop", "legacy-gamehost-campaign-diagnostics"],
+    "campaign": ["ring-map-domain", "lane-domain", "build-pad-domain", "unit-archetype-domain", "tower-archetype-domain", "wave-script-domain", "souls-economy-domain", "sanctum-core-health-domain", "selection-domain", "build-action-domain", "order-action-domain", "wave-start-action-domain", "unit-ai-domain", "enemy-pathing-domain", "ally-targeting-domain", "tower-targeting-domain", "projectile-domain", "damage-reward-domain", "effect-domain", "camera-pan-zoom-domain", "hud-projection-domain", "minimap-domain", "save-on-win-domain"],
+    "implementedKits": ["crt-renderer-kit", "graveyard-art-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
+    "next": ["phantom-command-campaign-source-manifest-kit", "phantom-command-ring-lane-descriptor-kit", "phantom-command-build-pad-descriptor-kit", "phantom-command-unit-archetype-kit", "phantom-command-tower-archetype-kit", "phantom-command-wave-script-kit", "phantom-command-action-intent-kit", "phantom-command-action-result-kit", "phantom-command-simulation-frame-kit", "phantom-command-render-readback-kit", "phantom-command-gamehost-campaign-diagnostics-kit", "phantom-command-campaign-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
   },
   "services": {
-    "current": ["menu route", "static scene route", "inline Three renderer", "inline profile constants", "ring descriptor math", "piece descriptor math", "construct animation", "HUD projection", "keyboard pan", "wheel zoom", "skip/restart", "legacy GameHost state", "construct spiral scheduling helper kit", "static artifact copy"],
-    "neededNext": ["source-owned profile", "normalized profile", "ring descriptors", "piece descriptors", "timeline descriptors", "source fingerprint", "source snapshot", "profile parity report", "GameHost source diagnostics", "sourceprofile consumer readback", "DOM-free fixture", "build fixture gate", "central ledger readback"]
+    "current": ["menu route", "settings persistence", "save detection", "static scene route", "CRT renderer", "campaign rings", "lanes", "pads", "archetypes", "towers", "waves", "input", "selection", "build", "order", "spawn", "unit AI", "tower AI", "projectiles", "damage", "reward", "HUD", "minimap", "GameHost state", "static artifact copy"],
+    "neededNext": ["source manifest", "descriptor fingerprint", "action intent rows", "ActionResult rows", "simulation frame rows", "render readback rows", "GameHost campaign diagnostics", "DOM-free campaign fixture", "build fixture gate", "central ledger readback"]
   },
   "validation": {
     "runtimeSourceChangedThisPass": false,
     "branchCreated": false,
     "pullRequestCreated": false,
+    "npmCheckRun": false,
     "npmBuildRun": false,
     "fixtureRun": false,
     "browserSmokeRun": false
