@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T06-59-18-04-00",
-  "status": "campaign-source-ledger-readback-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T06-59-18-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T06-59-18-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T06-59-18-04-00-campaign-source-ledger-readback-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T06-59-18-04-00-pixel-campaign-render-source-ledger-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T06-59-18-04-00-wave-build-order-action-result-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T06-59-18-04-00-select-build-order-fixture-map.md",
-  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T06-59-18-04-00-source-action-render-fixture-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T06-59-18-04-00-campaign-fixture-check-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T05-21-20-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T05-21-20-04-00.md",
+  "updatedAt": "2026-07-10T08-20-42-04-00",
+  "status": "campaign-source-action-render-proof-gamehost-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T08-20-42-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T08-20-42-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T08-20-42-04-00-campaign-source-action-render-proof-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T08-20-42-04-00-pixel-campaign-render-proof-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T08-20-42-04-00-wave-build-order-proof-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T08-20-42-04-00-select-build-order-action-result-map.md",
+  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T08-20-42-04-00-source-action-render-fixture-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T08-20-42-04-00-campaign-fixture-check-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T06-59-18-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T06-59-18-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
@@ -21,7 +21,7 @@
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-10T05-21-20-04-00"
+    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-10T06-59-18-04-00 after HorrorCorridor advanced to 2026-07-10T08-11-35-04-00"
   },
   "currentRuntime": {
     "type": "static-vite-canvas-campaign-game",
@@ -90,8 +90,8 @@
   "domains": {
     "runtime": ["static-route-shell", "menu-route", "campaign-route", "vite-static-build", "static-artifact-copy", "low-resolution-source-canvas", "crt-display-renderer", "pixel-campaign-render-loop", "legacy-gamehost-campaign-diagnostics"],
     "campaign": ["ring-map-domain", "lane-domain", "build-pad-domain", "unit-archetype-domain", "tower-archetype-domain", "wave-script-domain", "souls-economy-domain", "sanctum-core-health-domain", "selection-domain", "build-action-domain", "order-action-domain", "wave-start-action-domain", "unit-ai-domain", "enemy-pathing-domain", "ally-targeting-domain", "tower-targeting-domain", "projectile-domain", "damage-reward-domain", "effect-domain", "camera-pan-zoom-domain", "hud-projection-domain", "minimap-domain", "save-on-win-domain"],
-    "implementedKits": ["crt-renderer-kit", "graveyard-art-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
-    "next": ["phantom-command-campaign-source-ledger-kit", "phantom-command-campaign-descriptor-fingerprint-kit", "phantom-command-ring-lane-descriptor-kit", "phantom-command-build-pad-descriptor-kit", "phantom-command-unit-archetype-kit", "phantom-command-tower-archetype-kit", "phantom-command-wave-script-kit", "phantom-command-action-intent-kit", "phantom-command-action-result-kit", "phantom-command-simulation-frame-kit", "phantom-command-render-readback-kit", "phantom-command-gamehost-campaign-diagnostics-kit", "phantom-command-campaign-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
+    "implementedKits": ["crt-renderer-kit", "graveyard-art-kit", "menu-route-kit", "campaign-route-shell-kit", "pixel-campaign-runtime-kit", "legacy-gamehost-diagnostics-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
+    "next": ["phantom-command-campaign-source-ledger-kit", "phantom-command-source-manifest-kit", "phantom-command-source-fingerprint-kit", "phantom-command-ring-lane-descriptor-kit", "phantom-command-build-pad-descriptor-kit", "phantom-command-unit-archetype-kit", "phantom-command-tower-archetype-kit", "phantom-command-wave-script-kit", "phantom-command-action-intent-kit", "phantom-command-action-result-kit", "phantom-command-simulation-frame-kit", "phantom-command-render-readback-kit", "phantom-command-gamehost-diagnostics-kit", "phantom-command-campaign-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
   },
   "services": {
     "current": ["menu route", "settings persistence", "save detection", "static scene route", "CRT renderer", "campaign rings", "lanes", "pads", "archetypes", "towers", "waves", "input", "selection", "build", "order", "spawn", "unit AI", "tower AI", "projectiles", "damage", "reward", "HUD", "minimap", "GameHost state", "static artifact copy"],
