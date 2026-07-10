@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T11-10-08-04-00`
+**Timestamp:** `2026-07-10T12-40-45-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
+PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
