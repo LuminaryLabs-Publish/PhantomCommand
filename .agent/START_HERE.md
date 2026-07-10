@@ -2,36 +2,36 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T17-08-36-04-00`
+**Last aligned:** `2026-07-10T18-40-13-04-00`
 
-## Purpose
+## Current safe ledge
 
-This root `.agent/` folder is the repo-local operating memory for architecture, interaction, rendering, persistence, validation, and deployment work on `PhantomCommand`.
-
-Read it before changing runtime code. Push only to `main`; do not create branches.
+```txt
+PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+```
 
 ## Selection result
 
 The full accessible `LuminaryLabs-Publish` inventory contains 10 repositories. All nine eligible non-Cavalry repositories are centrally tracked and have root `.agent` state. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded.
 
-`PhantomCommand` was selected as the oldest eligible documented fallback. A newer repo-local `HorrorCorridor` audit at `2026-07-10T17-00-54-04-00` was treated as fresh activity even though its central ledger had not yet caught up.
+`PhantomCommand` was selected as the oldest eligible documented fallback.
 
 ```txt
-PhantomCommand       selected / prior central activity 2026-07-10T15-38-40-04-00
-ZombieOrchard        tracked  / 2026-07-10T15-55-49-04-00
-TheUnmappedHouse     tracked  / 2026-07-10T16-07-30-04-00
-MyCozyIsland         tracked  / 2026-07-10T16-17-08-04-00
-TheOpenAbove         tracked  / 2026-07-10T16-28-54-04-00
-PrehistoricRush      tracked  / 2026-07-10T16-37-25-04-00
-AetherVale           tracked  / 2026-07-10T16-48-42-04-00
-IntoTheMeadow        tracked  / 2026-07-10T16-51-37-04-00
-HorrorCorridor       repo-local fresh / 2026-07-10T17-00-54-04-00
+PhantomCommand       selected / prior 2026-07-10T17-08-36-04-00
+ZombieOrchard        tracked  / 2026-07-10T17-18-47-04-00
+TheUnmappedHouse     tracked  / 2026-07-10T17-29-23-04-00
+MyCozyIsland         tracked  / 2026-07-10T17-38-35-04-00
+TheOpenAbove         tracked  / 2026-07-10T17-51-35-04-00
+PrehistoricRush      tracked  / 2026-07-10T18-01-03-04-00
+AetherVale           tracked  / 2026-07-10T18-08-37-04-00
+IntoTheMeadow        tracked  / 2026-07-10T18-22-01-04-00
+HorrorCorridor       tracked  / 2026-07-10T18-31-21-04-00
 TheCavalryOfRome     excluded by rule
 ```
 
 ## Product read
 
-`PhantomCommand` is a static Vite browser game with a graveyard menu and a pixel-isometric grave-ring campaign route:
+`PhantomCommand` is a static Vite browser game with a procedural graveyard menu and a pixel-isometric grave-ring campaign route.
 
 ```txt
 index.html
@@ -47,51 +47,48 @@ The campaign uses a `640 x 360` source canvas, seven rings, four lanes, 58 gener
 ```txt
 open menu
   -> read settings
-  -> detect raw save-key presence across localStorage and sessionStorage
+  -> scan 3 keys across localStorage and sessionStorage
+  -> collapse all candidate evidence into one Boolean
+  -> snapshot Continue enabled/note state at page construction
   -> Begin emits campaign=new
-  -> Continue emits campaign=continue when any candidate key exists
-  -> campaign module ignores session mode and save candidates
+  -> Continue emits campaign=continue when the Boolean is true
+  -> campaign module ignores session mode and candidate storage
   -> fresh campaign initializes
   -> select units or pads
   -> build towers
   -> order allies
   -> start waves
   -> fixed-step combat/economy/core loop
-  -> render world, HUD, minimap, modal, CRT
+  -> render world, HUD, minimap, modal, and CRT
   -> victory writes a minimal completion summary
 ```
 
-## Current main finding
+## Main finding
 
-The immediate blocker is save-admission and resume-fidelity authority.
+The immediate blocker is now the shared Continue-capability boundary.
 
-The menu treats any value under `phantomCommand.save`, `nexus.sceneSnapshot`, or `phantom.command.campaign` in either storage layer as resumable. The campaign reads none of them. Its only write is a victory summary containing `scene`, `souls`, and `wave`, which cannot reconstruct a live campaign.
+`hasCampaignSave()` searches six storage slots but returns only a Boolean. It does not preserve candidate key, storage layer, raw payload, parse result, schema family, version, priority, or rejection reason. It is called twice while the menu object is constructed, and the resulting Continue state is not refreshed if storage changes while the menu remains open.
 
-A correct Continue path therefore needs candidate classification, a versioned resumable envelope, deterministic hydration, explicit fallback results, full-state fingerprint parity, and immutable session readback before command-correlation or content expansion proceeds.
+The campaign route independently ignores both the `campaign` query parameter and all candidate storage. A truthful Continue path therefore needs one pure resolver shared by menu admission and campaign startup. That resolver must enumerate every slot, classify candidates, select one by a documented precedence table, expose immutable provenance, and produce the same result in DOM-free fixtures.
 
-## First files to read next
+## Read first
 
 ```txt
 .agent/current-audit.md
-.agent/known-gaps.md
 .agent/next-steps.md
+.agent/known-gaps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fidelity-dsk-map.md
-.agent/render-audit/2026-07-10T17-08-36-04-00-session-provenance-render-readback-gap.md
-.agent/gameplay-audit/2026-07-10T17-08-36-04-00-continue-hydrate-resume-loop.md
-.agent/interaction-audit/2026-07-10T17-08-36-04-00-continue-admission-result-map.md
-.agent/session-authority-audit/2026-07-10T17-08-36-04-00-save-candidate-classification-contract.md
-.agent/persistence-audit/2026-07-10T17-08-36-04-00-resume-state-coverage-matrix.md
-.agent/deploy-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fixture-gate.md
-.agent/trackers/2026-07-10T17-08-36-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T17-08-36-04-00.md
 .agent/kit-registry.json
+.agent/trackers/2026-07-10T18-40-13-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T18-40-13-04-00.md
+.agent/architecture-audit/2026-07-10T18-40-13-04-00-continue-capability-resolver-dsk-map.md
+.agent/render-audit/2026-07-10T18-40-13-04-00-continue-provenance-render-gap.md
+.agent/gameplay-audit/2026-07-10T18-40-13-04-00-new-continue-session-entry-loop.md
+.agent/interaction-audit/2026-07-10T18-40-13-04-00-menu-candidate-admission-map.md
+.agent/persistence-audit/2026-07-10T18-40-13-04-00-six-slot-candidate-precedence-matrix.md
+.agent/deploy-audit/2026-07-10T18-40-13-04-00-candidate-resolver-fixture-gate.md
 ```
 
-## Next safe ledge
+## Validation state
 
-```txt
-PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate
-```
-
-Complete that proof boundary before command journaling, new waves, economy expansion, save/load UX redesign, camera rewrites, renderer replacement, enemy art expansion, multiplayer expansion, or legacy construct-profile work.
+Documentation only. Runtime source, package scripts, dependencies, routes, rendering behavior, persistence behavior, and deployment configuration did not change. No branch or pull request was created.
