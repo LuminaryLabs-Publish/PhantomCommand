@@ -89,5 +89,5 @@ runtime source changed: no
 branch created: no
 pull request created: no
 pushed to main: yes
-central ledger updated: pending at file update time
+central ledger updated: yes
 ```
