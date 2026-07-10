@@ -1,37 +1,38 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T15-38-40-04-00`
+**Timestamp:** `2026-07-10T17-08-36-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Enumerated all 10 accessible LuminaryLabs-Publish repositories.
-- Compared all nine eligible non-Cavalry repositories against central repo-ledger files.
-- Verified root .agent/START_HERE.md exists in all nine eligible repositories.
+- Enumerated the full 10-repository accessible LuminaryLabs-Publish inventory.
+- Compared all nine eligible non-Cavalry repositories against central ledger files and root .agent state.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
+- Accounted for the newer HorrorCorridor repo-local audit that had not yet reached its central ledger.
 - Selected PhantomCommand as the oldest eligible documented fallback.
-- Read README.md.
 - Read package.json.
-- Read game.html.
 - Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
-- Read scripts/check-campaign.mjs.
 - Read the current root .agent docs and kit registry.
-- Verified menu Begin target is game.html?campaign=new.
-- Verified menu Continue target is game.html?campaign=continue.
+- Verified the menu searches phantomCommand.save, nexus.sceneSnapshot, and phantom.command.campaign.
+- Verified the menu searches both localStorage and sessionStorage.
+- Verified any non-empty candidate enables Continue without parsing or schema validation.
+- Verified Begin routes to game.html?campaign=new.
+- Verified Continue routes to game.html?campaign=continue.
 - Verified campaign-scene.js does not parse the session query parameter.
-- Verified campaign-scene.js does not hydrate a save.
-- Verified the campaign writes only a minimal victory payload.
+- Verified campaign-scene.js does not read or hydrate any candidate key.
+- Verified the only campaign save write is a victory summary under phantomCommand.save.
+- Verified the payload contains only scene, souls, and wave.
 - Verified the 640 x 360 source canvas.
 - Verified 7 rings and 4 lanes.
-- Recomputed deterministic generated build-pad count as 58.
+- Retained the prior source-backed generated build-pad count of 58.
 - Verified 6 starter allies.
 - Verified 3 tower types, 7 unit archetypes, and 6 waves.
 - Verified fixed-step 1/60 simulation through an accumulator.
-- Verified direct mutable GameHost state exposure and aggregate getState output.
+- Verified direct mutable GameHost state and camera exposure plus aggregate getState output.
 - Updated required root .agent docs.
-- Added timestamped tracker and turn-ledger entries.
-- Added architecture, render, gameplay, interaction, session-authority, and deploy audits.
+- Added a timestamped tracker and turn-ledger entry.
+- Added architecture, render, gameplay, interaction, session-authority, persistence, and deploy audits.
 - Pushed only to main.
 - Created no branch or pull request.
 ```
@@ -43,31 +44,34 @@
 - npm run check was not run.
 - npm run build was not run.
 - npm start was not run.
-- Browser smoke was not run.
+- browser smoke was not run.
 - GitHub Pages deployment was not checked.
-- No Playwright or DOM automation was run.
-- No session fixture was run because it does not exist yet.
-- No campaign behavioral fixture was run because it does not exist yet.
-- No runtime source file was changed.
+- no Playwright or DOM automation was run.
+- no save-admission fixture was run because it does not exist yet.
+- no resume-fidelity fixture was run because it does not exist yet.
+- no runtime source file was changed.
 ```
-
-## Environment limitation
-
-A local validation clone was attempted through the execution container, but DNS resolution for `github.com` was unavailable. Repository inspection and all writes therefore used the authenticated GitHub connector.
 
 ## Source evidence captured
 
 ```txt
-menu save keys:
+candidate keys:
   phantomCommand.save
   nexus.sceneSnapshot
   phantom.command.campaign
+
+candidate storage layers:
+  localStorage
+  sessionStorage
+
+current Continue admission:
+  Boolean(raw value) for any key in either storage layer
 
 menu routes:
   Begin -> ./game.html?campaign=new
   Continue -> ./game.html?campaign=continue
 
-campaign save read:
+campaign candidate reads:
   none
 
 campaign save write:
@@ -89,8 +93,8 @@ campaign constants:
 ## Required validation after the next implementation
 
 ```bash
-node tests/phantom-command-session-fixture.mjs
-node tests/phantom-command-campaign-fixture.mjs
+node tests/phantom-command-save-admission-fixture.mjs
+node tests/phantom-command-resume-fidelity-fixture.mjs
 node tests/construct-spiral-intro-kit-smoke.mjs
 npm run check
 npm run build
@@ -105,8 +109,8 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-session fixture: not run because it does not exist yet
-local clone validation: blocked by container DNS
-pushed to main: yes
-central ledger update: pending until repo-local write set completes
+save admission fixture: not run because it does not exist yet
+resume fidelity fixture: not run because it does not exist yet
+repo-local documentation pushed to main: yes
+central ledger update: pending until the repo-local commit is recorded
 ```
