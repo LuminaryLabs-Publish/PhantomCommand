@@ -1,43 +1,47 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T14-11-51-04-00`
+**Timestamp:** `2026-07-10T15-38-40-04-00`
 
 ## Summary
 
-`PhantomCommand` is a static Vite canvas game with a graveyard menu route and a live 2D campaign route.
+`PhantomCommand` is a static Vite browser game with a graveyard menu and a live pixel-isometric campaign. The current playable route remains `game.html -> src/campaign/campaign-scene.js`.
 
-The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is playable, source-rich, and proof-poor. It still owns descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` inline.
-
-This pass refreshes repo-local docs and central tracking around the next proof cut: campaign action-result source ledger, render readback rows, deterministic simulation frame summaries, additive `GameHost` diagnostics, and a campaign fixture gate.
+This audit identifies a stronger immediate boundary than visual or content expansion: the menu emits distinct new/continue session intents, but the campaign always initializes a fresh run. The same runtime also handles descriptors, input, mutation, fixed-step simulation, rendering, persistence, and diagnostics inline without command/result correlation.
 
 Runtime source was not changed.
 
 ## Selection audit
 
 ```txt
-No checked public non-Cavalry repo was new, central-ledger absent, missing root .agent, recently added, or otherwise undocumented.
-LuminaryLabs-Publish/TheCavalryOfRome remained excluded by rule.
-PhantomCommand was selected as the oldest eligible documented fallback after HorrorCorridor advanced to 2026-07-10T13-58-16-04-00.
+Accessible Publish repositories: 10
+Eligible non-Cavalry repositories: 9
+Central ledger entries present: 9/9
+Root .agent/START_HERE.md present: 9/9
+Excluded: LuminaryLabs-Publish/TheCavalryOfRome
+Selected: LuminaryLabs-Publish/PhantomCommand
+Selection rule: oldest eligible documented fallback
+Prior selected-repo central timestamp: 2026-07-10T14-11-51-04-00
 ```
 
 ## Current interaction loop
 
 ```txt
-open index.html
-  -> graveyard menu uses crt-renderer and graveyard-art
-  -> Begin Campaign routes to game.html?campaign=new
-  -> Continue routes to game.html?campaign=continue when save exists
-  -> game.html imports src/campaign/campaign-scene.js
-  -> campaign-scene creates a 640 x 360 source canvas and CRT display renderer
-  -> inline rings, lane angles, pads, archetypes, tower types, waves, camera, input, and campaign state initialize
-  -> starter guards and archers spawn around the sanctum
-  -> pointer click selects units or build pads
-  -> repeat click on selected empty pad builds selected tower if souls cover cost
-  -> right-click orders selected units or targets nearest enemy
-  -> Space starts the next wave queue
-  -> update loop advances spawns, units, towers, projectiles, effects, wave clear, win, and loss
-  -> draw loop renders rings, lanes, pads, grave props, units, towers, projectiles, effects, HUD, minimap, modal state, and CRT pass
-  -> window.GameHost exposes state, camera, startWave, build, getState, and setZoom
+index.html menu
+  -> settings and save-presence read
+  -> Begin routes to game.html?campaign=new
+  -> Continue routes to game.html?campaign=continue
+  -> game.html imports campaign-scene.js
+  -> query intent is not parsed
+  -> save state is not hydrated
+  -> fresh campaign descriptors and state initialize
+  -> click/drag selects allies or pads
+  -> second click on selected pad attempts build
+  -> right-click attempts move/attack order
+  -> Space attempts wave start
+  -> fixed-step loop advances spawn, AI, towers, projectiles, damage, rewards, wave state, win/loss
+  -> render loop projects world, HUD, minimap, modal, and CRT
+  -> victory writes a minimal completion payload
+  -> GameHost exposes mutable state and aggregate diagnostics
 ```
 
 ## Domains in use
@@ -46,11 +50,18 @@ open index.html
 static-route-shell
 menu-route
 campaign-route
-vite-static-build
-static-artifact-copy
-low-resolution-source-canvas
-crt-display-renderer
-pixel-campaign-render-loop
+menu-selection-domain
+menu-panel-domain
+menu-settings-persistence-domain
+menu-save-presence-domain
+menu-transition-domain
+menu-audio-domain
+graveyard-art-domain
+source-canvas-domain
+crt-display-domain
+campaign-session-intent-domain
+campaign-save-schema-domain
+campaign-save-hydration-domain
 ring-map-domain
 lane-domain
 build-pad-domain
@@ -70,55 +81,67 @@ tower-targeting-domain
 projectile-domain
 damage-reward-domain
 effect-domain
-camera-pan-zoom-domain
+win-loss-domain
+save-on-win-domain
 keyboard-input-domain
 pointer-input-domain
+camera-pan-zoom-domain
+fixed-step-simulation-domain
+world-render-domain
 hud-projection-domain
 minimap-domain
-save-on-win-domain
-legacy-gamehost-campaign-diagnostics
-construct-spiral-intro-kit-legacy-support
-campaign-source-ledger-next
-campaign-source-fingerprint-next
-campaign-action-result-next
-campaign-simulation-frame-next
-campaign-render-readback-next
-campaign-gamehost-fixture-next
-central-ledger-sync
+modal-overlay-domain
+gamehost-diagnostics-domain
+campaign-static-check-domain
+static-build-domain
+github-pages-deploy-domain
+central-ledger-sync-domain
 ```
 
-## Kits and services
+## Source-backed kits and services
+
+- `crt-renderer-kit`: display scaling, CRT/grain/fade pass, source-coordinate pointer mapping.
+- `graveyard-art-kit`: menu art composition.
+- `menu-route-kit`: menu selection, panels, Begin/Continue navigation, credits.
+- `menu-settings-persistence-kit`: CRT, grain, and ambience preference persistence.
+- `menu-save-presence-kit`: save-key presence detection for Continue gating.
+- `menu-audio-kit`: synthesized ambience and UI feedback.
+- `campaign-route-shell-kit`: accessible campaign canvas route.
+- `pixel-campaign-runtime-kit`: campaign descriptors, state, input, simulation, rendering, persistence, and diagnostics inline.
+- `fixed-step-campaign-simulation-kit`: accumulator-based `1/60` updates inline.
+- `pixel-campaign-render-kit`: world/HUD/minimap/modal/CRT projection inline.
+- `legacy-gamehost-diagnostics-kit`: mutable state, camera, startWave, build, aggregate getState, setZoom.
+- `campaign-static-check-kit`: source-pattern smoke assertions.
+- `static-build-copy-kit`: static artifact creation.
+- `construct-spiral-intro-kit` family: retained legacy construct proof, not live campaign authority.
+
+## Verified source facts
 
 ```txt
-crt-renderer-kit: source canvas display, CRT pass, pointer source mapping.
-graveyard-art-kit: menu art composition.
-menu-route-kit: start, continue, settings, local save detection.
-campaign-route-shell-kit: game.html canvas route and accessible controls.
-pixel-campaign-runtime-kit: inline rings, lanes, pads, units, towers, waves, input, update, draw, HUD, minimap, save, GameHost.
-legacy-gamehost-diagnostics-kit: aggregate state, camera, startWave, build, setZoom.
-construct-spiral-intro-kit: legacy construct profile proof target, not current campaign authority.
-phantom-command-campaign-source-ledger-kit next: source-owned campaign rows.
-phantom-command-source-fingerprint-kit next: route/source descriptor fingerprints.
-phantom-command-action-result-kit next: select, build, order, start-wave, damage, reward, wave-clear, win, and loss rows.
-phantom-command-simulation-frame-kit next: deterministic spawn/unit/tower/projectile frame summaries.
-phantom-command-render-readback-kit next: render consumption rows.
-phantom-command-gamehost-diagnostics-kit next: JSON-safe campaign diagnostics.
-phantom-command-campaign-fixture-kit next: DOM-free campaign parity proof.
-phantom-command-build-fixture-gate-kit next: build/check integration.
+source canvas: 640 x 360
+ring count: 7
+lane count: 4
+generated build pad count: 58
+starter allies: 4 guards + 2 archers
+tower types: spire, lantern, ward
+unit archetypes: guard, archer, runner, shield, zealot, brute, wraith
+wave count: 6
+simulation: fixed 1/60 with accumulator
+menu save keys checked: 3
+campaign save reads: 0
+campaign save writes: victory-only minimal payload
 ```
 
 ## Main finding
 
-Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, RTS system expansion, construct-profile work, or visual polish.
+Do not start next with renderer replacement, camera rewrites, new waves, economy expansion, enemy art, RTS scenario expansion, or legacy construct-profile work.
 
-The immediate blocker is campaign action-result source authority. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` in one file.
-
-It needs source ledger rows, accepted/rejected action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
+The immediate blocker is session and command authority. Continue is a menu-only promise; campaign session mode and save hydration do not exist. `build`, `order`, and `startWave` return silently on rejected paths, selection and build are coupled, there is no ordered command/result journal, and no immutable readback links a session intent to simulation and rendered output.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Action Result Source Ledger Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Session Authority + Command Correlation Fixture Gate
 ```
 
 ## Validation status
@@ -129,7 +152,7 @@ branch created: no
 pull request created: no
 npm run check: not run
 npm run build: not run
-construct smoke: not run
-campaign fixture: not run because proof files do not exist yet
 browser smoke: not run
+session fixture: not run because it does not exist yet
+local clone validation: blocked by container DNS resolution for github.com
 ```
