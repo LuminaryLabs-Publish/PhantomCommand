@@ -1,62 +1,75 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T15-38-40-04-00`
+**Timestamp:** `2026-07-10T17-08-36-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Session Authority + Command Correlation Fixture Gate
+PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate
 ```
 
 ## Goal
 
-Make Begin and Continue explicit, testable session contracts and make every campaign command produce an ordered result that can be correlated with fixed-step simulation and render readback.
+Make Continue truthful and deterministic. The menu must enable it only for a classified resumable save, and the campaign must hydrate a versioned full-state envelope whose restored fingerprint matches the state that was saved.
 
-Preserve current routes, visuals, controls, gameplay constants, and legacy `window.GameHost` fields while adding DOM-free authority modules and immutable diagnostics.
+Preserve current routes, visuals, controls, gameplay constants, and legacy `window.GameHost` fields while adding DOM-free persistence modules and immutable session diagnostics.
 
 ## Full checklist
 
 ```txt
 [ ] Keep index.html and game.html route structure unchanged.
-[ ] Keep current campaign visuals and controls unchanged.
+[ ] Keep current campaign visuals, controls, constants, and fixed 1/60 simulation unchanged.
 [ ] Keep existing window.GameHost fields and methods compatible.
+[ ] Add src/campaign/save-candidate-registry.js.
+[ ] Define candidate key, storage layer, source owner, expected schema family, and priority.
+[ ] Add src/campaign/save-classifier.js.
+[ ] Classify absent, invalid-json, foreign-schema, legacy-completion-summary, resumable-current, resumable-migrated, unsupported-version, and checksum-failed candidates.
+[ ] Treat nexus.sceneSnapshot and phantom.command.campaign as foreign until explicit adapters exist.
+[ ] Treat the current { scene, souls, wave } phantomCommand.save payload as a legacy completion summary, not a resumable save.
+[ ] Enable Continue only when at least one candidate classifies as resumable-current or resumable-migrated.
+[ ] Expose the selected candidate and classification reason through PhantomMenu.getState().
 [ ] Add src/campaign/session-mode.js.
 [ ] Parse campaign=new and campaign=continue deterministically.
-[ ] Add src/campaign/save-schema.js with schema, version, sourceRevision, sceneId, sessionId, state, commandSequence, simulationTick, and checksum.
-[ ] Classify existing phantomCommand.save victory payloads as legacy completion summaries.
-[ ] Do not hydrate nexus.sceneSnapshot or phantom.command.campaign without explicit adapters.
+[ ] Add src/campaign/save-envelope.js.
+[ ] Include schema, version, sourceRevision, sceneId, sessionId, savedAtMs, simulationTick, commandSequence, and checksum.
+[ ] Include uid, pid, and tid counters.
+[ ] Include time, souls, core, wave, waveActive, spawn queue, units, towers, pad occupancy, projectiles, effects, selected units, selected pad, tower type, paused, won, lost, and message.
+[ ] Include camera x, z, zoom, targetZoom, and any required resume-safe camera values.
+[ ] Decide explicitly whether transient pointer, drag, pressed-key, and accumulator state is reset or persisted.
+[ ] Add src/campaign/session-state-snapshot.js.
+[ ] Normalize object maps and arrays into a stable JSON-safe envelope.
+[ ] Add src/campaign/session-fingerprint.js.
+[ ] Produce stable before-save and after-hydration fingerprints.
 [ ] Add src/campaign/save-hydration.js.
-[ ] Add accepted hydration, rejected hydration, and deterministic fallback-new results.
-[ ] Move fresh-state construction into a DOM-free campaign state factory.
-[ ] Preserve 7 rings, 4 lanes, 58 generated pads, 6 starter allies, 3 tower types, 7 unit archetypes, and 6 waves.
-[ ] Add src/campaign/command-envelope.js.
-[ ] Add sequence, commandId, sessionId, requestedFrameId, source, type, and payload.
-[ ] Add src/campaign/action-results.js.
-[ ] Return accepted, rejected, no-op, skipped, and unsupported statuses.
-[ ] Split pad selection from build execution at the command layer while preserving second-click UI behavior.
-[ ] Add explicit rejection reasons for no selection, no selected pad, occupied pad, insufficient souls, invalid tower type, active wave, complete campaign, won state, and lost state.
-[ ] Add src/campaign/action-journal.js with a bounded ordered journal.
-[ ] Add src/campaign/frame-correlation.js.
-[ ] Correlate command sequence to fixed-step simulation tick and render frame.
-[ ] Add src/campaign/render-readback.js.
-[ ] Add immutable world, HUD, minimap, overlay, and CRT consumer rows.
-[ ] Add src/campaign/gamehost-readback.js.
-[ ] Expose additive session, commandJournal, simulation, render, source, and fixture blocks without exposing new mutable references.
-[ ] Add tests/phantom-command-session-fixture.mjs.
-[ ] Prove new session creation.
-[ ] Prove valid continue hydration.
-[ ] Prove legacy completion-summary classification.
-[ ] Prove invalid continue rejection and deterministic fallback.
-[ ] Prove accepted and rejected build, order, and wave-start commands.
-[ ] Prove rejected commands preserve state fingerprints.
-[ ] Prove deterministic command replay produces the same final state fingerprint.
-[ ] Prove render-frame rows correlate with the applied command high-water mark.
+[ ] Return typed created, hydrated, rejected, migrated, and fallback-new results.
+[ ] Preserve the rejected candidate and reason in diagnostics.
+[ ] Use deterministic fallback-new behavior for invalid Continue requests.
+[ ] Add src/campaign/resume-result.js.
+[ ] Record selected candidate, classification, schema version, fingerprint, migration status, and fallback decision.
+[ ] Add src/campaign/gamehost-session-readback.js.
+[ ] Expose immutable additive session, persistence, source, and fixture blocks.
+[ ] Do not expose new mutable state references.
+[ ] Add tests/phantom-command-save-admission-fixture.mjs.
+[ ] Prove empty storage disables Continue.
+[ ] Prove malformed JSON disables Continue with invalid-json classification.
+[ ] Prove foreign nexus.sceneSnapshot does not enable Continue without an adapter.
+[ ] Prove foreign phantom.command.campaign does not enable Continue without an adapter.
+[ ] Prove legacy victory summary is classified but not hydrated.
+[ ] Prove current resumable envelope enables Continue.
+[ ] Prove candidate priority is deterministic across storage layers.
+[ ] Add tests/phantom-command-resume-fidelity-fixture.mjs.
+[ ] Save a nontrivial campaign state with units, towers, damaged core, active wave, camera, queues, and counters.
+[ ] Hydrate the envelope into a fresh runtime state factory.
+[ ] Prove saved and hydrated fingerprints match.
+[ ] Prove the next generated unit, projectile, and tower identifiers do not collide.
+[ ] Prove the next fixed-step update advances from the restored simulation tick.
+[ ] Prove rejected hydration does not partially mutate live state.
 [ ] Prove legacy GameHost fields remain present.
-[ ] Add the session fixture to npm run check only after it passes independently.
-[ ] Gate npm run build with the session fixture only after independent proof.
-[ ] Run node tests/phantom-command-session-fixture.mjs.
-[ ] Run node tests/phantom-command-campaign-fixture.mjs if retained separately.
-[ ] Run node tests/construct-spiral-intro-kit-smoke.mjs.
+[ ] Add both fixtures to npm run check only after each passes independently.
+[ ] Gate npm run build only after independent fixture proof.
+[ ] Run node tests/phantom-command-save-admission-fixture.mjs.
+[ ] Run node tests/phantom-command-resume-fidelity-fixture.mjs.
+[ ] Run node tests/construct-spiral-intro-kit-smoke.mjs if retained.
 [ ] Run npm run check.
 [ ] Run npm run build.
 [ ] Push only to main.
@@ -65,10 +78,17 @@ Preserve current routes, visuals, controls, gameplay constants, and legacy `wind
 ## Acceptance rows
 
 ```txt
+menu.continueEnabled === false when no resumable candidate exists
+menu.continueEnabled === false for malformed, foreign, unsupported, or legacy-summary candidates
+menu.selectedSaveCandidate.classification === resumable-current | resumable-migrated
 session.mode === new | continue
-session.result.status === created | hydrated | rejected | fallback-new
+session.result.status === created | hydrated | migrated | rejected | fallback-new
 session.save.schema is versioned
 session.save.sceneId === grave-ring
+session.save.sourceRevision is present
+session.save.checksum is verified
+session.beforeFingerprint === session.afterHydrationFingerprint
+session.hydration is atomic
 campaign.sourceWidth === 640
 campaign.sourceHeight === 360
 campaign.ringCount === 7
@@ -77,11 +97,8 @@ campaign.padCount === 58
 campaign.starterAllyCount === 6
 campaign.towerTypes === [spire, lantern, ward]
 campaign.waveCount === 6
-command results cover accepted and rejected build/order/start-wave
-rejected command stateBeforeFingerprint === stateAfterFingerprint
-journal sequence is monotonic
-simulation tick is correlated with command high-water mark
-render frame is correlated with simulation tick
+uid, pid, and tid counters resume without collisions
+simulation tick resumes deterministically
 legacy window.GameHost fields remain available
 central latest tracker equals repo-local latest tracker
 ```
@@ -89,6 +106,7 @@ central latest tracker equals repo-local latest tracker
 ## Defer until after proof
 
 ```txt
+command journal and frame correlation implementation
 new campaign waves
 new unit or tower types
 economy expansion
