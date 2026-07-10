@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T23-02-05-04-00`
+**Timestamp:** `2026-07-10T00-30-20-04-00`
 
 ## Summary
 
@@ -8,20 +8,20 @@
 
 The visible construct is stable. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera/input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Refresh + GameHost Fixture Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Fixture Readback Catch-up + GameHost Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T19-09-44-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T19-00-15-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T18-49-13-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T18-41-55-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T22-50-53-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T19-29-23-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T22-40-25-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T23-58-41-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T23-51-04-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T23-41-15-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T23-28-35-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T23-20-43-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T00-09-51-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T23-02-05-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T00-18-38-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T19-21-19-04-00
 ```
 
 No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
@@ -38,7 +38,6 @@ open index.html
   -> inline ring math creates 10 no-gap construct rings
   -> inline ringParts() computes [5,5,5,5,6,8,10,12,16,20]
   -> inline wedge geometry creates 92 stone pieces
-  -> construct(seq) animates each piece by ring delay plus part delay
   -> keyboard and buttons mutate skip/restart/pan state
   -> mouse wheel mutates zoom target
   -> frame loop advances construct, camera, tower, command figure, HUD, and renderer
@@ -52,10 +51,13 @@ static-route-shell
 menu-route
 scene-route
 vite-static-build
+static-artifact-copy
 three-cdn-runtime
 browser-render-loop
-inline-construct-profile
+inline-smooth-ring-handoff-profile
+inline-ring-start-time-policy
 ring-descriptor-inline-math
+inline-ring-part-count-policy
 piece-descriptor-inline-math
 construct-timeline-inline-math
 wedge-geometry-authoring
@@ -67,8 +69,7 @@ wheel-zoom-control
 skip-restart-control
 legacy-gamehost-diagnostics
 construct-spiral-intro-kit
-construct-spiral-schedule
-construct-piece-state-machine
+generic-construct-schedule-state
 source-profile-parity-next
 source-fingerprint-next
 source-snapshot-next
@@ -102,16 +103,20 @@ construct-piece-id-kit
 construct-piece-state-kit
 construct-sequence-update-kit
 legacy-inline-smooth-ring-handoff-profile
+legacy-inline-ring-start-time-policy
 legacy-inline-ring-descriptor-runtime
 legacy-inline-piece-descriptor-runtime
+legacy-inline-wedge-geometry-runtime
 legacy-inline-timeline-runtime
 legacy-inline-gamehost-diagnostics
+legacy-static-build-copy-kit
 ```
 
 Next-cut:
 
 ```txt
 phantom-command-smooth-handoff-profile-kit
+phantom-command-profile-normalizer-kit
 phantom-command-ring-descriptor-kit
 phantom-command-piece-descriptor-kit
 phantom-command-handoff-timeline-contract-kit
