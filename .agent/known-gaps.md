@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T05-21-20-04-00`
+**Timestamp:** `2026-07-10T06-59-18-04-00`
 
 ## Critical campaign-source gaps
 
@@ -17,7 +17,7 @@
 - simulation ticks have no deterministic frame summaries.
 - render pass has no source-consumption/readback ledger.
 - GameHost.getState() exposes only aggregate campaign counters and zoom.
-- GameHost does not expose source manifest, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
+- GameHost does not expose source ledger, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
 - build-static does not run a campaign fixture before copying static artifacts.
 ```
 
@@ -33,6 +33,7 @@
 ## Source wire gaps
 
 ```txt
+- src/campaign/campaign-source-ledger.js does not exist.
 - src/campaign/campaign-source-manifest.js does not exist.
 - src/campaign/ring-lane-descriptors.js does not exist.
 - src/campaign/build-pad-descriptors.js does not exist.
