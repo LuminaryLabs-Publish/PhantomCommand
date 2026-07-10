@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T18-41-55-04-00`
+**Timestamp:** `2026-07-09T23-02-05-04-00`
 
 ## Critical source-profile gaps
 
@@ -11,6 +11,7 @@
 - game.html still owns timing policy inline.
 - game.html still owns wedge geometry, material, construct animation, HUD mutation, input, camera, and GameHost state inline.
 - construct-spiral-intro-kit exists, but it is generic spiral/window scheduling and not the live no-gap smooth-ring-handoff-v6 authority.
+- tests/construct-spiral-intro-kit-smoke.mjs uses a different ring-part profile and does not prove live v6 parity.
 - There is no source-owned smooth-ring-handoff-v6 profile file.
 - There is no normalizer proving exact live default values.
 - There is no ring descriptor module that reproduces the live no-gap ring descriptors.
@@ -30,8 +31,8 @@
 ## Current central tracking gap
 
 ```txt
-- PhantomCommand is again the oldest eligible public non-Cavalry central ledger entry after recent public repo refreshes.
-- This pass refreshes repo-local docs and central tracking to 2026-07-09T18-41-55-04-00.
+- PhantomCommand is the oldest eligible public non-Cavalry central ledger entry after recent public repo refreshes.
+- This pass refreshes repo-local docs and central tracking to 2026-07-09T23-02-05-04-00.
 - The next central entry should not treat source-profile parity as implemented until the fixture exists and passes.
 ```
 
