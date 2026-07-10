@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-09T23-02-05-04-00`
+**Timestamp:** `2026-07-10T00-30-20-04-00`
 
 ## Critical source-profile gaps
 
@@ -28,11 +28,11 @@
 - npm run build does not yet run a source-profile fixture before static artifact copy.
 ```
 
-## Current central tracking gap
+## Current central tracking note
 
 ```txt
 - PhantomCommand is the oldest eligible public non-Cavalry central ledger entry after recent public repo refreshes.
-- This pass refreshes repo-local docs and central tracking to 2026-07-09T23-02-05-04-00.
+- This pass refreshes repo-local docs and central tracking to 2026-07-10T00-30-20-04-00.
 - The next central entry should not treat source-profile parity as implemented until the fixture exists and passes.
 ```
 
