@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T11-10-08-04-00`
+**Timestamp:** `2026-07-10T12-40-45-04-00`
 
 ## Validation performed in this pass
 
@@ -18,8 +18,6 @@
 - Read .agent/kit-registry.json.
 - Read central repo-ledger state for public Publish repo comparison.
 - Read package.json.
-- Read game.html.
-- Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
@@ -46,11 +44,6 @@
 ## Source evidence captured
 
 ```txt
-game.html declares:
-- thin route shell.
-- imports ./src/campaign/campaign-scene.js.
-- visible control copy for pan, zoom, drag select, right click order, tower numbers, and wave start.
-
 campaign-scene.js declares:
 - 640 x 360 source canvas.
 - CRT display renderer.
@@ -62,6 +55,11 @@ campaign-scene.js declares:
 - 6 scripted waves.
 - souls, core, wave, selected units, selected pad, tower type, win/loss state.
 - selectAt, order, build, startWave, update, draw, render, and GameHost methods.
+
+package.json declares:
+- npm run check.
+- npm run build.
+- no campaign fixture script yet.
 ```
 
 ## Required validation after the next implementation
