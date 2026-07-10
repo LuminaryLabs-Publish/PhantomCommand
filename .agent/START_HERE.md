@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-09T18-41-55-04-00`
+**Last aligned:** `2026-07-09T23-02-05-04-00`
 
 ## Purpose
 
@@ -18,20 +18,20 @@ No checked public non-Cavalry repo was new, missing from the central ledger, mis
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback. Its central ledger was at `2026-07-09T16-29-23-04-00`, older than the other checked eligible public entries after recent updates.
+`PhantomCommand` was selected as the oldest eligible public documented fallback. Its central ledger was at `2026-07-09T18-41-55-04-00`, older than the other checked eligible public entries after recent updates.
 
 ## Public Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T17-48-20-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T16-58-52-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T16-38-14-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible public documented fallback / central latest 2026-07-09T16-29-23-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T18-30-30-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T18-11-58-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T18-20-18-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T19-09-44-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T19-00-15-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T18-49-13-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T18-41-55-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T22-50-53-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T19-29-23-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T22-40-25-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T17-58-53-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T19-21-19-04-00
 ```
 
 ## Current product read
@@ -92,14 +92,14 @@ source-owned smooth-ring-handoff-v6 profile
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-09T18-41-55-04-00-sourceprofile-handoff-dsk-map.md
-.agent/render-audit/2026-07-09T18-41-55-04-00-gamehost-sourceprofile-consumer-readback.md
-.agent/gameplay-audit/2026-07-09T18-41-55-04-00-construct-sourceprofile-loop.md
-.agent/source-profile-audit/2026-07-09T18-41-55-04-00-live-profile-fixture-contract.md
-.agent/scenario-bootstrap-audit/2026-07-09T18-41-55-04-00-bootstrap-still-deferred.md
-.agent/deploy-audit/2026-07-09T18-41-55-04-00-sourceprofile-fixture-build-gate.md
-.agent/trackers/2026-07-09T18-41-55-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-09T18-41-55-04-00.md
+.agent/architecture-audit/2026-07-09T23-02-05-04-00-sourceprofile-consumer-central-refresh-dsk-map.md
+.agent/render-audit/2026-07-09T23-02-05-04-00-gamehost-sourceprofile-readback-gap.md
+.agent/gameplay-audit/2026-07-09T23-02-05-04-00-construct-sourceprofile-fixture-loop.md
+.agent/source-profile-audit/2026-07-09T23-02-05-04-00-live-v6-profile-consumer-contract.md
+.agent/scenario-bootstrap-audit/2026-07-09T23-02-05-04-00-bootstrap-deferred-by-sourceprofile.md
+.agent/deploy-audit/2026-07-09T23-02-05-04-00-sourceprofile-fixture-build-gate.md
+.agent/trackers/2026-07-09T23-02-05-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-09T23-02-05-04-00.md
 .agent/kit-registry.json
 ```
 
