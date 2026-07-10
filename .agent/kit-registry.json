@@ -1,19 +1,19 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T12-40-45-04-00",
-  "status": "campaign-source-action-render-readback-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T12-40-45-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T12-40-45-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T12-40-45-04-00-campaign-source-action-render-readback-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T12-40-45-04-00-pixel-campaign-render-readback-ledger-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T12-40-45-04-00-wave-build-order-result-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T12-40-45-04-00-select-build-order-action-result-map.md",
-  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T12-40-45-04-00-campaign-source-action-render-readback-contract.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T12-40-45-04-00-legacy-construct-profile-still-demoted.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T12-40-45-04-00-campaign-fixture-check-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T11-10-08-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T11-10-08-04-00.md",
+  "updatedAt": "2026-07-10T14-11-51-04-00",
+  "status": "campaign-action-result-source-ledger-gamehost-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T14-11-51-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T14-11-51-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T14-11-51-04-00-campaign-action-result-source-ledger-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T14-11-51-04-00-campaign-render-action-result-readback-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T14-11-51-04-00-wave-build-order-action-result-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T14-11-51-04-00-select-build-order-result-attribution-map.md",
+  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T14-11-51-04-00-campaign-source-action-result-contract.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T14-11-51-04-00-legacy-construct-profile-demotion.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T14-11-51-04-00-campaign-action-result-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T12-40-45-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T12-40-45-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
@@ -45,7 +45,7 @@
       "window.GameHost.getState",
       "window.GameHost.setZoom"
     ],
-    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, simulation, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action/render/GameHost parity before gameplay or visual expansion."
+    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, simulation, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action result, render, simulation, and GameHost parity before gameplay or visual expansion."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -65,7 +65,7 @@
       "derive ring/lane/pad descriptors",
       "derive archetype, tower, and wave descriptors",
       "emit action intent records for select/build/order/start-wave",
-      "emit ActionResult rows and simulation frame summaries",
+      "emit accepted/rejected ActionResult rows and simulation frame summaries",
       "emit render readback rows",
       "project additive GameHost campaign diagnostics",
       "run DOM-free campaign fixture",
