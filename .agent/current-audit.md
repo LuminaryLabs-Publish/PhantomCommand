@@ -9,7 +9,7 @@ status: continue-capability-resolver-candidate-precedence-fixture-gate-planned
 runtime source changed: no
 branch: main
 root .agent state: refreshed
-central ledger sync: pending until repo-local commit is recorded
+central ledger sync: complete
 ```
 
 ## Selection audit
@@ -188,6 +188,7 @@ npm run build: not run
 browser smoke: not run
 candidate resolver fixture: not run because it does not exist yet
 resume fidelity fixture: not run because it does not exist yet
-repo-local documentation pushed to main: in progress
-central ledger update: pending
+repo-local documentation pushed to main: yes
+central ledger updated: yes
+central internal change log added: yes
 ```
