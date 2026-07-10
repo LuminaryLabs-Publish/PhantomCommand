@@ -18,7 +18,7 @@ Document the current menu-to-campaign interaction, all source-backed domains, se
 - [x] Identify every source-backed kit and service.
 - [x] Add architecture, render, gameplay, interaction, persistence, and deploy audits.
 - [x] Update required root `.agent` files.
-- [ ] Sync the central repo ledger and internal change log.
+- [x] Sync the central repo ledger and internal change log.
 
 ## Repository inventory comparison
 
