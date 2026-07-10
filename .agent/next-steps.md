@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T12-40-45-04-00`
+**Timestamp:** `2026-07-10T14-11-51-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Action Result Source Ledger Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
@@ -30,7 +30,8 @@ The next cut should prove campaign source/action/render parity without depending
 [ ] Add src/campaign/tower-archetypes.js.
 [ ] Add src/campaign/wave-scripts.js.
 [ ] Add src/campaign/action-intents.js.
-[ ] Add src/campaign/action-results.js for select, build, order, start-wave, damage, reward, win, and loss rows.
+[ ] Add src/campaign/action-results.js for select, build, order, start-wave, damage, reward, wave-clear, win, and loss rows.
+[ ] Add rejection rows for no selection, unaffordable tower, occupied pad, already active wave, missing target, invalid tower type, and lost/won states.
 [ ] Add src/campaign/simulation-frame.js for deterministic tick summaries.
 [ ] Add src/campaign/render-readback.js for ring, lane, pad, unit, tower, projectile, HUD, minimap, and CRT consumption summaries.
 [ ] Add src/campaign/gamehost-diagnostics.js.
@@ -60,7 +61,8 @@ campaignSource.laneCount === 4
 campaignSource.towerTypes includes spire, lantern, ward
 campaignSource.unitArchetypes includes guard, archer, runner, shield, zealot, brute, wraith
 campaignSource.waveCount === 6
-ActionResult rows cover select, build, order, start-wave, damage, reward, win, and loss
+ActionResult rows cover select, build, order, start-wave, damage, reward, wave-clear, win, and loss
+ActionResult rows cover accepted, rejected, no-op, skipped, and unsupported branches
 simulation frame rows summarize spawn, unit, tower, projectile, damage, wave clear, win, and loss
 renderReadback rows cover rings, lanes, pads, units, towers, projectiles, HUD, minimap, and CRT pass
 legacy GameHost fields still exist
