@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T06-59-18-04-00`
+**Last aligned:** `2026-07-10T08-20-42-04-00`
 
 ## Purpose
 
@@ -14,23 +14,23 @@ Read this folder before changing runtime code.
 
 The current public `LuminaryLabs-Publish` repository list was checked against the tracked/documented repo ledger in `LuminaryLabs-Dev/LuminaryLabs` and sampled repo-local root `.agent` state.
 
-No checked public non-Cavalry repo was new, missing from the central ledger, missing root `.agent`, recently added but undocumented, or otherwise undocumented.
+No checked public non-Cavalry repo was new, missing from the central ledger, missing root `.agent`, recently added, or otherwise undocumented.
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback. Its prior central tracking was `2026-07-10T05-21-20-04-00`.
+`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T08-11-35-04-00`.
 
 ## Public Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T06-48-54-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T06-30-49-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T06-21-03-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T06-08-36-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T05-49-25-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T05-40-17-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T05-28-12-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T05-21-20-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / prior central latest 2026-07-10T06-59-18-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T07-08-10-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T07-20-08-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T07-29-12-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T07-41-42-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T07-50-29-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T07-59-27-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T08-11-35-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
@@ -59,12 +59,12 @@ open index.html
   -> campaign-scene creates 640 x 360 source canvas and CRT display renderer
   -> inline descriptors define 7 rings, 4 lanes, generated pads, unit archetypes, tower archetypes, waves, camera, input, and campaign state
   -> starter guards and archers spawn around sanctum core
-  -> pointer click selects units or empty build pads
+  -> pointer click selects allies or empty build pads
   -> second click on selected empty pad calls build when souls cover selected tower cost
   -> right-click orders selected units or targets nearest enemy
   -> Space starts queued wave spawns
   -> update loop advances wave spawn queue, unit AI, towers, projectiles, damage, rewards, effects, wave clear, win, and loss
-  -> draw loop renders rings, lanes, pads, props, units, towers, projectiles, effects, HUD, minimap, modal state, and CRT pass
+  -> draw loop renders rings, lanes, pads, grave props, units, towers, projectiles, effects, HUD, minimap, modal state, and CRT pass
   -> GameHost exposes state, camera, startWave, build, getState, and setZoom
 ```
 
@@ -75,14 +75,14 @@ open index.html
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T06-59-18-04-00-campaign-source-ledger-readback-dsk-map.md
-.agent/render-audit/2026-07-10T06-59-18-04-00-pixel-campaign-render-source-ledger-gap.md
-.agent/gameplay-audit/2026-07-10T06-59-18-04-00-wave-build-order-action-result-loop.md
-.agent/interaction-audit/2026-07-10T06-59-18-04-00-select-build-order-fixture-map.md
-.agent/campaign-authority-audit/2026-07-10T06-59-18-04-00-source-action-render-fixture-contract.md
-.agent/deploy-audit/2026-07-10T06-59-18-04-00-campaign-fixture-check-build-gate.md
-.agent/trackers/2026-07-10T06-59-18-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T06-59-18-04-00.md
+.agent/architecture-audit/2026-07-10T08-20-42-04-00-campaign-source-action-render-proof-dsk-map.md
+.agent/render-audit/2026-07-10T08-20-42-04-00-pixel-campaign-render-proof-gap.md
+.agent/gameplay-audit/2026-07-10T08-20-42-04-00-wave-build-order-proof-loop.md
+.agent/interaction-audit/2026-07-10T08-20-42-04-00-select-build-order-action-result-map.md
+.agent/campaign-authority-audit/2026-07-10T08-20-42-04-00-source-action-render-fixture-contract.md
+.agent/deploy-audit/2026-07-10T08-20-42-04-00-campaign-fixture-check-build-gate.md
+.agent/trackers/2026-07-10T08-20-42-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T08-20-42-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -103,7 +103,7 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Render Proof Refresh + GameHost Fixture Gate
 ```
 
 Build this before deeper camera rewrites, expanded enemy animation, economy expansion, renderer replacement, or additional campaign content.
