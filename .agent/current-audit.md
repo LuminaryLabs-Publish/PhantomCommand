@@ -1,28 +1,28 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T03-59-57-04-00`
+**Timestamp:** `2026-07-10T05-21-20-04-00`
 
 ## Summary
 
-`PhantomCommand` is now a static Vite canvas game with a graveyard menu route and a live 2D campaign route.
+`PhantomCommand` is a static Vite canvas game with a graveyard menu route and a live 2D campaign route.
 
-The previous docs focused on the old inline smooth-ring construct in `game.html`. Current source shows `game.html` is now a thin shell importing `src/campaign/campaign-scene.js`.
+The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and GameHost inline.
 
-This pass updates repo-local docs and central tracking around the new proof cut: campaign source manifest, action-result rows, render readback, additive `GameHost` diagnostics, and a DOM-free campaign fixture.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/readback refresh, GameHost diagnostics, and DOM-free campaign fixture gate.
 
 Runtime source was not changed.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T03-01-42-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T02-51-39-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T02-38-56-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T02-31-58-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T02-19-14-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T02-10-16-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T02-02-24-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T03-49-48-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T04-58-56-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T04-50-40-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T04-40-52-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T04-29-10-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T04-22-00-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T04-11-36-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T05-11-51-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T03-59-57-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
@@ -87,9 +87,12 @@ save-on-win-domain
 legacy-gamehost-campaign-diagnostics
 construct-spiral-intro-kit-legacy-support
 campaign-source-manifest-next
+campaign-descriptor-fingerprint-next
 campaign-action-result-next
+campaign-simulation-frame-next
 campaign-render-readback-next
-campaign-gamehost-fixture-next
+campaign-gamehost-diagnostics-next
+campaign-fixture-next
 central-ledger-sync
 ```
 
@@ -103,7 +106,7 @@ campaign-scene inline runtime:
   ring descriptors, lane descriptors, build pad generation, unit archetypes, tower archetypes, wave scripts, state mutation, targeting, projectiles, HUD, minimap, camera, input, GameHost
 
 construct-spiral-intro-kit:
-  still present as generic construct scheduling support, but not the live campaign route authority
+  generic construct scheduling support retained for legacy tests, not the live campaign route authority
 
 build-static script:
   copies index.html, game.html, src, docs, and config into dist without campaign fixture gating
@@ -149,6 +152,7 @@ Next-cut kits:
 
 ```txt
 phantom-command-campaign-source-manifest-kit
+phantom-command-campaign-descriptor-fingerprint-kit
 phantom-command-ring-lane-descriptor-kit
 phantom-command-build-pad-descriptor-kit
 phantom-command-unit-archetype-kit
@@ -168,10 +172,10 @@ central-ledger-readback-kit
 
 Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, or visual polish.
 
-The immediate blocker is source ownership and action/readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, and `GameHost` in one file. It needs source manifests, action-result rows, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
+The immediate blocker is source ownership and action/readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file. It needs source manifests, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Scene Source Manifest + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Readback Refresh + GameHost Fixture Gate
 ```
