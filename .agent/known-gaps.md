@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T09-52-02-04-00`
+**Timestamp:** `2026-07-10T11-10-08-04-00`
 
 ## Critical campaign-source gaps
 
@@ -70,5 +70,6 @@
 - Do not add more waves or enemy types before source manifests exist.
 - Do not expand economy before build/action results exist.
 - Do not rewrite camera before camera/readback fixture rows exist.
+- Do not start construct-profile parity before campaign fixture readback.
 - Do not delete legacy construct kit during this proof cut.
 ```
