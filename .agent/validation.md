@@ -1,13 +1,13 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T06-59-18-04-00`
+**Timestamp:** `2026-07-10T08-20-42-04-00`
 
 ## Validation performed in this pass
 
 ```txt
 - Checked the current public LuminaryLabs-Publish repo list.
 - Compared the public repo set against central LuminaryLabs-Dev/LuminaryLabs repo-ledger entries.
-- Confirmed no checked public non-Cavalry repo was new, ledger-absent, missing root agent state, recently added but undocumented, or otherwise undocumented.
+- Confirmed no checked public non-Cavalry repo was new, ledger-absent, missing root agent state, recently added, or otherwise undocumented.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
 - Selected PhantomCommand as the oldest eligible public documented fallback.
 - Read .agent/START_HERE.md.
@@ -16,10 +16,15 @@
 - Read .agent/known-gaps.md.
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
-- Read package.json.
-- Read game.html.
-- Read src/campaign/campaign-scene.js.
 - Read central repo-ledger state for public Publish repo comparison.
+- Read package.json.
+- Read index.html.
+- Read game.html.
+- Read scripts/build-static.mjs.
+- Read src/menu/graveyard-menu.js.
+- Read src/menu/crt-renderer.js.
+- Read src/campaign/campaign-scene.js.
+- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
 - Added architecture, render, gameplay, interaction, campaign-authority, and deploy audits.
@@ -84,5 +89,5 @@ runtime source changed: no
 branch created: no
 pull request created: no
 pushed to main: yes
-central ledger updated: yes
+central ledger updated: pending at file update time
 ```
