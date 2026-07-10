@@ -1,76 +1,87 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T14-11-51-04-00`
+**Timestamp:** `2026-07-10T15-38-40-04-00`
 
-## Critical campaign-source gaps
+## Critical session-authority gaps
 
 ```txt
-- game.html is a thin route shell importing src/campaign/campaign-scene.js.
-- src/campaign/campaign-scene.js owns rings, lanes, pads, archetypes, towers, waves, state, update, draw, HUD, minimap, input, camera, save, and GameHost inline.
-- campaign ring descriptors are not source-owned outside the runtime file.
-- lane descriptors are not source-owned outside the runtime file.
-- build pad generation is inline and has no descriptor parity rows.
-- unit archetypes are inline and have no source fingerprint.
-- tower archetypes are inline and have no source fingerprint.
-- wave scripts are inline and have no fixture rows.
-- select, build, order, start-wave, damage, reward, wave-clear, win, and loss actions have no ActionResult records.
-- no-op, rejected, unaffordable-build, no-selection-order, and already-active-wave branches are silent.
-- simulation ticks have no deterministic frame summaries.
-- render pass has no source-consumption/readback ledger.
-- HUD and minimap draw from live aggregate state without render-consumption rows.
-- GameHost.getState() exposes only aggregate campaign counters and zoom.
-- GameHost does not expose source ledger, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
-- build-static does not run a campaign fixture before copying static artifacts.
+- Begin and Continue emit different query parameters, but campaign-scene.js does not parse either mode.
+- Continue is enabled by save-key presence rather than a validated resumable save envelope.
+- The campaign does not read phantomCommand.save, nexus.sceneSnapshot, or phantom.command.campaign.
+- The only campaign write happens on victory.
+- The victory payload contains only scene, souls, and wave.
+- The victory payload cannot restore the live campaign state.
+- No save schema, version, source revision, checksum, migration policy, or invalid-save result exists.
+- No distinction exists between resumable session, completion summary, and cross-engine snapshot.
+- No deterministic fallback policy exists for an invalid Continue request.
 ```
 
-## Source wire gaps
+## Critical command-authority gaps
 
 ```txt
-- src/campaign/campaign-source-ledger.js does not exist.
-- src/campaign/campaign-source-manifest.js does not exist.
-- src/campaign/source-fingerprint.js does not exist.
-- src/campaign/ring-lane-descriptors.js does not exist.
-- src/campaign/build-pad-descriptors.js does not exist.
-- src/campaign/unit-archetypes.js does not exist.
-- src/campaign/tower-archetypes.js does not exist.
-- src/campaign/wave-scripts.js does not exist.
-- src/campaign/action-intents.js does not exist.
-- src/campaign/action-results.js does not exist.
-- src/campaign/simulation-frame.js does not exist.
-- src/campaign/render-readback.js does not exist.
-- src/campaign/gamehost-diagnostics.js does not exist.
-- tests/phantom-command-campaign-fixture.mjs does not exist.
+- selectAt, build, order, and startWave mutate state directly.
+- selectAt conflates pad selection and build execution.
+- build silently returns for missing pad, occupied pad, or insufficient souls.
+- order silently returns when no allies are selected.
+- startWave silently returns for active wave, won state, lost state, or completed wave set.
+- no command envelope, command ID, sequence, source, or logical timestamp exists.
+- no accepted/rejected/no-op/skipped/unsupported result contract exists.
+- no bounded action journal exists.
+- no deterministic replay input exists.
+- rejected commands cannot be proven to preserve state.
 ```
 
-## Legacy construct gaps now demoted
+## Source and descriptor gaps
 
 ```txt
-- construct-spiral-intro-kit is still present and smoke-tested separately.
-- it is no longer the live campaign route authority.
-- source-profile work for the old smooth-ring-handoff construct is not the immediate live-route blocker.
-- do not delete the construct kit, but do not treat it as proof for current game.html gameplay.
+- rings, lanes, pads, unit archetypes, tower archetypes, and wave scripts remain inline in campaign-scene.js.
+- fresh campaign state construction is not a DOM-free module.
+- generated pad count is not asserted behaviorally.
+- campaign source descriptors have no source revision or fingerprint.
+- the legacy construct kit is not authority for the current campaign route.
 ```
 
-## Non-blocking gaps
+## Simulation and render proof gaps
 
 ```txt
-- pixel art animation frames are procedural rectangles today.
-- isometric camera zoom/pan is functional but lacks fixture-readable bounds.
-- enemy and ally AI are compact and inline.
-- economy is minimal.
-- save only writes a small win payload.
-- accessibility route copy roughly matches campaign controls, but needs source-owned control help later.
+- fixed-step updates have no simulation tick record.
+- commands are not queued against simulation frames.
+- render() consumes live mutable state directly.
+- world, HUD, minimap, overlay, and CRT consumers have no readback rows.
+- no state fingerprint links command result, simulation frame, and rendered frame.
+- screenshots cannot prove whether Continue hydrated state or started fresh.
+```
+
+## Diagnostics and validation gaps
+
+```txt
+- window.GameHost exposes direct mutable state and camera references.
+- GameHost.getState() exposes aggregate counters only.
+- GameHost has no session mode, save classification, command journal, result reasons, simulation tick, render frame, source fingerprint, or fixture status.
+- check-campaign.mjs checks source patterns rather than behavior.
+- no DOM-free session fixture exists.
+- npm run build does not gate on session, save, command, replay, or render proof.
+```
+
+## Non-blocking product gaps
+
+```txt
+- procedural rectangle sprites remain visually simple.
+- AI and targeting logic remain compact and inline.
+- economy and persistence depth are minimal.
+- accessibility copy cannot report current session or rejected command results.
+- menu Continue labeling currently overstates actual behavior.
 ```
 
 ## Do not do next
 
 ```txt
-- Do not create a new branch.
+- Do not create a branch.
 - Do not work on Cavalry of Rome.
-- Do not replace the campaign scene renderer first.
-- Do not add more waves or enemy types before source manifests exist.
-- Do not expand economy before build/action results exist.
-- Do not rewrite camera before camera/readback fixture rows exist.
-- Do not start construct-profile parity before campaign fixture readback.
-- Do not delete legacy construct kit during this proof cut.
+- Do not add waves, units, towers, or economy systems before session/command authority exists.
+- Do not redesign save/load UI before defining the save envelope.
+- Do not replace the renderer before render readback exists.
+- Do not rewrite camera behavior before frame correlation exists.
+- Do not expand legacy construct-profile work before live campaign fixture proof.
+- Do not expose additional mutable objects through GameHost.
 ```
