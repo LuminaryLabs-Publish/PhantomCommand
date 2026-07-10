@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T09-52-02-04-00`
+**Last aligned:** `2026-07-10T11-10-08-04-00`
 
 ## Purpose
 
@@ -18,7 +18,7 @@ No checked public non-Cavalry repo was new, missing from the central ledger, mis
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback.
+`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T10-58-54-04-00`.
 
 ## Current product read
 
@@ -33,7 +33,7 @@ index.html
 
 The active game route is a live pixel campaign scene. `game.html` is a thin route shell that imports `src/campaign/campaign-scene.js`.
 
-The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements concentric grave rings, enemy lanes, build pads, player guards/archers, tower placement, enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, and `window.GameHost` readback.
+The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements concentric grave rings, enemy lanes, build pads, player guards/archers, tower placement, enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, save-on-win, and `window.GameHost` readback.
 
 ## Current interaction loop
 
@@ -46,10 +46,10 @@ open index.html
   -> inline descriptors define 7 rings, 4 lanes, generated pads, unit archetypes, tower archetypes, waves, camera, input, and campaign state
   -> starter guards and archers spawn around sanctum core
   -> pointer click selects allies or empty build pads
-  -> second click on selected empty pad builds selected tower if souls cover selected tower cost
+  -> repeat click on selected empty pad builds selected tower if souls cover selected tower cost
   -> right-click orders selected units or targets nearest enemy
   -> Space starts queued wave spawns
-  -> update loop advances wave spawn queue, unit AI, towers, projectiles, damage, rewards, effects, wave clear, win, and loss
+  -> update loop advances wave spawn queue, unit AI, towers, projectiles, damage, rewards, effects, win, and loss
   -> draw loop renders rings, lanes, pads, grave props, units, towers, projectiles, effects, HUD, minimap, modal state, and CRT pass
   -> GameHost exposes state, camera, startWave, build, getState, and setZoom
 ```
@@ -61,14 +61,15 @@ open index.html
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T09-52-02-04-00-campaign-source-action-render-readback-dsk-map.md
-.agent/render-audit/2026-07-10T09-52-02-04-00-pixel-campaign-render-readback-ledger-gap.md
-.agent/gameplay-audit/2026-07-10T09-52-02-04-00-wave-build-order-result-loop.md
-.agent/interaction-audit/2026-07-10T09-52-02-04-00-select-build-order-action-result-map.md
-.agent/campaign-authority-audit/2026-07-10T09-52-02-04-00-source-action-render-readback-contract.md
-.agent/deploy-audit/2026-07-10T09-52-02-04-00-campaign-fixture-check-build-gate.md
-.agent/trackers/2026-07-10T09-52-02-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T09-52-02-04-00.md
+.agent/architecture-audit/2026-07-10T11-10-08-04-00-campaign-fixture-readback-ledger-dsk-map.md
+.agent/render-audit/2026-07-10T11-10-08-04-00-pixel-campaign-render-fixture-gap.md
+.agent/gameplay-audit/2026-07-10T11-10-08-04-00-wave-build-order-fixture-loop.md
+.agent/interaction-audit/2026-07-10T11-10-08-04-00-select-build-order-action-map.md
+.agent/campaign-authority-audit/2026-07-10T11-10-08-04-00-campaign-source-action-render-contract.md
+.agent/deploy-audit/2026-07-10T11-10-08-04-00-campaign-fixture-build-gate.md
+.agent/source-profile-audit/2026-07-10T11-10-08-04-00-legacy-construct-profile-demotion.md
+.agent/trackers/2026-07-10T11-10-08-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T11-10-08-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -79,6 +80,7 @@ package.json
 index.html
 game.html
 scripts/build-static.mjs
+scripts/check-campaign.mjs
 src/menu/graveyard-menu.js
 src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
@@ -89,7 +91,7 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
 ```
 
-Build this before camera rewrites, expanded enemy animation, economy expansion, renderer replacement, RTS scenario expansion, or additional campaign content.
+Build this before camera rewrites, expanded enemy animation, economy expansion, renderer replacement, RTS scenario expansion, construct-profile work, or additional campaign content.
