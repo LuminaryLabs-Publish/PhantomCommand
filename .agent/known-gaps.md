@@ -1,49 +1,59 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T02-02-24-04-00`
+**Timestamp:** `2026-07-10T03-59-57-04-00`
 
-## Critical source-profile gaps
+## Critical campaign-source gaps
 
 ```txt
-- game.html still owns the live smooth-ring-handoff-v6 constants inline.
-- game.html still owns ring descriptor math inline.
-- game.html still owns piece descriptor math inline.
-- game.html still owns timing policy inline.
-- game.html still owns wedge geometry, material, construct animation, HUD mutation, input, camera, and GameHost state inline.
-- construct-spiral-intro-kit exists, but it is generic spiral/window scheduling and not the live no-gap smooth-ring-handoff-v6 authority.
-- tests/construct-spiral-intro-kit-smoke.mjs uses a different ring-part profile and does not prove live v6 parity.
-- There is no source-owned smooth-ring-handoff-v6 profile file.
-- There is no normalizer proving exact live default values.
-- There is no ring descriptor module that reproduces the live no-gap ring descriptors.
-- There is no piece descriptor module that reproduces the live 92-piece construct.
-- There is no timeline contract module proving ringStartTimes, per-piece delays, totalBuildSeconds, and prewarm behavior.
-- There is no stable source fingerprint for the live construct profile.
-- There is no serializable source snapshot proving what profile produced the construct.
-- There is no profile parity report separating ok, warning, error, unsupported, and missing rows.
-- There is no DOM-free fixture proving [5,5,5,5,6,8,10,12,16,20].
-- There is no DOM-free fixture proving 92 live pieces.
-- There is no DOM-free fixture proving total build seconds 19.923.
-- GameHost does not yet expose sourceProfile, profileFingerprint, sourceSnapshot, descriptor parity, timing parity, or fixture status.
-- game.html has no additive consumer splice for source-profile diagnostics.
-- npm run build does not yet run a source-profile fixture before static artifact copy.
+- game.html is now a thin route shell importing src/campaign/campaign-scene.js.
+- prior .agent docs still described an older inline game.html construct profile.
+- src/campaign/campaign-scene.js owns rings, lanes, pads, archetypes, towers, waves, state, update, draw, HUD, minimap, input, camera, save, and GameHost inline.
+- campaign ring descriptors are not source-owned outside the runtime file.
+- lane descriptors are not source-owned outside the runtime file.
+- build pad generation is inline and has no descriptor parity rows.
+- unit archetypes are inline and have no source fingerprint.
+- tower archetypes are inline and have no source fingerprint.
+- wave scripts are inline and have no fixture rows.
+- build, select, order, start-wave, damage, reward, win, and loss actions have no ActionResult records.
+- GameHost.getState() exposes only aggregate campaign counters and zoom.
+- GameHost does not expose source manifest, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
+- build-static does not run a campaign fixture before copying static artifacts.
 ```
 
-## Current central tracking note
+## Legacy construct gaps now demoted
 
 ```txt
-- PhantomCommand is the oldest eligible public non-Cavalry central ledger entry after recent public repo refreshes.
-- This pass refreshes repo-local docs and central tracking to 2026-07-10T02-02-24-04-00.
-- The next central entry should not treat source-profile parity as implemented until the fixture exists and passes.
+- construct-spiral-intro-kit is still present and smoke-tested separately.
+- it is no longer the live campaign route authority.
+- source-profile work for the old smooth-ring-handoff construct is not the immediate live-route blocker.
+- do not delete the construct kit, but do not treat it as proof for current game.html gameplay.
+```
+
+## Source wire gaps
+
+```txt
+- src/campaign/campaign-source-manifest.js does not exist.
+- src/campaign/ring-lane-descriptors.js does not exist.
+- src/campaign/build-pad-descriptors.js does not exist.
+- src/campaign/unit-archetypes.js does not exist.
+- src/campaign/tower-archetypes.js does not exist.
+- src/campaign/wave-scripts.js does not exist.
+- src/campaign/action-results.js does not exist.
+- src/campaign/simulation-frame.js does not exist.
+- src/campaign/render-readback.js does not exist.
+- src/campaign/gamehost-diagnostics.js does not exist.
+- tests/phantom-command-campaign-fixture.mjs does not exist.
 ```
 
 ## Non-blocking gaps
 
 ```txt
-- Scenario bootstrap remains conceptual.
-- Construct result authority remains blocked until sourceProfile parity exists.
-- RTS unit/economy loops are not implemented.
-- Renderer extraction is not required before source-profile fixture proof.
-- The page is still a static inline prototype, but that is acceptable for the current proof boundary.
+- pixel art animation frames are procedural rectangles today.
+- isometric camera zoom/pan is functional but lacks fixture-readback bounds.
+- enemy and ally AI are compact and inline.
+- economy is minimal.
+- save only writes a small win payload.
+- accessibility route copy mentions RTS controls that now roughly match the campaign, but needs source-owned control help later.
 ```
 
 ## Do not do next
@@ -51,8 +61,9 @@
 ```txt
 - Do not create a new branch.
 - Do not work on Cavalry of Rome.
-- Do not replace the visible construct with another animation model.
-- Do not extract the full renderer before profile parity exists.
-- Do not build scenario bootstrap before construct sourceProfile proof exists.
-- Do not add RTS gameplay before the current construct is source-owned and fixture-readable.
+- Do not replace the campaign scene renderer first.
+- Do not add more waves or enemy types before source manifests exist.
+- Do not expand economy before build/action results exist.
+- Do not rewrite camera before camera/readback fixture rows exist.
+- Do not delete legacy construct kit during this proof cut.
 ```
