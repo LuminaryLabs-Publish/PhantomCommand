@@ -26,29 +26,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare static artifact
+      - name: Validate and prepare static artifact
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf dist
-          mkdir -p dist
-          cp index.html dist/index.html
-          cp game.html dist/game.html
-          if [ -d src ]; then cp -R src dist/src; fi
-          if [ -d docs ]; then cp -R docs dist/docs; fi
-          if [ -d config ]; then cp -R config dist/config; fi
+          node --check src/menu/crt-renderer.js
+          node --check src/menu/graveyard-art.js
+          node --check src/menu/graveyard-menu.js
+          node --check src/campaign/campaign-scene.js
+          node scripts/check-menu.mjs
+          node scripts/check-campaign.mjs
+          node scripts/build-static.mjs
           touch dist/.nojekyll
           test -f dist/index.html
           test -f dist/game.html
-          grep -q 'smooth-ring-handoff-v6' dist/game.html
-          grep -q 'const RING_COUNT=10;' dist/game.html
-          grep -q 'const MOVE_SECONDS=' dist/game.html
-          grep -q 'const DROP_START_SECONDS=' dist/game.html
-          grep -q 'const START_HEIGHT_BASE=' dist/game.html
-          grep -q 'const RING_GAP_BASE=0;' dist/game.html
-          grep -q 'const RING_GAP_GROWTH=0;' dist/game.html
-          grep -q 'const RING_HANDOFF=' dist/game.html
-          find dist -maxdepth 3 -type f | sort
+          test -f dist/src/menu/crt-renderer.js
+          test -f dist/src/campaign/campaign-scene.js
+          grep -Fq 'src/menu/graveyard-menu.js' dist/index.html
+          grep -Fq 'src/campaign/campaign-scene.js' dist/game.html
+          grep -Fq 'const W = 640;' dist/src/campaign/campaign-scene.js
+          grep -Fq 'Array.from({ length: 7 }' dist/src/campaign/campaign-scene.js
+          grep -Fq 'window.GameHost=' dist/src/campaign/campaign-scene.js
+          find dist -maxdepth 4 -type f | sort
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
