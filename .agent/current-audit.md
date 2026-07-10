@@ -1,14 +1,14 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T09-52-02-04-00`
+**Timestamp:** `2026-07-10T11-10-08-04-00`
 
 ## Summary
 
 `PhantomCommand` is a static Vite canvas game with a graveyard menu route and a live 2D campaign route.
 
-The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and GameHost inline.
+The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` inline.
 
-This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/render readback, GameHost diagnostics, and DOM-free campaign fixture gate.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign fixture readback ledger, action/result rows, render consumption rows, additive GameHost diagnostics, and build fixture gate.
 
 Runtime source was not changed.
 
@@ -17,7 +17,7 @@ Runtime source was not changed.
 ```txt
 No checked public non-Cavalry repo was new, central-ledger absent, missing root .agent, recently added, or otherwise undocumented.
 LuminaryLabs-Publish/TheCavalryOfRome remained excluded by rule.
-PhantomCommand was selected as the oldest eligible documented fallback.
+PhantomCommand was selected as the oldest eligible documented fallback after HorrorCorridor advanced to 2026-07-10T10-58-54-04-00.
 ```
 
 ## Current interaction loop
@@ -32,7 +32,7 @@ open index.html
   -> inline rings, lane angles, pads, archetypes, tower types, waves, camera, input, and campaign state initialize
   -> starter guards and archers spawn around the sanctum
   -> pointer click selects units or build pads
-  -> second click on selected empty pad builds selected tower if souls cover cost
+  -> repeat click on selected empty pad builds selected tower if souls cover cost
   -> right-click orders selected units or targets nearest enemy
   -> Space starts the next wave queue
   -> update loop advances spawns, units, towers, projectiles, effects, wave clear, win, and loss
@@ -83,8 +83,7 @@ campaign-source-fingerprint-next
 campaign-action-result-next
 campaign-simulation-frame-next
 campaign-render-readback-next
-campaign-gamehost-diagnostics-next
-campaign-fixture-next
+campaign-gamehost-fixture-next
 central-ledger-sync
 ```
 
@@ -104,20 +103,21 @@ phantom-command-simulation-frame-kit next: deterministic spawn/unit/tower/projec
 phantom-command-render-readback-kit next: render consumption rows.
 phantom-command-gamehost-diagnostics-kit next: JSON-safe campaign diagnostics.
 phantom-command-campaign-fixture-kit next: DOM-free campaign parity proof.
+phantom-command-build-fixture-gate-kit next: build/check integration.
 ```
 
 ## Main finding
 
-Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, or visual polish.
+Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, RTS system expansion, construct-profile work, or visual polish.
 
-The immediate blocker is campaign source/action/render readback. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file.
+The immediate blocker is campaign fixture readback. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, input, simulation, rendering, HUD, minimap, save-on-win, and `GameHost` in one file.
 
 It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
 ```
 
 ## Validation status
