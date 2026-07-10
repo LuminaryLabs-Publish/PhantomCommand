@@ -1,12 +1,11 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T03-59-57-04-00`
+**Timestamp:** `2026-07-10T05-21-20-04-00`
 
 ## Critical campaign-source gaps
 
 ```txt
-- game.html is now a thin route shell importing src/campaign/campaign-scene.js.
-- prior .agent docs still described an older inline game.html construct profile.
+- game.html is a thin route shell importing src/campaign/campaign-scene.js.
 - src/campaign/campaign-scene.js owns rings, lanes, pads, archetypes, towers, waves, state, update, draw, HUD, minimap, input, camera, save, and GameHost inline.
 - campaign ring descriptors are not source-owned outside the runtime file.
 - lane descriptors are not source-owned outside the runtime file.
@@ -15,6 +14,8 @@
 - tower archetypes are inline and have no source fingerprint.
 - wave scripts are inline and have no fixture rows.
 - build, select, order, start-wave, damage, reward, win, and loss actions have no ActionResult records.
+- simulation ticks have no deterministic frame summaries.
+- render pass has no source-consumption/readback ledger.
 - GameHost.getState() exposes only aggregate campaign counters and zoom.
 - GameHost does not expose source manifest, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
 - build-static does not run a campaign fixture before copying static artifacts.
@@ -53,7 +54,7 @@
 - enemy and ally AI are compact and inline.
 - economy is minimal.
 - save only writes a small win payload.
-- accessibility route copy mentions RTS controls that now roughly match the campaign, but needs source-owned control help later.
+- accessibility route copy roughly matches campaign controls, but needs source-owned control help later.
 ```
 
 ## Do not do next
