@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T08-20-42-04-00`
+**Timestamp:** `2026-07-10T09-52-02-04-00`
 
 ## Validation performed in this pass
 
@@ -17,14 +17,8 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read central repo-ledger state for public Publish repo comparison.
-- Read package.json.
-- Read index.html.
 - Read game.html.
-- Read scripts/build-static.mjs.
-- Read src/menu/graveyard-menu.js.
-- Read src/menu/crt-renderer.js.
 - Read src/campaign/campaign-scene.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
 - Added architecture, render, gameplay, interaction, campaign-authority, and deploy audits.
@@ -50,11 +44,6 @@
 ## Source evidence captured
 
 ```txt
-package/source readback declares:
-- npm run check calls node scripts/check-menu.mjs && node scripts/check-campaign.mjs.
-- npm run build calls node scripts/build-static.mjs.
-- vite dev/start/preview run on port 4173.
-
 game.html declares:
 - thin route shell.
 - imports ./src/campaign/campaign-scene.js.
@@ -88,6 +77,11 @@ npm run build
 runtime source changed: no
 branch created: no
 pull request created: no
+npm run check: not run
+npm run build: not run
+construct smoke: not run
+campaign fixture: not run because proof files do not exist yet
+browser smoke: not run
 pushed to main: yes
 central ledger updated: yes
 ```
