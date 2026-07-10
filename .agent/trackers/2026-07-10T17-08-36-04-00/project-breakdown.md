@@ -20,7 +20,7 @@
 [x] add timestamped architecture and system audits
 [x] keep runtime source unchanged
 [x] push only to main
-[ ] synchronize central repo ledger and internal change log
+[x] synchronize central repo ledger and internal change log
 ```
 
 ## Selection
@@ -91,4 +91,4 @@ PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate
 
 ## Validation
 
-Documentation only. Runtime source, dependencies, package scripts, routes, controls, visuals, deployment configuration, branches, and pull requests were unchanged. Existing checks were not run.
+Documentation only. Runtime source, dependencies, package scripts, routes, controls, visuals, deployment configuration, branches, and pull requests were unchanged. Existing checks were not run. Repo-local and central documentation were pushed directly to `main`.
