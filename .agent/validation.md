@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T09-52-02-04-00`
+**Timestamp:** `2026-07-10T11-10-08-04-00`
 
 ## Validation performed in this pass
 
@@ -17,11 +17,13 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read central repo-ledger state for public Publish repo comparison.
+- Read package.json.
 - Read game.html.
+- Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
-- Added architecture, render, gameplay, interaction, campaign-authority, and deploy audits.
+- Added architecture, render, gameplay, interaction, campaign-authority, source-profile, and deploy audits.
 - Updated central repo ledger.
 - Added central internal change-log entry.
 ```
