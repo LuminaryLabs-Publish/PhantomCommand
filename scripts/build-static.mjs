@@ -5,6 +5,7 @@ const outputDir = "dist";
 const staticPaths = [
   "index.html",
   "game.html",
+  "src",
   "docs",
   "config"
 ];
