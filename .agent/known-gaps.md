@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T11-10-08-04-00`
+**Timestamp:** `2026-07-10T12-40-45-04-00`
 
 ## Critical campaign-source gaps
 
@@ -17,6 +17,7 @@
 - no-op and rejected branches are silent.
 - simulation ticks have no deterministic frame summaries.
 - render pass has no source-consumption/readback ledger.
+- HUD and minimap draw from live aggregate state without render-consumption rows.
 - GameHost.getState() exposes only aggregate campaign counters and zoom.
 - GameHost does not expose source ledger, action journal, render readback, fixture status, selected units, selected pad, tower type, wave queue, or per-wave source.
 - build-static does not run a campaign fixture before copying static artifacts.
