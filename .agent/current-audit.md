@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T05-21-20-04-00`
+**Timestamp:** `2026-07-10T06-59-18-04-00`
 
 ## Summary
 
@@ -8,21 +8,21 @@
 
 The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and GameHost inline.
 
-This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/readback refresh, GameHost diagnostics, and DOM-free campaign fixture gate.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign source ledger readback, action-result rows, render readback, GameHost diagnostics, and DOM-free campaign fixture gate.
 
 Runtime source was not changed.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T04-58-56-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T04-50-40-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T04-40-52-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T04-29-10-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T04-22-00-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T04-11-36-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T05-11-51-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T03-59-57-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T06-48-54-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T06-30-49-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T06-21-03-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T06-08-36-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T05-49-25-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T05-40-17-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T05-28-12-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T05-21-20-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
@@ -86,7 +86,7 @@ minimap-domain
 save-on-win-domain
 legacy-gamehost-campaign-diagnostics
 construct-spiral-intro-kit-legacy-support
-campaign-source-manifest-next
+campaign-source-ledger-next
 campaign-descriptor-fingerprint-next
 campaign-action-result-next
 campaign-simulation-frame-next
@@ -96,86 +96,14 @@ campaign-fixture-next
 central-ledger-sync
 ```
 
-## Kit services in use
-
-```txt
-graveyard-menu route:
-  menu state, save detection, settings persistence, audio ambience, route transition, CRT display
-
-campaign-scene inline runtime:
-  ring descriptors, lane descriptors, build pad generation, unit archetypes, tower archetypes, wave scripts, state mutation, targeting, projectiles, HUD, minimap, camera, input, GameHost
-
-construct-spiral-intro-kit:
-  generic construct scheduling support retained for legacy tests, not the live campaign route authority
-
-build-static script:
-  copies index.html, game.html, src, docs, and config into dist without campaign fixture gating
-```
-
-## Kits
-
-Current explicit kits:
-
-```txt
-crt-renderer-kit
-graveyard-art-kit
-construct-spiral-intro-kit
-construct-spiral-schedule-kit
-construct-piece-id-kit
-construct-piece-state-kit
-construct-sequence-update-kit
-```
-
-Current inline/runtime kits:
-
-```txt
-legacy-inline-campaign-ring-map-kit
-legacy-inline-campaign-lane-kit
-legacy-inline-build-pad-kit
-legacy-inline-unit-archetype-kit
-legacy-inline-tower-archetype-kit
-legacy-inline-wave-script-kit
-legacy-inline-selection-kit
-legacy-inline-build-action-kit
-legacy-inline-order-action-kit
-legacy-inline-wave-start-kit
-legacy-inline-unit-ai-kit
-legacy-inline-projectile-kit
-legacy-inline-economy-kit
-legacy-inline-hud-kit
-legacy-inline-minimap-kit
-legacy-inline-gamehost-campaign-diagnostics-kit
-legacy-static-build-copy-kit
-```
-
-Next-cut kits:
-
-```txt
-phantom-command-campaign-source-manifest-kit
-phantom-command-campaign-descriptor-fingerprint-kit
-phantom-command-ring-lane-descriptor-kit
-phantom-command-build-pad-descriptor-kit
-phantom-command-unit-archetype-kit
-phantom-command-tower-archetype-kit
-phantom-command-wave-script-kit
-phantom-command-action-intent-kit
-phantom-command-action-result-kit
-phantom-command-simulation-frame-kit
-phantom-command-render-readback-kit
-phantom-command-gamehost-campaign-diagnostics-kit
-phantom-command-campaign-fixture-kit
-phantom-command-build-fixture-gate-kit
-central-ledger-readback-kit
-```
-
 ## Main finding
 
 Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, or visual polish.
 
-The immediate blocker is source ownership and action/readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file. It needs source manifests, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
+The immediate blocker is source ownership and action/readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file. It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
 ```
