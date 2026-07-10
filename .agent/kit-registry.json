@@ -1,18 +1,19 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T15-38-40-04-00",
-  "status": "campaign-session-authority-command-correlation-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T15-38-40-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T15-38-40-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T15-38-40-04-00-campaign-session-command-correlation-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T15-38-40-04-00-session-frame-render-readback-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T15-38-40-04-00-new-continue-wave-command-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T15-38-40-04-00-command-intent-result-correlation-map.md",
-  "latestSessionAuthorityAudit": ".agent/session-authority-audit/2026-07-10T15-38-40-04-00-new-continue-save-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T15-38-40-04-00-session-fixture-check-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T14-11-51-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T14-11-51-04-00.md",
+  "updatedAt": "2026-07-10T17-08-36-04-00",
+  "status": "campaign-save-admission-resume-fidelity-fixture-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T17-08-36-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T17-08-36-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fidelity-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T17-08-36-04-00-session-provenance-render-readback-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T17-08-36-04-00-continue-hydrate-resume-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T17-08-36-04-00-continue-admission-result-map.md",
+  "latestSessionAuthorityAudit": ".agent/session-authority-audit/2026-07-10T17-08-36-04-00-save-candidate-classification-contract.md",
+  "latestPersistenceAudit": ".agent/persistence-audit/2026-07-10T17-08-36-04-00-resume-state-coverage-matrix.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T17-08-36-04-00-save-admission-resume-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T15-38-40-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T15-38-40-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
@@ -21,11 +22,12 @@
   },
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "reason": "all nine eligible non-Cavalry repositories were centrally tracked and had root agent state; PhantomCommand had the oldest prior central timestamp",
-    "priorCentralTimestamp": "2026-07-10T14-11-51-04-00",
+    "reason": "all nine eligible non-Cavalry repositories were centrally tracked and had root agent state; PhantomCommand was the oldest eligible documented fallback after accounting for fresh HorrorCorridor repo-local activity",
+    "priorCentralTimestamp": "2026-07-10T15-38-40-04-00",
     "eligibleRepoCount": 9,
     "accessibleRepoCount": 10
   },
+  "currentNextSlice": "PhantomCommand Save Admission Authority + Resume Fidelity Fixture Gate",
   "currentRuntime": {
     "type": "static-vite-pixel-isometric-campaign-game",
     "entrypoints": [
@@ -60,11 +62,23 @@
       "game.html?campaign=new",
       "game.html?campaign=continue"
     ],
+    "saveCandidateKeys": [
+      "phantomCommand.save",
+      "nexus.sceneSnapshot",
+      "phantom.command.campaign"
+    ],
+    "saveCandidateStorageLayers": [
+      "localStorage",
+      "sessionStorage"
+    ],
+    "currentContinueAdmission": "any non-empty raw value under any candidate key",
     "campaignReadsSessionMode": false,
+    "campaignReadsSaveCandidates": false,
     "campaignHydratesSave": false,
     "campaignSaveWrite": {
       "key": "phantomCommand.save",
       "when": "victory only",
+      "classification": "legacy-completion-summary",
       "fields": [
         "scene",
         "souls",
@@ -79,11 +93,12 @@
       "window.GameHost.getState",
       "window.GameHost.setZoom"
     ],
-    "primaryGap": "the menu emits new/continue session intent but the campaign always initializes fresh; save hydration, command result correlation, deterministic journal/replay, render readback, and immutable diagnostics are missing"
+    "primaryGap": "Continue is enabled by unvalidated cross-schema key presence, while the campaign reads no candidate and the only saved payload is a non-resumable victory summary; no versioned full-state envelope or fingerprint-proven hydration exists"
   },
   "interactionLoops": {
     "currentPlayerLoop": [
       "open menu",
+      "read settings and raw save-key presence",
       "choose Begin or Continue",
       "campaign initializes fresh regardless of session intent",
       "select units or build pads",
@@ -92,19 +107,18 @@
       "start waves",
       "survive fixed-step combat and economy loop",
       "render world, HUD, minimap, modal, and CRT",
-      "write minimal victory completion payload"
+      "write minimal victory completion summary"
     ],
     "targetFixtureLoop": [
-      "parse new or continue intent",
-      "classify save envelope",
-      "create or hydrate deterministic campaign state",
-      "emit ordered command envelopes",
-      "emit accepted or rejected command results",
-      "advance correlated fixed-step frames",
-      "emit render consumer readback",
-      "expose immutable additive GameHost diagnostics",
-      "replay journal and compare final fingerprint",
-      "gate check and build",
+      "enumerate save candidates",
+      "parse and classify each candidate",
+      "select a resumable candidate by deterministic priority",
+      "parse new or continue session intent",
+      "create or atomically hydrate full campaign state",
+      "compare saved and hydrated fingerprints",
+      "resume counters and fixed-step simulation deterministically",
+      "emit immutable session and persistence readback",
+      "gate check and build with DOM-free fixtures",
       "sync central ledger"
     ]
   },
@@ -116,17 +130,24 @@
       "menu-selection-domain",
       "menu-panel-domain",
       "menu-settings-persistence-domain",
-      "menu-save-presence-domain",
+      "menu-save-candidate-discovery-domain",
       "menu-transition-domain",
       "menu-audio-domain",
       "graveyard-art-domain",
       "source-canvas-domain",
       "crt-display-domain"
     ],
-    "campaign": [
+    "sessionAndPersistence": [
       "campaign-session-intent-domain",
-      "campaign-save-schema-domain",
-      "campaign-save-hydration-domain",
+      "campaign-save-key-domain",
+      "campaign-save-admission-domain-next",
+      "campaign-save-classification-domain-next",
+      "campaign-save-envelope-domain-next",
+      "campaign-save-hydration-domain-next",
+      "campaign-resume-fidelity-domain-next",
+      "campaign-session-fingerprint-domain-next"
+    ],
+    "campaign": [
       "ring-map-domain",
       "lane-domain",
       "build-pad-domain",
@@ -187,25 +208,33 @@
       "construct-sequence-update-kit"
     ],
     "next": [
+      "phantom-command-save-candidate-registry-kit",
+      "phantom-command-save-classifier-kit",
       "phantom-command-campaign-session-mode-kit",
-      "phantom-command-save-schema-kit",
+      "phantom-command-save-envelope-kit",
+      "phantom-command-session-state-snapshot-kit",
       "phantom-command-save-hydration-kit",
+      "phantom-command-session-fingerprint-kit",
+      "phantom-command-resume-result-kit",
+      "phantom-command-gamehost-session-readback-kit",
+      "phantom-command-save-admission-fixture-kit",
+      "phantom-command-resume-fidelity-fixture-kit",
+      "phantom-command-build-fixture-gate-kit",
+      "central-ledger-readback-kit"
+    ],
+    "deferred": [
       "phantom-command-command-envelope-kit",
       "phantom-command-action-result-kit",
       "phantom-command-action-journal-kit",
       "phantom-command-frame-correlation-kit",
-      "phantom-command-render-readback-kit",
-      "phantom-command-gamehost-readback-kit",
-      "phantom-command-session-fixture-kit",
-      "phantom-command-build-fixture-gate-kit",
-      "central-ledger-readback-kit"
+      "phantom-command-render-readback-kit"
     ]
   },
   "services": {
     "current": [
       "menu navigation",
       "settings persistence",
-      "save presence detection",
+      "raw save-key presence detection",
       "route transition",
       "procedural menu audio",
       "graveyard art composition",
@@ -221,35 +250,39 @@
       "world rendering",
       "HUD",
       "minimap",
-      "victory completion write",
+      "victory completion-summary write",
       "aggregate GameHost diagnostics",
       "source-pattern checks",
       "static artifact copy"
     ],
     "neededNext": [
+      "save candidate enumeration",
+      "JSON parsing and schema-family classification",
+      "deterministic candidate priority",
+      "truthful Continue admission",
       "session mode parsing",
-      "versioned save envelope",
-      "save classification and hydration",
-      "command envelopes",
-      "typed action results",
-      "bounded ordered journal",
-      "deterministic replay",
-      "simulation/render frame correlation",
-      "immutable GameHost readback",
-      "DOM-free session fixture",
-      "check/build fixture gate",
+      "versioned full-state envelope",
+      "atomic save hydration",
+      "legacy-summary classification",
+      "foreign-schema rejection or adapter routing",
+      "state fingerprinting",
+      "resume counter and simulation parity",
+      "immutable GameHost session readback",
+      "DOM-free save-admission fixture",
+      "DOM-free resume-fidelity fixture",
+      "check and build fixture gate",
       "central ledger readback"
     ]
   },
+  "currentBlocker": "The menu equates raw save-key presence with resumability. The campaign reads none of those candidates, and its only saved payload cannot reconstruct live state. Save admission, full-state envelope authority, atomic hydration, and fingerprint parity are missing.",
   "validation": {
     "runtimeSourceChangedThisPass": false,
     "branchCreated": false,
     "pullRequestCreated": false,
     "npmCheckRun": false,
     "npmBuildRun": false,
-    "fixtureRun": false,
-    "browserSmokeRun": false,
-    "localCloneAttempted": true,
-    "localCloneBlockedReason": "container DNS could not resolve github.com"
+    "saveAdmissionFixtureRun": false,
+    "resumeFidelityFixtureRun": false,
+    "browserSmokeRun": false
   }
 }
