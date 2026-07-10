@@ -2,11 +2,11 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T03-59-57-04-00`
+**Last aligned:** `2026-07-10T05-21-20-04-00`
 
 ## Purpose
 
-This `.agent/` folder is the repo-local operating memory for scheduled and manual breakdown work on `PhantomCommand`.
+This `.agent/` folder is the repo-local operating memory for breakdown and implementation work on `PhantomCommand`.
 
 Read this folder before changing runtime code.
 
@@ -18,25 +18,25 @@ No checked public non-Cavalry repo was new, missing from the central ledger, mis
 
 `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded by standing rule.
 
-`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T03-49-48-04-00`.
+`PhantomCommand` was selected as the oldest eligible public documented fallback after `HorrorCorridor` advanced to `2026-07-10T05-11-51-04-00`.
 
 ## Public Publish repos checked
 
 ```txt
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T03-01-42-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T02-51-39-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T02-38-56-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T02-31-58-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T02-19-14-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T02-10-16-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T02-02-24-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T03-49-48-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T04-58-56-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T04-50-40-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T04-40-52-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T04-29-10-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T04-22-00-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T04-11-36-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T05-11-51-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T03-59-57-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
 ## Current product read
 
-`PhantomCommand` is now a static Vite canvas game with two routes:
+`PhantomCommand` is a static Vite canvas game with two routes:
 
 ```txt
 index.html
@@ -45,43 +45,41 @@ index.html
   -> src/campaign/campaign-scene.js
 ```
 
-The active game route is no longer an inline `game.html` construct proof. `game.html` is a thin route shell that imports `src/campaign/campaign-scene.js`.
+The active game route is a live pixel campaign scene. `game.html` is a thin route shell that imports `src/campaign/campaign-scene.js`.
 
-The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements concentric grave rings, four enemy lanes, build pads, player guards/archers, tower placement, enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, and `window.GameHost` readback.
+The live campaign scene is a 640 x 360 internal canvas rendered through a CRT/pixel display adapter. It implements concentric grave rings, enemy lanes, build pads, player guards/archers, tower placement, enemy waves, projectiles, minimap, camera pan/zoom, wave start, pause, reload, and `window.GameHost` readback.
 
 ## Current interaction loop
 
 ```txt
 open index.html
-  -> graveyard menu renders into low-res canvas through crt-renderer
-  -> Begin Campaign routes to game.html?campaign=new
+  -> graveyard menu renders through crt-renderer and graveyard-art
+  -> Begin Campaign or Continue routes to game.html
   -> game.html imports src/campaign/campaign-scene.js
-  -> campaign-scene creates 640 x 360 source canvas and CRT renderer
-  -> rings, lanes, pads, archetypes, towers, waves, camera, input, and state are declared inline
-  -> starter guards and archers spawn around center
-  -> pointer selects units or build pads
-  -> double-select empty pad builds selected tower when souls are sufficient
-  -> right-click orders selected units or targets enemies
+  -> campaign-scene creates 640 x 360 source canvas and CRT display renderer
+  -> inline descriptors define 7 rings, 4 lanes, generated pads, unit archetypes, tower archetypes, waves, camera, input, and campaign state
+  -> starter guards and archers spawn around sanctum core
+  -> pointer click selects units or empty build pads
+  -> second click on selected empty pad calls build when souls cover selected tower cost
+  -> right-click orders selected units or targets nearest enemy
   -> Space starts queued wave spawns
-  -> enemies path from lane edge toward sanctum core
-  -> towers/allies acquire targets and fire projectiles
-  -> enemies damage sanctum core if they reach center
-  -> update loop resolves units, towers, projectiles, effects, wave clear, win/loss
-  -> draw loop renders rings, lanes, pads, props, units, towers, projectiles, effects, HUD, minimap, and CRT pass
-  -> window.GameHost exposes state, camera, startWave, build, getState, and setZoom
+  -> update loop advances wave spawn queue, unit AI, towers, projectiles, damage, rewards, effects, wave clear, win, and loss
+  -> draw loop renders rings, lanes, pads, props, units, towers, projectiles, effects, HUD, minimap, modal state, and CRT pass
+  -> GameHost exposes state, camera, startWave, build, getState, and setZoom
 ```
 
-## Next target loop
+## Target authority loop
 
 ```txt
 campaign source manifest
+  -> descriptor fingerprint
   -> ring/lane/pad descriptor kit
   -> unit archetype descriptor kit
   -> tower descriptor kit
   -> wave descriptor kit
   -> input/action intent contract
-  -> build/order/wave ActionResult rows
-  -> simulation tick frame rows
+  -> ActionResult rows
+  -> simulation frame summaries
   -> render readback rows
   -> additive GameHost campaign diagnostics
   -> DOM-free campaign fixture
@@ -96,14 +94,14 @@ campaign source manifest
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-10T03-59-57-04-00-campaign-scene-source-manifest-dsk-map.md
-.agent/render-audit/2026-07-10T03-59-57-04-00-pixel-campaign-render-readback.md
-.agent/gameplay-audit/2026-07-10T03-59-57-04-00-wave-build-action-loop.md
-.agent/interaction-audit/2026-07-10T03-59-57-04-00-select-build-order-action-results.md
-.agent/campaign-authority-audit/2026-07-10T03-59-57-04-00-campaign-source-fixture-contract.md
-.agent/deploy-audit/2026-07-10T03-59-57-04-00-campaign-fixture-build-gate.md
-.agent/trackers/2026-07-10T03-59-57-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T03-59-57-04-00.md
+.agent/architecture-audit/2026-07-10T05-21-20-04-00-campaign-source-action-readback-dsk-map.md
+.agent/render-audit/2026-07-10T05-21-20-04-00-pixel-campaign-render-readback-gap.md
+.agent/gameplay-audit/2026-07-10T05-21-20-04-00-wave-build-order-action-loop.md
+.agent/interaction-audit/2026-07-10T05-21-20-04-00-select-build-order-action-result-map.md
+.agent/campaign-authority-audit/2026-07-10T05-21-20-04-00-source-action-fixture-contract.md
+.agent/deploy-audit/2026-07-10T05-21-20-04-00-campaign-fixture-build-gate.md
+.agent/trackers/2026-07-10T05-21-20-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T05-21-20-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -124,7 +122,7 @@ tests/construct-spiral-intro-kit-smoke.mjs
 ## Current next safe ledge
 
 ```txt
-PhantomCommand Campaign Scene Source Manifest + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Readback Refresh + GameHost Fixture Gate
 ```
 
 Build this before deeper camera rewrites, expanded enemy animation, economy expansion, renderer replacement, or additional campaign content.
