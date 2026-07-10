@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T06-59-18-04-00`
+**Timestamp:** `2026-07-10T08-20-42-04-00`
 
 ## Summary
 
@@ -8,25 +8,25 @@
 
 The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and GameHost inline.
 
-This pass updates repo-local docs and central tracking around the next proof cut: campaign source ledger readback, action-result rows, render readback, GameHost diagnostics, and DOM-free campaign fixture gate.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/render proof, GameHost diagnostics, and DOM-free campaign fixture gate.
 
 Runtime source was not changed.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T06-48-54-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T06-30-49-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T06-21-03-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T06-08-36-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T05-49-25-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T05-40-17-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T05-28-12-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / prior central latest 2026-07-10T05-21-20-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / prior central latest 2026-07-10T06-59-18-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T07-08-10-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T07-20-08-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T07-29-12-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T07-41-42-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T07-50-29-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T07-59-27-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T08-11-35-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
-No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent`, recently added but undocumented, or otherwise undocumented.
+No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent`, recently added, or otherwise undocumented.
 
 ## Current interaction loop
 
@@ -87,7 +87,6 @@ save-on-win-domain
 legacy-gamehost-campaign-diagnostics
 construct-spiral-intro-kit-legacy-support
 campaign-source-ledger-next
-campaign-descriptor-fingerprint-next
 campaign-action-result-next
 campaign-simulation-frame-next
 campaign-render-readback-next
@@ -100,10 +99,12 @@ central-ledger-sync
 
 Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, or visual polish.
 
-The immediate blocker is source ownership and action/readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file. It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
+The immediate blocker is source ownership and action/render readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file.
+
+It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Render Proof Refresh + GameHost Fixture Gate
 ```
