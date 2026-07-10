@@ -1,41 +1,33 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T17-08-36-04-00`
+**Timestamp:** `2026-07-10T18-40-13-04-00`
 
 ## Validation performed in this pass
 
 ```txt
-- Enumerated the full 10-repository accessible LuminaryLabs-Publish inventory.
-- Compared all nine eligible non-Cavalry repositories against central ledger files and root .agent state.
+- Enumerated the complete 10-repository accessible LuminaryLabs-Publish inventory.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
-- Accounted for the newer HorrorCorridor repo-local audit that had not yet reached its central ledger.
+- Confirmed all nine eligible repositories are centrally tracked and have root .agent state.
 - Selected PhantomCommand as the oldest eligible documented fallback.
 - Read package.json.
 - Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
 - Read the current root .agent docs and kit registry.
-- Verified the menu searches phantomCommand.save, nexus.sceneSnapshot, and phantom.command.campaign.
-- Verified the menu searches both localStorage and sessionStorage.
-- Verified any non-empty candidate enables Continue without parsing or schema validation.
-- Verified Begin routes to game.html?campaign=new.
-- Verified Continue routes to game.html?campaign=continue.
-- Verified campaign-scene.js does not parse the session query parameter.
-- Verified campaign-scene.js does not read or hydrate any candidate key.
-- Verified the only campaign save write is a victory summary under phantomCommand.save.
-- Verified the payload contains only scene, souls, and wave.
-- Verified the 640 x 360 source canvas.
-- Verified 7 rings and 4 lanes.
-- Retained the prior source-backed generated build-pad count of 58.
-- Verified 6 starter allies.
-- Verified 3 tower types, 7 unit archetypes, and 6 waves.
-- Verified fixed-step 1/60 simulation through an accumulator.
-- Verified direct mutable GameHost state and camera exposure plus aggregate getState output.
-- Updated required root .agent docs.
+- Verified three candidate keys and two storage layers produce six possible slots.
+- Verified hasCampaignSave() returns only Boolean presence.
+- Verified hasCampaignSave() is invoked twice while constructing the Continue menu item.
+- Verified no candidate key, layer, classification, priority, or reason is preserved.
+- Verified Continue state is not refreshed after menu construction.
+- Verified Begin routes to ./game.html?campaign=new.
+- Verified Continue routes to ./game.html?campaign=continue.
+- Verified campaign-scene.js parses neither session intent nor candidate storage.
+- Verified the campaign always initializes fresh.
+- Verified the only save write is victory-only { scene, souls, wave }.
+- Verified source canvas 640 x 360, 7 rings, 4 lanes, 58 pads, 6 starter allies, 3 tower types, 7 unit archetypes, 6 waves, and fixed 1/60 simulation.
+- Verified GameHost exposes mutable state/camera and aggregate getState output.
+- Updated the required root .agent docs.
 - Added a timestamped tracker and turn-ledger entry.
-- Added architecture, render, gameplay, interaction, session-authority, persistence, and deploy audits.
-- Updated the central repo ledger.
-- Added the central internal change-log entry.
-- Pushed only to main.
+- Added architecture, render, gameplay, interaction, persistence, and deploy audits.
 - Created no branch or pull request.
 ```
 
@@ -48,8 +40,7 @@
 - npm start was not run.
 - browser smoke was not run.
 - GitHub Pages deployment was not checked.
-- no Playwright or DOM automation was run.
-- no save-admission fixture was run because it does not exist yet.
+- no candidate resolver fixture was run because it does not exist yet.
 - no resume-fidelity fixture was run because it does not exist yet.
 - no runtime source file was changed.
 ```
@@ -62,16 +53,25 @@ candidate keys:
   nexus.sceneSnapshot
   phantom.command.campaign
 
-candidate storage layers:
+storage layers:
   localStorage
   sessionStorage
 
-current Continue admission:
-  Boolean(raw value) for any key in either storage layer
+candidate slots:
+  3 keys x 2 layers = 6
 
-menu routes:
-  Begin -> ./game.html?campaign=new
-  Continue -> ./game.html?campaign=continue
+current resolver:
+  hasCampaignSave() -> Boolean
+
+menu construction calls:
+  Continue.enabled -> hasCampaignSave()
+  Continue.note -> hasCampaignSave()
+
+menu refresh after storage mutation:
+  none
+
+campaign query parsing:
+  none
 
 campaign candidate reads:
   none
@@ -79,22 +79,12 @@ campaign candidate reads:
 campaign save write:
   phantomCommand.save
   { scene: "grave-ring", souls, wave }
-
-campaign constants:
-  source canvas 640 x 360
-  7 rings
-  4 lanes
-  58 generated pads
-  6 starter allies
-  3 tower types
-  7 unit archetypes
-  6 waves
-  fixed 1/60 simulation
 ```
 
 ## Required validation after the next implementation
 
 ```bash
+node tests/phantom-command-candidate-resolver-fixture.mjs
 node tests/phantom-command-save-admission-fixture.mjs
 node tests/phantom-command-resume-fidelity-fixture.mjs
 node tests/construct-spiral-intro-kit-smoke.mjs
@@ -111,9 +101,9 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-save admission fixture: not run because it does not exist yet
+candidate resolver fixture: not run because it does not exist yet
 resume fidelity fixture: not run because it does not exist yet
-repo-local documentation pushed to main: yes
-central ledger updated: yes
-central internal change log added: yes
+repo-local documentation pushed to main: in progress
+central ledger update: pending
+central internal change log: pending
 ```
