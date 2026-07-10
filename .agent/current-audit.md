@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T00-30-20-04-00`
+**Timestamp:** `2026-07-10T02-02-24-04-00`
 
 ## Summary
 
@@ -8,19 +8,19 @@
 
 The visible construct is stable. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera/input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Fixture Readback Catch-up + GameHost Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Ledger Catch-up + GameHost Fixture Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T23-58-41-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T23-51-04-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T23-41-15-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T23-28-35-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T23-20-43-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T00-09-51-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T23-02-05-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T00-18-38-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T01-31-29-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T01-20-47-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T01-11-51-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T00-51-03-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T00-38-44-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T01-38-16-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-10T00-30-20-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T01-49-13-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
 ```
 
@@ -132,6 +132,6 @@ central-ledger-readback-kit
 
 ## Main finding
 
-Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command result authority, or scene expansion.
+Do not start with scenario bootstrap, RTS gameplay, economy, renderer replacement, command-result authority, or scene expansion.
 
-The next useful pass is source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, then splice additive diagnostics into `window.GameHost.getState()` and keep central ledger pointers synchronized with repo-local audit state.
+The next useful pass is source-profile proof: source-own the exact live constants and descriptor math, prove parity without DOM/Three/browser timing, splice additive diagnostics into `window.GameHost.getState()`, add a build fixture gate, and keep central ledger pointers synchronized with repo-local audit state.
