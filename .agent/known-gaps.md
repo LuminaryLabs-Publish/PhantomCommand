@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T12-40-45-04-00`
+**Timestamp:** `2026-07-10T14-11-51-04-00`
 
 ## Critical campaign-source gaps
 
@@ -13,8 +13,8 @@
 - unit archetypes are inline and have no source fingerprint.
 - tower archetypes are inline and have no source fingerprint.
 - wave scripts are inline and have no fixture rows.
-- select, build, order, start-wave, damage, reward, win, and loss actions have no ActionResult records.
-- no-op and rejected branches are silent.
+- select, build, order, start-wave, damage, reward, wave-clear, win, and loss actions have no ActionResult records.
+- no-op, rejected, unaffordable-build, no-selection-order, and already-active-wave branches are silent.
 - simulation ticks have no deterministic frame summaries.
 - render pass has no source-consumption/readback ledger.
 - HUD and minimap draw from live aggregate state without render-consumption rows.
