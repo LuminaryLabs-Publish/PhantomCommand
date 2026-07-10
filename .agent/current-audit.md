@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T08-20-42-04-00`
+**Timestamp:** `2026-07-10T09-52-02-04-00`
 
 ## Summary
 
@@ -8,25 +8,17 @@
 
 The active route remains `game.html -> src/campaign/campaign-scene.js`. The campaign scene is source-rich but proof-poor: it owns descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and GameHost inline.
 
-This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/render proof, GameHost diagnostics, and DOM-free campaign fixture gate.
+This pass updates repo-local docs and central tracking around the next proof cut: campaign source/action/render readback, GameHost diagnostics, and DOM-free campaign fixture gate.
 
 Runtime source was not changed.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/PhantomCommand       selected / prior central latest 2026-07-10T06-59-18-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-10T07-08-10-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-10T07-20-08-04-00
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-10T07-29-12-04-00
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-10T07-41-42-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-10T07-50-29-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-10T07-59-27-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-10T08-11-35-04-00
-LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
+No checked public non-Cavalry repo was new, central-ledger absent, missing root .agent, recently added, or otherwise undocumented.
+LuminaryLabs-Publish/TheCavalryOfRome remained excluded by rule.
+PhantomCommand was selected as the oldest eligible documented fallback.
 ```
-
-No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent`, recently added, or otherwise undocumented.
 
 ## Current interaction loop
 
@@ -87,6 +79,7 @@ save-on-win-domain
 legacy-gamehost-campaign-diagnostics
 construct-spiral-intro-kit-legacy-support
 campaign-source-ledger-next
+campaign-source-fingerprint-next
 campaign-action-result-next
 campaign-simulation-frame-next
 campaign-render-readback-next
@@ -95,16 +88,47 @@ campaign-fixture-next
 central-ledger-sync
 ```
 
+## Kits and services
+
+```txt
+crt-renderer-kit: source canvas display, CRT pass, pointer source mapping.
+graveyard-art-kit: menu art composition.
+menu-route-kit: start, continue, settings, local save detection.
+campaign-route-shell-kit: game.html canvas route and accessible controls.
+pixel-campaign-runtime-kit: inline rings, lanes, pads, units, towers, waves, input, update, draw, HUD, minimap, save, GameHost.
+legacy-gamehost-diagnostics-kit: aggregate state, camera, startWave, build, setZoom.
+construct-spiral-intro-kit: legacy construct profile proof target, not current campaign authority.
+phantom-command-campaign-source-ledger-kit next: source-owned campaign rows.
+phantom-command-action-result-kit next: select/build/order/start-wave/damage/reward/win/loss rows.
+phantom-command-simulation-frame-kit next: deterministic spawn/unit/tower/projectile frame summaries.
+phantom-command-render-readback-kit next: render consumption rows.
+phantom-command-gamehost-diagnostics-kit next: JSON-safe campaign diagnostics.
+phantom-command-campaign-fixture-kit next: DOM-free campaign parity proof.
+```
+
 ## Main finding
 
 Do not start next with renderer replacement, camera rewrite, larger economy, more enemy types, expanded campaign content, or visual polish.
 
-The immediate blocker is source ownership and action/render readback proof. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file.
+The immediate blocker is campaign source/action/render readback. `src/campaign/campaign-scene.js` owns campaign descriptors, mutation, rendering, input, HUD, minimap, save-on-win, and `GameHost` in one file.
 
 It needs source ledger rows, action-result rows, simulation-frame summaries, render readback, fixture rows, and additive `GameHost` diagnostics before additional gameplay or visual expansion.
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Proof Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
+```
+
+## Validation status
+
+```txt
+runtime source changed: no
+branch created: no
+pull request created: no
+npm run check: not run
+npm run build: not run
+construct smoke: not run
+campaign fixture: not run because proof files do not exist yet
+browser smoke: not run
 ```
