@@ -1,18 +1,18 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-09T23-02-05-04-00",
-  "status": "sourceprofile-consumer-refresh-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-09T23-02-05-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-09T23-02-05-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-09T23-02-05-04-00-sourceprofile-consumer-central-refresh-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-09T23-02-05-04-00-gamehost-sourceprofile-readback-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-09T23-02-05-04-00-construct-sourceprofile-fixture-loop.md",
-  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-09T23-02-05-04-00-live-v6-profile-consumer-contract.md",
-  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-09T23-02-05-04-00-bootstrap-deferred-by-sourceprofile.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-09T23-02-05-04-00-sourceprofile-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-09T18-41-55-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T18-41-55-04-00.md",
+  "updatedAt": "2026-07-10T00-30-20-04-00",
+  "status": "sourceprofile-fixture-readback-catchup-gamehost-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T00-30-20-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T00-30-20-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T00-30-20-04-00-sourceprofile-fixture-readback-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T00-30-20-04-00-gamehost-sourceprofile-readback-catchup.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T00-30-20-04-00-construct-sourceprofile-fixture-loop.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T00-30-20-04-00-live-v6-profile-fixture-contract.md",
+  "latestScenarioBootstrapAudit": ".agent/scenario-bootstrap-audit/2026-07-10T00-30-20-04-00-bootstrap-still-deferred-by-sourceprofile.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T00-30-20-04-00-sourceprofile-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-09T23-02-05-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-09T23-02-05-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "doNotPauseScheduledTask": true,
@@ -22,7 +22,7 @@
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-09T18-41-55-04-00"
+    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp at 2026-07-09T23-02-05-04-00"
   },
   "currentRuntime": {
     "type": "static-vite-three-app",
@@ -81,13 +81,13 @@
     ]
   },
   "domains": {
-    "runtime": ["static-route-shell", "menu-route", "scene-route", "vite-static-build", "three-cdn-runtime", "browser-render-loop", "legacy-gamehost-diagnostics"],
-    "construct": ["inline-construct-profile", "ring-descriptor-inline-math", "piece-descriptor-inline-math", "construct-timeline-inline-math", "wedge-geometry-authoring", "material-palette", "lighting-and-fog", "hud-projection", "keyboard-pan-control", "wheel-zoom-control", "skip-restart-control"],
+    "runtime": ["static-route-shell", "menu-route", "scene-route", "vite-static-build", "static-artifact-copy", "three-cdn-runtime", "browser-render-loop", "legacy-gamehost-diagnostics"],
+    "construct": ["inline-smooth-ring-handoff-profile", "inline-ring-start-time-policy", "ring-descriptor-inline-math", "inline-ring-part-count-policy", "piece-descriptor-inline-math", "construct-timeline-inline-math", "wedge-geometry-authoring", "material-palette", "lighting-and-fog", "hud-projection", "keyboard-pan-control", "wheel-zoom-control", "skip-restart-control"],
     "implementedKits": ["construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
-    "next": ["phantom-command-smooth-handoff-profile-kit", "phantom-command-ring-descriptor-kit", "phantom-command-piece-descriptor-kit", "phantom-command-handoff-timeline-contract-kit", "phantom-command-source-profile-fingerprint-kit", "phantom-command-source-profile-snapshot-kit", "phantom-command-profile-parity-report-kit", "phantom-command-gamehost-source-diagnostics-kit", "phantom-command-sourceprofile-consumer-readback-kit", "phantom-command-sourceprofile-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
+    "next": ["phantom-command-smooth-handoff-profile-kit", "phantom-command-profile-normalizer-kit", "phantom-command-ring-descriptor-kit", "phantom-command-piece-descriptor-kit", "phantom-command-handoff-timeline-contract-kit", "phantom-command-source-profile-fingerprint-kit", "phantom-command-source-profile-snapshot-kit", "phantom-command-profile-parity-report-kit", "phantom-command-gamehost-source-diagnostics-kit", "phantom-command-sourceprofile-consumer-readback-kit", "phantom-command-sourceprofile-fixture-kit", "phantom-command-build-fixture-gate-kit", "central-ledger-readback-kit"]
   },
   "services": {
-    "current": ["menu route", "static scene route", "inline Three renderer", "inline profile constants", "ring descriptor math", "piece descriptor math", "construct animation", "HUD projection", "keyboard pan", "wheel zoom", "skip/restart", "legacy GameHost state", "construct spiral scheduling helper kit"],
+    "current": ["menu route", "static scene route", "inline Three renderer", "inline profile constants", "ring descriptor math", "piece descriptor math", "construct animation", "HUD projection", "keyboard pan", "wheel zoom", "skip/restart", "legacy GameHost state", "construct spiral scheduling helper kit", "static artifact copy"],
     "neededNext": ["source-owned profile", "normalized profile", "ring descriptors", "piece descriptors", "timeline descriptors", "source fingerprint", "source snapshot", "profile parity report", "GameHost source diagnostics", "sourceprofile consumer readback", "DOM-free fixture", "build fixture gate", "central ledger readback"]
   },
   "validation": {
