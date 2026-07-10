@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T09-52-02-04-00`
+**Timestamp:** `2026-07-10T11-10-08-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Fixture Readback Ledger Refresh + GameHost Gate
 ```
 
 ## Goal
@@ -77,4 +77,5 @@ new economy systems
 renderer replacement
 expanded save/load
 RTS scenario bootstrap
+construct-profile parity work
 ```
