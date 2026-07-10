@@ -1,11 +1,11 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T05-21-20-04-00`
+**Timestamp:** `2026-07-10T06-59-18-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
@@ -20,7 +20,8 @@ The next cut should prove campaign source and action parity without depending on
 [ ] Keep index.html -> game.html routing unchanged.
 [ ] Keep current campaign visuals and controls unchanged.
 [ ] Keep existing window.GameHost methods and fields unchanged.
-[ ] Add src/campaign/campaign-source-manifest.js.
+[ ] Add src/campaign/campaign-source-ledger.js.
+[ ] Add src/campaign/campaign-source-manifest.js if separate from ledger.
 [ ] Move ring, lane, pad, archetype, tower, and wave constants into source-owned descriptors.
 [ ] Add src/campaign/ring-lane-descriptors.js.
 [ ] Add src/campaign/build-pad-descriptors.js.
@@ -34,7 +35,7 @@ The next cut should prove campaign source and action parity without depending on
 [ ] Add tests/phantom-command-campaign-fixture.mjs.
 [ ] Prove sourceWidth/sourceHeight, ring count 7, lane count 4, generated pad count, starter ally count 6, tower catalog, wave queue shape, build accept/reject, order action, wave start, win/loss flags, and GameHost legacy compatibility.
 [ ] Import only source/readback helpers into src/campaign/campaign-scene.js after fixture proof.
-[ ] Add additive campaign diagnostics under window.GameHost.getState().
+[ ] Add additive campaign diagnostics under window.GameHost.getState().campaign.
 [ ] Ensure npm run build runs the campaign fixture before copying static artifacts.
 [ ] Run node tests/phantom-command-campaign-fixture.mjs.
 [ ] Run node tests/construct-spiral-intro-kit-smoke.mjs.
