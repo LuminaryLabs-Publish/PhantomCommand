@@ -1,18 +1,18 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T06-59-18-04-00`
+**Timestamp:** `2026-07-10T08-20-42-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Ledger Readback Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Render Proof Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
 
 Preserve the current campaign scene while moving live rings, lanes, pads, unit archetypes, tower archetypes, wave scripts, action intents, action results, simulation frame rows, render readback, and additive GameHost diagnostics into explicit contracts.
 
-The next cut should prove campaign source and action parity without depending on DOM, canvas drawing, CRT effects, or browser timing. Only after fixture proof should `src/campaign/campaign-scene.js` consume those helpers additively through `window.GameHost.getState().campaign`.
+The next cut should prove campaign source and action/render parity without depending on DOM, canvas drawing, CRT effects, or browser timing. Only after fixture proof should `src/campaign/campaign-scene.js` consume those helpers additively through `window.GameHost.getState().campaign`.
 
 ## Checklist
 
