@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T03-59-57-04-00`
+**Timestamp:** `2026-07-10T05-21-20-04-00`
 
 ## Validation performed in this pass
 
@@ -17,13 +17,10 @@
 - Read .agent/validation.md.
 - Read .agent/kit-registry.json.
 - Read package.json.
-- Read index.html.
 - Read game.html.
 - Read scripts/build-static.mjs.
 - Read src/menu/graveyard-menu.js.
 - Read src/campaign/campaign-scene.js.
-- Read src/kits/construct-spiral-intro-kit/index.js.
-- Read tests/construct-spiral-intro-kit-smoke.mjs.
 - Read central repo-ledger state for public Publish repo comparison.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
@@ -72,9 +69,9 @@ campaign-scene.js declares:
 - souls, core, wave, selected units, selected pad, tower type, win/loss state.
 - selectAt, order, build, startWave, update, draw, render, and GameHost methods.
 
-construct-spiral-intro-kit declares:
-- generic construct scheduling support.
-- no longer the live game.html route authority.
+build-static declares:
+- copies index.html, game.html, src, docs, and config into dist.
+- no campaign fixture gate yet.
 ```
 
 ## Required validation after the next implementation
