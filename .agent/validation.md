@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-09T18-41-55-04-00`
+**Timestamp:** `2026-07-09T23-02-05-04-00`
 
 ## Validation performed in this pass
 
@@ -22,7 +22,7 @@
 - Read scripts/build-static.mjs.
 - Read src/kits/construct-spiral-intro-kit/index.js.
 - Read tests/construct-spiral-intro-kit-smoke.mjs.
-- Read central repo-ledger entries for public Publish repo comparison.
+- Read central repo-ledger state for public Publish repo comparison.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
 - Added architecture, render, gameplay, source-profile, scenario-bootstrap, and deploy audits.
