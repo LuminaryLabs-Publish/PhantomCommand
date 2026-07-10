@@ -1,83 +1,101 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T14-11-51-04-00`
+**Timestamp:** `2026-07-10T15-38-40-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Action Result Source Ledger Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Session Authority + Command Correlation Fixture Gate
 ```
 
 ## Goal
 
-Preserve the current campaign scene while moving live rings, lanes, pads, unit archetypes, tower archetypes, wave scripts, action intents, action results, simulation frame rows, render readback, and additive GameHost diagnostics into explicit contracts.
+Make Begin and Continue explicit, testable session contracts and make every campaign command produce an ordered result that can be correlated with fixed-step simulation and render readback.
 
-The next cut should prove campaign source/action/render parity without depending on DOM, canvas drawing, CRT effects, or browser timing. Only after fixture proof should `src/campaign/campaign-scene.js` consume those helpers additively through `window.GameHost.getState().campaign`.
+Preserve current routes, visuals, controls, gameplay constants, and legacy `window.GameHost` fields while adding DOM-free authority modules and immutable diagnostics.
 
-## Checklist
+## Full checklist
 
 ```txt
-[ ] Keep index.html -> game.html routing unchanged.
+[ ] Keep index.html and game.html route structure unchanged.
 [ ] Keep current campaign visuals and controls unchanged.
-[ ] Keep existing window.GameHost methods and fields unchanged.
-[ ] Add src/campaign/campaign-source-ledger.js.
-[ ] Add src/campaign/campaign-source-manifest.js if separate from ledger.
-[ ] Add src/campaign/source-fingerprint.js.
-[ ] Move ring, lane, pad, archetype, tower, and wave constants into source-owned descriptors.
-[ ] Add src/campaign/ring-lane-descriptors.js.
-[ ] Add src/campaign/build-pad-descriptors.js.
-[ ] Add src/campaign/unit-archetypes.js.
-[ ] Add src/campaign/tower-archetypes.js.
-[ ] Add src/campaign/wave-scripts.js.
-[ ] Add src/campaign/action-intents.js.
-[ ] Add src/campaign/action-results.js for select, build, order, start-wave, damage, reward, wave-clear, win, and loss rows.
-[ ] Add rejection rows for no selection, unaffordable tower, occupied pad, already active wave, missing target, invalid tower type, and lost/won states.
-[ ] Add src/campaign/simulation-frame.js for deterministic tick summaries.
-[ ] Add src/campaign/render-readback.js for ring, lane, pad, unit, tower, projectile, HUD, minimap, and CRT consumption summaries.
-[ ] Add src/campaign/gamehost-diagnostics.js.
-[ ] Add tests/phantom-command-campaign-fixture.mjs.
-[ ] Prove sourceWidth/sourceHeight, ring count 7, lane count 4, generated pad count, starter ally count 6, tower catalog, wave queue shape, build accept/reject, order action, wave start, win/loss flags, and GameHost legacy compatibility.
-[ ] Import only source/readback helpers into src/campaign/campaign-scene.js after fixture proof.
-[ ] Add additive campaign diagnostics under window.GameHost.getState().campaign.
-[ ] Ensure npm run build runs the campaign fixture before copying static artifacts.
-[ ] Run node tests/phantom-command-campaign-fixture.mjs.
+[ ] Keep existing window.GameHost fields and methods compatible.
+[ ] Add src/campaign/session-mode.js.
+[ ] Parse campaign=new and campaign=continue deterministically.
+[ ] Add src/campaign/save-schema.js with schema, version, sourceRevision, sceneId, sessionId, state, commandSequence, simulationTick, and checksum.
+[ ] Classify existing phantomCommand.save victory payloads as legacy completion summaries.
+[ ] Do not hydrate nexus.sceneSnapshot or phantom.command.campaign without explicit adapters.
+[ ] Add src/campaign/save-hydration.js.
+[ ] Add accepted hydration, rejected hydration, and deterministic fallback-new results.
+[ ] Move fresh-state construction into a DOM-free campaign state factory.
+[ ] Preserve 7 rings, 4 lanes, 58 generated pads, 6 starter allies, 3 tower types, 7 unit archetypes, and 6 waves.
+[ ] Add src/campaign/command-envelope.js.
+[ ] Add sequence, commandId, sessionId, requestedFrameId, source, type, and payload.
+[ ] Add src/campaign/action-results.js.
+[ ] Return accepted, rejected, no-op, skipped, and unsupported statuses.
+[ ] Split pad selection from build execution at the command layer while preserving second-click UI behavior.
+[ ] Add explicit rejection reasons for no selection, no selected pad, occupied pad, insufficient souls, invalid tower type, active wave, complete campaign, won state, and lost state.
+[ ] Add src/campaign/action-journal.js with a bounded ordered journal.
+[ ] Add src/campaign/frame-correlation.js.
+[ ] Correlate command sequence to fixed-step simulation tick and render frame.
+[ ] Add src/campaign/render-readback.js.
+[ ] Add immutable world, HUD, minimap, overlay, and CRT consumer rows.
+[ ] Add src/campaign/gamehost-readback.js.
+[ ] Expose additive session, commandJournal, simulation, render, source, and fixture blocks without exposing new mutable references.
+[ ] Add tests/phantom-command-session-fixture.mjs.
+[ ] Prove new session creation.
+[ ] Prove valid continue hydration.
+[ ] Prove legacy completion-summary classification.
+[ ] Prove invalid continue rejection and deterministic fallback.
+[ ] Prove accepted and rejected build, order, and wave-start commands.
+[ ] Prove rejected commands preserve state fingerprints.
+[ ] Prove deterministic command replay produces the same final state fingerprint.
+[ ] Prove render-frame rows correlate with the applied command high-water mark.
+[ ] Prove legacy GameHost fields remain present.
+[ ] Add the session fixture to npm run check only after it passes independently.
+[ ] Gate npm run build with the session fixture only after independent proof.
+[ ] Run node tests/phantom-command-session-fixture.mjs.
+[ ] Run node tests/phantom-command-campaign-fixture.mjs if retained separately.
 [ ] Run node tests/construct-spiral-intro-kit-smoke.mjs.
 [ ] Run npm run check.
 [ ] Run npm run build.
 [ ] Push only to main.
 ```
 
-## Stop condition
-
-Stop the implementation slice only after these are fixture-readable:
+## Acceptance rows
 
 ```txt
-campaignSource.route === game.html
-campaignSource.sceneModule === src/campaign/campaign-scene.js
-campaignSource.sourceWidth === 640
-campaignSource.sourceHeight === 360
-campaignSource.ringCount === 7
-campaignSource.laneCount === 4
-campaignSource.towerTypes includes spire, lantern, ward
-campaignSource.unitArchetypes includes guard, archer, runner, shield, zealot, brute, wraith
-campaignSource.waveCount === 6
-ActionResult rows cover select, build, order, start-wave, damage, reward, wave-clear, win, and loss
-ActionResult rows cover accepted, rejected, no-op, skipped, and unsupported branches
-simulation frame rows summarize spawn, unit, tower, projectile, damage, wave clear, win, and loss
-renderReadback rows cover rings, lanes, pads, units, towers, projectiles, HUD, minimap, and CRT pass
-legacy GameHost fields still exist
-central ledger latest tracker equals repo-local latest tracker
+session.mode === new | continue
+session.result.status === created | hydrated | rejected | fallback-new
+session.save.schema is versioned
+session.save.sceneId === grave-ring
+campaign.sourceWidth === 640
+campaign.sourceHeight === 360
+campaign.ringCount === 7
+campaign.laneCount === 4
+campaign.padCount === 58
+campaign.starterAllyCount === 6
+campaign.towerTypes === [spire, lantern, ward]
+campaign.waveCount === 6
+command results cover accepted and rejected build/order/start-wave
+rejected command stateBeforeFingerprint === stateAfterFingerprint
+journal sequence is monotonic
+simulation tick is correlated with command high-water mark
+render frame is correlated with simulation tick
+legacy window.GameHost fields remain available
+central latest tracker equals repo-local latest tracker
 ```
 
 ## Defer until after proof
 
 ```txt
+new campaign waves
+new unit or tower types
+economy expansion
+save/load UI redesign
 camera rewrite
-pixel art enemy animation expansion
-additional campaign waves
-new economy systems
 renderer replacement
-expanded save/load
-RTS scenario bootstrap
-construct-profile parity work
+pixel art expansion
+multiplayer or RTS scenario expansion
+legacy construct-profile parity work
 ```
