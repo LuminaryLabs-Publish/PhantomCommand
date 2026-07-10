@@ -1,6 +1,6 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-10T08-20-42-04-00`
+**Timestamp:** `2026-07-10T09-52-02-04-00`
 
 ## Critical campaign-source gaps
 
@@ -22,6 +22,25 @@
 - build-static does not run a campaign fixture before copying static artifacts.
 ```
 
+## Source wire gaps
+
+```txt
+- src/campaign/campaign-source-ledger.js does not exist.
+- src/campaign/campaign-source-manifest.js does not exist.
+- src/campaign/source-fingerprint.js does not exist.
+- src/campaign/ring-lane-descriptors.js does not exist.
+- src/campaign/build-pad-descriptors.js does not exist.
+- src/campaign/unit-archetypes.js does not exist.
+- src/campaign/tower-archetypes.js does not exist.
+- src/campaign/wave-scripts.js does not exist.
+- src/campaign/action-intents.js does not exist.
+- src/campaign/action-results.js does not exist.
+- src/campaign/simulation-frame.js does not exist.
+- src/campaign/render-readback.js does not exist.
+- src/campaign/gamehost-diagnostics.js does not exist.
+- tests/phantom-command-campaign-fixture.mjs does not exist.
+```
+
 ## Legacy construct gaps now demoted
 
 ```txt
@@ -29,23 +48,6 @@
 - it is no longer the live campaign route authority.
 - source-profile work for the old smooth-ring-handoff construct is not the immediate live-route blocker.
 - do not delete the construct kit, but do not treat it as proof for current game.html gameplay.
-```
-
-## Source wire gaps
-
-```txt
-- src/campaign/campaign-source-ledger.js does not exist.
-- src/campaign/campaign-source-manifest.js does not exist.
-- src/campaign/ring-lane-descriptors.js does not exist.
-- src/campaign/build-pad-descriptors.js does not exist.
-- src/campaign/unit-archetypes.js does not exist.
-- src/campaign/tower-archetypes.js does not exist.
-- src/campaign/wave-scripts.js does not exist.
-- src/campaign/action-results.js does not exist.
-- src/campaign/simulation-frame.js does not exist.
-- src/campaign/render-readback.js does not exist.
-- src/campaign/gamehost-diagnostics.js does not exist.
-- tests/phantom-command-campaign-fixture.mjs does not exist.
 ```
 
 ## Non-blocking gaps
