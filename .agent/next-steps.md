@@ -1,18 +1,18 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T08-20-42-04-00`
+**Timestamp:** `2026-07-10T09-52-02-04-00`
 
 ## Next safe ledge
 
 ```txt
-PhantomCommand Campaign Source Action Render Proof Refresh + GameHost Fixture Gate
+PhantomCommand Campaign Source Action Render Readback Refresh + GameHost Fixture Gate
 ```
 
 ## Goal
 
 Preserve the current campaign scene while moving live rings, lanes, pads, unit archetypes, tower archetypes, wave scripts, action intents, action results, simulation frame rows, render readback, and additive GameHost diagnostics into explicit contracts.
 
-The next cut should prove campaign source and action/render parity without depending on DOM, canvas drawing, CRT effects, or browser timing. Only after fixture proof should `src/campaign/campaign-scene.js` consume those helpers additively through `window.GameHost.getState().campaign`.
+The next cut should prove campaign source/action/render parity without depending on DOM, canvas drawing, CRT effects, or browser timing. Only after fixture proof should `src/campaign/campaign-scene.js` consume those helpers additively through `window.GameHost.getState().campaign`.
 
 ## Checklist
 
@@ -22,12 +22,14 @@ The next cut should prove campaign source and action/render parity without depen
 [ ] Keep existing window.GameHost methods and fields unchanged.
 [ ] Add src/campaign/campaign-source-ledger.js.
 [ ] Add src/campaign/campaign-source-manifest.js if separate from ledger.
+[ ] Add src/campaign/source-fingerprint.js.
 [ ] Move ring, lane, pad, archetype, tower, and wave constants into source-owned descriptors.
 [ ] Add src/campaign/ring-lane-descriptors.js.
 [ ] Add src/campaign/build-pad-descriptors.js.
 [ ] Add src/campaign/unit-archetypes.js.
 [ ] Add src/campaign/tower-archetypes.js.
 [ ] Add src/campaign/wave-scripts.js.
+[ ] Add src/campaign/action-intents.js.
 [ ] Add src/campaign/action-results.js for select, build, order, start-wave, damage, reward, win, and loss rows.
 [ ] Add src/campaign/simulation-frame.js for deterministic tick summaries.
 [ ] Add src/campaign/render-readback.js for ring, lane, pad, unit, tower, projectile, HUD, minimap, and CRT consumption summaries.
