@@ -1,18 +1,19 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T09-52-02-04-00",
-  "status": "campaign-source-action-render-readback-gamehost-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T09-52-02-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T09-52-02-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T09-52-02-04-00-campaign-source-action-render-readback-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T09-52-02-04-00-pixel-campaign-render-readback-ledger-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T09-52-02-04-00-wave-build-order-result-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T09-52-02-04-00-select-build-order-action-result-map.md",
-  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T09-52-02-04-00-source-action-render-readback-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T09-52-02-04-00-campaign-fixture-check-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T08-20-42-04-00/project-breakdown.md",
-  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T08-20-42-04-00.md",
+  "updatedAt": "2026-07-10T11-10-08-04-00",
+  "status": "campaign-fixture-readback-ledger-gamehost-gate-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T11-10-08-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T11-10-08-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T11-10-08-04-00-campaign-fixture-readback-ledger-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T11-10-08-04-00-pixel-campaign-render-fixture-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T11-10-08-04-00-wave-build-order-fixture-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T11-10-08-04-00-select-build-order-action-map.md",
+  "latestCampaignAuthorityAudit": ".agent/campaign-authority-audit/2026-07-10T11-10-08-04-00-campaign-source-action-render-contract.md",
+  "latestSourceProfileAudit": ".agent/source-profile-audit/2026-07-10T11-10-08-04-00-legacy-construct-profile-demotion.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T11-10-08-04-00-campaign-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T09-52-02-04-00/project-breakdown.md",
+  "previousTurnLedger": ".agent/turn-ledger/2026-07-10T09-52-02-04-00.md",
   "automationContinuity": {
     "continueRotation": true,
     "onlyPushMain": true,
@@ -21,7 +22,7 @@
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
-    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp"
+    "reason": "selected after current public Publish repo-list, central-ledger, and repo-local agent comparison; no checked public non-Cavalry repo was missing or undocumented, and PhantomCommand had the oldest eligible public central ledger timestamp after HorrorCorridor advanced"
   },
   "currentRuntime": {
     "type": "static-vite-canvas-campaign-game",
@@ -44,7 +45,7 @@
       "window.GameHost.getState",
       "window.GameHost.setZoom"
     ],
-    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action/render/GameHost parity before gameplay or visual expansion."
+    "primaryGap": "src/campaign/campaign-scene.js owns descriptors, mutation, input, simulation, render, HUD, minimap, save-on-win, and GameHost inline. The next cut should source-own descriptors and prove action/render/GameHost parity before gameplay or visual expansion."
   },
   "interactionLoops": {
     "currentPlayerLoop": [
@@ -53,24 +54,11 @@
       "pan with WASD/arrows",
       "zoom with wheel",
       "drag or click to select allies or pads",
-      "double-select pad to build selected tower",
+      "repeat selected pad click to build selected tower",
       "right-click to order units or target enemies",
       "press 1/2/3 to choose tower type",
       "press Space to start wave",
       "hold sanctum core through six waves"
-    ],
-    "currentRuntimeLoop": [
-      "create low-resolution source canvas",
-      "wrap display canvas through CRT renderer",
-      "declare rings, lanes, pads, archetypes, towers, waves, camera, input, and state inline",
-      "spawn starter guards and archers",
-      "advance wave spawn queue",
-      "advance unit AI and movement",
-      "advance towers and projectiles",
-      "apply damage and rewards",
-      "resolve wave clear, win, loss, and save-on-win",
-      "draw world, HUD, minimap, and CRT pass",
-      "publish aggregate GameHost state"
     ],
     "targetCampaignFixtureLoop": [
       "load source-owned campaign ledger",
