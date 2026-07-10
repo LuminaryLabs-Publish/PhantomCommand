@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T12-40-45-04-00`
+**Timestamp:** `2026-07-10T14-11-51-04-00`
 
 ## Validation performed in this pass
 
@@ -18,6 +18,7 @@
 - Read .agent/kit-registry.json.
 - Read central repo-ledger state for public Publish repo comparison.
 - Read package.json.
+- Read game.html.
 - Read src/campaign/campaign-scene.js.
 - Updated required repo-local .agent root docs.
 - Added timestamped tracker and turn-ledger entries.
