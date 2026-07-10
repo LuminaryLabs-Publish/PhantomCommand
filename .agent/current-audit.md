@@ -1,6 +1,6 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-09T18-41-55-04-00`
+**Timestamp:** `2026-07-09T23-02-05-04-00`
 
 ## Summary
 
@@ -8,20 +8,20 @@
 
 The visible construct is stable. The architectural blocker is proofability: the live `smooth-ring-handoff-v6` profile, ring descriptors, piece descriptors, timeline, HUD mutation, camera/input handling, and `GameHost` projection are still owned by inline browser code.
 
-This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Handoff Ledger Refresh + GameHost Fixture Gate**.
+This pass keeps runtime source unchanged and aligns repo-local docs plus central tracking around **PhantomCommand SourceProfile Consumer Refresh + GameHost Fixture Gate**.
 
 ## Selection audit
 
 ```txt
-LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T17-48-20-04-00
-LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T16-58-52-04-00
-LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T16-38-14-04-00
-LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible documented fallback / central latest 2026-07-09T16-29-23-04-00
-LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T18-30-30-04-00
-LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T18-11-58-04-00
-LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T18-20-18-04-00
+LuminaryLabs-Publish/MyCozyIsland         tracked / root .agent present / central latest 2026-07-09T19-09-44-04-00
+LuminaryLabs-Publish/TheUnmappedHouse     tracked / root .agent present / central latest 2026-07-09T19-00-15-04-00
+LuminaryLabs-Publish/ZombieOrchard        tracked / root .agent present / central latest 2026-07-09T18-49-13-04-00
+LuminaryLabs-Publish/PhantomCommand       selected / oldest eligible fallback / central latest 2026-07-09T18-41-55-04-00
+LuminaryLabs-Publish/HorrorCorridor       tracked / root .agent present / central latest 2026-07-09T22-50-53-04-00
+LuminaryLabs-Publish/PrehistoricRush      tracked / root .agent present / central latest 2026-07-09T19-29-23-04-00
+LuminaryLabs-Publish/IntoTheMeadow        tracked / root .agent present / central latest 2026-07-09T22-40-25-04-00
 LuminaryLabs-Publish/TheCavalryOfRome     excluded by rule
-LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T17-58-53-04-00
+LuminaryLabs-Publish/TheOpenAbove         tracked / root .agent present / central latest 2026-07-09T19-21-19-04-00
 ```
 
 No checked public non-Cavalry repo was new, central-ledger absent, missing root `.agent/START_HERE.md`, recently added but undocumented, or otherwise undocumented.
