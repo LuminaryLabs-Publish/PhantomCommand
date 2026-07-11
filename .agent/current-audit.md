@@ -1,11 +1,11 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T20-19-35-04-00`
+**Timestamp:** `2026-07-10T21-49-26-04-00`
 
 ## Status
 
 ```txt
-status: continue-resolver-first-action-result-authority-second-fixture-gates-planned
+status: continue-resolver-first-action-authority-second-lifecycle-third-planned
 runtime source changed: no
 branch: main
 root .agent state: refreshed
@@ -22,191 +22,133 @@ Root .agent state present: 9/9
 Excluded: LuminaryLabs-Publish/TheCavalryOfRome
 Selected: LuminaryLabs-Publish/PhantomCommand
 Selection rule: oldest eligible documented fallback
-Prior selected-repo timestamp: 2026-07-10T18-40-13-04-00
+Prior selected-repo timestamp: 2026-07-10T20-19-35-04-00
 ```
 
 ## Current interaction loop
 
 ```txt
-index.html menu
-  -> read menu settings
-  -> scan six storage slots twice through hasCampaignSave()
-  -> collapse all evidence into Boolean presence
-  -> freeze Continue enabled/note state for the page lifetime
-  -> Begin emits game.html?campaign=new
-  -> Continue emits game.html?campaign=continue
-  -> campaign-scene.js parses neither mode nor storage
-  -> fresh descriptors, counters, camera, and campaign state initialize
-  -> pointer and keyboard callbacks mutate live state
-  -> select ally, select pad, clear selection, or implicitly attempt build
-  -> right-click implicitly attempts order
-  -> Space implicitly attempts wave start
+index.html menu module evaluation
+  -> settings and six-slot raw save-presence scans
+  -> menu/art/CRT/audio construction
+  -> canvas, document, and hidden-button listeners
+  -> unretained recursive RAF loop
+  -> Begin or Continue timed fade and browser navigation
+  -> game.html campaign module evaluation
+  -> fresh descriptors, mutable state, CRT renderer, listeners, and unretained RAF loop
+  -> pointer and keyboard callbacks mutate camera or campaign state
   -> accumulator advances exact 1/60 simulation steps
-  -> live state and camera render to world, HUD, minimap, modal, and CRT
-  -> victory writes { scene, souls, wave }
-  -> GameHost exposes mutable state/camera and aggregate counters
+  -> live state renders through world, HUD, minimap, modal, and CRT
+  -> win/loss stops simulation updates
+  -> R reloads or Escape navigates to menu
 ```
 
 ## Domains in use
 
 ```txt
 route and menu presentation:
-  static-route-shell
-  menu-route
-  campaign-route
-  menu-selection-domain
-  menu-panel-domain
-  menu-settings-persistence-domain
-  menu-save-candidate-discovery-domain
-  menu-continue-capability-domain
-  menu-transition-domain
-  menu-audio-domain
-  graveyard-art-domain
-  source-canvas-domain
-  crt-display-domain
+  static-route-shell, menu-route, campaign-route
+  menu-selection, panel, settings, save-presence, Continue capability
+  transition, audio, graveyard art, source canvas, CRT display
 
 session and persistence:
-  campaign-session-intent-domain
-  campaign-save-key-domain
-  candidate-slot-enumeration-domain-next
-  candidate-parse-domain-next
-  candidate-schema-classification-domain-next
-  candidate-precedence-domain-next
-  continue-capability-projection-domain-next
-  candidate-provenance-domain-next
-  campaign-save-envelope-domain-follow-on
-  campaign-save-hydration-domain-follow-on
-  campaign-resume-fidelity-domain-follow-on
+  campaign route intent, save-key ownership, victory completion summary
+  candidate classification/precedence/resolution next
+  versioned save envelope and hydration follow-on
 
 campaign content and simulation:
-  ring-map-domain
-  lane-domain
-  build-pad-domain
-  unit-archetype-domain
-  tower-archetype-domain
-  wave-script-domain
-  souls-economy-domain
-  sanctum-core-health-domain
-  selection-domain
-  build-action-domain
-  order-action-domain
-  wave-start-action-domain
-  unit-ai-domain
-  enemy-pathing-domain
-  ally-targeting-domain
-  tower-targeting-domain
-  projectile-domain
-  damage-reward-domain
-  effect-domain
-  win-loss-domain
-  save-on-win-domain
-  fixed-step-simulation-domain
+  rings, lanes, build pads, units, towers, waves
+  souls economy, sanctum health, selection, build, order, wave start
+  AI, pathing, targeting, projectiles, damage, rewards, effects, win/loss
+  fixed-step accumulator
 
-campaign action and observation next:
-  action-command-domain-next
-  action-preflight-domain-next
-  action-result-domain-next
-  action-sequence-domain-next
-  fixed-step-command-queue-domain-next
-  action-journal-domain-next
-  event-journal-domain-next
-  state-fingerprint-domain-next
-  committed-frame-domain-next
-  render-consumption-domain-next
-  gamehost-observation-domain-next
+input and render:
+  pointer selection, drag selection, order input
+  keyboard pan, pause, wave, tower choice, restart, exit
+  wheel zoom and camera focus
+  world, entity, HUD, minimap, modal, CRT rendering
 
-input, render, proof, and deploy:
-  keyboard-input-domain
-  pointer-input-domain
-  camera-pan-zoom-domain
-  world-render-domain
-  hud-projection-domain
-  minimap-domain
-  modal-overlay-domain
-  gamehost-diagnostics-domain
-  campaign-static-check-domain
-  static-build-domain
-  github-pages-deploy-domain
-  central-ledger-sync-domain
+proof and deploy:
+  PhantomMenu and GameHost diagnostics
+  source-pattern checks, static build, Pages deployment, central ledger
+
+lifecycle next:
+  route-session state and ID
+  startup transaction and rollback
+  RAF ownership and cancellation
+  listener registration/removal ledger
+  audio and WebGL resource ownership
+  ordered idempotent stop/dispose/restart
+  lifecycle journal and clone-safe host observation
 ```
 
 ## Source-backed kits and services
 
-- `crt-renderer-kit`: source upload, nearest sampling, contain mapping, CRT effects, fade, resize, and pointer conversion.
+- `crt-renderer-kit`: WebGL program, texture upload, nearest sampling, containment mapping, CRT effects, resize, and pointer conversion.
 - `graveyard-art-kit`: procedural menu art.
-- `menu-route-kit`: selection, panels, Begin/Continue route emission, and credits.
+- `menu-route-kit`: selection, panels, Begin/Continue route emission, credits, and fade transition.
 - `menu-settings-persistence-kit`: CRT, grain, and ambience preferences.
-- `menu-save-presence-kit`: raw presence scans across three keys and two storage layers.
-- `menu-audio-kit`: synthesized ambience and UI tones.
-- `campaign-route-shell-kit`: accessible campaign canvas route.
-- `pixel-campaign-runtime-kit`: descriptors, mutable state, input, action mutation, simulation, persistence, rendering, and diagnostics.
+- `menu-save-presence-kit`: raw six-slot presence scans.
+- `menu-audio-kit`: lazy AudioContext, drone, wind, and UI tones.
+- `campaign-route-shell-kit`: campaign canvas route.
+- `pixel-campaign-runtime-kit`: descriptors, mutable state, input, action mutation, simulation, save, rendering, and diagnostics.
 - `fixed-step-campaign-simulation-kit`: accumulator-based `1/60` updates.
 - `pixel-campaign-render-kit`: world, entities, HUD, minimap, modal, selection rectangle, and CRT projection.
 - `legacy-gamehost-diagnostics-kit`: mutable state/camera, `startWave`, `build`, aggregate `getState`, and `setZoom`.
 - `campaign-static-check-kit`: source-pattern assertions.
 - `static-build-copy-kit`: static artifact creation.
-- `construct-spiral-intro-kit`, `construct-spiral-schedule-kit`, `construct-piece-id-kit`, `construct-piece-state-kit`, and `construct-sequence-update-kit`: retained legacy construct proof, not live campaign authority.
+- Legacy construct kits remain source-backed retained proof but are not live campaign authority.
 
 ## Verified source facts
 
 ```txt
-source canvas: 640 x 360
-rings: 7
-lanes: 4
-generated pads: 58
-starter allies: 6
-tower types: spire, lantern, ward
-unit archetypes: guard, archer, runner, shield, zealot, brute, wraith
-waves: 6
-simulation: fixed 1/60 through an accumulator
+menu RAF request ID retained: no
+campaign RAF request ID retained: no
+menu listener removal service: no
+campaign listener removal service: no
+menu route stop/dispose/restart: no
+campaign route stop/dispose/restart: no
+startup rollback: no
+session ID/state: no
+CRT renderer dispose: no
+WebGL program/buffer/texture release: no
+menu audio teardown on route navigation: no
+GameHost lifecycle surface: no
+PhantomMenu lifecycle surface: no
 
-campaign action functions:
-  selectAt
-  build
-  order
-  startWave
+campaign action functions: selectAt, build, order, startWave
+action result shape: none
+action sequence/target tick: none
+command/result/event journals: none
+committed frame/fingerprint: none
 
-action return shape: undefined on success and rejection
-action sequence: none
-target tick: none
-command journal: none
-result journal: none
-event journal: none
-frame ID: none
-tick ID: none
-state fingerprint: none
-render-consumption row: none
-
-candidate keys:
-  phantomCommand.save
-  nexus.sceneSnapshot
-  phantom.command.campaign
+candidate keys: phantomCommand.save, nexus.sceneSnapshot, phantom.command.campaign
 candidate layers: localStorage, sessionStorage
-candidate slots: 6
 Continue resolver: Boolean presence only
-campaign mode parsing: none
-campaign hydration: none
-save write: victory-only { scene, souls, wave }
+campaign mode parsing/hydration: none
 ```
 
 ## Main findings
 
 ### Queue head retained
 
-The first implementation remains the shared Continue-capability resolver. Menu and campaign must consume one immutable six-slot classification and precedence result before any hydration work.
+Menu and campaign must consume one immutable six-slot candidate-resolution result before hydration work.
 
-### Newly mapped campaign blocker
+### Action authority retained
 
-The live campaign has no action-result authority. `selectAt()`, `build()`, `order()`, and `startWave()` mutate state directly from event callbacks. Build, order, and wave-start rejection paths silently return. `selectAt()` also hides a build attempt inside a repeated pad-selection click.
+Gameplay mutation still bypasses a deterministic command/result queue and committed-frame boundary.
 
-Because action mutation occurs outside the fixed-step queue, there is no deterministic evidence of which tick admitted a request. Rendering consumes live mutable state, and GameHost exposes aggregate counters without command, result, tick, frame, fingerprint, or render correlation.
+### Newly mapped lifecycle blocker
+
+Both route modules eagerly allocate resources, register listeners, and begin recursive RAF loops. They rely on page destruction for cleanup. No object can prove that frames stop, listeners are removed, audio closes, WebGL resources release, partial startup rolls back, or restart/remount produces exactly one live route session.
 
 ## Implementation queue
 
 ```txt
 1. Continue Capability Resolver + Save Candidate Precedence Fixture Gate
 2. Campaign Action Result Authority + Fixed-Step Frame Fixture Gate
-3. Versioned Save Envelope + Atomic Resume Fidelity Gate
+3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
+4. Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
 
 ## Validation status
@@ -218,9 +160,10 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-candidate resolver fixture: absent / not run
-action result fixture: absent / not run
-fixed-step frame fixture: absent / not run
+lifecycle fixture: absent / not run
+CRT disposal fixture: absent / not run
+listener ledger fixture: absent / not run
+restart idempotency fixture: absent / not run
 repo-local documentation pushed to main: yes
 central ledger updated: yes
 central internal change log added: yes
