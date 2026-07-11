@@ -23,6 +23,7 @@
 - Verified the Pages workflow runs syntax and source checks but no save-admission behavior fixture.
 - Added timestamped architecture, render, gameplay, interaction, save-authority, deploy, tracker, and turn-ledger records.
 - Refreshed START_HERE.md, current-audit.md, next-steps.md, known-gaps.md, and validation.md.
+- Updated the central repo ledger and added the internal change-log entry.
 - Pushed only to main.
 - Created no branch or pull request.
 ```
@@ -131,6 +132,6 @@ browser smoke: not run
 candidate resolver fixture: absent / not run
 session admission fixture: absent / not run
 repo-local documentation pushed to main: yes
-central ledger update: pending
-central internal change log: pending
+central ledger updated: yes
+central internal change log added: yes
 ```
