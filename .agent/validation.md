@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T01-20-51-04-00`
+**Timestamp:** `2026-07-11T03-31-26-04-00`
 
 ## Validation performed in this pass
 
@@ -8,21 +8,20 @@
 - Enumerated the complete ten-repository accessible LuminaryLabs-Publish inventory.
 - Excluded LuminaryLabs-Publish/TheCavalryOfRome.
 - Confirmed all nine eligible repositories are centrally tracked and have root .agent state.
-- Selected PhantomCommand as the oldest eligible documented repository.
-- Read README.md, package.json, menu source, campaign source, menu check, deployment workflow, and prior audits.
-- Reconfirmed the complete interaction loop, active domains, implemented kits, and services.
-- Verified the menu scans three keys across localStorage and sessionStorage.
-- Verified hasCampaignSave() returns only Boolean presence and is called twice during construction.
-- Verified candidate parse, classification, precedence, selection, provenance, and decision fingerprint are absent.
-- Verified invalid, foreign, unsupported, and completion-summary values can enable Continue.
-- Verified campaign-scene.js does not parse campaign=new or campaign=continue.
-- Verified both route modes construct the same fresh campaign state.
-- Verified phantomCommand.save is written only on victory as { scene, souls, wave }.
-- Verified the victory payload is not sufficient for active-session hydration.
-- Verified check-menu.mjs is a source-pattern check rather than a candidate-resolution fixture.
-- Verified the Pages workflow runs syntax and source checks but no save-admission behavior fixture.
-- Added timestamped architecture, render, gameplay, interaction, save-authority, deploy, tracker, and turn-ledger records.
-- Refreshed START_HERE.md, current-audit.md, next-steps.md, known-gaps.md, and validation.md.
+- Selected PhantomCommand as the oldest eligible documented fallback.
+- Read the active campaign source and current root audit set.
+- Reconfirmed the product interaction loop, domains, implemented kits, and services.
+- Verified selectAt(), build(), order(), and startWave() mutate live state directly.
+- Verified successful, rejected, and no-op action paths return undefined.
+- Verified selectAt() conflates selection, pad targeting, build triggering, and deselection.
+- Verified build() depends on mutable selectedPad and towerType.
+- Verified pointer, keyboard, and GameHost requests have no shared command adapter.
+- Verified commands have no session ID, sequence, target tick, pure preflight, terminal result, or journal.
+- Verified command mutation can occur between fixed update(1/60) steps.
+- Verified frame() applies variable-dt camera motion, zero or more fixed steps, and render without committed-frame metadata.
+- Verified render and GameHost expose no state fingerprint or consumer-correlation result.
+- Added timestamped architecture, render, gameplay, interaction, action-authority, deploy, tracker, and turn-ledger records.
+- Refreshed START_HERE.md, current-audit.md, next-steps.md, known-gaps.md, validation.md, and kit-registry.json.
 - Updated the central repo ledger and added the internal change-log entry.
 - Pushed only to main.
 - Created no branch or pull request.
@@ -37,46 +36,61 @@
 - npm start was not run.
 - browser smoke was not run.
 - GitHub Pages deployment was not checked.
-- candidate-resolver fixture was not run because it does not exist.
-- session-admission fixture was not run because it does not exist.
-- action-result, replay, frame, lifecycle, resource, and resume fixtures were not run because they do not exist.
+- candidate-resolver and session-admission fixtures were not run because they do not exist.
+- action-result fixture was not run because it does not exist.
+- fixed-step replay fixture was not run because it does not exist.
+- committed-frame consumption fixture was not run because it does not exist.
+- lifecycle, resource, and resume fixtures were not run because they do not exist.
 - no runtime source file was changed.
 ```
 
 ## Source evidence captured
 
 ```txt
-candidate keys:
-  phantomCommand.save
-  nexus.sceneSnapshot
-  phantom.command.campaign
+action functions:
+  selectAt(world, add)
+  build()
+  order(world)
+  startWave()
 
-storage layers:
-  localStorage
-  sessionStorage
+browser sources:
+  pointer down/up/move
+  wheel
+  keyboard down/up
+  blur
 
-physical slots: 6
-stable slot registry: absent
-candidate parser: absent
-candidate classifier: absent
-precedence policy: absent
-selected candidate: absent
-Continue decision reason: absent
-Continue decision fingerprint: absent
+host sources:
+  GameHost.startWave
+  GameHost.build
+  GameHost.setZoom
 
-route output:
-  game.html?campaign=new
-  game.html?campaign=continue
+current action result: undefined
+command ID: absent
+command sequence: absent
+target tick: absent
+preflight result: absent
+command queue: absent
+result journal: absent
+event journal: absent
+state fingerprint: absent
+committed frame: absent
+render consumption row: absent
+CRT acknowledgement retained by campaign: no
+```
 
-campaign route parser: absent
-fresh/continue behavior difference: none
+## Required action-authority proof
 
-current save writer:
-  trigger: victory only
-  key: phantomCommand.save
-  payload: { scene, souls, wave }
-  classification: legacy-completion-summary
-  resumable: no
+```txt
+- every request produces at most one command
+- every command has one session ID, command ID, sequence, and target tick
+- rejected and no-op commands produce terminal results without mutation
+- accepted commands apply once at the declared fixed-step boundary
+- multiple commands for one tick apply in sequence order
+- duplicate command IDs remain idempotent
+- browser, GameHost, replay, and fixture requests have result parity
+- identical initial state and command sequence produce identical events and fingerprints
+- every committed frame names its tick range, commands, state fingerprint, and consumer results
+- failed frames preserve the previous committed frame
 ```
 
 ## Required validation after implementation
@@ -96,23 +110,6 @@ npm run check
 npm run build
 ```
 
-## Required candidate-resolution proof
-
-```txt
-- every physical slot has a stable identity
-- every slot produces one inspection row
-- invalid and unsupported candidates never enable Continue
-- the victory completion summary never enables active-session resume
-- multiple valid candidates produce one deterministic winner
-- storage failures are explicit and do not crash startup
-- decision results are clone-safe and mutation-proof
-- the same slot set produces the same decision fingerprint
-- new starts consume no candidate
-- accepted Continue consumes exactly the selected candidate
-- rejected Continue commits no silent fresh session
-- menu, route admission, and campaign startup share decision IDs and fingerprints
-```
-
 ## Current status
 
 ```txt
@@ -129,8 +126,9 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-candidate resolver fixture: absent / not run
-session admission fixture: absent / not run
+action-result fixture: absent / not run
+fixed-step replay fixture: absent / not run
+frame-consumption fixture: absent / not run
 repo-local documentation pushed to main: yes
 central ledger updated: yes
 central internal change log added: yes
