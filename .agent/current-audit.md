@@ -1,24 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T13-28-37-04-00`
+**Timestamp:** `2026-07-11T15-08-41-04-00`
 
 ## Summary
 
-PhantomCommand can commit defeat and victory during the same fixed update. Core breach sets `lost = true`, but the update continues into final-wave completion, which can set `won = true`, overwrite the message and write a victory save. The render overlay prioritizes `won`, so a destroyed sanctum can be presented and persisted as a win.
+PhantomCommand presents Continue as a real capability, but the menu only checks whether any raw string exists under three key names across local or session storage. It does not parse, validate, rank or select a candidate, and `campaign-scene.js` never reads `campaign=continue`. Continue therefore starts the same fresh default campaign as Begin.
 
 ## Plan ledger
 
-**Goal:** catalogue the complete runtime and define one exclusive, monotonic terminal-outcome transaction that is compatible with the planned command, phase, replay, frame and checkpoint authorities.
+**Goal:** catalogue the complete runtime and define one deterministic save-candidate resolution and campaign-startup admission boundary before action, phase, replay, lifecycle or checkpoint work proceeds.
 
 - [x] Compare the current Publish inventory with the central ledger.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Detect a same-window active documentation sequence in `HorrorCorridor`.
+- [x] Detect a same-window active interaction-target audit in `HorrorCorridor`.
 - [x] Select only `PhantomCommand` as the oldest stable eligible repository.
-- [x] Read menu, campaign state, unit update, wave completion, render, persistence, restart and `GameHost` source.
+- [x] Read menu save scanning, menu projection, route transition, campaign initialization and victory save source.
 - [x] Identify the interaction loop, all domains, implemented kits and offered services.
-- [x] Prove the simultaneous win/loss path by source ordering.
-- [x] Define terminal arbitration, latch, result, persistence and frame contracts.
+- [x] Prove that raw storage presence and campaign resumability are currently unrelated.
+- [x] Define candidate parsing, classification, precedence, capability, startup admission, journal and fixture contracts.
 - [ ] Implement the boundary and executable fixtures.
 
 ## Selection audit
@@ -28,174 +28,150 @@ accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 central ledger entries: 9/9
 root .agent state: 9/9
-same-window active repo skipped: HorrorCorridor at 2026-07-11T13-20-45-04-00
+same-window active repo skipped: HorrorCorridor at 2026-07-11T15-01-33-04-00
 selected: LuminaryLabs-Publish/PhantomCommand
-selected prior timestamp: 2026-07-11T11-51-06-04-00
+selected prior central timestamp: 2026-07-11T13-28-37-04-00
 excluded: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
-Current stable comparison:
+Stable comparison at selection:
 
 ```txt
-PhantomCommand     2026-07-11T11-51-06-04-00 selected
-ZombieOrchard      2026-07-11T12-01-38-04-00
-TheUnmappedHouse   2026-07-11T12-08-47-04-00
-AetherVale         2026-07-11T12-18-42-04-00
-IntoTheMeadow      2026-07-11T12-29-49-04-00
-PrehistoricRush    2026-07-11T12-39-53-04-00
-MyCozyIsland       2026-07-11T12-58-06-04-00
-TheOpenAbove       2026-07-11T13-10-35-04-00
-HorrorCorridor     active repo-local audit at 2026-07-11T13-20-45-04-00
+PhantomCommand     2026-07-11T13-28-37-04-00 selected
+ZombieOrchard      2026-07-11T13-41-23-04-00
+TheUnmappedHouse   2026-07-11T13-49-30-04-00
+AetherVale         2026-07-11T14-00-01-04-00
+IntoTheMeadow      2026-07-11T14-08-51-04-00
+PrehistoricRush    2026-07-11T14-31-27-04-00
+MyCozyIsland       2026-07-11T14-41-28-04-00
+TheOpenAbove       2026-07-11T14-50-59-04-00
+HorrorCorridor     active repo-local audit at 2026-07-11T15-01-33-04-00
 TheCavalryOfRome   excluded
 ```
 
 ## Interaction loops
 
-### Menu and route loop
+### Menu startup loop
 
 ```txt
 index.html
   -> graveyard-menu.js
-  -> settings and raw save-key presence
-  -> Begin routes to game.html?campaign=new
-  -> Continue routes to game.html?campaign=continue
-  -> campaign module constructs fresh state regardless of query mode
+  -> define three save-key names
+  -> call hasCampaignSave() twice during menu construction
+  -> scan localStorage then sessionStorage per key
+  -> collapse any nonempty string to true
+  -> project Continue as BOUND or EMPTY
 ```
 
-### Campaign input loop
+### Begin loop
 
 ```txt
-pointer or keyboard event
-  -> contain-only source projection
-  -> direct selection, build, order, wave, pause, tower or camera mutation
-  -> no command envelope or terminal-phase admission
+BEGIN CAMPAIGN
+  -> game.html?campaign=new
+  -> campaign module constructs default state
+  -> souls 145, core 24, wave 0
+  -> six default allied units
+  -> empty towers, projectiles and effects
+  -> fresh counters and camera
 ```
 
-### Fixed-step terminal loop
+### Continue loop
 
 ```txt
-frame(now)
-  -> cap dt to 50 ms
-  -> variable-step camera update
-  -> accumulator-driven update(1/60)
-
-update(1/60)
-  -> return if paused or already terminal
-  -> update spawn timers
-  -> update each unit
-       enemy may reach core
-       core may become 0
-       lost = true
-       enemy deleted
-  -> update towers and projectiles
-  -> remove expired effects
-  -> evaluate wave clear
-       if final wave cleared
-         won = true
-         victory message
-         victory summary write
+CONTINUE
+  -> game.html?campaign=continue
+  -> campaign module never reads location.search
+  -> no key or storage layer is read
+  -> no candidate is selected
+  -> no payload is parsed or hydrated
+  -> same default state as Begin
 ```
 
-### Presentation and restart loop
+### Save-write loop
 
 ```txt
-render()
-  -> world
-  -> HUD and minimap
-  -> overlay checks won before lost
-  -> CRT upload and draw
-
-R key
-  -> location.reload()
-  -> no terminal result acknowledgement
-  -> no ordered teardown
-  -> no explicit new-run epoch
-
-GameHost
-  -> exposes won and lost independently
-  -> exposes live state and camera
+final wave clears
+  -> state.won = true
+  -> localStorage phantomCommand.save receives:
+       { scene: "grave-ring", souls, wave }
+  -> no schema, checkpoint ID, content revision or fingerprint
+  -> menu later treats the raw string as sufficient Continue evidence
 ```
 
 ## Main finding
 
-The runtime uses independent terminal booleans:
+### Six possible slots collapse to one Boolean
+
+The declared keys are:
 
 ```txt
-state.won
-state.lost
+phantomCommand.save
+nexus.sceneSnapshot
+phantom.command.campaign
 ```
 
-`updateUnit()` admits defeat when an enemy reaches the center and reduces core health to zero. It deletes that enemy and returns only from the unit update. The parent `update()` continues.
-
-The same parent update then evaluates:
+Each key can exist in:
 
 ```txt
-state.waveActive
-&& state.spawn.length === 0
-&& enemies().length === 0
+localStorage
+sessionStorage
 ```
 
-On the final wave, that branch sets `state.won = true` and writes:
+The scan therefore covers six possible slots, but returns only true or false. Per key, a truthy local value hides a session value. Across keys, `Array.some()` stops at the first truthy result. No candidate object survives the scan.
+
+### Malformed or unrelated payloads enable Continue
+
+The menu never calls `JSON.parse()` for campaign candidates. The following values all enable Continue:
 
 ```txt
-phantomCommand.save = {
-  scene: "grave-ring",
-  souls,
-  wave
-}
+"not-json"
+"null"
+"{}"
+legacy payload for another product revision
+partial victory summary
+stale session snapshot
 ```
 
-### Reachable conflicting state
+A storage exception is caught around the complete scan and returns false, so one inaccessible slot can hide otherwise valid candidates without a typed read result.
+
+### Candidate precedence is undefined
+
+The current code implies an accidental read order:
 
 ```txt
-final wave
-last enemy
-empty spawn queue
-enemy reaches core
-core becomes 0
-lost becomes true
-enemy is deleted
-enemies() becomes empty
-wave-clear branch runs
-won becomes true
-success save is written
+phantomCommand.save local
+phantomCommand.save session
+nexus.sceneSnapshot local
+nexus.sceneSnapshot session
+phantom.command.campaign local
+phantom.command.campaign session
 ```
 
-Result:
+But because the output is Boolean, the order does not actually select a candidate. There is no policy for:
 
 ```txt
-core = 0
-lost = true
-won = true
-message = victory message
-saved result = victory summary
+current schema over legacy schema
+newer checkpoint over older checkpoint
+local over session
+committed checkpoint over completion summary
+valid candidate over malformed higher-priority slot
+matching content revision over stale revision
 ```
 
-### Presentation conflict
+### Route mode is projection only
 
-The overlay chooses:
+`activateMain()` routes to either:
 
 ```txt
-won ? "GRAVE RING SECURED"
-    : lost ? "SANCTUM LOST"
-    : "PAUSED"
+game.html?campaign=new
+game.html?campaign=continue
 ```
 
-The visible result is therefore victory even though the sanctum was destroyed.
+`campaign-scene.js` constructs state immediately at module scope and contains no `URLSearchParams`, `location.search`, load, migration or hydration path. The query string changes the URL but not the campaign state.
 
-### Persistence conflict
+### New mode is also undefined
 
-The save write occurs inside the final-wave victory branch and does not preflight:
-
-```txt
-core > 0
-lost === false
-exclusive terminal outcome
-committed tick fingerprint
-terminal result identity
-```
-
-A contradictory state can therefore produce a success candidate that later enables Continue.
+Begin does not explicitly reject, archive or clear existing candidates. If later startup logic is added without a typed mode contract, a stale candidate could accidentally leak into a new campaign.
 
 ## Domains in use
 
@@ -208,12 +184,28 @@ campaign-route-domain
 menu-selection-domain
 menu-panel-domain
 menu-settings-persistence-domain
-menu-save-presence-domain
-menu-continue-capability-domain
 menu-transition-domain
 menu-audio-domain
 graveyard-art-domain
 source-canvas-domain
+```
+
+### Save candidate and startup authority
+
+```txt
+save-slot-registry-domain
+storage-slot-read-domain
+raw-save-presence-domain
+save-candidate-parse-domain-next
+save-schema-classification-domain-next
+save-content-identity-domain-next
+save-candidate-provenance-domain-next
+save-candidate-precedence-domain-next
+save-candidate-resolution-domain-next
+continue-capability-domain-next
+campaign-startup-mode-domain-next
+campaign-startup-admission-domain-next
+candidate-journal-domain-next
 ```
 
 ### Projection and presentation
@@ -223,12 +215,12 @@ crt-display-domain
 contain-projection-domain
 crt-curve-domain
 source-resolution-domain
-display-to-source-domain-next
+pointer-hit-domain
 source-to-world-domain
 world-to-source-domain
-pointer-hit-domain
 wheel-anchor-domain
 drag-selection-domain
+display-to-source-authority-domain-next
 projection-revision-domain-next
 ```
 
@@ -273,23 +265,21 @@ replay-journal-domain-next
 state-fingerprint-domain-next
 ```
 
-### Terminal outcome and persistence
+### Terminal, persistence and lifecycle
 
 ```txt
 core-breach-predicate-domain
 wave-clear-predicate-domain
-victory-predicate-domain
-defeat-predicate-domain
 terminal-outcome-arbitration-domain-next
-terminal-transition-domain-next
-terminal-latch-domain-next
 terminal-result-domain-next
 terminal-persistence-policy-domain-next
-save-on-win-domain
-checkpoint-resume-domain-next
+victory-summary-write-domain
+runtime-lifecycle-domain-next
+versioned-checkpoint-domain-next
+atomic-resume-domain-next
 ```
 
-### Render, observation and proof
+### Render, diagnostics and proof
 
 ```txt
 world-render-domain
@@ -302,10 +292,11 @@ phantom-menu-diagnostics-domain
 gamehost-diagnostics-domain
 committed-tick-domain-next
 committed-frame-domain-next
-terminal-frame-receipt-domain-next
 frame-consumer-ack-domain-next
-runtime-lifecycle-domain-next
-source-check-build-pages-deploy-domain
+menu-static-check-domain
+campaign-static-check-domain
+static-build-domain
+github-pages-deploy-domain
 central-ledger-sync-domain
 ```
 
@@ -313,11 +304,11 @@ central-ledger-sync-domain
 
 | Kit | Current services |
 |---|---|
-| `crt-renderer-kit` | WebGL setup, source upload, contain framing, CRT curvature, animation-time effects, draw, resize and contain-only coordinate projection |
+| `crt-renderer-kit` | WebGL setup, source upload, contain framing, CRT curvature, draw, resize and contain-only coordinate projection |
 | `graveyard-art-kit` | Procedural graveyard composition and animated menu source-canvas drawing |
 | `menu-route-kit` | Menu selection, panels, Begin/Continue routing and fade timing |
 | `menu-settings-persistence-kit` | Read, normalize and write CRT, grain and ambience settings |
-| `menu-save-presence-kit` | Scan three keys across local and session storage and return Boolean presence |
+| `menu-save-presence-kit` | Scan three key names across local and session storage and return Boolean presence |
 | `menu-audio-kit` | Lazy AudioContext, ambience, UI tones and delayed close |
 | `campaign-route-shell-kit` | Campaign canvas boot and module execution |
 | `pixel-campaign-runtime-kit` | Campaign descriptors, mutable state, selection, building, orders, wave and camera input |
@@ -330,109 +321,124 @@ central-ledger-sync-domain
 | `pages-deploy-kit` | GitHub Pages artifact deployment |
 | retained construct kits | Intro scheduling, construct IDs, piece state and sequence updates |
 
-## Candidate terminal-outcome kits
+## Candidate Continue authority kits
 
 ```txt
-phantom-command-terminal-evaluation-input-kit
-phantom-command-core-breach-predicate-kit
-phantom-command-final-wave-clear-predicate-kit
-phantom-command-outcome-priority-policy-kit
-phantom-command-exclusive-outcome-arbitration-kit
-phantom-command-terminal-transition-kit
-phantom-command-terminal-latch-kit
-phantom-command-terminal-result-kit
-phantom-command-terminal-event-kit
-phantom-command-terminal-persistence-policy-kit
-phantom-command-terminal-save-admission-kit
-phantom-command-terminal-frame-receipt-kit
-phantom-command-terminal-observation-kit
-phantom-command-terminal-outcome-fixture-kit
+phantom-command-save-slot-registry-kit
+phantom-command-storage-slot-read-kit
+phantom-command-save-candidate-parse-kit
+phantom-command-save-schema-classifier-kit
+phantom-command-save-content-identity-kit
+phantom-command-save-candidate-provenance-kit
+phantom-command-save-candidate-precedence-kit
+phantom-command-save-candidate-resolver-kit
+phantom-command-continue-capability-result-kit
+phantom-command-campaign-startup-mode-kit
+phantom-command-campaign-startup-admission-kit
+phantom-command-campaign-hydration-plan-kit
+phantom-command-campaign-hydration-result-kit
+phantom-command-candidate-journal-kit
+phantom-command-candidate-resolver-fixture-kit
+phantom-command-browser-continue-parity-smoke-kit
 ```
 
-## Required terminal transaction
+## Required resolution transaction
 
 ```txt
-fixed tick begins
-  -> run combat and collect terminal evidence
-       core breach evidence
-       wave clear evidence
-       remaining enemies and spawn evidence
-       core health
-       prior phase and prior outcome
-  -> evaluate predicates without mutating terminal state
-  -> arbitrate exactly one outcome using a versioned policy
-       defeat dominates when core <= 0
-       victory requires final wave clear and core > 0
-       otherwise remain active
-  -> commit one monotonic terminal transition
-  -> latch terminal outcome for the run epoch
-  -> emit TerminalOutcomeResult
-  -> admit or reject persistence from that result
-  -> publish committed tick and terminal frame receipts
+menu startup begins
+  -> enumerate all declared candidate slots
+  -> read each slot independently with typed success/failure
+  -> parse every readable nonempty payload
+  -> classify schema, content identity and candidate kind
+  -> validate required fields and fingerprints
+  -> rank valid candidates through a versioned precedence policy
+  -> publish ContinueCapabilityResult
+       enabled
+       selectedCandidateId
+       selectedSlot
+       schemaVersion
+       contentRevision
+       reason
+  -> render Continue from the result
+
+Continue activation
+  -> carry selected candidate identity into campaign startup
+  -> re-read and revalidate the exact candidate
+  -> reject stale or changed candidate fingerprints
+  -> stage hydration without mutating live state
+  -> atomically commit a continue run or return a typed failure
+  -> acknowledge the first resumed frame
 ```
 
 ## Required contracts
 
-### TerminalEvaluationInput
+### SaveSlotReadResult
 
 ```txt
-runId
-runEpoch
-tickId
-priorPhase
-priorOutcome
-coreHealth
-waveIndex
-waveCount
-waveActive
-spawnCount
-enemyCount
-coreBreachEvents
-waveClearEvents
-stateFingerprintBefore
+slotId
+key
+storageLayer
+status: empty | read | denied | failed
+rawHash
+errorCode
 ```
 
-### TerminalOutcomeResult
+### SaveCandidateResult
 
 ```txt
-resultId
-runId
-runEpoch
-tickId
-status: active | victory | defeat
+candidateId
+slotId
+kind
+schemaVersion
+contentRevision
+checkpointId
+capturedAt
+stateFingerprint
+status: valid | invalid | unsupported
 reason
-transitioned
-latched
-coreHealth
-waveIndex
-stateFingerprintAfter
-persistenceDecision
 ```
 
-### TerminalPersistenceDecision
+### ContinueCapabilityResult
 
 ```txt
-terminalResultId
+resolutionId
+enabled
+selectedCandidateId
+selectedSlotId
+policyVersion
+reason
+candidateCount
+rejectedCandidateCount
+```
+
+### CampaignStartupResult
+
+```txt
+startupId
+mode: new | continue
+candidateId
 accepted
 reason
-checkpointKind
+runId
+runEpoch
 stateFingerprint
-commandCursor
+firstFrameReceiptId
 ```
 
 ## Required proof
 
 ```txt
-core breach before final wave commits defeat only
-final wave clear with positive core commits victory only
-simultaneous core breach and final-wave clear commits defeat only
-no tick can commit both outcomes
-terminal result is monotonic within one run epoch
-victory persistence is rejected after defeat evidence
-render overlay consumes the committed terminal result rather than Boolean priority
-GameHost observes one outcome enum and one terminal result ID
-R restart retires the prior outcome and advances a run epoch
-same replay journal reproduces the same terminal result and fingerprint
+no slots -> Continue disabled
+malformed payload only -> Continue disabled with invalid-candidate reason
+unsupported schema only -> Continue disabled with unsupported-schema reason
+valid lower-priority candidate plus malformed higher slot -> valid candidate selected
+multiple valid candidates -> deterministic policy selects the same candidate
+storage read failure in one slot -> other slots still evaluated
+menu-selected candidate changed before startup -> startup rejects stale fingerprint
+new mode -> starts fresh and does not hydrate a candidate
+continue mode -> hydrates selected state or fails without partial mutation
+Begin and Continue produce observably different admitted startup results
+browser menu, URL mode, live state and first frame agree on one startup identity
 ```
 
 ## Ordered implementation queue
@@ -450,4 +456,4 @@ same replay journal reproduces the same terminal result and fingerprint
 
 ## Validation boundary
 
-Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration were not changed. Existing checks are source-pattern checks and do not execute simultaneous core-breach/final-wave-clear behavior, terminal exclusivity, persistence admission, replay convergence or terminal-frame correlation.
+Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration were not changed. Existing checks verify expected source strings; they do not execute candidate reads, malformed payload handling, precedence, query-mode admission, hydration, rollback or first-resumed-frame correlation.
