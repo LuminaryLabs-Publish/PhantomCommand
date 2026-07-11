@@ -1,78 +1,112 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-10T18-40-13-04-00`
+**Timestamp:** `2026-07-10T20-19-35-04-00`
 
-## Next safe ledge
+## Implementation queue
 
 ```txt
-PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+1. PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+2. PhantomCommand Campaign Action Result Authority + Fixed-Step Frame Fixture Gate
+3. PhantomCommand Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
 
-## Goal
+Preserve current routes, visuals, controls, simulation constants, campaign content, and legacy `window.GameHost` fields while adding pure, clone-safe proof boundaries.
 
-Create one pure, deterministic resolver that both the menu and campaign startup can consume. It must inspect all six candidate slots, classify each value, choose at most one resumable candidate by an explicit precedence table, and return immutable provenance plus a truthful Continue capability result.
+## Goal 1: Continue capability resolver
 
-Preserve current routes, visuals, controls, simulation constants, and legacy `window.GameHost` fields.
+Create one pure, deterministic resolver consumed by both menu admission and campaign startup.
 
-## Plan ledger
+### Plan ledger
 
-- [ ] Keep `index.html`, `game.html`, gameplay constants, and rendering unchanged.
-- [ ] Add `src/campaign/save-candidate-registry.js` with all three keys and both storage layers.
-- [ ] Give every slot a stable ID, owner, schema family, storage layer, and priority.
-- [ ] Add `src/campaign/save-candidate-resolver.js` as a DOM-free pure function.
-- [ ] Return one row per slot, including absent, unreadable, invalid-json, foreign-schema, legacy-summary, unsupported-version, checksum-failed, resumable-current, and resumable-migrated.
-- [ ] Define deterministic ordering across key and storage layer.
-- [ ] Never let malformed higher-priority data hide a valid lower-priority candidate without reporting the shadowing decision.
+- [ ] Add `src/campaign/save-candidate-registry.js` with three keys and two storage layers.
+- [ ] Give all six slots stable IDs, schema ownership, and priority.
+- [ ] Add a DOM-free classifier and resolver.
+- [ ] Preserve absent, unreadable, invalid-json, foreign-schema, legacy-summary, unsupported-version, resumable-current, and resumable-migrated classifications.
 - [ ] Return `continueEnabled`, `selectedCandidate`, `inspectedCandidates`, and `decisionReason`.
-- [ ] Make menu initialization call the resolver once, not two independent presence scans.
+- [ ] Make menu initialization call the resolver once.
 - [ ] Expose immutable resolver output through `PhantomMenu.getState()`.
-- [ ] Refresh capability on the browser `storage` event or document why a reload is required.
-- [ ] Add `src/campaign/session-mode.js` and parse `campaign=new|continue`.
-- [ ] Make campaign startup consume the same resolver result before hydration work begins.
-- [ ] Treat the existing `{ scene, souls, wave }` payload as `legacy-completion-summary`, never resumable.
-- [ ] Treat `nexus.sceneSnapshot` and `phantom.command.campaign` as foreign until adapters exist.
+- [ ] Parse `campaign=new|continue` in a shared session-mode service.
+- [ ] Make campaign startup consume the same resolution result.
+- [ ] Keep the existing `{ scene, souls, wave }` payload classified as a non-resumable completion summary.
 - [ ] Add `tests/phantom-command-candidate-resolver-fixture.mjs`.
-- [ ] Prove empty storage disables Continue.
-- [ ] Prove malformed JSON disables Continue and preserves its reason.
-- [ ] Prove each of the six slots is inspected exactly once.
-- [ ] Prove precedence is deterministic when several resumable candidates exist.
-- [ ] Prove a malformed candidate cannot silently shadow a valid candidate.
-- [ ] Prove foreign and legacy-summary candidates are visible but non-resumable.
-- [ ] Prove menu and campaign receive the same selected candidate ID and fingerprint.
-- [ ] Add the fixture to `npm run check` only after it passes independently.
-- [ ] Run `node tests/phantom-command-candidate-resolver-fixture.mjs`.
-- [ ] Run `npm run check`.
-- [ ] Run `npm run build`.
-- [ ] Push only to `main`.
+- [ ] Prove all six slots are inspected exactly once.
+- [ ] Prove precedence and rejection reasons are deterministic.
+- [ ] Add the fixture to `npm run check` only after independent success.
 
-## Acceptance rows
+## Goal 2: Campaign action result authority
+
+Normalize every gameplay request into a typed command, evaluate preconditions at a deterministic fixed-step boundary, and retain accepted, rejected, and no-op results.
+
+### Plan ledger
+
+- [ ] Add a pure campaign-state factory usable without DOM or WebGL.
+- [ ] Add `src/campaign/action-command.js` with stable command types and payload validation.
+- [ ] Add one monotonic command-sequence allocator per campaign session.
+- [ ] Normalize pointer, keyboard, GameHost, and replay requests through one `submitCommand()` adapter.
+- [ ] Separate pad selection from tower construction.
+- [ ] Add explicit preflight for `build`, `order`, and `wave.start`.
+- [ ] Return `accepted`, `rejected`, or `no-op` results with stable reasons.
+- [ ] Preserve state fingerprints before and after execution.
+- [ ] Schedule simulation commands to deterministic target ticks.
+- [ ] Ensure DOM callbacks never mutate simulation state directly.
+- [ ] Add bounded command, result, and event journals.
+- [ ] Add `tickId` and `frameId` counters.
+- [ ] Add a canonical simulation-state fingerprint.
+- [ ] Commit an immutable presentation snapshot after simulation.
+- [ ] Record world, HUD, minimap, modal, and CRT consumption against one committed frame.
+- [ ] Add clone-safe GameHost observations while preserving legacy fields.
+- [ ] Add `tests/phantom-command-action-result-fixture.mjs`.
+- [ ] Add `tests/phantom-command-fixed-step-command-fixture.mjs`.
+- [ ] Add `tests/phantom-command-frame-consumption-fixture.mjs`.
+- [ ] Prove rejected commands leave the state fingerprint unchanged.
+- [ ] Prove identical command sequences and target ticks yield identical results and fingerprints.
+- [ ] Prove all presentation surfaces report the same committed frame.
+- [ ] Add fixtures to `npm run check` only after independent success.
+
+## Action-result acceptance rows
 
 ```txt
-candidateRegistry.slotCount === 6
-candidateResolution.inspectedCount === 6
-candidateResolution.continueEnabled === false when no resumable candidate exists
-candidateResolution.selectedCandidate === null for absent, malformed, foreign, unsupported, checksum-failed, and legacy-summary-only storage
-candidateResolution.selectedCandidate.classification === resumable-current | resumable-migrated
-candidateResolution.selectedCandidate.slotId is stable
-candidateResolution.decisionReason is present
-candidateResolution.rows preserve key and storageLayer
-menu.getState().continueCapability matches campaign startup resolution
-session.mode === new | continue
-legacy victory summary remains non-resumable
-current routes and campaign constants remain unchanged
-legacy window.GameHost fields remain available
+build accepted -> one tower, one soul debit, one pad link
+build rejected / no-selected-pad -> unchanged fingerprint
+build rejected / pad-occupied -> unchanged fingerprint
+build rejected / insufficient-souls -> unchanged fingerprint
+order rejected / no-selected-units -> unchanged fingerprint
+order accepted / move -> selected allies receive deterministic destinations
+order accepted / attack -> selected allies receive target ID
+wave accepted -> deterministic spawn queue
+wave rejected / wave-already-active -> unchanged fingerprint
+wave rejected / campaign-won -> unchanged fingerprint
+wave rejected / campaign-lost -> unchanged fingerprint
+wave rejected / no-wave-remaining -> unchanged fingerprint
+one terminal result per valid command
+monotonic command, tick, result, event, and frame IDs
+render and GameHost fingerprints equal committed-frame fingerprint
 ```
 
-## Follow-on dependency order
+## Goal 3: Versioned resume fidelity
+
+After the resolver and action authority are proven:
 
 ```txt
-Continue capability resolver
-  -> versioned full-state save envelope
+versioned full-state save envelope
   -> atomic hydration
   -> saved/hydrated fingerprint parity
-  -> identifier and fixed-step resume parity
-  -> command result journal
-  -> frame/render correlation
+  -> identifier counter parity
+  -> fixed-step queue and journal parity
+  -> committed-frame parity
+  -> resume-fidelity fixture
+```
+
+## Required validation after implementation
+
+```bash
+node tests/phantom-command-candidate-resolver-fixture.mjs
+node tests/phantom-command-action-result-fixture.mjs
+node tests/phantom-command-fixed-step-command-fixture.mjs
+node tests/phantom-command-frame-consumption-fixture.mjs
+node tests/phantom-command-resume-fidelity-fixture.mjs
+npm run check
+npm run build
 ```
 
 ## Defer until after proof
@@ -82,7 +116,8 @@ new waves, units, towers, or economy systems
 save/load UI redesign
 camera rewrite
 renderer replacement
-pixel art expansion
+pixel-art expansion
 multiplayer expansion
+full campaign module extraction
 legacy construct-profile parity work
 ```
