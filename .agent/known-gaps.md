@@ -1,152 +1,111 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T05-50-43-04-00`
+**Timestamp:** `2026-07-11T07-38-25-04-00`
 
 ## Summary
 
-PhantomCommand still lacks four connected authority boundaries: candidate resolution, fixed-step command results, runtime lifecycle ownership and full versioned checkpoint/resume fidelity. Continue is not operational until all four gates are implemented and fixture-gated.
+PhantomCommand still lacks four connected authority gates. The second gate now has a more precise blocker: campaign phase is not an enforceable mutation barrier, so paused and terminal sessions continue to accept direct gameplay actions.
 
 ## Plan ledger
 
-**Goal:** keep unresolved risks explicit, ordered by dependency and separated from unrelated feature work.
+**Goal:** keep unresolved risks explicit and ordered by dependency.
 
 - [ ] Continue/save-candidate resolution.
-- [ ] Campaign action-result and fixed-step command authority.
+- [ ] Campaign command, phase-admission and fixed-step action-result authority.
 - [ ] Runtime session lifecycle authority.
 - [ ] Versioned checkpoint capture and atomic resume authority.
-- [ ] First-frame resume acknowledgement.
-- [ ] Broader content and presentation work only after those gates.
+- [ ] Committed-frame and first-frame acknowledgements.
+- [ ] Broader content and visual work only after these gates.
 
 ## Gate 1: Continue resolution gaps
 
 ```txt
 three keys x two storage layers collapse to Boolean presence
 candidate parse/schema/version/content/provenance is discarded
-menu calls presence detection more than once during construction
 candidate precedence is undefined
 campaign ignores campaign=new|continue
 candidate identity is not carried into startup
 ```
 
-## Gate 2: Campaign action authority gaps
+## Gate 2: Campaign action and phase gaps
+
+### Direct mutation
 
 ```txt
-input and GameHost mutate live state directly
+pointer, keyboard and GameHost mutate live state
 no command identity, sequence or target tick
 invalid requests silently return
-no typed result or reason catalog
+no typed result or stable reason catalog
 no replay journal or canonical fingerprint
-render has no committed-frame identity
+```
+
+### Phase authority
+
+```txt
+paused/won/lost are independent Boolean flags
+no canonical CampaignPhase
+no legal transition table
+no phase sequence or transition result
+no command-to-phase admission matrix
+no stale observed-phase rejection
+```
+
+### Paused mutation
+
+```txt
+update() returns while paused
+selectAt() remains admitted
+build() remains admitted
+order() remains admitted
+startWave() does not check paused
+camera continues updating in RAF
+held/drag input is not retired on pause entry
+```
+
+### Terminal mutation
+
+```txt
+update() returns when won or lost
+selection/build/order callbacks remain active
+camera still mutates
+terminal state is not immutable
+restart/exit bypass typed lifecycle authority
+```
+
+### Render proof
+
+```txt
+world/HUD/minimap/overlay read live mutable state
+no committed frame identity
+no phase sequence on render input
+overlay can claim PAUSED/WON/LOST while underlying state changes
+CRT upload/draw returns no phase/frame acknowledgement
 ```
 
 ## Gate 3: Lifecycle gaps
 
-### Session ownership
-
 ```txt
 menu and campaign allocate at module scope
-no route-session object
-no sessionId, runId or runGeneration
-no explicit lifecycle state
-no startup result or startup rollback
-```
-
-### Animation frame and event ownership
-
-```txt
 RAF request IDs are discarded
-no cancelAnimationFrame path
-no stale-callback fence
-multiple anonymous listeners
-no deterministic listener removal
-no timer or global lease ledger
-```
-
-### Audio and CRT ownership
-
-```txt
-AudioContext, sources and nodes are not session-owned
-delayed context-close timer is not retained
-CRT renderer has no dispose method
-no deleteTexture/deleteBuffer/deleteProgram proof
-no render-after-dispose rejection
-```
-
-### Navigation and restart
-
-```txt
-menu assigns location after fade without explicit teardown
-campaign uses location.reload and location.href directly
-input remains admitted during transition
-navigation completion has no typed result
-teardown is not awaited or observable
+anonymous listeners have no deterministic removal
+no sessionId, runId or runGeneration
+no startup rollback
+no audio or CRT resource owner
+navigation/reload bypass typed transition and teardown
+no lifecycle journal or clone-safe observation
 ```
 
 ## Gate 4: Checkpoint and resume gaps
 
-### Current save format
-
 ```txt
-writes only after victory
-payload: { scene, souls, wave }
-no schema identity
-no schema version
-no campaign content identity/version
-no checkpoint ID
-no simulation tick
-no command sequence cursor
-no canonical state fingerprint
-```
-
-### Missing authoritative state
-
-```txt
-core health and elapsed time
-waveActive and spawn queue
-units and their combat/movement state
-towers and pad ownership
-projectiles and targets
-selection and selected pad
-tower type and camera continuity
-uid/pid/tid counters
-paused/won/lost/message state
-```
-
-### Missing load path
-
-```txt
-campaign never reads a candidate
-campaign never parses or validates a save
-no migration registry
-no staged hydration
-no reference rebuilding
-no invariant validation
-no atomic state replacement
-no rollback
-no resume epoch
-```
-
-### Missing relational proof
-
-```txt
-pad tower IDs may not resolve
-selected IDs may not resolve
-projectile targets may not resolve
-spawn entries may reference invalid archetypes/lanes
-restored counters may collide
-terminal flags may conflict
-fingerprint parity is unavailable
-```
-
-### Missing frame proof
-
-```txt
-no checkpoint fingerprint on render input
-no resume epoch on render input
-no world/HUD/minimap application result
-no CRT upload acknowledgement
-no first resumed-frame completion barrier
-stale pre-resume RAF callbacks are not fenced
+victory writes only { scene, souls, wave }
+no schema/content identity/checkpoint ID/fingerprint
+no committed tick or command cursor
+no full entity graph or identity counters
+no load path, migration, staged hydration or reference rebuild
+no atomic commit, rollback or resume epoch
+no phase invariant validation
+no first resumed-frame acknowledgement
 ```
 
 ## Validation gaps
@@ -154,18 +113,16 @@ stale pre-resume RAF callbacks are not fenced
 ```txt
 current checks are source-pattern checks
 no candidate precedence fixture
-no command/replay/committed-frame fixture
-no fake RAF/listener/global/audio/WebGL lifecycle fixture
-no checkpoint roundtrip fixture
-no migration fixture
-no malformed/corrupt candidate fixture
-no relational invariant fixture
-no hydration rollback fixture
-no duplicate/stale Resume command fixture
-no first-frame resume fixture
-no browser Continue/resume smoke
+no command/replay fixture
+no phase transition fixture
+no paused/terminal mutation fixture
+no source-parity fixture
+no phase/frame correlation fixture
+no lifecycle fixture
+no checkpoint roundtrip/migration/corruption/rollback fixture
+no browser Continue or phase smoke
 ```
 
 ## Do not claim
 
-Do not claim Continue works, campaign resume, full save fidelity, migration safety, corruption safety, atomic load, lifecycle safety, restart safety or first-frame fidelity until the ordered fixture gates and browser smoke pass on `main`.
+Do not claim Continue works, pause freezes authoritative state, terminal state is immutable, GameHost obeys campaign phase, fixed-step commands are deterministic, restart is lifecycle-safe, checkpoint resume works or rendered overlays prove committed phase until the corresponding fixtures and browser smoke pass on `main`.
