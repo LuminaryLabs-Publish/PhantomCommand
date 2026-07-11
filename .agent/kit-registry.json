@@ -1,81 +1,113 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T18-40-13-04-00",
-  "status": "continue-capability-resolver-candidate-precedence-fixture-gate-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T18-40-13-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T18-40-13-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T18-40-13-04-00-continue-capability-resolver-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T18-40-13-04-00-continue-provenance-render-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T18-40-13-04-00-new-continue-session-entry-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T18-40-13-04-00-menu-candidate-admission-map.md",
-  "latestPersistenceAudit": ".agent/persistence-audit/2026-07-10T18-40-13-04-00-six-slot-candidate-precedence-matrix.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T18-40-13-04-00-candidate-resolver-fixture-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T17-08-36-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-10T20-19-35-04-00",
+  "status": "continue-resolver-first-action-result-authority-second-fixture-gates-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T20-19-35-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T20-19-35-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T20-19-35-04-00-campaign-action-result-authority-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T20-19-35-04-00-committed-frame-render-consumption-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T20-19-35-04-00-action-precondition-result-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T20-19-35-04-00-pointer-keyboard-command-admission-map.md",
+  "latestCommandAuthorityAudit": ".agent/command-authority-audit/2026-07-10T20-19-35-04-00-action-sequence-rejection-journal-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T20-19-35-04-00-action-fixture-build-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T18-40-13-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "reason": "all nine eligible non-Cavalry repositories were tracked and documented; PhantomCommand had the oldest prior audit timestamp",
-    "priorTimestamp": "2026-07-10T17-08-36-04-00",
+    "priorTimestamp": "2026-07-10T18-40-13-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
   "currentNextSlice": "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
+  "nextCampaignSlice": "PhantomCommand Campaign Action Result Authority + Fixed-Step Frame Fixture Gate",
   "runtime": {
     "type": "static-vite-pixel-isometric-campaign-game",
-    "entrypoints": ["index.html", "game.html"],
+    "entrypoints": [
+      "index.html",
+      "game.html"
+    ],
     "menuModule": "src/menu/graveyard-menu.js",
     "campaignModule": "src/campaign/campaign-scene.js",
-    "sourceCanvas": [640, 360],
+    "sourceCanvas": [
+      640,
+      360
+    ],
     "rings": 7,
     "lanes": 4,
     "generatedPads": 58,
     "starterAllies": 6,
-    "towerTypes": ["spire", "lantern", "ward"],
-    "unitArchetypes": ["guard", "archer", "runner", "shield", "zealot", "brute", "wraith"],
+    "towerTypes": [
+      "spire",
+      "lantern",
+      "ward"
+    ],
+    "unitArchetypes": [
+      "guard",
+      "archer",
+      "runner",
+      "shield",
+      "zealot",
+      "brute",
+      "wraith"
+    ],
     "waves": 6,
     "simulationStep": "1/60",
-    "candidateKeys": ["phantomCommand.save", "nexus.sceneSnapshot", "phantom.command.campaign"],
-    "storageLayers": ["localStorage", "sessionStorage"],
+    "campaignActionFunctions": [
+      "selectAt",
+      "build",
+      "order",
+      "startWave"
+    ],
+    "actionResultShape": null,
+    "actionSequence": null,
+    "actionJournal": null,
+    "frameId": null,
+    "tickId": null,
+    "renderConsumptionRow": null,
+    "gameHostStateExposure": "mutable state and camera plus aggregate clone",
+    "candidateKeys": [
+      "phantomCommand.save",
+      "nexus.sceneSnapshot",
+      "phantom.command.campaign"
+    ],
+    "storageLayers": [
+      "localStorage",
+      "sessionStorage"
+    ],
     "candidateSlotCount": 6,
     "currentResolver": "Boolean presence only",
-    "menuResolverCallsAtConstruction": 2,
-    "storageRefresh": false,
     "campaignReadsSessionMode": false,
-    "campaignReadsCandidates": false,
-    "campaignHydratesSave": false,
-    "saveWrite": {
-      "key": "phantomCommand.save",
-      "when": "victory only",
-      "classification": "legacy-completion-summary",
-      "fields": ["scene", "souls", "wave"]
-    }
+    "campaignReadsCandidates": false
   },
   "interactionLoops": {
-    "current": [
-      "open menu",
+    "menu": [
       "read settings",
       "scan six candidate slots twice and collapse to Boolean",
       "choose Begin or Continue",
-      "campaign initializes fresh regardless of route intent",
-      "select units or build pads",
-      "build towers",
-      "order allies",
-      "start waves",
-      "advance fixed-step combat and economy",
-      "render world HUD minimap modal and CRT",
-      "write legacy victory summary"
+      "animate route transition"
     ],
-    "target": [
-      "enumerate six stable candidate slots once",
-      "parse and classify every candidate",
-      "select one candidate by deterministic precedence",
-      "project truthful Continue capability",
-      "share the same immutable result with campaign startup",
-      "parse new or continue session intent",
-      "hydrate only a versioned resumable envelope",
-      "emit immutable session and persistence readback",
-      "gate check and build with DOM-free fixtures"
+    "campaign": [
+      "initialize fresh descriptors and mutable state",
+      "translate pointer and keyboard events directly into mutation functions",
+      "select allies or pads",
+      "second pad click implicitly attempts build",
+      "right click implicitly attempts order",
+      "Space implicitly attempts wave start",
+      "advance fixed-step simulation",
+      "render mutable state through world HUD minimap modal and CRT",
+      "expose aggregate GameHost counters"
+    ],
+    "targetCampaign": [
+      "normalize input into typed commands",
+      "assign stable sequence and requested frame",
+      "preflight against one committed state",
+      "execute at a deterministic simulation tick",
+      "return accepted rejected or no-op result",
+      "append bounded command result and event journals",
+      "commit immutable frame snapshot and fingerprint",
+      "record render consumption and GameHost observation"
     ]
   },
   "domains": {
@@ -103,12 +135,10 @@
       "candidate-precedence-domain-next",
       "continue-capability-projection-domain-next",
       "candidate-provenance-domain-next",
-      "campaign-save-envelope-domain-next",
-      "campaign-save-hydration-domain-next",
-      "campaign-resume-fidelity-domain-next",
-      "campaign-session-fingerprint-domain-next"
+      "campaign-save-envelope-domain-follow-on",
+      "campaign-save-hydration-domain-follow-on"
     ],
-    "campaign": [
+    "campaignContentSimulation": [
       "ring-map-domain",
       "lane-domain",
       "build-pad-domain",
@@ -129,13 +159,26 @@
       "damage-reward-domain",
       "effect-domain",
       "win-loss-domain",
-      "save-on-win-domain"
+      "save-on-win-domain",
+      "fixed-step-simulation-domain"
     ],
-    "runtimeProofDeploy": [
+    "commandObservationNext": [
+      "action-command-domain-next",
+      "action-preflight-domain-next",
+      "action-result-domain-next",
+      "action-sequence-domain-next",
+      "fixed-step-command-queue-domain-next",
+      "action-journal-domain-next",
+      "event-journal-domain-next",
+      "state-fingerprint-domain-next",
+      "committed-frame-domain-next",
+      "render-consumption-domain-next",
+      "gamehost-observation-domain-next"
+    ],
+    "inputRenderProofDeploy": [
       "keyboard-input-domain",
       "pointer-input-domain",
       "camera-pan-zoom-domain",
-      "fixed-step-simulation-domain",
       "world-render-domain",
       "hud-projection-domain",
       "minimap-domain",
@@ -168,17 +211,30 @@
       "construct-piece-state-kit",
       "construct-sequence-update-kit"
     ],
-    "neededNext": [
+    "queueHead": [
       "phantom-command-candidate-slot-registry-kit",
-      "phantom-command-save-candidate-resolver-kit",
       "phantom-command-save-classifier-kit",
       "phantom-command-candidate-precedence-kit",
+      "phantom-command-save-candidate-resolver-kit",
       "phantom-command-continue-capability-kit",
       "phantom-command-candidate-provenance-kit",
       "phantom-command-campaign-session-mode-kit",
-      "phantom-command-candidate-resolver-fixture-kit",
-      "phantom-command-build-fixture-gate-kit",
-      "central-ledger-readback-kit"
+      "phantom-command-candidate-resolver-fixture-kit"
+    ],
+    "nextCampaign": [
+      "phantom-command-action-command-kit",
+      "phantom-command-action-preflight-kit",
+      "phantom-command-action-result-kit",
+      "phantom-command-action-sequence-kit",
+      "phantom-command-fixed-step-command-queue-kit",
+      "phantom-command-action-journal-kit",
+      "phantom-command-event-journal-kit",
+      "phantom-command-state-fingerprint-kit",
+      "phantom-command-committed-frame-kit",
+      "phantom-command-render-consumption-kit",
+      "phantom-command-gamehost-observation-kit",
+      "phantom-command-action-fixture-kit",
+      "phantom-command-build-fixture-gate-kit"
     ],
     "followOn": [
       "phantom-command-save-envelope-kit",
@@ -186,49 +242,52 @@
       "phantom-command-save-hydration-kit",
       "phantom-command-session-fingerprint-kit",
       "phantom-command-resume-result-kit",
-      "phantom-command-gamehost-session-readback-kit",
       "phantom-command-resume-fidelity-fixture-kit"
-    ],
-    "deferred": [
-      "phantom-command-command-envelope-kit",
-      "phantom-command-action-result-kit",
-      "phantom-command-action-journal-kit",
-      "phantom-command-frame-correlation-kit",
-      "phantom-command-render-readback-kit"
     ]
   },
   "services": {
     "current": [
-      "menu navigation",
+      "menu navigation and panels",
       "settings persistence",
       "raw save-key presence detection",
       "route transition",
       "procedural menu audio",
       "graveyard art composition",
-      "source canvas CRT presentation",
-      "campaign descriptors",
-      "selection building and unit orders",
-      "wave spawning and fixed-step combat",
+      "source-canvas CRT presentation",
+      "campaign descriptor generation",
+      "unit and pad selection",
+      "tower construction",
+      "ally move and attack orders",
+      "wave admission and spawning",
+      "fixed-step combat and economy",
       "souls rewards and sanctum damage",
-      "world HUD minimap and modal rendering",
+      "world HUD minimap modal and CRT rendering",
       "victory completion-summary write",
       "aggregate GameHost diagnostics",
       "source-pattern checks",
-      "static artifact copy"
+      "static artifact copy and Pages deployment"
     ],
-    "neededNext": [
-      "stable six-slot enumeration",
-      "single-pass candidate reads",
-      "JSON parsing and schema classification",
-      "deterministic key and storage precedence",
+    "queueHead": [
+      "stable save-candidate enumeration and classification",
+      "deterministic candidate precedence",
       "truthful Continue capability",
-      "candidate provenance and decision reasons",
-      "shared menu and campaign resolution",
-      "DOM-free resolver fixtures",
-      "check and build gating"
+      "shared menu and campaign session resolution"
+    ],
+    "nextCampaign": [
+      "typed command normalization",
+      "explicit precondition evaluation",
+      "accepted rejected and no-op result rows",
+      "stable command sequencing",
+      "deterministic tick admission",
+      "bounded command result and event journals",
+      "canonical state fingerprints",
+      "immutable committed-frame snapshots",
+      "render-consumption correlation",
+      "bounded GameHost observations",
+      "DOM-free action and fixed-step fixtures"
     ]
   },
-  "currentBlocker": "Continue availability is a stale page-load Boolean produced by two independent six-slot scans. No authoritative resolver preserves candidate provenance, classification, precedence, or a result that both menu and campaign startup consume.",
+  "currentBlocker": "The queue head remains the shared Continue resolver. The next campaign-internal blocker is that selectAt, build, order, and startWave mutate live state directly, silently reject invalid requests, and are not sequenced to simulation ticks or correlated with committed frames, rendering, or GameHost readback.",
   "validation": {
     "runtimeSourceChangedThisPass": false,
     "branchCreated": false,
@@ -236,7 +295,8 @@
     "npmCheckRun": false,
     "npmBuildRun": false,
     "candidateResolverFixtureRun": false,
-    "resumeFidelityFixtureRun": false,
+    "actionFixtureRun": false,
+    "fixedStepFrameFixtureRun": false,
     "browserSmokeRun": false
   }
 }
