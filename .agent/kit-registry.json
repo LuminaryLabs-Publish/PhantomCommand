@@ -1,26 +1,27 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-11T13-28-37-04-00",
-  "status": "exclusive-terminal-outcome-transaction-authority-audited",
-  "sourceTracker": ".agent/trackers/2026-07-11T13-28-37-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T13-28-37-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T13-28-37-04-00-terminal-outcome-authority-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-11T13-28-37-04-00-terminal-overlay-committed-outcome-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T13-28-37-04-00-simultaneous-win-loss-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T13-28-37-04-00-terminal-restart-command-map.md",
-  "latestOutcomeAuthorityAudit": ".agent/outcome-authority-audit/2026-07-11T13-28-37-04-00-exclusive-terminal-outcome-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T13-28-37-04-00-terminal-outcome-fixture-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-11T11-51-06-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-11T15-08-41-04-00",
+  "status": "continue-capability-save-candidate-startup-admission-audited",
+  "sourceTracker": ".agent/trackers/2026-07-11T15-08-41-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T15-08-41-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T15-08-41-04-00-continue-capability-save-candidate-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-11T15-08-41-04-00-continue-ui-startup-provenance-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T15-08-41-04-00-menu-continue-fresh-campaign-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T15-08-41-04-00-continue-command-candidate-admission-map.md",
+  "latestPersistenceAudit": ".agent/persistence-audit/2026-07-11T15-08-41-04-00-save-candidate-precedence-capability-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T15-08-41-04-00-continue-capability-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-11T13-28-37-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "reason": "all nine eligible non-Cavalry repositories were tracked and documented; HorrorCorridor had an active same-window repo-local write and PhantomCommand was the oldest stable eligible repository",
-    "priorCentralTimestamp": "2026-07-11T11-51-06-04-00",
+    "reason": "all nine eligible non-Cavalry repositories were tracked and documented; HorrorCorridor had an active same-window repo-local audit and PhantomCommand was the oldest stable eligible repository",
+    "priorCentralTimestamp": "2026-07-11T13-28-37-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "centralLedgerCount": 9,
     "rootAgentCount": 9,
     "activeRepoSkipped": "LuminaryLabs-Publish/HorrorCorridor",
+    "activeRepoTimestamp": "2026-07-11T15-01-33-04-00",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
   "implementationQueue": [
@@ -42,6 +43,24 @@
     "menuSourceCanvas": [480, 270],
     "simulationStep": "1/60",
     "frameDeltaClampSeconds": 0.05,
+    "saveKeys": [
+      "phantomCommand.save",
+      "nexus.sceneSnapshot",
+      "phantom.command.campaign"
+    ],
+    "storageLayers": ["localStorage", "sessionStorage"],
+    "possibleCandidateSlotCount": 6,
+    "menuCapabilityRepresentation": "boolean-raw-presence",
+    "candidateParser": null,
+    "candidateSchema": null,
+    "candidatePrecedencePolicy": null,
+    "selectedCandidateId": null,
+    "campaignReadsSessionMode": false,
+    "campaignReadsSaveCandidate": false,
+    "atomicHydration": false,
+    "startupResultId": null,
+    "firstResumedFrameReceipt": null,
+    "currentVictorySaveFields": ["scene", "souls", "wave"],
     "commandsAppliedInsideFixedStep": false,
     "simulationTickId": null,
     "commandSequence": null,
@@ -51,34 +70,37 @@
     "exclusiveTerminalOutcome": false,
     "terminalLatch": false,
     "terminalResultId": null,
-    "victorySaveRequiresCorePositive": false,
-    "victorySaveRequiresExclusiveOutcome": false,
-    "terminalFrameReceipt": null,
-    "campaignReadsSessionMode": false,
     "checkpointSchema": null,
     "atomicResume": false
   },
   "interactionLoops": {
     "menu": [
       "construct graveyard art, source canvas, CRT, settings and audio at module scope",
-      "scan raw save-key presence across local and session storage",
+      "scan three raw save keys across local and session storage",
+      "collapse any nonempty value to Boolean Continue capability",
       "route Begin or Continue to game.html"
     ],
-    "campaign": [
-      "browser callbacks mutate selection, build, order, wave, pause, tower and camera state immediately",
-      "RAF caps elapsed frame duration at 50 ms",
-      "accumulator runs exact 1/60 simulation updates",
-      "enemy breach can set lost during unit iteration",
-      "parent update can later set won during final-wave clear",
-      "render overlay prioritizes won and victory persistence writes immediately"
+    "continue": [
+      "navigate to game.html?campaign=continue",
+      "campaign module ignores the query parameter",
+      "no candidate is read, parsed, selected or hydrated",
+      "construct the same default state as Begin"
     ],
-    "targetTerminalAuthority": [
-      "collect terminal evidence without mutation",
-      "evaluate defeat and victory predicates",
-      "arbitrate exactly one outcome using a versioned priority policy",
-      "commit and latch one terminal result",
-      "gate persistence, rendering and diagnostics on the result",
-      "publish terminal tick and frame receipts"
+    "victoryWrite": [
+      "final wave sets won",
+      "write localStorage phantomCommand.save",
+      "persist only scene, souls and wave",
+      "menu later treats the raw string as resumable evidence"
+    ],
+    "targetContinueAuthority": [
+      "enumerate and read every slot independently",
+      "parse and classify candidates",
+      "validate schema, content revision and fingerprint",
+      "rank candidates through a versioned precedence policy",
+      "publish ContinueCapabilityResult",
+      "carry candidate identity into startup",
+      "stage hydration and commit atomically",
+      "acknowledge the first resumed frame"
     ]
   },
   "domains": {
@@ -89,12 +111,26 @@
       "menu-selection-domain",
       "menu-panel-domain",
       "menu-settings-persistence-domain",
-      "menu-save-presence-domain",
-      "menu-continue-capability-domain",
       "menu-transition-domain",
       "menu-audio-domain",
       "graveyard-art-domain",
       "source-canvas-domain"
+    ],
+    "continueCapability": [
+      "save-slot-registry-domain",
+      "storage-slot-read-domain",
+      "raw-save-presence-domain",
+      "save-candidate-parse-domain-next",
+      "save-schema-classification-domain-next",
+      "save-content-identity-domain-next",
+      "save-candidate-provenance-domain-next",
+      "save-candidate-precedence-domain-next",
+      "save-candidate-resolution-domain-next",
+      "continue-capability-domain-next",
+      "campaign-startup-mode-domain-next",
+      "campaign-startup-admission-domain-next",
+      "campaign-hydration-domain-next",
+      "candidate-journal-domain-next"
     ],
     "projectionPresentation": [
       "crt-display-domain",
@@ -207,15 +243,23 @@
       "construct-piece-state-kit",
       "construct-sequence-update-kit"
     ],
-    "continueResolver": [
-      "phantom-command-candidate-slot-registry-kit",
-      "phantom-command-save-classifier-kit",
-      "phantom-command-candidate-precedence-kit",
+    "continueCapabilityAuthority": [
+      "phantom-command-save-slot-registry-kit",
+      "phantom-command-storage-slot-read-kit",
+      "phantom-command-save-candidate-parse-kit",
+      "phantom-command-save-schema-classifier-kit",
+      "phantom-command-save-content-identity-kit",
+      "phantom-command-save-candidate-provenance-kit",
+      "phantom-command-save-candidate-precedence-kit",
       "phantom-command-save-candidate-resolver-kit",
-      "phantom-command-continue-capability-kit",
-      "phantom-command-candidate-provenance-kit",
-      "phantom-command-campaign-session-mode-kit",
-      "phantom-command-candidate-resolver-fixture-kit"
+      "phantom-command-continue-capability-result-kit",
+      "phantom-command-campaign-startup-mode-kit",
+      "phantom-command-campaign-startup-admission-kit",
+      "phantom-command-campaign-hydration-plan-kit",
+      "phantom-command-campaign-hydration-result-kit",
+      "phantom-command-candidate-journal-kit",
+      "phantom-command-candidate-resolver-fixture-kit",
+      "phantom-command-browser-continue-parity-smoke-kit"
     ],
     "projectionAuthority": [
       "phantom-command-presentation-transform-kit",
@@ -243,19 +287,11 @@
       "phantom-command-phase-transition-kit",
       "phantom-command-phase-admission-matrix-kit",
       "phantom-command-phase-result-kit",
-      "phantom-command-monotonic-frame-sample-kit",
       "phantom-command-simulation-clock-kit",
-      "phantom-command-fixed-step-accumulator-kit",
-      "phantom-command-simulation-tick-id-kit",
-      "phantom-command-command-envelope-kit",
-      "phantom-command-command-sequence-kit",
-      "phantom-command-target-tick-policy-kit",
       "phantom-command-fixed-step-command-queue-kit",
-      "phantom-command-command-application-kit",
       "phantom-command-state-fingerprint-kit",
       "phantom-command-committed-tick-receipt-kit",
       "phantom-command-committed-frame-receipt-kit",
-      "phantom-command-frame-consumer-ack-kit",
       "phantom-command-replay-journal-kit"
     ],
     "terminalOutcomeAuthority": [
@@ -267,11 +303,9 @@
       "phantom-command-terminal-transition-kit",
       "phantom-command-terminal-latch-kit",
       "phantom-command-terminal-result-kit",
-      "phantom-command-terminal-event-kit",
       "phantom-command-terminal-persistence-policy-kit",
       "phantom-command-terminal-save-admission-kit",
       "phantom-command-terminal-frame-receipt-kit",
-      "phantom-command-terminal-observation-kit",
       "phantom-command-terminal-outcome-fixture-kit"
     ],
     "lifecycleAndCheckpoint": [
@@ -317,22 +351,24 @@
       "source-pattern checks",
       "static artifact copy and Pages deployment"
     ],
-    "terminalOutcomeNeeded": [
-      "terminal evidence collection",
-      "pure defeat and victory predicate evaluation",
-      "versioned priority arbitration",
-      "exclusive terminal commit",
-      "run-epoch terminal latch",
-      "typed terminal result and event",
-      "terminal persistence admission",
-      "terminal frame receipt",
-      "render and GameHost terminal observation",
-      "simultaneous breach/clear fixture",
-      "persistence rejection fixture",
-      "replay and frame-correlation fixture"
+    "continueAuthorityNeeded": [
+      "canonical candidate slot enumeration",
+      "independent typed storage reads",
+      "safe candidate parsing",
+      "schema and content classification",
+      "candidate fingerprint and provenance",
+      "versioned deterministic precedence",
+      "typed Continue capability result",
+      "campaign startup mode admission",
+      "stale candidate rejection",
+      "detached hydration planning",
+      "atomic hydration commit and rollback",
+      "candidate journal",
+      "first resumed-frame acknowledgement",
+      "pure resolver and browser parity fixtures"
     ]
   },
-  "currentBlocker": "A final-wave core breach can set lost=true, delete the last enemy, then satisfy the wave-clear branch, set won=true and write a victory save during the same fixed update. The overlay prioritizes won, so a contradictory state is displayed and persisted as victory.",
+  "currentBlocker": "The menu reduces six possible storage slots to raw Boolean presence. Malformed or unrelated nonempty data can enable Continue, no candidate is selected, and campaign-scene.js ignores campaign=continue and always constructs the default state.",
   "validation": {
     "runtimeSourceChanged": false,
     "packageScriptsChanged": false,
@@ -342,9 +378,11 @@
     "npmCheckRun": false,
     "npmBuildRun": false,
     "browserSmokeRun": false,
-    "terminalOutcomeFixturePresent": false,
-    "terminalPersistenceFixturePresent": false,
-    "terminalFrameFixturePresent": false,
-    "terminalReplayFixturePresent": false
+    "candidateResolverFixturePresent": false,
+    "candidatePrecedenceFixturePresent": false,
+    "storageFailureFixturePresent": false,
+    "campaignStartupFixturePresent": false,
+    "hydrationRollbackFixturePresent": false,
+    "firstResumedFrameFixturePresent": false
   }
 }
