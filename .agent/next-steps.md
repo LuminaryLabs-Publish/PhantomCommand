@@ -1,26 +1,26 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T16-49-51-04-00`
+**Timestamp:** `2026-07-11T18-21-09-04-00`
 
 ## Summary
 
-Implement Continue capability first, then establish command, phase and fixed-step identities before replacing mutable combat iteration with a deterministic liveness-safe pipeline. Combat resolution must complete before terminal arbitration and checkpoint fidelity can be trusted.
+Implement Continue capability first, then establish command, phase, fixed-step and combat-result identities. The immediate terminal ledge is to replace independent `won` and `lost` mutation with one exclusive, latched `TerminalOutcomeResult` that gates victory persistence, overlays, GameHost readback, restart and exit.
 
 ## Plan ledger
 
-**Goal:** make startup, commands, combat, terminal state and rendering agree on one admitted session, tick, combat result and frame.
+**Goal:** make startup, commands, combat, terminal state, persistence and rendering agree on one admitted session, tick, combat result, outcome result and frame.
 
 - [ ] Resolve and admit one Continue candidate.
 - [ ] Add typed command and phase admission.
 - [ ] Queue commands by target tick and sequence.
 - [ ] Add simulation tick and state fingerprint identity.
-- [ ] Introduce combat frame input and liveness index.
-- [ ] Define stable entity and target tie-break order.
-- [ ] Collect movement, attack and damage intents.
-- [ ] Resolve damage, retirement, rewards and cleanup exactly once.
-- [ ] Publish `CombatResolutionResult` before terminal arbitration.
-- [ ] Render only committed post-cleanup state.
-- [ ] Add order, liveness, checkpoint parity and frame-provenance fixtures.
+- [ ] Introduce liveness-safe `CombatResolutionResult`.
+- [ ] Collect terminal evidence without mutating terminal state inside combat subsystems.
+- [ ] Arbitrate one exclusive outcome with a versioned policy.
+- [ ] Latch terminal state for the run epoch.
+- [ ] Gate persistence, message, overlay and GameHost projection on the result.
+- [ ] Acknowledge the first terminal frame.
+- [ ] Add simultaneous-evidence, persistence, restart and frame fixtures.
 - [ ] Continue with lifecycle and checkpoint work afterward.
 
 ## Ordered implementation sequence
@@ -65,29 +65,31 @@ Implement Continue capability first, then establish command, phase and fixed-ste
 
 ### Gate 2d: Combat resolution and entity liveness
 
-1. Extract pure combat state and `CombatFrameInput` from `campaign-scene.js`.
-2. Build an alive/retiring/retired index for each tick.
-3. Define spawn first-action policy.
-4. Define stable actor order and distance-tie policy.
-5. Collect movement, targeting and attack intents from alive entities only.
-6. Normalize direct, projectile and splash damage intents.
-7. Apply a versioned sequential or simultaneous damage policy.
-8. Retire entities exactly once.
-9. Clean selection, target and projectile references before commit.
-10. Settle rewards and core-breach events exactly once.
-11. Evaluate wave-clear evidence after cleanup.
-12. Publish `CombatResolutionResult` and event range.
-13. Feed terminal arbitration only from that result.
-14. Acknowledge the first frame consuming the result.
+1. Extract pure combat state and `CombatFrameInput`.
+2. Build an alive/retiring/retired index.
+3. Define spawn first-action and stable actor-order policies.
+4. Collect movement, attack and damage intents from alive entities only.
+5. Resolve direct, projectile and splash damage by a versioned policy.
+6. Retire entities and clean references exactly once.
+7. Settle rewards and core-breach evidence exactly once.
+8. Evaluate wave-clear evidence after cleanup.
+9. Publish `CombatResolutionResult`.
 
 ### Gate 2e: Exclusive terminal outcome
 
-1. Remove terminal mutation from subsystem iteration.
-2. Collect core-breach and final-wave-clear evidence.
-3. Evaluate pure victory and defeat predicates.
-4. Arbitrate one `ACTIVE | VICTORY | DEFEAT` result.
-5. Latch the result for the run epoch.
-6. Gate persistence and rendering on the result.
+1. Remove `state.lost=true` from `updateUnit()`.
+2. Remove `state.won=true` and victory save writes from wave-clear mutation.
+3. Have combat publish typed `CoreBreachEvidence` and `FinalWaveClearEvidence`.
+4. Build `TerminalEvidenceInput` from one committed combat result.
+5. Evaluate pure victory and defeat predicates.
+6. Apply one named, versioned simultaneous-evidence policy.
+7. Publish one `TerminalOutcomeResult` with `ACTIVE | VICTORY | DEFEAT`.
+8. Latch the result for the run epoch and reject later terminal mutation.
+9. Apply rewards and persistence only after the outcome commit.
+10. Project one message and one overlay from the result.
+11. Update GameHost from a detached terminal observation.
+12. Render and acknowledge the first terminal frame.
+13. Admit restart or exit only against the committed outcome and run epoch.
 
 ### Gate 3: Runtime lifecycle
 
@@ -99,46 +101,43 @@ Implement Continue capability first, then establish command, phase and fixed-ste
 
 ### Gate 4: Versioned checkpoint and atomic resume
 
-1. Capture only from a committed tick and combat result.
-2. Store command cursor, combat policy versions, entity graph and fingerprint.
+1. Capture only from a committed tick, combat result and terminal result.
+2. Store command cursor, policy versions, entity graph and fingerprint.
 3. Validate, migrate and rebuild references in detached state.
 4. Prove reconstruction order does not change the next tick.
 5. Commit a new resume epoch atomically or roll back unchanged.
 6. Acknowledge the first resumed frame.
 
-## First combat target files
+## First terminal target files
 
 ```txt
-src/campaign/combat/combat-frame.js
-src/campaign/combat/entity-liveness.js
-src/campaign/combat/entity-order.js
-src/campaign/combat/target-policy.js
-src/campaign/combat/intent-collection.js
-src/campaign/combat/damage-resolution.js
-src/campaign/combat/entity-retirement.js
-src/campaign/combat/reference-cleanup.js
-src/campaign/combat/combat-result.js
+src/campaign/outcome/terminal-evidence.js
+src/campaign/outcome/terminal-policy.js
+src/campaign/outcome/terminal-arbitration.js
+src/campaign/outcome/terminal-result.js
+src/campaign/outcome/terminal-persistence.js
+src/campaign/outcome/terminal-projection.js
 src/campaign/campaign-scene.js
-tests/combat-dead-entity.fixture.mjs
-tests/combat-order-parity.fixture.mjs
-tests/combat-checkpoint-order.fixture.mjs
-scripts/smoke-combat-frame.mjs
+tests/terminal-simultaneous-evidence.fixture.mjs
+tests/terminal-persistence.fixture.mjs
+tests/terminal-latch.fixture.mjs
+tests/terminal-restart.fixture.mjs
+scripts/smoke-terminal-frame.mjs
 package.json
 ```
 
-## Required combat fixtures
+## Required terminal fixtures
 
 ```txt
-earlier actor kills later captured actor -> no later action
-same state with reversed insertion order -> same fingerprint
-equal-distance targets -> stable chosen ID
-spawn due this tick -> declared first-action behavior
-two lethal hits -> one retirement and one reward
-retired selected entity -> selection cleaned
-retired projectile target -> declared orphan result
-checkpoint hydration in another order -> same next tick
-core breach and last enemy death -> explicit terminal evidence
-first visible frame -> no unexplained dead-source effect
+core above zero + final wave clear -> VICTORY only
+core reaches zero + enemies remain -> DEFEAT only
+core reaches zero + final enemy removed -> policy-defined single outcome
+same evidence submitted twice -> same idempotent result
+terminal result followed by later combat evidence -> no outcome change
+defeat result -> no victory save write
+victory result -> one admitted completion write
+world/HUD/overlay/CRT/GameHost -> same outcome, resultId and frameId
+restart from terminal -> new run epoch and ACTIVE phase
 ```
 
 ## Out of scope for this ledge
@@ -149,5 +148,5 @@ visual redesign
 networked play
 renderer replacement
 new save-slot UI
-balance changes before deterministic combat fixtures exist
+balance changes before deterministic combat and terminal fixtures exist
 ```
