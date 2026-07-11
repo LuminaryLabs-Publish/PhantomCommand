@@ -2,27 +2,26 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-11T11-51-06-04-00`
+**Last aligned:** `2026-07-11T13-28-37-04-00`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a grave-ring campaign. The campaign runs combat in `1/60` steps, but browser callbacks mutate selection, construction, orders, wave state, pause state and tower choice immediately between simulation ticks. The current audit defines the missing command-scheduling, clock-overrun and committed-frame authority needed for deterministic replay.
+PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a `640 x 360` grave-ring campaign. This audit isolates a terminal-outcome transaction defect: the final enemy can destroy the sanctum and then satisfy the final-wave-clear branch during the same fixed update, leaving `state.lost === true` and `state.won === true` while the UI and save path report victory.
 
 ## Plan ledger
 
-**Goal:** preserve the current game while making every authoritative mutation apply at a declared simulation tick and every rendered frame prove which committed state, camera and projection it consumed.
+**Goal:** make campaign completion one exclusive, monotonic, fixed-step transaction so defeat and victory cannot both commit, success persistence cannot follow defeat, and every terminal frame exposes one authoritative outcome receipt.
 
-- [ ] Finish Continue candidate resolution and pass one typed startup mode into the campaign.
-- [ ] Finish shared CRT display/input projection before pointer commands are admitted.
-- [ ] Normalize browser and `GameHost` actions into typed command envelopes.
-- [ ] Add canonical campaign phase and mutation admission.
-- [ ] Queue admitted commands by sequence and target tick.
-- [ ] Advance one monotonic simulation tick ID for every `1/60` update.
-- [ ] Make stall, visibility and catch-up behavior explicit instead of silently discarding time.
-- [ ] Publish state fingerprints and immutable committed-tick receipts.
-- [ ] Correlate world, HUD, minimap, overlay and CRT output with one render-frame receipt.
-- [ ] Add cadence, stall, replay and frame-correlation fixtures.
-- [ ] Complete lifecycle ownership and versioned checkpoint resume after command/frame authority.
+- [x] Compare the current ten-repository Publish inventory with the central ledger.
+- [x] Exclude `TheCavalryOfRome`.
+- [x] Confirm all nine eligible repositories remain centrally tracked with root `.agent` state.
+- [x] Skip the same-window active `HorrorCorridor` documentation write.
+- [x] Select only `PhantomCommand` as the oldest stable eligible repository.
+- [x] Trace core damage, enemy deletion, wave completion, terminal rendering, persistence, restart and `GameHost` observation.
+- [x] Identify the interaction loop, domains, kits and offered services.
+- [x] Define an exclusive terminal-outcome authority and fixture gate.
+- [x] Push documentation directly to `main`.
+- [ ] Runtime implementation and executable outcome fixtures remain future work.
 
 ## Current implementation queue
 
@@ -32,72 +31,97 @@ PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu 
    2a. CRT Display/Input Projection Authority + CPU/GLSL Parity Fixture Gate
    2b. Campaign Phase Admission + Paused/Terminal Mutation Fixture Gate
    2c. Fixed-Step Command Scheduling, Replay and Committed Frame Authority
-       + Cadence/Stall/Replay/Frame Fixture Gate
+   2d. Exclusive Terminal Outcome Transaction + Win/Loss Arbitration Fixture Gate
 3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
 4. Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate
 ```
 
-## Selection result
-
-The current Publish inventory contains ten accessible repositories. `TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `PhantomCommand` was the oldest eligible ledger entry at the start of this run and was the only Publish repository changed.
+Terminal arbitration belongs inside the fixed-step command/phase boundary. It must be designed now so the future replay journal, checkpoint writer and committed-frame receipt have one canonical terminal result to record.
 
 ## Product route
 
 ```txt
 index.html
   -> src/menu/graveyard-menu.js
-  -> game.html?campaign=new|continue
+  -> Begin or Continue route
+  -> game.html
   -> src/campaign/campaign-scene.js
 ```
 
 ## Current interaction loop
 
 ```txt
-browser event
-  -> pointer/key handler
-  -> immediate live-state or camera mutation
+menu
+  -> render graveyard source canvas through CRT
+  -> detect raw save-key presence
+  -> route to new or continue campaign
 
-animation frame
-  -> wall-clock delta capped at 50 ms
-  -> variable-step camera pan and zoom
-  -> accumulator += capped delta
-  -> zero to three exact 1/60 simulation updates
-  -> render live world, HUD, minimap and overlay
-  -> CRT render uses independent performance.now time
-  -> next RAF
+campaign input
+  -> mutate selection, build, order, wave, pause, tower or camera state
+
+fixed campaign update
+  -> spawn and move units
+  -> enemy may reach sanctum
+  -> core damage may set lost = true
+  -> update continues through towers, projectiles and wave-clear evaluation
+  -> final-wave clear may set won = true and write a victory save
+
+render and observation
+  -> overlay chooses won before lost
+  -> GameHost exposes both booleans
+  -> R reloads the page without a typed terminal-reset transaction
 ```
-
-The simulation step is fixed, but command application and camera/projection state are not tick-owned. Browser event ordering relative to RAF therefore affects which tick observes each mutation.
 
 ## Main finding
 
+The terminal state is represented by independent booleans:
+
 ```txt
-fixed simulation update: yes
-fixed command application: no
-simulation tick identity: no
-command sequence/target tick: no
-stall and dropped-time receipt: no
-state fingerprint: no
-committed render-frame identity: no
-replay journal: no
+paused
+won
+lost
 ```
 
-`frame()` caps wall-clock delta at `.05`, so longer stalls are silently discarded. Pointer and key callbacks invoke `selectAt`, `build`, `order`, `startWave`, pause and tower changes directly. Camera pan and zoom advance with variable frame delta outside the fixed-step loop. The rendered frame then combines the latest fixed-step state, variable camera state and independent CRT time without publishing a correlation receipt.
+A reachable same-tick path is:
+
+```txt
+final wave active
+  -> last enemy reaches the sanctum
+  -> core becomes 0
+  -> lost = true
+  -> enemy is deleted
+  -> update continues
+  -> spawn queue is empty and enemies() is empty
+  -> wave increments to waves.length
+  -> won = true
+  -> victory message and success save are written
+```
+
+The committed state can therefore become:
+
+```txt
+core: 0
+lost: true
+won: true
+```
+
+Presentation then resolves the conflict by checking `won` first, so the player sees `GRAVE RING SECURED`. Persistence also writes the victory summary despite the defeated sanctum.
 
 ## Domains in use
 
 ```txt
-route shell, menu, settings, save presence, audio and procedural art
-CRT containment, curvature, source upload and display projection
-pointer, source-canvas, isometric world and drag-selection projection
-campaign content, economy, health, selection, camera and terminal state
-build, order, wave, spawn, AI, combat, projectile and reward simulation
-wall-clock sampling, accumulator and fixed-step update
-world, HUD, minimap, overlay and CRT rendering
+static route and page shell
+menu selection panels settings audio and save presence
+procedural graveyard art and source canvas
+CRT contain curve upload display and pointer projection
+campaign ring map lanes pads archetypes waves economy and core health
+selection building orders wave start pause camera and identity counters
+spawn queue unit AI enemy pathing targeting projectiles damage rewards and effects
+fixed-step simulation and wall-clock frame sampling
+terminal predicate evaluation outcome arbitration phase latching and persistence
+world HUD minimap modal overlay and CRT presentation
 GameHost diagnostics and direct mutation bypasses
-Continue, command, phase, lifecycle and checkpoint authority candidates
-command scheduling, replay, state fingerprint and committed-frame authority candidates
-source checks, static build, Pages deployment and central synchronization
+runtime lifecycle checkpoint resume validation build deploy and central synchronization
 ```
 
 ## Implemented kits
@@ -125,25 +149,64 @@ construct-piece-state-kit
 construct-sequence-update-kit
 ```
 
-The complete current, planned and fixed-step authority service map is in `.agent/kit-registry.json`.
+## Required composed domain
+
+```txt
+phantom-command-terminal-outcome-authority-domain
+  -> phantom-command-terminal-evaluation-input-kit
+  -> phantom-command-defeat-predicate-kit
+  -> phantom-command-victory-predicate-kit
+  -> phantom-command-outcome-priority-policy-kit
+  -> phantom-command-exclusive-outcome-arbitration-kit
+  -> phantom-command-terminal-transition-kit
+  -> phantom-command-terminal-latch-kit
+  -> phantom-command-terminal-result-kit
+  -> phantom-command-terminal-persistence-policy-kit
+  -> phantom-command-terminal-frame-receipt-kit
+  -> phantom-command-terminal-observation-kit
+  -> phantom-command-terminal-outcome-fixture-kit
+```
+
+## Required invariant
+
+```txt
+for every campaign run and fixed tick:
+  terminalOutcome is exactly one of ACTIVE | VICTORY | DEFEAT
+
+once terminalOutcome is VICTORY or DEFEAT:
+  it cannot transition to another outcome in the same run epoch
+
+victory persistence is allowed only when:
+  terminalOutcome == VICTORY
+  core > 0
+  terminal receipt and state fingerprint agree
+```
 
 ## Read first
 
 ```txt
+.agent/trackers/2026-07-11T13-28-37-04-00/project-breakdown.md
 .agent/current-audit.md
-.agent/next-steps.md
 .agent/known-gaps.md
+.agent/next-steps.md
 .agent/validation.md
-.agent/trackers/2026-07-11T11-51-06-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-11T11-51-06-04-00.md
-.agent/architecture-audit/2026-07-11T11-51-06-04-00-fixed-step-command-frame-authority-dsk-map.md
-.agent/render-audit/2026-07-11T11-51-06-04-00-simulation-tick-render-frame-correlation-gap.md
-.agent/gameplay-audit/2026-07-11T11-51-06-04-00-event-command-fixed-step-loop.md
-.agent/interaction-audit/2026-07-11T11-51-06-04-00-event-command-target-tick-admission-map.md
-.agent/simulation-clock-audit/2026-07-11T11-51-06-04-00-catchup-stall-replay-contract.md
-.agent/deploy-audit/2026-07-11T11-51-06-04-00-cadence-replay-frame-fixture-gate.md
+.agent/turn-ledger/2026-07-11T13-28-37-04-00.md
+.agent/architecture-audit/2026-07-11T13-28-37-04-00-terminal-outcome-authority-dsk-map.md
+.agent/render-audit/2026-07-11T13-28-37-04-00-terminal-overlay-committed-outcome-gap.md
+.agent/gameplay-audit/2026-07-11T13-28-37-04-00-simultaneous-win-loss-loop.md
+.agent/interaction-audit/2026-07-11T13-28-37-04-00-terminal-restart-command-map.md
+.agent/outcome-authority-audit/2026-07-11T13-28-37-04-00-exclusive-terminal-outcome-contract.md
+.agent/deploy-audit/2026-07-11T13-28-37-04-00-terminal-outcome-fixture-gate.md
 ```
 
-## Validation state
+## Guardrails
 
-Documentation only. Runtime source, scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration did not change. No branch or pull request was created. Existing checks are source-pattern checks; cadence, stall, replay and committed-frame fixtures do not yet exist and were not run.
+```txt
+Push only to main.
+Create no branches or pull requests.
+Do not work on TheCavalryOfRome.
+Do not preserve independent won/lost booleans as terminal authority.
+Do not evaluate wave victory after defeat has been admitted in the same tick.
+Do not write a success checkpoint from a conflicting terminal state.
+Do not claim terminal correctness without breach, clear, simultaneous, persistence, replay and frame fixtures.
+```
