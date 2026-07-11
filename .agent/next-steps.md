@@ -1,126 +1,172 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T03-41-49-04-00`
+**Timestamp:** `2026-07-11T05-50-43-04-00`
 
 ## Summary
 
-Keep the dependency order intact. Continue resolution and action-result authority remain first; the lifecycle implementation should then wrap the existing menu and campaign modules without changing their visuals or rules.
+Keep the dependency order intact. Candidate resolution, fixed-step action authority and runtime lifecycle must land before the versioned checkpoint/resume transaction. The checkpoint implementation must capture only committed state, validate a complete staged graph, advance a resume epoch atomically and prove first-frame consumption.
 
 ## Plan ledger
 
-**Goal:** implement deterministic runtime ownership from startup through navigation and disposal, then prove it with scheduler, listener, global, audio and WebGL fixtures.
+**Goal:** implement deterministic Continue from candidate selection through an acknowledged resumed frame without allowing partial hydration, stale callbacks or invalid relational state.
 
 - [ ] Finish save-candidate resolution first.
 - [ ] Finish fixed-step command/action-result authority second.
-- [ ] Extract menu and campaign construction from module scope into factories.
-- [ ] Add a shared runtime-session authority.
-- [ ] Add fake-environment lifecycle fixtures.
-- [ ] Add browser remount/navigation smoke coverage.
-- [ ] Only then add the versioned resumable save envelope.
+- [ ] Finish runtime lifecycle ownership third.
+- [ ] Add committed checkpoint admission.
+- [ ] Add versioned envelope and content identity.
+- [ ] Add canonical fingerprint and migration registry.
+- [ ] Add staged hydration and invariant validation.
+- [ ] Add atomic resume commit, rollback and resume epoch.
+- [ ] Add detached persistence observation and first-frame acknowledgement.
+- [ ] Add roundtrip, corruption, migration and browser resume gates.
 
 ## Ordered implementation sequence
 
-1. **Extract route factories**
-   - Add `createMenuSession(environment, options)`.
-   - Add `createCampaignSession(environment, options)`.
-   - Keep current entry modules as thin boot adapters.
-   - Do not change drawing, timings, controls or gameplay.
+### Gate 1: Continue capability
 
-2. **Add session identity and state**
-   - Allocate `sessionId`, `runId` and monotonic `runGeneration`.
-   - Use explicit states: `constructing`, `running`, `transitioning`, `stopping`, `disposed`, `failed`.
-   - Reject invalid transitions with typed reasons.
+1. Replace Boolean save presence with a candidate-slot registry.
+2. Parse each local/session candidate independently.
+3. Classify schema, content identity and provenance.
+4. Apply deterministic precedence.
+5. Publish one selected candidate or a typed rejection.
+6. Pass candidate identity into campaign startup.
 
-3. **Add startup transaction and rollback**
-   - Register cleanup immediately after each resource acquisition.
-   - Roll back in reverse order if any later acquisition fails.
-   - Publish a clone-safe startup result.
+### Gate 2: Campaign action authority
 
-4. **Own the RAF**
-   - Retain the exact pending request ID.
-   - Cancel before transition, restart or dispose.
-   - Capture the generation in each callback.
-   - Reject callbacks from stale generations.
-   - Never permit more than one pending callback per session.
+1. Normalize pointer, keyboard and GameHost sources into commands.
+2. Add command IDs, sequences and target ticks.
+3. Preflight commands without mutation.
+4. Apply accepted commands only inside fixed-step updates.
+5. Publish typed results, domain events and canonical state fingerprints.
+6. Publish committed-frame consumption rows.
 
-5. **Own listeners and timers**
-   - Replace anonymous handlers with named functions.
-   - Register through a listener lease ledger.
-   - Retain fade/navigation and audio-close timers.
-   - Cancel or settle them during teardown.
+### Gate 3: Runtime lifecycle
 
-6. **Lease globals**
-   - Install `PhantomMenu` or `GameHost` through a lease.
-   - Record the previous property descriptor/value.
-   - Restore only when the disposing session still owns the lease.
-   - Expose immutable lifecycle readback instead of raw ownership objects.
+1. Extract menu and campaign factories from module scope.
+2. Add session identity and lifecycle states.
+3. Add startup transaction and rollback.
+4. Lease RAF, listeners, timers, globals, audio and CRT resources.
+5. Complete teardown before navigation, reload or restart.
+6. Fence stale callbacks by run generation.
+7. Expose detached lifecycle observation.
 
-7. **Own audio**
-   - Track context, sources, nodes and close promise.
-   - Stop and disconnect sources once.
-   - Cancel delayed-close timers.
-   - Await or record context close completion.
+### Gate 4: Versioned checkpoint and atomic resume
 
-8. **Own CRT/WebGL**
-   - Retain shader handles until post-link cleanup.
-   - Add `dispose()` and `getLifecycleState()`.
-   - Delete texture, buffer, program and retained shaders exactly once.
-   - Reject `render`, `resize` and coordinate operations after disposal with typed results.
+1. **Add a committed checkpoint boundary**
+   - Capture only after a completed fixed simulation tick.
+   - Require no partially applied command.
+   - Record tick and applied command sequence cursor.
+   - Reset or reject nonzero accumulator remainder.
 
-9. **Add transition authority**
-   - Normalize Begin, Continue, Restart and Exit as transition commands.
-   - Admit at most one terminal transition per session.
-   - Stop new input and command admission.
-   - Complete teardown before navigation or reload.
-   - Publish transition and disposal results.
+2. **Define schema and content identity**
+   - `schema = phantom-command.campaign-checkpoint`.
+   - Explicit schema version.
+   - Explicit campaign content ID/version.
+   - Stable content hash for rings, lanes, pads, archetypes and waves.
 
-10. **Add lifecycle observation**
-    - Bounded journal with sequence, sessionId, runGeneration, state, operation, result and resource counts.
-    - Clone-safe menu/campaign host snapshot.
-    - No raw WebGL, AudioContext, mutable state or mutable camera references.
+3. **Capture a canonical detached payload**
+   - Scalars: time, souls, core, wave, waveActive.
+   - Entity state: spawn, units, towers, projectiles.
+   - Relationships: pad tower ownership, selection, targets.
+   - Identity: uid, pid, tid.
+   - Continuity: selectedPad, towerType, camera.
+   - Terminal: paused, won, lost, message.
+   - Exclude live DOM, WebGL, audio, listeners, timers, RAF and input handles.
+
+4. **Fingerprint the checkpoint**
+   - Canonical key and collection ordering.
+   - Stable numeric normalization.
+   - Fingerprint covers all authoritative payload fields.
+   - Roundtrip capture must reproduce the same fingerprint.
+
+5. **Add admission and migration**
+   - Enforce size/type limits before parsing.
+   - Reject malformed JSON, unknown schema and content mismatch.
+   - Migrate only through declared deterministic functions.
+   - Recompute and verify fingerprint after migration.
+
+6. **Stage hydration off-line**
+   - Build new maps/arrays/counters away from the live session.
+   - Restore units and towers before references.
+   - Rebuild pads, selection, target and projectile links.
+   - Restore counters only after collision checks.
+
+7. **Validate invariants**
+   - Unique IDs.
+   - Valid references.
+   - Valid archetypes, lanes and wave bounds.
+   - Counter monotonicity.
+   - Valid terminal combinations.
+   - Canonical fingerprint parity.
+
+8. **Commit atomically**
+   - Preserve the active session while staging.
+   - Stop new input/command admission.
+   - Replace one complete state graph.
+   - Advance `resumeEpoch` exactly once.
+   - Reset input, wall-clock timestamp and accumulator.
+   - Roll back to the unchanged prior session on failure.
+
+9. **Acknowledge the first resumed frame**
+   - World, HUD and minimap consume the same tick/fingerprint.
+   - CRT upload acknowledges the same source frame.
+   - Publish one first-frame result for the resume epoch.
+   - Reject stale pre-resume RAF callbacks.
+
+10. **Add persistence observation**
+    - Selected candidate metadata.
+    - Last save/load result.
+    - Schema/content versions.
+    - Checkpoint ID/fingerprint.
+    - Resume epoch.
+    - Bounded clone-safe journal.
 
 11. **Add fixtures**
-    - Startup success and failure rollback.
-    - Duplicate start/stop/dispose.
-    - Stale RAF callback after restart.
-    - Exact listener add/remove parity.
-    - Global lease restoration and ownership conflict.
-    - Audio close timer cancellation.
-    - CRT resource deletion and render-after-dispose rejection.
-    - Menu-to-campaign navigation teardown.
-    - Campaign restart and exit teardown.
-    - Two mount/dispose cycles with zero retained resources.
+    - Fresh and mid-wave roundtrip.
+    - Active towers, projectiles, selections and camera continuity.
+    - Paused and terminal states.
+    - Corrupt fingerprint.
+    - Unsupported schema and content mismatch.
+    - Duplicate/missing references and counter collision.
+    - Failed hydrate/commit leaves active session unchanged.
+    - Idempotent duplicate Resume command.
+    - Migration from every supported version.
+    - First-frame acknowledgement.
 
 12. **Add deployment gate**
-    - Run `npm run check`.
-    - Run `npm run build`.
-    - Add `npm run fixture:lifecycle`.
-    - Add a browser smoke that mounts, transitions, remounts and confirms one RAF chain and zero leaked resources.
+    - `npm run check`.
+    - `npm run fixture:checkpoint`.
+    - `npm run build`.
+    - Browser Continue/resume smoke.
+    - Publish only after all pass on `main`.
 
 ## First target files
 
 ```txt
+src/persistence/checkpoint-envelope.js
+src/persistence/checkpoint-capture.js
+src/persistence/checkpoint-validation.js
+src/persistence/checkpoint-migrations.js
+src/persistence/hydration-stage.js
+src/persistence/resume-transaction.js
+src/persistence/storage-adapter.js
 src/runtime/runtime-session.js
-src/runtime/resource-ledger.js
-src/runtime/listener-lease.js
-src/runtime/global-lease.js
 src/menu/graveyard-menu.js
-src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
-tests/runtime-lifecycle.fixture.mjs
-scripts/check-lifecycle.mjs
+tests/checkpoint-roundtrip.fixture.mjs
+scripts/check-checkpoint.mjs
 package.json
 ```
 
 ## Out of scope for this ledge
 
 ```txt
-new waves or units
-camera rewrite
+new waves, units or towers
+new save-slot UI
+cloud or remote saves
+networked co-op persistence
 renderer replacement
 visual polish
-new save UI
-full save hydration
-networking
 construct-profile revival
 ```
