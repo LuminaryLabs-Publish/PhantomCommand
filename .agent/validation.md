@@ -20,6 +20,7 @@ This pass changed documentation only. Source inspection confirms that Continue i
 - [x] Verify that the query mode is ignored by campaign startup.
 - [x] Verify that Continue and Begin construct the same default campaign state.
 - [x] Define the missing candidate-resolution, startup-admission and fixture boundary.
+- [x] Push repo-local documentation and central tracking to `main`.
 - [ ] Run behavioral validation after the authority boundary exists.
 
 ## Current scripts
@@ -162,7 +163,9 @@ resumed state, startup result and first frame share one identity
 ```txt
 repo inventory compared: yes
 root .agent state confirmed: yes
-documentation pushed to main: in progress during this synchronization
+repo-local documentation pushed to main: yes
+central ledger updated on main: yes
+central internal change log added on main: yes
 runtime Continue implementation: raw Boolean presence only
 deterministic candidate resolver: no
 campaign continue-mode admission: no
