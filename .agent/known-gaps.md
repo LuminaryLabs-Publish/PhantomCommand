@@ -1,34 +1,34 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T03-41-49-04-00`
+**Timestamp:** `2026-07-11T05-50-43-04-00`
 
 ## Summary
 
-The current product can run correctly in a one-shot page load, but it cannot prove safe construction, remount, transition, restart or disposal. The gaps below are ordered by dependency.
+PhantomCommand still lacks four connected authority boundaries: candidate resolution, fixed-step command results, runtime lifecycle ownership and full versioned checkpoint/resume fidelity. Continue is not operational until all four gates are implemented and fixture-gated.
 
 ## Plan ledger
 
-**Goal:** keep unresolved risks explicit and prevent unrelated feature work from obscuring the required authority gates.
+**Goal:** keep unresolved risks explicit, ordered by dependency and separated from unrelated feature work.
 
 - [ ] Continue/save-candidate resolution.
 - [ ] Campaign action-result and fixed-step command authority.
 - [ ] Runtime session lifecycle authority.
-- [ ] Versioned full-session save and resume fidelity.
+- [ ] Versioned checkpoint capture and atomic resume authority.
+- [ ] First-frame resume acknowledgement.
 - [ ] Broader content and presentation work only after those gates.
 
-## Queue-head gaps
-
-### Continue resolution
+## Gate 1: Continue resolution gaps
 
 ```txt
 three keys x two storage layers collapse to Boolean presence
-candidate parse/schema/version/provenance is discarded
-menu calls presence detection twice
+candidate parse/schema/version/content/provenance is discarded
+menu calls presence detection more than once during construction
+candidate precedence is undefined
 campaign ignores campaign=new|continue
-victory payload is not resumable state
+candidate identity is not carried into startup
 ```
 
-### Campaign action authority
+## Gate 2: Campaign action authority gaps
 
 ```txt
 input and GameHost mutate live state directly
@@ -39,7 +39,7 @@ no replay journal or canonical fingerprint
 render has no committed-frame identity
 ```
 
-## Lifecycle gaps
+## Gate 3: Lifecycle gaps
 
 ### Session ownership
 
@@ -51,53 +51,25 @@ no explicit lifecycle state
 no startup result or startup rollback
 ```
 
-### Animation frame
+### Animation frame and event ownership
 
 ```txt
-request IDs are discarded
+RAF request IDs are discarded
 no cancelAnimationFrame path
 no stale-callback fence
-no one-pending-request invariant
-no stop or restart transaction
+multiple anonymous listeners
+no deterministic listener removal
+no timer or global lease ledger
 ```
 
-### Event listeners
+### Audio and CRT ownership
 
 ```txt
-multiple anonymous handlers
-no registration ledger
-no deterministic removal
-canvas, document and window ownership is fragmented
-```
-
-### Globals
-
-```txt
-window.PhantomMenu and window.GameHost overwrite prior values
-no ownership token
-no restore-on-dispose behavior
-GameHost exposes mutable state and camera
-CRT renderer exposes raw WebGL context
-```
-
-### Audio and timers
-
-```txt
-AudioContext and graph are not session-owned
-looping sources are not tracked in a disposal ledger
+AudioContext, sources and nodes are not session-owned
 delayed context-close timer is not retained
-menu transition and audio shutdown have no shared completion result
-```
-
-### CRT/WebGL
-
-```txt
-no dispose method
-no deleteTexture, deleteBuffer or deleteProgram
-shader lifecycle is incomplete
-no disposed-state guard
+CRT renderer has no dispose method
+no deleteTexture/deleteBuffer/deleteProgram proof
 no render-after-dispose rejection
-no resource counters or disposal proof
 ```
 
 ### Navigation and restart
@@ -110,31 +82,90 @@ navigation completion has no typed result
 teardown is not awaited or observable
 ```
 
-### Failure handling
+## Gate 4: Checkpoint and resume gaps
+
+### Current save format
 
 ```txt
-partial startup has no reverse cleanup stack
-later initialization failure can leak earlier resources
-no failed terminal state
-no last error or cleanup report
+writes only after victory
+payload: { scene, souls, wave }
+no schema identity
+no schema version
+no campaign content identity/version
+no checkpoint ID
+no simulation tick
+no command sequence cursor
+no canonical state fingerprint
+```
+
+### Missing authoritative state
+
+```txt
+core health and elapsed time
+waveActive and spawn queue
+units and their combat/movement state
+towers and pad ownership
+projectiles and targets
+selection and selected pad
+tower type and camera continuity
+uid/pid/tid counters
+paused/won/lost/message state
+```
+
+### Missing load path
+
+```txt
+campaign never reads a candidate
+campaign never parses or validates a save
+no migration registry
+no staged hydration
+no reference rebuilding
+no invariant validation
+no atomic state replacement
+no rollback
+no resume epoch
+```
+
+### Missing relational proof
+
+```txt
+pad tower IDs may not resolve
+selected IDs may not resolve
+projectile targets may not resolve
+spawn entries may reference invalid archetypes/lanes
+restored counters may collide
+terminal flags may conflict
+fingerprint parity is unavailable
+```
+
+### Missing frame proof
+
+```txt
+no checkpoint fingerprint on render input
+no resume epoch on render input
+no world/HUD/minimap application result
+no CRT upload acknowledgement
+no first resumed-frame completion barrier
+stale pre-resume RAF callbacks are not fenced
 ```
 
 ## Validation gaps
 
 ```txt
 current checks are source-pattern checks
-no fake RAF scheduler fixture
-no listener parity fixture
-no global lease fixture
-no audio lifecycle fixture
-no WebGL resource fixture
-no startup rollback fixture
-no remount fixture
-no menu-to-campaign teardown fixture
-no restart/exit fixture
-no browser resource-retention smoke
+no candidate precedence fixture
+no command/replay/committed-frame fixture
+no fake RAF/listener/global/audio/WebGL lifecycle fixture
+no checkpoint roundtrip fixture
+no migration fixture
+no malformed/corrupt candidate fixture
+no relational invariant fixture
+no hydration rollback fixture
+no duplicate/stale Resume command fixture
+no first-frame resume fixture
+no browser Continue/resume smoke
 ```
 
 ## Do not claim
 
-Do not claim lifecycle safety, restart safety, remount safety, resource cleanup, or render disposal until the lifecycle fixture gate and browser smoke pass on `main`.
+Do not claim Continue works, campaign resume, full save fidelity, migration safety, corruption safety, atomic load, lifecycle safety, restart safety or first-frame fidelity until the ordered fixture gates and browser smoke pass on `main`.
