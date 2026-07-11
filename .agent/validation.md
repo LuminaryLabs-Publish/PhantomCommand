@@ -1,20 +1,21 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T03-41-49-04-00`
+**Timestamp:** `2026-07-11T05-50-43-04-00`
 
 ## Summary
 
-This pass changed documentation only. The repository still has source-pattern checks and a static build, but no executable lifecycle fixture.
+This pass changed documentation only. The repository still has source-pattern checks and a static build, but no executable checkpoint/resume fixture or browser Continue smoke.
 
 ## Plan ledger
 
-**Goal:** distinguish verified repository state from planned lifecycle proof.
+**Goal:** distinguish verified repository state from planned persistence, resume and first-frame proof.
 
 - [x] Confirm default branch is `main`.
 - [x] Confirm no branch or pull request was created.
-- [x] Read menu, campaign, CRT and package source.
+- [x] Read menu, campaign, CRT, package and current `.agent` source.
+- [x] Verify the current three-field victory write and missing load path.
 - [x] Record current scripts and missing fixtures.
-- [ ] Run behavioral validation after lifecycle implementation exists.
+- [ ] Run behavioral validation after checkpoint/resume implementation exists.
 
 ## Current scripts
 
@@ -36,7 +37,7 @@ dependencies changed: no
 routes changed: no
 gameplay changed: no
 rendering changed: no
-persistence changed: no
+persistence behavior changed: no
 deployment workflow changed: no
 branch created: no
 pull request created: no
@@ -45,39 +46,92 @@ npm run build: not run
 browser smoke: not run
 ```
 
-## Missing future gate
+## Verified by source inspection
 
 ```txt
-npm run fixture:lifecycle
+menu scans:
+  phantomCommand.save
+  nexus.sceneSnapshot
+  phantom.command.campaign
+  across localStorage and sessionStorage
+
+menu Continue output:
+  game.html?campaign=continue
+
+campaign mode read:
+  absent
+
+campaign load/hydration path:
+  absent
+
+victory write:
+  { scene: "grave-ring", souls, wave }
+
+fixed simulation step:
+  1/60
 ```
 
-Required assertions:
+## Missing future gates
 
 ```txt
-one active session owns one pending RAF
-stale RAF callbacks cannot mutate or render
-listener add/remove counts match
-global leases restore safely
-startup failure leaves zero owned resources
-menu and campaign transition exactly once
-audio sources stop and context close is tracked
-CRT texture, buffer, program and shaders are released exactly once
-dispose is idempotent
-no render or input is admitted after disposal
-two mount/dispose cycles leave zero retained resources
+npm run fixture:candidate-resolver
+npm run fixture:action-authority
+npm run fixture:lifecycle
+npm run fixture:checkpoint
+npm run smoke:resume
+```
+
+## Checkpoint fixture assertions
+
+```txt
+capture occurs only at a committed tick
+canonical roundtrip preserves the state fingerprint
+schema/content identity are required
+all entity and relationship invariants validate
+unsupported version/content is rejected
+corrupt fingerprint is rejected
+migration is deterministic
+failed staging or commit leaves active state unchanged
+resume epoch advances exactly once
+stale session/generation cannot commit
+duplicate Resume command is idempotent
+input, wall time and accumulator are reset rather than restored
+```
+
+## First-frame assertions
+
+```txt
+world, HUD and minimap consume the resumed tick/fingerprint
+CRT upload acknowledges the same source frame
+first-frame acknowledgement occurs once per resume epoch
+no partially staged state can render
+no stale pre-resume RAF callback can render under the new epoch
 ```
 
 ## Browser smoke
 
 ```txt
 load menu
-start and cancel panel interactions
-begin campaign transition
-verify menu teardown before navigation
-load campaign
-exercise input and render
-restart or exit
-verify campaign teardown
-remount both routes
-confirm one RAF chain, one listener set and no retained audio/WebGL resources
+install a valid checkpoint candidate
+verify Continue resolves the intended candidate
+activate Continue
+verify candidate identity reaches campaign boot
+resume mid-wave state
+verify units, towers, pads, projectiles, counters, camera and terminal state
+verify first rendered frame acknowledges checkpoint fingerprint and resume epoch
+reload and repeat
+install malformed candidate
+verify typed rejection and no partial mutation
+```
+
+## Current claim boundary
+
+```txt
+repo inventory compared: yes
+root .agent state confirmed: yes
+documentation pushed to main: yes
+runtime checkpoint implementation: no
+Continue resume behavior: no
+roundtrip/corruption proof: no
+first-frame resume proof: no
 ```
