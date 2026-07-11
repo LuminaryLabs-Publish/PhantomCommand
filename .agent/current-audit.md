@@ -1,22 +1,38 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T03-41-49-04-00`
+**Timestamp:** `2026-07-11T05-50-43-04-00`
 
 ## Summary
 
-The codebase has a compact, understandable menu and campaign loop, but runtime resources are created directly at module scope and are not owned by a session object. The missing boundary is not another renderer or gameplay rewrite; it is lifecycle authority across construction, running, transition, failure, restart and disposal.
+PhantomCommand has a clear menu and fixed-step campaign, but Continue does not resume a campaign. The menu scans raw storage values only for Boolean presence, the campaign ignores `campaign=continue`, and victory stores only `{ scene, souls, wave }`. The missing fourth authority boundary is a versioned checkpoint captured at a committed simulation tick, validated and migrated before use, hydrated off-line, committed atomically under a new resume epoch, and acknowledged by the first rendered frame.
 
 ## Plan ledger
 
-**Goal:** record the full current product loop, domains, kit services and lifecycle gaps so implementation can add ownership without changing gameplay or visual output.
+**Goal:** catalogue the complete current product and define the checkpoint/resume architecture without changing gameplay, visuals, candidate precedence, command semantics or lifecycle ownership.
 
-- [x] Read the menu, campaign, CRT renderer and package scripts.
-- [x] Trace all RAF, listener, timer, global, audio and WebGL ownership.
-- [x] Preserve the current Continue and action-authority dependency order.
-- [x] Identify the lifecycle domain and candidate kits.
-- [x] Define proof requirements for startup, transition, remount and disposal.
-- [ ] Implement lifecycle authority.
-- [ ] Add executable fixtures and browser smoke tests.
+- [x] Reconcile the full Publish inventory and central ledgers.
+- [x] Select only `PhantomCommand` by the oldest documented-selection rule.
+- [x] Read the current menu, campaign, CRT and package source.
+- [x] Trace New, Continue, gameplay, victory write and render paths.
+- [x] Catalogue active domains, implemented kits and services.
+- [x] Classify durable and transient campaign state.
+- [x] Define schema, content identity, migration and fingerprint requirements.
+- [x] Define staged hydration, relational validation, rollback and resume epoch.
+- [x] Define first-frame and deployment proof.
+- [ ] Implement the four ordered authority gates.
+- [ ] Add executable fixtures and browser smoke coverage.
+
+## Selection audit
+
+```txt
+accessible Publish repositories: 10
+eligible non-Cavalry repositories: 9
+central ledger entries: 9/9
+root .agent state: 9/9
+selected: LuminaryLabs-Publish/PhantomCommand
+selection rule: oldest eligible documented repository
+excluded: LuminaryLabs-Publish/TheCavalryOfRome
+```
 
 ## Interaction loops
 
@@ -25,35 +41,56 @@ The codebase has a compact, understandable menu and campaign loop, but runtime r
 ```txt
 module evaluates
   -> create 480 x 270 source canvas
-  -> create graveyard art provider
-  -> create CRT WebGL renderer
-  -> read settings
-  -> scan six save slots as Boolean presence
+  -> create graveyard art and CRT renderer
+  -> read menu settings
+  -> scan three save keys across localStorage and sessionStorage
+  -> reduce all candidates to Boolean hasSave
   -> create mutable menu state
-  -> attach canvas, document and button listeners
-  -> lazily create AudioContext, oscillators and looping buffer source
+  -> attach canvas/document/button listeners
   -> start recursive RAF
-  -> draw art and CRT each frame
-  -> begin timed fade
-  -> assign window.location.href
+  -> Begin emits game.html?campaign=new
+  -> Continue emits game.html?campaign=continue
 ```
 
 ### Campaign
 
 ```txt
 module evaluates
-  -> create 640 x 360 source canvas
-  -> create CRT WebGL renderer
+  -> create 640 x 360 source canvas and CRT renderer
   -> build rings, lanes, pads, archetypes and waves
-  -> create mutable camera, input and campaign state
-  -> attach canvas and window listeners
-  -> expose mutable GameHost references
+  -> create fresh uid/pid/tid counters
+  -> create fresh camera, input and campaign state
+  -> create six starter allies
+  -> attach canvas/window listeners
   -> start recursive RAF
-  -> update camera with variable dt
-  -> apply zero or more exact 1/60 simulation steps
+  -> browser and GameHost actions mutate live state
+  -> accumulator applies exact 1/60 updates
   -> draw world, HUD, minimap and terminal overlay
-  -> upload source canvas and draw CRT
-  -> reload or navigate on keyboard request
+  -> upload/draw CRT
+  -> on victory write { scene, souls, wave }
+```
+
+### Authored Continue intent versus actual behavior
+
+```txt
+menu: campaign=continue
+campaign: query ignored
+result: fresh campaign state
+```
+
+### Target checkpoint/resume loop
+
+```txt
+Continue command
+  -> typed candidate resolution with storage/key provenance
+  -> checkpoint parse and schema/content admission
+  -> supported migration
+  -> canonical fingerprint validation
+  -> staged hydration and reference rebuilding
+  -> relational invariant validation
+  -> atomic session replacement
+  -> resume epoch publication
+  -> first world/HUD/minimap/CRT frame acknowledgement
 ```
 
 ## Domains in use
@@ -91,9 +128,10 @@ selection-domain
 campaign-message-domain
 campaign-terminal-state-domain
 camera-pan-zoom-domain
+identity-counter-domain
 ```
 
-### Campaign simulation
+### Interaction and simulation
 
 ```txt
 build-action-domain
@@ -145,6 +183,30 @@ lifecycle-journal-domain
 lifecycle-observation-domain
 ```
 
+### Missing checkpoint and resume authority
+
+```txt
+committed-checkpoint-boundary-domain
+save-schema-version-domain
+campaign-content-identity-domain
+checkpoint-envelope-domain
+checkpoint-capture-domain
+checkpoint-fingerprint-domain
+save-admission-domain
+save-migration-domain
+checkpoint-invariant-domain
+hydration-staging-domain
+reference-rebuild-domain
+atomic-resume-transaction-domain
+resume-rollback-domain
+resume-epoch-domain
+storage-adapter-domain
+resume-result-domain
+resume-journal-domain
+first-frame-resume-ack-domain
+roundtrip-corruption-proof-domain
+```
+
 ### Proof and deployment
 
 ```txt
@@ -172,119 +234,138 @@ central-ledger-sync-domain
 | `legacy-gamehost-diagnostics-kit` | Mutable state/camera exposure, direct actions and aggregate clone |
 | `menu-static-check-kit` | Source-pattern checks for menu structure |
 | `campaign-static-check-kit` | Source-pattern checks for campaign structure |
-| `static-build-copy-kit` | Copy static route and source files to deployment artifact |
+| `static-build-copy-kit` | Copy static route and source files to the deployment artifact |
 | `pages-deploy-kit` | GitHub Pages publishing |
-| retained construct kits | Legacy concentric construction descriptors and sequence helpers not used by the active campaign route |
+| retained construct kits | Historical concentric construction descriptors and sequence helpers not used by the active campaign route |
 
-## Lifecycle ownership gaps
-
-```txt
-RAF:
-  menu and campaign discard request IDs
-  no stop, resume or stale-callback fence
-  every admitted callback schedules a successor
-
-listeners:
-  several handlers are anonymous
-  no listener ledger
-  no exact remove operation
-  canvas, document and window ownership is split
-
-globals:
-  PhantomMenu and GameHost overwrite prior values
-  no lease token or restore-on-dispose behavior
-  GameHost exposes mutable state and camera
-
-audio:
-  AudioContext, oscillator, looping buffer source and nodes are route-owned but not session-owned
-  delayed close timer is not retained
-  transition does not await or report audio shutdown
-
-CRT/WebGL:
-  program, buffer and texture are allocated
-  shader objects are not retained for explicit post-link deletion
-  no deleteProgram, deleteBuffer or deleteTexture
-  no dispose state or render-after-dispose rejection
-  raw gl escapes through the public return value
-
-startup and failure:
-  allocation happens during module evaluation
-  partial startup has no rollback stack
-  a shader or later initialization failure can leave earlier resources alive
-
-navigation:
-  menu fade navigates after time threshold
-  campaign reload and exit use location directly
-  no typed transition command/result
-  no exactly-once teardown completion proof
-```
-
-## Candidate lifecycle kits and services
+## Current persistence behavior
 
 ```txt
-phantom-command-runtime-session-authority-kit
-  construct, start, stop, transition, restart, fail and dispose one route session
+SAVE_KEYS:
+  phantomCommand.save
+  nexus.sceneSnapshot
+  phantom.command.campaign
 
-phantom-command-runtime-session-id-kit
-  allocate sessionId, runId and runGeneration
+menu read:
+  localStorage or sessionStorage value exists -> hasSave=true
 
-phantom-command-lifecycle-state-kit
-  enforce constructing -> running -> transitioning/stopping -> disposed/failed
+campaign write:
+  localStorage[phantomCommand.save] =
+    { scene: "grave-ring", souls: state.souls, wave: state.wave }
 
-phantom-command-startup-transaction-kit
-  stage resources, register cleanup immediately and publish start result
-
-phantom-command-animation-frame-lease-kit
-  retain one RAF id, cancel it and reject stale generation callbacks
-
-phantom-command-listener-lease-kit
-  register named listeners and remove each exactly once
-
-phantom-command-timer-lease-kit
-  retain transition and delayed-close timers
-
-phantom-command-global-exposure-lease-kit
-  own, replace and restore PhantomMenu/GameHost globals safely
-
-phantom-command-audio-resource-owner-kit
-  stop sources, disconnect nodes, close context and report completion
-
-phantom-command-crt-resource-owner-kit
-  delete texture, buffer, program and shaders; reject render after disposal
-
-phantom-command-transition-command-kit
-  normalize menu navigation, restart and exit requests
-
-phantom-command-transition-result-kit
-  publish accepted, rejected, no-op, completed and failed results
-
-phantom-command-ordered-dispose-kit
-  stop admission, cancel RAF, remove listeners, release globals, close audio, dispose CRT
-
-phantom-command-startup-rollback-kit
-  unwind partial construction in reverse acquisition order
-
-phantom-command-lifecycle-journal-kit
-  retain bounded ordered lifecycle and cleanup rows
-
-phantom-command-lifecycle-observation-kit
-  expose clone-safe state, leases, last result and disposal counts
-
-phantom-command-lifecycle-fixture-kit
-  fake scheduler, fake event targets, fake globals, fake audio and fake WebGL assertions
+campaign read:
+  absent
 ```
 
-## Required invariants
+The current payload cannot reconstruct authoritative gameplay state.
+
+## Durable checkpoint state
+
+A resumable checkpoint needs, at minimum:
 
 ```txt
-one active route session owns at most one RAF request
-every listener registration has one matching removal
-every global replacement has one matching release or restoration
-every timer is cancelled or completes under the owning session
-every audio/WebGL allocation is released exactly once
-dispose is idempotent
-no callback mutates or renders after runGeneration changes
-no render occurs after CRT disposal
-startup failure leaves zero owned resources
-navigation occurs only after teardown reaches a terminal result
+simulation:
+  committed tick, time and command sequence cursor
+
+economy/progression:
+  souls, core, wave and waveActive
+
+entities:
+  spawn queue, units, towers and projectiles
+
+relationships:
+  pad-to-tower ownership, selection and projectile targets
+
+identity:
+  uid, pid and tid counters
+
+continuity:
+  selectedPad, towerType and camera position/zoom
+
+terminal:
+  paused, won, lost and message
 ```
+
+Presentation effects may be explicitly classified as transient or included for exact visual continuity. Input, DOM, WebGL, audio, listener, timer, RAF, wall-clock and accumulator state must not be persisted as live resources.
+
+## Relational invariants
+
+```txt
+all entity IDs are unique
+all pad tower references resolve
+all selected IDs resolve to live player units
+all projectile targets resolve to live units
+spawn entries use valid archetypes and lanes
+uid/pid/tid exceed every restored identifier
+wave and waveActive agree with spawn/enemy state
+won/lost/paused combinations are valid
+schema/content identity match the loaded runtime
+canonical fingerprint matches the payload
+```
+
+## Candidate checkpoint kits
+
+```txt
+phantom-command-checkpoint-boundary-kit
+phantom-command-save-schema-version-kit
+phantom-command-campaign-content-identity-kit
+phantom-command-checkpoint-envelope-kit
+phantom-command-checkpoint-capture-kit
+phantom-command-checkpoint-fingerprint-kit
+phantom-command-save-admission-kit
+phantom-command-save-migration-registry-kit
+phantom-command-checkpoint-invariant-kit
+phantom-command-hydration-stage-kit
+phantom-command-reference-rebuild-kit
+phantom-command-atomic-resume-transaction-kit
+phantom-command-resume-rollback-kit
+phantom-command-resume-epoch-kit
+phantom-command-storage-adapter-kit
+phantom-command-resume-result-kit
+phantom-command-resume-journal-kit
+phantom-command-first-frame-resume-ack-kit
+phantom-command-roundtrip-fixture-kit
+```
+
+## Main findings
+
+### 1. Save presence is not save admission
+
+A nonempty storage value can be malformed, incompatible, stale or unrelated. Boolean presence cannot support Continue safely.
+
+### 2. The campaign ignores resume intent
+
+The query string is never read. New and Continue both construct the same fresh singleton state.
+
+### 3. The victory payload is not a checkpoint
+
+Three fields cannot restore the campaign entity graph, identity counters, fixed-step position or relational state.
+
+### 4. Hydration cannot mutate live state incrementally
+
+A partial load could leave pads, towers, selected IDs, projectiles and counters inconsistent. Hydration must stage and validate a complete graph before commit.
+
+### 5. Resume needs an epoch
+
+A committed load replaces session identity. Stale input, commands, RAF callbacks, GameHost observations and frames must be fenced from the new epoch.
+
+### 6. Render consumption requires acknowledgement
+
+The first world, HUD, minimap and CRT frame after resume must identify the checkpoint fingerprint, tick and resume epoch.
+
+### 7. Executable proof is absent
+
+Current checks are source-pattern checks. There is no roundtrip, migration, corruption, rollback, idempotency or first-frame resume fixture.
+
+## Ordered implementation queue
+
+```txt
+1. Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+2. Campaign Action Result Authority + Fixed-Step Replay/Frame Fixture Gate
+3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
+4. Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate
+```
+
+## Validation status
+
+Documentation only. Runtime behavior was not changed. `npm run check`, `npm run build`, checkpoint fixtures and browser resume smoke were not run. No branch or pull request was created.
