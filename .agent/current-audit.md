@@ -1,25 +1,25 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T15-08-41-04-00`
+**Timestamp:** `2026-07-11T16-49-51-04-00`
 
 ## Summary
 
-PhantomCommand presents Continue as a real capability, but the menu only checks whether any raw string exists under three key names across local or session storage. It does not parse, validate, rank or select a candidate, and `campaign-scene.js` never reads `campaign=continue`. Continue therefore starts the same fresh default campaign as Begin.
+PhantomCommand has an exact `1/60` update step, but combat inside that step is not yet deterministic or liveness-safe. `update()` captures `Object.values(state.units)`, and `damage()` can delete a later actor from `state.units` before that actor's captured entry is processed. Because `updateUnit()` does not re-check liveness, a killed unit can still move, attack, create a projectile or damage the sanctum in the same tick. Rendering then omits the deleted actor, creating a visible-causality gap.
 
 ## Plan ledger
 
-**Goal:** catalogue the complete runtime and define one deterministic save-candidate resolution and campaign-startup admission boundary before action, phase, replay, lifecycle or checkpoint work proceeds.
+**Goal:** preserve the complete architecture census and define one staged combat-resolution transaction that is independent from object insertion order and produces a committed, renderable result.
 
-- [x] Compare the current Publish inventory with the central ledger.
+- [x] Compare the complete current Publish inventory with the central ledger.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Detect a same-window active interaction-target audit in `HorrorCorridor`.
-- [x] Select only `PhantomCommand` as the oldest stable eligible repository.
-- [x] Read menu save scanning, menu projection, route transition, campaign initialization and victory save source.
-- [x] Identify the interaction loop, all domains, implemented kits and offered services.
-- [x] Prove that raw storage presence and campaign resumability are currently unrelated.
-- [x] Define candidate parsing, classification, precedence, capability, startup admission, journal and fixture contracts.
-- [ ] Implement the boundary and executable fixtures.
+- [x] Select only `PhantomCommand` as the oldest eligible repository.
+- [x] Read campaign content, input, fixed-step update, targeting, damage, deletion, rewards, terminal checks, rendering and validation.
+- [x] Identify the full interaction loop.
+- [x] Identify all domains in use.
+- [x] Identify all implemented kits and current services.
+- [x] Define combat input, liveness, ordering, intent, damage, retirement, cleanup, result and fixture contracts.
+- [ ] Implement and execute the authority boundary.
 
 ## Selection audit
 
@@ -28,154 +28,125 @@ accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 central ledger entries: 9/9
 root .agent state: 9/9
-same-window active repo skipped: HorrorCorridor at 2026-07-11T15-01-33-04-00
+new or missing eligible repositories: 0
 selected: LuminaryLabs-Publish/PhantomCommand
-selected prior central timestamp: 2026-07-11T13-28-37-04-00
+selected prior central timestamp: 2026-07-11T15-08-41-04-00
 excluded: LuminaryLabs-Publish/TheCavalryOfRome
+other Publish repositories changed: none
 ```
 
-Stable comparison at selection:
+Stable comparison:
 
 ```txt
-PhantomCommand     2026-07-11T13-28-37-04-00 selected
-ZombieOrchard      2026-07-11T13-41-23-04-00
-TheUnmappedHouse   2026-07-11T13-49-30-04-00
-AetherVale         2026-07-11T14-00-01-04-00
-IntoTheMeadow      2026-07-11T14-08-51-04-00
-PrehistoricRush    2026-07-11T14-31-27-04-00
-MyCozyIsland       2026-07-11T14-41-28-04-00
-TheOpenAbove       2026-07-11T14-50-59-04-00
-HorrorCorridor     active repo-local audit at 2026-07-11T15-01-33-04-00
+PhantomCommand     2026-07-11T15-08-41-04-00 selected
+ZombieOrchard      2026-07-11T15-20-27-04-00
+TheUnmappedHouse   2026-07-11T15-30-50-04-00
+AetherVale         2026-07-11T15-38-27-04-00
+IntoTheMeadow      2026-07-11T15-49-49-04-00
+PrehistoricRush    2026-07-11T15-59-12-04-00
+MyCozyIsland       2026-07-11T16-10-58-04-00
+TheOpenAbove       2026-07-11T16-30-25-04-00
+HorrorCorridor     2026-07-11T16-38-10-04-00
 TheCavalryOfRome   excluded
 ```
 
-## Interaction loops
-
-### Menu startup loop
+## Complete interaction loop
 
 ```txt
 index.html
   -> graveyard-menu.js
-  -> define three save-key names
-  -> call hasCampaignSave() twice during menu construction
-  -> scan localStorage then sessionStorage per key
-  -> collapse any nonempty string to true
-  -> project Continue as BOUND or EMPTY
+  -> procedural menu art, settings, audio and raw save presence
+  -> Begin or Continue navigation
+
+game.html
+  -> campaign-scene.js
+  -> create source canvas and CRT
+  -> construct rings, lanes, pads, archetypes, waves, camera and state
+  -> create six allies
+  -> install input listeners
+  -> expose GameHost
+  -> request RAF
+
+input callback
+  -> immediate live mutation of selection, order, build, wave, pause or camera
+
+RAF
+  -> sample wall-clock time
+  -> clamp accepted delta to 50 ms
+  -> update variable-delta camera
+  -> run zero or more exact 1/60 updates
+  -> draw world, HUD, minimap and overlay
+  -> upload and draw CRT
 ```
 
-### Begin loop
+## Combat-resolution loop
 
 ```txt
-BEGIN CAMPAIGN
-  -> game.html?campaign=new
-  -> campaign module constructs default state
-  -> souls 145, core 24, wave 0
-  -> six default allied units
-  -> empty towers, projectiles and effects
-  -> fresh counters and camera
-```
-
-### Continue loop
-
-```txt
-CONTINUE
-  -> game.html?campaign=continue
-  -> campaign module never reads location.search
-  -> no key or storage layer is read
-  -> no candidate is selected
-  -> no payload is parsed or hydrated
-  -> same default state as Begin
-```
-
-### Save-write loop
-
-```txt
-final wave clears
-  -> state.won = true
-  -> localStorage phantomCommand.save receives:
-       { scene: "grave-ring", souls, wave }
-  -> no schema, checkpoint ID, content revision or fingerprint
-  -> menu later treats the raw string as sufficient Continue evidence
+update(dt)
+  -> decrement due spawn rows
+  -> insert spawned enemies
+  -> capture Object.values(state.units)
+  -> process captured units in insertion order
+       cooldown
+       target selection
+       movement or attack
+       immediate damage or projectile creation
+       immediate deletion and reward
+       possible core breach and self-deletion
+  -> process towers
+  -> process projectiles and splash damage
+  -> age effects
+  -> evaluate wave completion and terminal state
 ```
 
 ## Main finding
 
-### Six possible slots collapse to one Boolean
-
-The declared keys are:
+### Dead actor can still act
 
 ```txt
-phantomCommand.save
-nexus.sceneSnapshot
-phantom.command.campaign
+const actors = Object.values(state.units)
+earlier actor kills later actor
+damage() deletes state.units[laterActor.id]
+actors still contains laterActor
+updateUnit(laterActor) executes
 ```
 
-Each key can exist in:
+The deleted actor can still:
 
 ```txt
-localStorage
-sessionStorage
+select a target
+move
+perform melee damage
+launch a projectile
+breach the sanctum
+create visible effects
 ```
 
-The scan therefore covers six possible slots, but returns only true or false. Per key, a truthy local value hides a session value. Across keys, `Array.some()` stops at the first truthy result. No candidate object survives the scan.
-
-### Malformed or unrelated payloads enable Continue
-
-The menu never calls `JSON.parse()` for campaign candidates. The following values all enable Continue:
+### Combat result depends on incidental order
 
 ```txt
-"not-json"
-"null"
-"{}"
-legacy payload for another product revision
-partial victory summary
-stale session snapshot
+allies are inserted before enemies
+enemies are inserted by spawn order
+nearest() resolves equal distance by first encountered entry
+immediate damage changes which later entries survive
+checkpoint reconstruction order can alter next-tick behavior
 ```
 
-A storage exception is caught around the complete scan and returns false, so one inaccessible slot can hide otherwise valid candidates without a typed read result.
-
-### Candidate precedence is undefined
-
-The current code implies an accidental read order:
+### Spawn and cleanup policy is implicit
 
 ```txt
-phantomCommand.save local
-phantomCommand.save session
-nexus.sceneSnapshot local
-nexus.sceneSnapshot session
-phantom.command.campaign local
-phantom.command.campaign session
+newly spawned enemies act during the same update
+unit target cleanup is lazy
+projectile target cleanup occurs in the projectile phase
+selection cleanup occurs inside damage()
+reward settlement occurs inside deletion
+core breach occurs inside unit iteration
+wave clear occurs after mutable subsystem passes
 ```
-
-But because the output is Boolean, the order does not actually select a candidate. There is no policy for:
-
-```txt
-current schema over legacy schema
-newer checkpoint over older checkpoint
-local over session
-committed checkpoint over completion summary
-valid candidate over malformed higher-priority slot
-matching content revision over stale revision
-```
-
-### Route mode is projection only
-
-`activateMain()` routes to either:
-
-```txt
-game.html?campaign=new
-game.html?campaign=continue
-```
-
-`campaign-scene.js` constructs state immediately at module scope and contains no `URLSearchParams`, `location.search`, load, migration or hydration path. The query string changes the URL but not the campaign state.
-
-### New mode is also undefined
-
-Begin does not explicitly reject, archive or clear existing candidates. If later startup logic is added without a typed mode contract, a stale candidate could accidentally leak into a new campaign.
 
 ## Domains in use
 
-### Route, menu and product shell
+### Route, menu and startup
 
 ```txt
 static-route-shell-domain
@@ -188,24 +159,12 @@ menu-transition-domain
 menu-audio-domain
 graveyard-art-domain
 source-canvas-domain
-```
-
-### Save candidate and startup authority
-
-```txt
 save-slot-registry-domain
 storage-slot-read-domain
 raw-save-presence-domain
-save-candidate-parse-domain-next
-save-schema-classification-domain-next
-save-content-identity-domain-next
-save-candidate-provenance-domain-next
-save-candidate-precedence-domain-next
 save-candidate-resolution-domain-next
 continue-capability-domain-next
-campaign-startup-mode-domain-next
 campaign-startup-admission-domain-next
-candidate-journal-domain-next
 ```
 
 ### Projection and presentation
@@ -224,7 +183,7 @@ display-to-source-authority-domain-next
 projection-revision-domain-next
 ```
 
-### Campaign content and state
+### Campaign content and mutable state
 
 ```txt
 ring-map-domain
@@ -237,26 +196,19 @@ souls-economy-domain
 sanctum-core-health-domain
 selection-domain
 campaign-message-domain
-campaign-phase-domain-next
 camera-pan-zoom-domain
 identity-counter-domain
+campaign-phase-domain-next
 ```
 
-### Simulation and interaction
+### Input, command and fixed step
 
 ```txt
 build-action-domain
 order-action-domain
 wave-start-action-domain
 pause-resume-action-domain
-spawn-queue-domain
-unit-ai-domain
-enemy-pathing-domain
-ally-targeting-domain
-tower-targeting-domain
-projectile-domain
-damage-reward-domain
-effect-domain
+gamehost-action-domain
 fixed-step-simulation-domain
 command-sequence-domain-next
 target-tick-domain-next
@@ -265,21 +217,47 @@ replay-journal-domain-next
 state-fingerprint-domain-next
 ```
 
-### Terminal, persistence and lifecycle
+### Combat resolution
 
 ```txt
-core-breach-predicate-domain
+spawn-queue-domain
+spawn-admission-domain-next
+entity-liveness-domain-next
+deterministic-entity-order-domain-next
+unit-ai-domain
+enemy-pathing-domain
+ally-targeting-domain
+tower-targeting-domain
+target-tie-break-domain-next
+unit-intent-domain-next
+attack-intent-domain-next
+projectile-domain
+damage-intent-domain-next
+damage-resolution-domain-next
+entity-retirement-domain-next
+reference-cleanup-domain-next
+damage-reward-domain
+core-breach-event-domain-next
 wave-clear-predicate-domain
+combat-resolution-result-domain-next
+combat-resolution-journal-domain-next
+```
+
+### Terminal, lifecycle and persistence
+
+```txt
+victory-predicate-domain
+defeat-predicate-domain
 terminal-outcome-arbitration-domain-next
+terminal-transition-domain-next
 terminal-result-domain-next
-terminal-persistence-policy-domain-next
 victory-summary-write-domain
 runtime-lifecycle-domain-next
 versioned-checkpoint-domain-next
 atomic-resume-domain-next
 ```
 
-### Render, diagnostics and proof
+### Render, proof and deployment
 
 ```txt
 world-render-domain
@@ -305,155 +283,102 @@ central-ledger-sync-domain
 | Kit | Current services |
 |---|---|
 | `crt-renderer-kit` | WebGL setup, source upload, contain framing, CRT curvature, draw, resize and contain-only coordinate projection |
-| `graveyard-art-kit` | Procedural graveyard composition and animated menu source-canvas drawing |
-| `menu-route-kit` | Menu selection, panels, Begin/Continue routing and fade timing |
-| `menu-settings-persistence-kit` | Read, normalize and write CRT, grain and ambience settings |
-| `menu-save-presence-kit` | Scan three key names across local and session storage and return Boolean presence |
-| `menu-audio-kit` | Lazy AudioContext, ambience, UI tones and delayed close |
-| `campaign-route-shell-kit` | Campaign canvas boot and module execution |
-| `pixel-campaign-runtime-kit` | Campaign descriptors, mutable state, selection, building, orders, wave and camera input |
-| `fixed-step-campaign-simulation-kit` | Exact `1/60` spawning, AI, combat, projectiles, rewards, core damage and terminal mutation |
+| `graveyard-art-kit` | Procedural graveyard composition and animated menu drawing |
+| `menu-route-kit` | Menu selection, panels, Begin/Continue routing and fade |
+| `menu-settings-persistence-kit` | CRT, grain and ambience setting read/write |
+| `menu-save-presence-kit` | Boolean raw-presence scan across six possible slots |
+| `menu-audio-kit` | AudioContext, ambience and UI tones |
+| `campaign-route-shell-kit` | Campaign page and module bootstrap |
+| `pixel-campaign-runtime-kit` | Content, mutable state, selection, construction, orders, waves, camera and input |
+| `fixed-step-campaign-simulation-kit` | Spawning, AI, movement, targeting, towers, projectiles, damage, rewards, core damage and wave completion |
 | `pixel-campaign-render-kit` | World, HUD, minimap, terminal overlay and source-frame drawing |
-| `legacy-gamehost-diagnostics-kit` | Live state/camera exposure and direct action methods |
+| `legacy-gamehost-diagnostics-kit` | Mutable state/camera exposure and direct actions |
 | `menu-static-check-kit` | Menu source-pattern checks |
 | `campaign-static-check-kit` | Campaign source-pattern checks |
 | `static-build-copy-kit` | Static artifact assembly |
-| `pages-deploy-kit` | GitHub Pages artifact deployment |
-| retained construct kits | Intro scheduling, construct IDs, piece state and sequence updates |
+| `pages-deploy-kit` | Pages artifact deployment |
+| `construct-spiral-intro-kit` | Retained intro scheduling |
+| `construct-spiral-schedule-kit` | Retained piece timing |
+| `construct-piece-id-kit` | Retained piece identity |
+| `construct-piece-state-kit` | Retained piece state |
+| `construct-sequence-update-kit` | Retained sequence updates |
 
-## Candidate Continue authority kits
-
-```txt
-phantom-command-save-slot-registry-kit
-phantom-command-storage-slot-read-kit
-phantom-command-save-candidate-parse-kit
-phantom-command-save-schema-classifier-kit
-phantom-command-save-content-identity-kit
-phantom-command-save-candidate-provenance-kit
-phantom-command-save-candidate-precedence-kit
-phantom-command-save-candidate-resolver-kit
-phantom-command-continue-capability-result-kit
-phantom-command-campaign-startup-mode-kit
-phantom-command-campaign-startup-admission-kit
-phantom-command-campaign-hydration-plan-kit
-phantom-command-campaign-hydration-result-kit
-phantom-command-candidate-journal-kit
-phantom-command-candidate-resolver-fixture-kit
-phantom-command-browser-continue-parity-smoke-kit
-```
-
-## Required resolution transaction
+## Required combat-resolution kits
 
 ```txt
-menu startup begins
-  -> enumerate all declared candidate slots
-  -> read each slot independently with typed success/failure
-  -> parse every readable nonempty payload
-  -> classify schema, content identity and candidate kind
-  -> validate required fields and fingerprints
-  -> rank valid candidates through a versioned precedence policy
-  -> publish ContinueCapabilityResult
-       enabled
-       selectedCandidateId
-       selectedSlot
-       schemaVersion
-       contentRevision
-       reason
-  -> render Continue from the result
-
-Continue activation
-  -> carry selected candidate identity into campaign startup
-  -> re-read and revalidate the exact candidate
-  -> reject stale or changed candidate fingerprints
-  -> stage hydration without mutating live state
-  -> atomically commit a continue run or return a typed failure
-  -> acknowledge the first resumed frame
+phantom-command-combat-frame-input-kit
+phantom-command-entity-liveness-index-kit
+phantom-command-deterministic-entity-order-kit
+phantom-command-spawn-admission-phase-kit
+phantom-command-unit-intent-kit
+phantom-command-target-selection-policy-kit
+phantom-command-attack-intent-kit
+phantom-command-damage-intent-kit
+phantom-command-damage-resolution-policy-kit
+phantom-command-entity-retirement-kit
+phantom-command-reference-cleanup-kit
+phantom-command-reward-settlement-kit
+phantom-command-core-breach-event-kit
+phantom-command-wave-clear-evaluation-kit
+phantom-command-combat-resolution-result-kit
+phantom-command-combat-resolution-journal-kit
+phantom-command-dead-entity-no-action-fixture-kit
+phantom-command-combat-order-parity-fixture-kit
+phantom-command-checkpoint-order-parity-fixture-kit
+phantom-command-ghost-action-frame-smoke-kit
 ```
 
-## Required contracts
-
-### SaveSlotReadResult
+## Required transaction
 
 ```txt
-slotId
-key
-storageLayer
-status: empty | read | denied | failed
-rawHash
-errorCode
+admitted commands for tick
+  -> immutable CombatFrameInput
+  -> due spawn admission
+  -> alive entity index
+  -> versioned stable entity order
+  -> movement/target/attack intent collection
+  -> damage intent collection
+  -> declared damage resolution
+  -> exactly-once retirement
+  -> eager reference cleanup
+  -> reward and core-breach settlement
+  -> wave-clear evidence
+  -> CombatResolutionResult
+  -> terminal arbitration
+  -> committed state fingerprint
+  -> immutable render snapshot
+  -> world/HUD/minimap/CRT acknowledgement
 ```
 
-### SaveCandidateResult
-
-```txt
-candidateId
-slotId
-kind
-schemaVersion
-contentRevision
-checkpointId
-capturedAt
-stateFingerprint
-status: valid | invalid | unsupported
-reason
-```
-
-### ContinueCapabilityResult
-
-```txt
-resolutionId
-enabled
-selectedCandidateId
-selectedSlotId
-policyVersion
-reason
-candidateCount
-rejectedCandidateCount
-```
-
-### CampaignStartupResult
-
-```txt
-startupId
-mode: new | continue
-candidateId
-accepted
-reason
-runId
-runEpoch
-stateFingerprint
-firstFrameReceiptId
-```
-
-## Required proof
-
-```txt
-no slots -> Continue disabled
-malformed payload only -> Continue disabled with invalid-candidate reason
-unsupported schema only -> Continue disabled with unsupported-schema reason
-valid lower-priority candidate plus malformed higher slot -> valid candidate selected
-multiple valid candidates -> deterministic policy selects the same candidate
-storage read failure in one slot -> other slots still evaluated
-menu-selected candidate changed before startup -> startup rejects stale fingerprint
-new mode -> starts fresh and does not hydrate a candidate
-continue mode -> hydrates selected state or fails without partial mutation
-Begin and Continue produce observably different admitted startup results
-browser menu, URL mode, live state and first frame agree on one startup identity
-```
-
-## Ordered implementation queue
+## Implementation order
 
 ```txt
 1. Continue Capability Resolver
 2. Campaign Action Result Authority
-   2a. CRT Display/Input Projection Authority
-   2b. Campaign Phase Admission Authority
-   2c. Fixed-Step Command Scheduling, Replay and Committed Frame Authority
-   2d. Exclusive Terminal Outcome Transaction Authority
+   2a. Projection Authority
+   2b. Phase Admission Authority
+   2c. Fixed-Step Command/Replay/Frame Authority
+   2d. Combat Resolution and Entity Liveness Authority
+   2e. Exclusive Terminal Outcome Authority
 3. Runtime Session Lifecycle Authority
-4. Versioned Campaign Checkpoint and Atomic Resume Authority
+4. Versioned Checkpoint and Atomic Resume Authority
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration were not changed. Existing checks verify expected source strings; they do not execute candidate reads, malformed payload handling, precedence, query-mode admission, hydration, rollback or first-resumed-frame correlation.
+```txt
+runtime source changed: no
+package scripts changed: no
+dependencies changed: no
+gameplay changed: no
+rendering changed: no
+persistence changed: no
+deployment changed: no
+npm run check: not run
+npm run build: not run
+browser smoke: not run
+dead-entity fixture: absent
+combat-order fixture: absent
+checkpoint-order parity fixture: absent
+ghost-action committed-frame smoke: absent
+```
