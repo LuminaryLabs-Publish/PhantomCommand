@@ -2,7 +2,21 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-11T01-20-51-04-00`
+**Last aligned:** `2026-07-11T03-31-26-04-00`
+
+## Summary
+
+The live product is a static pixel-isometric RTS with a procedural menu and fixed-step grave-ring campaign. The queue head remains Continue/save-candidate resolution; the newly mapped second gate is campaign action-result authority because browser and GameHost requests currently mutate live state outside fixed-step application and return no typed result.
+
+## Plan ledger
+
+**Goal:** preserve current gameplay and presentation while establishing one admitted campaign session, deterministic command application, and committed-frame proof.
+
+- [ ] Implement the Continue capability resolver and save-candidate precedence fixtures.
+- [ ] Add typed campaign commands, target ticks, preflight, results, and fixed-step application.
+- [ ] Add command, event, fingerprint, replay, and committed-frame fixtures.
+- [ ] Add explicit menu and campaign lifecycle ownership.
+- [ ] Add a versioned full-session save envelope only after the earlier authority gates pass.
 
 ## Current implementation queue
 
@@ -15,11 +29,9 @@
 
 ## Selection result
 
-The accessible `LuminaryLabs-Publish` inventory contains ten repositories. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `PhantomCommand` was selected as the oldest current documented fallback from its prior central timestamp, `2026-07-10T23-40-35-04-00`.
+The accessible `LuminaryLabs-Publish` inventory contains ten repositories. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `PhantomCommand` was selected as the oldest documented fallback from its prior central timestamp, `2026-07-11T01-20-51-04-00`.
 
-## Product read
-
-`PhantomCommand` is a static Vite browser RTS prototype with a procedural graveyard menu and a pixel-isometric grave-ring campaign.
+## Product route
 
 ```txt
 index.html
@@ -28,64 +40,46 @@ index.html
   -> src/campaign/campaign-scene.js
 ```
 
-The campaign uses a `640 x 360` source canvas, seven rings, four lanes, generated build pads, six starter allies, three tower types, seven unit archetypes, six waves, exact `1/60` simulation, HUD, minimap, terminal modal, CRT presentation, victory-summary persistence, and `window.GameHost` diagnostics.
+The campaign uses a `640 x 360` source canvas, seven rings, four lanes, generated build pads, six starter allies, three tower types, seven unit archetypes, six waves, exact `1/60` simulation steps, HUD, minimap, terminal modal, CRT presentation, victory-summary persistence, and `window.GameHost` diagnostics.
 
 ## Current interaction loop
 
 ```txt
 menu evaluates
-  -> reads settings
-  -> scans 3 keys x 2 storage layers
-  -> collapses evidence to Boolean Continue capability
-  -> constructs art, CRT, audio, listeners, and RAF
+  -> reads settings and raw save presence
   -> emits campaign=new or campaign=continue
-  -> campaign ignores route intent
-  -> constructs the same fresh state
-  -> pointer, keyboard, and GameHost paths mutate live state
-  -> fixed 1/60 simulation advances
-  -> world, HUD, minimap, modal, CRT, and GameHost expose uncorrelated mutable observations
+  -> campaign ignores route intent and creates fresh mutable state
+  -> pointer, keyboard, and GameHost mutate live state directly
+  -> RAF advances camera with variable dt
+  -> accumulator applies zero or more exact 1/60 updates
+  -> world, HUD, minimap, modal, CRT, and GameHost observe mutable state
   -> victory writes a three-field completion summary
 ```
 
 ## Queue-head finding
 
-`hasCampaignSave()` checks these keys in both local and session storage:
+The menu scans three keys in both local and session storage and reduces all evidence to Boolean presence. The campaign never consumes the route mode or a selected candidate. The current `{ scene, souls, wave }` victory payload is a completion summary, not resumable session state.
+
+## Newly mapped action-authority finding
 
 ```txt
-phantomCommand.save
-nexus.sceneSnapshot
-phantom.command.campaign
+selectAt(), build(), order(), startWave()
+  -> immediate live-state mutation
+  -> successful/rejected/no-op return: undefined
+  -> no command ID, sequence, target tick, preflight, result, journal, or fingerprint
 ```
 
-It returns only Boolean presence and is called twice during menu construction. Any non-empty value can enable Continue. No slot ID, parse result, schema, version, candidate kind, precedence, selected candidate, or decision reason survives the scan.
-
-The campaign never parses `campaign=new|continue`, so Continue currently starts the same fresh state as Begin Campaign. The only current writer stores `{ scene, souls, wave }` after victory. That payload is a completion summary, not a resumable session.
-
-## Required admission boundary
-
-```txt
-stable six-slot registry
-  -> candidate reader
-  -> parser and classifier
-  -> deterministic precedence
-  -> immutable Continue decision
-  -> route-intent admission
-  -> fresh or resume startup result
-  -> menu, campaign, PhantomMenu, GameHost, and fixture projections
-```
+`selectAt()` combines unit selection, toggling, pad selection, second-click building, and deselection. Browser callbacks and GameHost calls can mutate state between fixed simulation steps. The frame path publishes no simulation tick range, applied command sequences, canonical state fingerprint, render-consumption rows, or CRT acknowledgement.
 
 ## Domains in use
 
 ```txt
 route shell and menu presentation
 settings persistence and procedural audio
-raw save-presence detection
-menu transition and route emission
+raw save-presence detection and Continue capability
 campaign content and mutable state
-fixed-step simulation and spawn queues
-selection, building, orders, and wave start
-AI, pathing, targeting, projectiles, damage, rewards, and terminal state
-camera and input
+selection, building, orders, wave start, pause, and camera input
+fixed-step spawning, AI, combat, economy, and terminal progression
 world, HUD, minimap, modal, and CRT rendering
 victory-summary persistence
 PhantomMenu and GameHost diagnostics
@@ -120,16 +114,16 @@ retained construct kits
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/trackers/2026-07-11T01-20-51-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-11T01-20-51-04-00.md
-.agent/architecture-audit/2026-07-11T01-20-51-04-00-continue-capability-resolver-dsk-map.md
-.agent/render-audit/2026-07-11T01-20-51-04-00-resume-provenance-projection-gap.md
-.agent/gameplay-audit/2026-07-11T01-20-51-04-00-new-continue-startup-loop.md
-.agent/interaction-audit/2026-07-11T01-20-51-04-00-menu-route-session-admission-map.md
-.agent/save-authority-audit/2026-07-11T01-20-51-04-00-six-slot-candidate-precedence-contract.md
-.agent/deploy-audit/2026-07-11T01-20-51-04-00-candidate-resolver-fixture-gate.md
+.agent/trackers/2026-07-11T03-31-26-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-11T03-31-26-04-00.md
+.agent/architecture-audit/2026-07-11T03-31-26-04-00-campaign-action-result-authority-dsk-map.md
+.agent/render-audit/2026-07-11T03-31-26-04-00-committed-frame-consumption-gap.md
+.agent/gameplay-audit/2026-07-11T03-31-26-04-00-command-preflight-application-loop.md
+.agent/interaction-audit/2026-07-11T03-31-26-04-00-input-gamehost-command-admission-map.md
+.agent/action-authority-audit/2026-07-11T03-31-26-04-00-command-sequence-target-tick-contract.md
+.agent/deploy-audit/2026-07-11T03-31-26-04-00-action-replay-frame-fixture-gate.md
 ```
 
 ## Validation state
 
-Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence, and deployment configuration did not change. No branch or pull request was created. Behavioral fixtures remain absent and were not run.
+Documentation only. Runtime source, scripts, dependencies, routes, gameplay, rendering, persistence, and deployment configuration did not change. No branch or pull request was created. The required behavioral fixtures do not yet exist and were not run.
