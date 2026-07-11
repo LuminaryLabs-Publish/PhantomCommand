@@ -1,15 +1,15 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-10T21-49-26-04-00`
+**Timestamp:** `2026-07-10T23-40-35-04-00`
 
 ## Status
 
 ```txt
-status: continue-resolver-first-action-authority-second-lifecycle-third-planned
+status: continue-resolver-first-action-authority-implementation-ready
 runtime source changed: no
 branch: main
 root .agent state: refreshed
-central ledger sync: complete
+central ledger sync: pending until repo-local audit completes
 ```
 
 ## Selection audit
@@ -22,25 +22,25 @@ Root .agent state present: 9/9
 Excluded: LuminaryLabs-Publish/TheCavalryOfRome
 Selected: LuminaryLabs-Publish/PhantomCommand
 Selection rule: oldest eligible documented fallback
-Prior selected-repo timestamp: 2026-07-10T20-19-35-04-00
+Prior selected-repo timestamp: 2026-07-10T21-49-26-04-00
 ```
 
 ## Current interaction loop
 
 ```txt
 index.html menu module evaluation
-  -> settings and six-slot raw save-presence scans
+  -> settings and six-slot raw save-presence scan
   -> menu/art/CRT/audio construction
   -> canvas, document, and hidden-button listeners
-  -> unretained recursive RAF loop
-  -> Begin or Continue timed fade and browser navigation
+  -> recursive RAF loop
+  -> Begin or Continue fade and browser navigation
   -> game.html campaign module evaluation
-  -> fresh descriptors, mutable state, CRT renderer, listeners, and unretained RAF loop
-  -> pointer and keyboard callbacks mutate camera or campaign state
+  -> fresh descriptors, mutable campaign state, CRT renderer, listeners, and recursive RAF
+  -> pointer, keyboard, and GameHost entry points mutate camera or campaign state directly
   -> accumulator advances exact 1/60 simulation steps
-  -> live state renders through world, HUD, minimap, modal, and CRT
+  -> world, HUD, minimap, modal, and CRT render live mutable state
   -> win/loss stops simulation updates
-  -> R reloads or Escape navigates to menu
+  -> R reloads or Escape navigates to the menu
 ```
 
 ## Domains in use
@@ -48,105 +48,117 @@ index.html menu module evaluation
 ```txt
 route and menu presentation:
   static-route-shell, menu-route, campaign-route
-  menu-selection, panel, settings, save-presence, Continue capability
-  transition, audio, graveyard art, source canvas, CRT display
+  menu-selection, settings-panel, credits-panel
+  settings persistence, save-candidate discovery, Continue capability
+  fade transition, audio, graveyard art, source canvas, CRT display
 
-session and persistence:
-  campaign route intent, save-key ownership, victory completion summary
-  candidate classification/precedence/resolution next
-  versioned save envelope and hydration follow-on
+campaign content and state:
+  ring map, lanes, build pads
+  unit, tower, and wave descriptors
+  souls economy, sanctum health, campaign flags and messages
+  selection, selected pad, camera pan/zoom/focus
 
-campaign content and simulation:
-  rings, lanes, build pads, units, towers, waves
-  souls economy, sanctum health, selection, build, order, wave start
-  AI, pathing, targeting, projectiles, damage, rewards, effects, win/loss
-  fixed-step accumulator
+campaign commands and simulation:
+  selection, pad selection, building, unit orders, wave start
+  fixed-step accumulator and spawn queue
+  AI, pathing, targeting, projectiles, damage, rewards, effects
+  wave completion, win/loss, victory summary persistence
 
-input and render:
-  pointer selection, drag selection, order input
-  keyboard pan, pause, wave, tower choice, restart, exit
-  wheel zoom and camera focus
-  world, entity, HUD, minimap, modal, CRT rendering
-
-proof and deploy:
+input, render, proof, and deploy:
+  pointer and keyboard input
+  world, entity, HUD, minimap, modal, and CRT rendering
   PhantomMenu and GameHost diagnostics
   source-pattern checks, static build, Pages deployment, central ledger
-
-lifecycle next:
-  route-session state and ID
-  startup transaction and rollback
-  RAF ownership and cancellation
-  listener registration/removal ledger
-  audio and WebGL resource ownership
-  ordered idempotent stop/dispose/restart
-  lifecycle journal and clone-safe host observation
 ```
 
 ## Source-backed kits and services
 
-- `crt-renderer-kit`: WebGL program, texture upload, nearest sampling, containment mapping, CRT effects, resize, and pointer conversion.
-- `graveyard-art-kit`: procedural menu art.
-- `menu-route-kit`: selection, panels, Begin/Continue route emission, credits, and fade transition.
+- `crt-renderer-kit`: WebGL program, source texture, nearest filtering, containment mapping, CRT curve, grain, aberration, fade, resize, and pointer conversion.
+- `graveyard-art-kit`: procedural menu art and animation.
+- `menu-route-kit`: selection, settings/credits panels, activation, fade, and route emission.
 - `menu-settings-persistence-kit`: CRT, grain, and ambience preferences.
-- `menu-save-presence-kit`: raw six-slot presence scans.
-- `menu-audio-kit`: lazy AudioContext, drone, wind, and UI tones.
+- `menu-save-presence-kit`: raw six-slot storage presence scan.
+- `menu-audio-kit`: lazy AudioContext graph, drone, wind, and UI tones.
 - `campaign-route-shell-kit`: campaign canvas route.
-- `pixel-campaign-runtime-kit`: descriptors, mutable state, input, action mutation, simulation, save, rendering, and diagnostics.
-- `fixed-step-campaign-simulation-kit`: accumulator-based `1/60` updates.
+- `pixel-campaign-runtime-kit`: descriptors, live state, input, action mutation, simulation, persistence, render, and diagnostics.
+- `fixed-step-campaign-simulation-kit`: accumulator-based exact `1/60` updates.
 - `pixel-campaign-render-kit`: world, entities, HUD, minimap, modal, selection rectangle, and CRT projection.
-- `legacy-gamehost-diagnostics-kit`: mutable state/camera, `startWave`, `build`, aggregate `getState`, and `setZoom`.
-- `campaign-static-check-kit`: source-pattern assertions.
+- `legacy-gamehost-diagnostics-kit`: mutable state/camera, `startWave`, `build`, aggregate state clone, and zoom control.
+- `menu-static-check-kit` and `campaign-static-check-kit`: source-shape assertions.
 - `static-build-copy-kit`: static artifact creation.
-- Legacy construct kits remain source-backed retained proof but are not live campaign authority.
+- Retained construct kits remain historical proof and are not live campaign authority.
 
 ## Verified source facts
 
 ```txt
-menu RAF request ID retained: no
-campaign RAF request ID retained: no
-menu listener removal service: no
-campaign listener removal service: no
-menu route stop/dispose/restart: no
-campaign route stop/dispose/restart: no
-startup rollback: no
-session ID/state: no
-CRT renderer dispose: no
-WebGL program/buffer/texture release: no
-menu audio teardown on route navigation: no
-GameHost lifecycle surface: no
-PhantomMenu lifecycle surface: no
-
-campaign action functions: selectAt, build, order, startWave
-action result shape: none
-action sequence/target tick: none
+campaign action entry points: selectAt, build, order, startWave
+shared command envelope: none
+command sequence: none
+target tick: none
+accepted/rejected/no-op result: none
+stable reason vocabulary: none
 command/result/event journals: none
-committed frame/fingerprint: none
+canonical state fingerprint: none
+committed frame: none
+render consumption rows: none
 
-candidate keys: phantomCommand.save, nexus.sceneSnapshot, phantom.command.campaign
-candidate layers: localStorage, sessionStorage
+selectAt separates selection and building: no
+build rejection is observable: no
+order rejection is observable: no
+wave-start rejection is observable: no
+GameHost uses the same typed command path: no
+DOM callbacks mutate simulation state directly: yes
+
+simulation step: 1/60
+commands drained at tick boundary: no
+browser callback timing can change request ordering relative to update: yes
+render reads mutable state directly: yes
+GameHost getState matches one committed rendered frame: no
+
+candidate slots: 6
 Continue resolver: Boolean presence only
-campaign mode parsing/hydration: none
+campaign reads session mode: no
+route lifecycle owner: no
 ```
 
 ## Main findings
 
-### Queue head retained
+### Queue head remains Continue resolution
 
-Menu and campaign must consume one immutable six-slot candidate-resolution result before hydration work.
+The menu and campaign still need one shared immutable save-candidate decision before resume work.
 
-### Action authority retained
+### Action authority is now mapped in implementation order
 
-Gameplay mutation still bypasses a deterministic command/result queue and committed-frame boundary.
+The fixed-step accumulator does not make browser requests deterministic because callbacks mutate state before the queue-free simulation loop decides how many ticks to run. The same logical request stream cannot yet be replayed independently of browser timing.
 
-### Newly mapped lifecycle blocker
+Required boundary:
 
-Both route modules eagerly allocate resources, register listeners, and begin recursive RAF loops. They rely on page destruction for cleanup. No object can prove that frames stop, listeners are removed, audio closes, WebGL resources release, partial startup rolls back, or restart/remount produces exactly one live route session.
+```txt
+request adapter
+  -> command sequence
+  -> target tick
+  -> pure preflight
+  -> typed result
+  -> fixed-step queue
+  -> deterministic events
+  -> state fingerprint
+  -> committed frame
+  -> render/GameHost consumption proof
+```
+
+### Rendering lacks committed-frame identity
+
+World, HUD, minimap, modal, CRT, and GameHost observation may inspect the same mutable objects at different moments. No frame ID or fingerprint proves convergence.
+
+### Lifecycle remains third
+
+Session ownership, frame cancellation, listener removal, audio/CRT disposal, restart, and stale-session rejection remain necessary after command authority.
 
 ## Implementation queue
 
 ```txt
 1. Continue Capability Resolver + Save Candidate Precedence Fixture Gate
-2. Campaign Action Result Authority + Fixed-Step Frame Fixture Gate
+2. Campaign Action Result Authority + Fixed-Step Replay/Frame Fixture Gate
 3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
 4. Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
@@ -160,11 +172,10 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-lifecycle fixture: absent / not run
-CRT disposal fixture: absent / not run
-listener ledger fixture: absent / not run
-restart idempotency fixture: absent / not run
-repo-local documentation pushed to main: yes
-central ledger updated: yes
-central internal change log added: yes
+candidate resolver fixture: absent / not run
+action-result fixture: absent / not run
+fixed-step replay fixture: absent / not run
+frame-consumption fixture: absent / not run
+repo-local documentation pushed to main: in progress
+central ledger update: pending
 ```
