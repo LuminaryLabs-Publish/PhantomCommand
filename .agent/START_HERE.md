@@ -2,26 +2,27 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-11T13-28-37-04-00`
+**Last aligned:** `2026-07-11T15-08-41-04-00`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a `640 x 360` grave-ring campaign. This audit isolates a terminal-outcome transaction defect: the final enemy can destroy the sanctum and then satisfy the final-wave-clear branch during the same fixed update, leaving `state.lost === true` and `state.won === true` while the UI and save path report victory.
+PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a `640 x 360` grave-ring campaign. The current highest-priority gap is the Continue capability boundary: the menu enables Continue from raw nonempty data in any of six storage slots, but it never parses, validates, ranks or selects a save candidate, and the campaign ignores `campaign=continue` and constructs a fresh run.
 
 ## Plan ledger
 
-**Goal:** make campaign completion one exclusive, monotonic, fixed-step transaction so defeat and victory cannot both commit, success persistence cannot follow defeat, and every terminal frame exposes one authoritative outcome receipt.
+**Goal:** make Continue a truthful, deterministic capability derived from one admitted save candidate whose identity, schema, content provenance and startup result are preserved from menu projection into campaign bootstrap.
 
-- [x] Compare the current ten-repository Publish inventory with the central ledger.
+- [x] Compare the complete ten-repository Publish inventory with the central ledger.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories remain centrally tracked with root `.agent` state.
-- [x] Skip the same-window active `HorrorCorridor` documentation write.
+- [x] Skip the active same-window `HorrorCorridor` interaction-target audit.
 - [x] Select only `PhantomCommand` as the oldest stable eligible repository.
-- [x] Trace core damage, enemy deletion, wave completion, terminal rendering, persistence, restart and `GameHost` observation.
+- [x] Trace all three save keys across local and session storage.
+- [x] Trace Continue enablement, routing, campaign startup and current save writing.
 - [x] Identify the interaction loop, domains, kits and offered services.
-- [x] Define an exclusive terminal-outcome authority and fixture gate.
-- [x] Push documentation directly to `main`.
-- [ ] Runtime implementation and executable outcome fixtures remain future work.
+- [x] Define candidate classification, precedence, capability, startup admission and fixture contracts.
+- [x] Push documentation directly to `main` without a branch or pull request.
+- [ ] Runtime implementation and executable Continue fixtures remain future work.
 
 ## Current implementation queue
 
@@ -36,7 +37,13 @@ PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu 
 4. Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate
 ```
 
-Terminal arbitration belongs inside the fixed-step command/phase boundary. It must be designed now so the future replay journal, checkpoint writer and committed-frame receipt have one canonical terminal result to record.
+Continue remains first because every later phase, replay, lifecycle and checkpoint contract needs an authoritative answer to three questions before campaign construction begins:
+
+```txt
+which candidate was selected
+why it was accepted
+which startup mode consumed it
+```
 
 ## Product route
 
@@ -51,76 +58,72 @@ index.html
 ## Current interaction loop
 
 ```txt
-menu
-  -> render graveyard source canvas through CRT
-  -> detect raw save-key presence
-  -> route to new or continue campaign
+menu construction
+  -> enumerate three key names
+  -> read localStorage or sessionStorage
+  -> collapse any nonempty string to Boolean true
+  -> enable Continue and label it BOUND
 
-campaign input
-  -> mutate selection, build, order, wave, pause, tower or camera state
+Continue activation
+  -> navigate to game.html?campaign=continue
+  -> campaign module does not read the query parameter
+  -> construct default souls, core, wave, units, towers and counters
+  -> start a fresh campaign indistinguishable from Begin
 
-fixed campaign update
-  -> spawn and move units
-  -> enemy may reach sanctum
-  -> core damage may set lost = true
-  -> update continues through towers, projectiles and wave-clear evaluation
-  -> final-wave clear may set won = true and write a victory save
-
-render and observation
-  -> overlay chooses won before lost
-  -> GameHost exposes both booleans
-  -> R reloads the page without a typed terminal-reset transaction
+victory persistence
+  -> final-wave branch writes localStorage phantomCommand.save
+  -> payload contains only scene, souls and wave
+  -> menu later treats the raw string as sufficient Continue evidence
 ```
 
 ## Main finding
 
-The terminal state is represented by independent booleans:
+The menu declares:
 
 ```txt
-paused
-won
-lost
+SAVE_KEYS = [
+  phantomCommand.save,
+  nexus.sceneSnapshot,
+  phantom.command.campaign
+]
 ```
 
-A reachable same-tick path is:
+For each key it reads local storage first and session storage second, then reduces all six possible slots to one Boolean. It does not preserve:
 
 ```txt
-final wave active
-  -> last enemy reaches the sanctum
-  -> core becomes 0
-  -> lost = true
-  -> enemy is deleted
-  -> update continues
-  -> spawn queue is empty and enemies() is empty
-  -> wave increments to waves.length
-  -> won = true
-  -> victory message and success save are written
+slot identity
+storage layer
+raw payload
+parse result
+schema or version
+content identity
+campaign revision
+completion provenance
+candidate timestamp
+state fingerprint
+rejection reason
 ```
 
-The committed state can therefore become:
+Any nonempty string can enable Continue, including malformed JSON or unrelated legacy content. A storage exception during the scan disables Continue without identifying which slot failed.
 
-```txt
-core: 0
-lost: true
-won: true
-```
-
-Presentation then resolves the conflict by checking `won` first, so the player sees `GRAVE RING SECURED`. Persistence also writes the victory summary despite the defeated sanctum.
+The route then discards even the Boolean provenance. `campaign=continue` is never consumed by `campaign-scene.js`, no save is loaded, and a fresh default run starts. `campaign=new` also does not explicitly reject or clear prior candidates.
 
 ## Domains in use
 
 ```txt
 static route and page shell
-menu selection panels settings audio and save presence
+menu selection panels settings audio and transition
+storage slot enumeration and raw presence detection
+save candidate parsing schema version provenance and precedence
+Continue capability and menu projection
+campaign startup mode and startup admission
 procedural graveyard art and source canvas
 CRT contain curve upload display and pointer projection
 campaign ring map lanes pads archetypes waves economy and core health
 selection building orders wave start pause camera and identity counters
-spawn queue unit AI enemy pathing targeting projectiles damage rewards and effects
-fixed-step simulation and wall-clock frame sampling
-terminal predicate evaluation outcome arbitration phase latching and persistence
-world HUD minimap modal overlay and CRT presentation
-GameHost diagnostics and direct mutation bypasses
+spawn queue unit AI targeting projectiles damage rewards and effects
+fixed-step simulation clock command replay and committed-frame planning
+terminal outcome arbitration persistence and restart planning
 runtime lifecycle checkpoint resume validation build deploy and central synchronization
 ```
 
@@ -152,51 +155,55 @@ construct-sequence-update-kit
 ## Required composed domain
 
 ```txt
-phantom-command-terminal-outcome-authority-domain
-  -> phantom-command-terminal-evaluation-input-kit
-  -> phantom-command-defeat-predicate-kit
-  -> phantom-command-victory-predicate-kit
-  -> phantom-command-outcome-priority-policy-kit
-  -> phantom-command-exclusive-outcome-arbitration-kit
-  -> phantom-command-terminal-transition-kit
-  -> phantom-command-terminal-latch-kit
-  -> phantom-command-terminal-result-kit
-  -> phantom-command-terminal-persistence-policy-kit
-  -> phantom-command-terminal-frame-receipt-kit
-  -> phantom-command-terminal-observation-kit
-  -> phantom-command-terminal-outcome-fixture-kit
+phantom-command-continue-capability-authority-domain
+  -> phantom-command-save-slot-registry-kit
+  -> phantom-command-storage-slot-read-kit
+  -> phantom-command-save-candidate-parse-kit
+  -> phantom-command-save-schema-classifier-kit
+  -> phantom-command-save-content-identity-kit
+  -> phantom-command-save-candidate-provenance-kit
+  -> phantom-command-save-candidate-precedence-kit
+  -> phantom-command-save-candidate-resolver-kit
+  -> phantom-command-continue-capability-result-kit
+  -> phantom-command-campaign-startup-mode-kit
+  -> phantom-command-campaign-startup-admission-kit
+  -> phantom-command-candidate-journal-kit
+  -> phantom-command-candidate-resolver-fixture-kit
+  -> phantom-command-browser-continue-parity-smoke-kit
 ```
 
 ## Required invariant
 
 ```txt
-for every campaign run and fixed tick:
-  terminalOutcome is exactly one of ACTIVE | VICTORY | DEFEAT
+Continue is enabled if and only if:
+  exactly one deterministic candidate resolution succeeds
 
-once terminalOutcome is VICTORY or DEFEAT:
-  it cannot transition to another outcome in the same run epoch
+Campaign startup in continue mode is admitted if and only if:
+  the selected candidate identity and fingerprint still match
+  the candidate schema and content revision are supported
+  hydration succeeds atomically
 
-victory persistence is allowed only when:
-  terminalOutcome == VICTORY
-  core > 0
-  terminal receipt and state fingerprint agree
+If no candidate is valid:
+  Continue is disabled with a typed reason
+  Begin remains available
+  no malformed or stale payload reaches live campaign state
 ```
 
 ## Read first
 
 ```txt
-.agent/trackers/2026-07-11T13-28-37-04-00/project-breakdown.md
+.agent/trackers/2026-07-11T15-08-41-04-00/project-breakdown.md
 .agent/current-audit.md
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/turn-ledger/2026-07-11T13-28-37-04-00.md
-.agent/architecture-audit/2026-07-11T13-28-37-04-00-terminal-outcome-authority-dsk-map.md
-.agent/render-audit/2026-07-11T13-28-37-04-00-terminal-overlay-committed-outcome-gap.md
-.agent/gameplay-audit/2026-07-11T13-28-37-04-00-simultaneous-win-loss-loop.md
-.agent/interaction-audit/2026-07-11T13-28-37-04-00-terminal-restart-command-map.md
-.agent/outcome-authority-audit/2026-07-11T13-28-37-04-00-exclusive-terminal-outcome-contract.md
-.agent/deploy-audit/2026-07-11T13-28-37-04-00-terminal-outcome-fixture-gate.md
+.agent/turn-ledger/2026-07-11T15-08-41-04-00.md
+.agent/architecture-audit/2026-07-11T15-08-41-04-00-continue-capability-save-candidate-dsk-map.md
+.agent/render-audit/2026-07-11T15-08-41-04-00-continue-ui-startup-provenance-gap.md
+.agent/gameplay-audit/2026-07-11T15-08-41-04-00-menu-continue-fresh-campaign-loop.md
+.agent/interaction-audit/2026-07-11T15-08-41-04-00-continue-command-candidate-admission-map.md
+.agent/persistence-audit/2026-07-11T15-08-41-04-00-save-candidate-precedence-capability-contract.md
+.agent/deploy-audit/2026-07-11T15-08-41-04-00-continue-capability-fixture-gate.md
 ```
 
 ## Guardrails
@@ -205,8 +212,8 @@ victory persistence is allowed only when:
 Push only to main.
 Create no branches or pull requests.
 Do not work on TheCavalryOfRome.
-Do not preserve independent won/lost booleans as terminal authority.
-Do not evaluate wave victory after defeat has been admitted in the same tick.
-Do not write a success checkpoint from a conflicting terminal state.
-Do not claim terminal correctness without breach, clear, simultaneous, persistence, replay and frame fixtures.
+Do not equate raw storage presence with resumability.
+Do not let menu and campaign resolve candidates independently.
+Do not hydrate a candidate without schema, content and fingerprint admission.
+Do not claim Continue works until pure and browser fixtures prove candidate selection and resumed state.
 ```
