@@ -1,10 +1,10 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T16-49-51-04-00`
+**Timestamp:** `2026-07-11T18-21-09-04-00`
 
 ## Summary
 
-PhantomCommand still lacks connected startup, projection, command, phase, fixed-step, combat-resolution, terminal, lifecycle and checkpoint authority. The newest concrete defect is inside the fixed update: a unit deleted from live state can remain in the captured unit array and act later in the same tick.
+PhantomCommand still lacks connected startup, projection, command, phase, fixed-step, combat-resolution, terminal, lifecycle and checkpoint authority. The newest concrete defect is terminal convergence: one fixed update can set both `lost` and `won`, report victory, grant the clear reward and write a victory summary after the sanctum has already reached zero.
 
 ## Plan ledger
 
@@ -15,8 +15,8 @@ PhantomCommand still lacks connected startup, projection, command, phase, fixed-
 - [ ] Campaign command and phase admission.
 - [ ] Fixed-step command scheduling, clock-overrun and replay authority.
 - [ ] Deterministic combat resolution and entity liveness.
-- [ ] Committed-tick and render-frame authority.
 - [ ] Exclusive terminal-outcome arbitration and persistence admission.
+- [ ] Committed-tick and terminal-frame authority.
 - [ ] Runtime session lifecycle authority.
 - [ ] Versioned checkpoint capture and atomic resume authority.
 
@@ -70,29 +70,37 @@ no immutable render snapshot or committed-frame receipt
 
 ```txt
 Object.values(state.units) is captured before per-unit mutation
-damage() deletes a target from state.units during captured iteration
+damage() deletes a target during captured iteration
 updateUnit() does not reject an entity already deleted from live state
 a killed actor can still move, attack, launch a projectile or breach the core
 entity order is incidental object insertion order
-allies act before enemies because they were inserted first
 newly spawned enemies act during the spawn tick without an explicit policy
 nearest-target ties resolve by first encountered entry
-melee damage is immediate and sequential
-retirement and rewards happen inside damage mutation
-target and projectile reference cleanup is lazy
-no CombatResolutionResult, liveness revision or combat event journal exists
-checkpoint rebuild order can change next-tick behavior
+retirement, rewards and core effects happen inside mutable iteration
+no CombatResolutionResult, liveness revision or combat journal exists
 ```
 
 ## Gate 2e: Terminal outcome gaps
 
 ```txt
-core breach can set lost during unit iteration
-remaining units, towers and projectiles can still update
-final-wave clear can later set won
+update() rejects terminal state only at tick entry
+core breach mutates lost during unit iteration
+core breach deletes the breaching enemy
+remaining actors, towers and projectiles continue after lost becomes true
+wave-clear evaluation still runs after defeat evidence
+final-wave clear mutates won later in the same update
 won and lost can both be true
+victory message overwrites defeat message
+victory clear reward can settle after defeat evidence
 victory summary can be written after defeat evidence
-no exclusive outcome enum, arbitration policy, latch or result ID
+overlay chooses victory when both flags are true
+GameHost can expose won:true and lost:true
+no terminal evidence IDs or revision
+no simultaneous-evidence policy
+no outcome enum, arbitration result, latch or run epoch
+no persistence admission result
+no terminal frame acknowledgement
+no restart or exit result correlated to the terminal outcome
 ```
 
 ## Gate 3: Lifecycle gaps
@@ -111,7 +119,7 @@ navigation and reload bypass typed teardown
 
 ```txt
 no resumable checkpoint schema or content identity
-no committed tick, command cursor, combat policy version or fingerprint
+no committed tick, command cursor, combat/terminal policy version or fingerprint
 no complete entity graph and identity counters
 no load path, migration, staged hydration or reference rebuild
 no atomic commit, rollback or resume epoch
@@ -130,12 +138,13 @@ no dead-entity-no-action fixture
 no insertion-order parity fixture
 no target tie-break fixture
 no reward/cleanup fixture
-no checkpoint-order parity fixture
-no ghost-action committed-frame smoke
-no simultaneous terminal fixture
+no simultaneous victory/defeat fixture
+no terminal latch fixture
+no persistence admission fixture
+no terminal world/HUD/overlay/CRT/GameHost parity smoke
 no lifecycle or checkpoint roundtrip fixture
 ```
 
 ## Do not claim
 
-Do not claim Continue works, pointer targeting is exact, commands are deterministic, combat is deterministic, dead entities cannot act, checkpoint hydration preserves combat behavior, terminal outcome is exclusive, restart is lifecycle-safe or checkpoint resume works until the corresponding fixtures pass on `main`.
+Do not claim Continue works, pointer targeting is exact, commands are deterministic, combat is deterministic, terminal state is exclusive, defeat cannot persist as victory, terminal rendering is correlated, restart is lifecycle-safe or checkpoint resume works until the corresponding fixtures pass on `main`.
