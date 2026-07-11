@@ -1,116 +1,145 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T01-20-51-04-00`
+**Timestamp:** `2026-07-11T03-31-26-04-00`
 
 ## Plan ledger
 
-**Goal:** establish one deterministic session-admission authority before implementing action replay, lifecycle ownership, or full resume hydration.
+**Goal:** establish one admitted campaign session, then route every gameplay request through deterministic fixed-step command authority before lifecycle and full resume work.
 
-- [ ] Add a stable registry for the six current storage slots.
-- [ ] Read every slot through an injected storage adapter.
-- [ ] Parse and classify every candidate without mutating storage.
-- [ ] Encode deterministic key, layer, version, and migration precedence.
-- [ ] Return one immutable Continue capability decision.
-- [ ] Parse `campaign=new|continue` through one route-intent service.
-- [ ] Make campaign startup consume the same resolver result used by the menu.
-- [ ] Expose clone-safe provenance through PhantomMenu and future GameHost startup observations.
-- [ ] Add DOM-free candidate-resolution and session-admission fixtures.
-- [ ] Add the fixtures to `npm run check` and the Pages validation step only after they pass independently.
+- [ ] Resolve the six current storage slots through one deterministic Continue decision.
+- [ ] Make menu route intent and campaign startup consume the same admission result.
+- [ ] Define explicit command types for selection, build, order, wave, pause, and focus behavior.
+- [ ] Normalize pointer, keyboard, GameHost, replay, and fixture requests through source adapters.
+- [ ] Assign session-scoped command IDs, monotonic sequences, and deterministic target ticks.
+- [ ] Run pure preflight and return accepted, rejected, or no-op terminal results.
+- [ ] Apply accepted gameplay commands only at fixed-step boundaries.
+- [ ] Publish bounded command, result, and domain-event journals.
+- [ ] Compute canonical simulation-state fingerprints after each committed tick.
+- [ ] Commit immutable presentation frames with render-consumption and CRT acknowledgement rows.
+- [ ] Prove action results, replay determinism, and frame coherence with DOM-free fixtures.
+- [ ] Add lifecycle ownership and versioned resume only after the earlier gates pass.
 
-## Implementation queue
+## Ordered implementation queue
 
 ```txt
-1. PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
-2. PhantomCommand Campaign Action Result Authority + Fixed-Step Replay/Frame Fixture Gate
-3. PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
-4. PhantomCommand Versioned Save Envelope + Atomic Resume Fidelity Gate
+1. Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+2. Campaign Action Result Authority + Fixed-Step Replay/Frame Fixture Gate
+3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
+4. Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
 
-Preserve current routes, visuals, controls, source-canvas sizes, simulation constants, balance, content, CRT behavior, and compatibility diagnostic fields.
+Preserve routes, controls, source-canvas sizes, visual output, content, simulation constants, balance, CRT behavior, and legacy diagnostic fields while adding typed authority beside them.
 
 ## Goal 1: Continue capability resolver
 
-### Slot registry
+### Slot and candidate authority
 
-- [ ] Define stable IDs for all three keys in local and session storage.
-- [ ] Record layer, key, priority, expected authority, and supported adapters.
-- [ ] Keep registry order data-driven and versioned.
+- [ ] Define stable IDs for the three keys across local and session storage.
+- [ ] Read candidates through an injected adapter.
+- [ ] Classify absent, unreadable, invalid, foreign, unsupported, completion-summary, legacy resumable, current resumable, and migrated candidates.
+- [ ] Define deterministic key, layer, version, and migration precedence.
+- [ ] Keep `{ scene, souls, wave }` classified as a non-resumable legacy completion summary.
+- [ ] Return one clone-safe decision with inspected candidates, selected candidate, reason, version, and fingerprint.
 
-### Candidate inspection
+### Route and startup
 
-- [ ] Distinguish absent, unreadable, empty, invalid JSON, foreign shape, unsupported version, completion summary, legacy resumable, current resumable, and migrated resumable.
-- [ ] Compute payload fingerprints without exposing raw payloads.
-- [ ] Retain inspection evidence for every slot.
-- [ ] Ensure storage errors do not crash menu startup.
-
-### Precedence and decision
-
-- [ ] Select at most one resumable candidate through explicit precedence.
-- [ ] Define deterministic tie behavior.
-- [ ] Return `continueEnabled`, `selectedCandidate`, `inspectedCandidates`, `decisionReason`, `resolverVersion`, and `decisionFingerprint`.
-- [ ] Keep the current `{ scene, souls, wave }` payload as `legacy-completion-summary` and non-resumable.
-- [ ] Make the menu resolve once per resolver generation instead of calling `hasCampaignSave()` twice.
-
-### Route and startup admission
-
-- [ ] Parse `new`, `continue`, and invalid route modes.
-- [ ] Return typed accepted, rejected, or no-op route activation results.
+- [ ] Parse `campaign=new|continue` once.
 - [ ] Reject Continue when no resumable candidate exists.
-- [ ] Do not silently convert rejected Continue to a fresh campaign.
-- [ ] Stage and validate fresh or hydrated state before session commit.
-- [ ] Correlate menu decision, transition admission, and campaign startup by IDs and fingerprints.
-
-### Diagnostics
-
-- [ ] Replace `PhantomMenu.getState().hasSave` as the primary proof with a clone-safe admission projection.
-- [ ] Expose selected slot ID, candidate kind, version, scene, counts, decision reason, and fingerprint.
-- [ ] Never expose raw storage values through browser globals.
+- [ ] Do not silently replace rejected Continue with a fresh campaign.
+- [ ] Stage and validate fresh or hydrated state before committing a session.
+- [ ] Correlate menu decision, route admission, and campaign startup by IDs and fingerprints.
 
 ### Fixtures
 
 - [ ] Add `tests/phantom-command-candidate-resolver-fixture.mjs`.
 - [ ] Add `tests/phantom-command-session-admission-fixture.mjs`.
-- [ ] Cover all six slots, invalid data, unsupported versions, completion summaries, multiple valid candidates, precedence, ties, storage errors, mutation resistance, stable fingerprints, and route modes.
-- [ ] Prove `new` consumes no candidate.
-- [ ] Prove accepted `continue` consumes exactly the selected candidate.
-- [ ] Prove rejected `continue` commits no fresh or hydrated session.
+- [ ] Cover all six slots, failures, invalid data, unsupported versions, completion summaries, multiple candidates, precedence, ties, mutation resistance, and route modes.
 
 ## Goal 2: Campaign action result authority
 
-After startup admission is proven:
+### Command definitions
+
+Initial action types:
 
 ```txt
-source request
-  -> typed command
-  -> monotonic sequence
-  -> deterministic target tick
-  -> pure preflight
-  -> accepted/rejected/no-op result
-  -> fixed-step application
-  -> ordered events
-  -> canonical state fingerprint
-  -> committed frame
-  -> render and GameHost consumption rows
+select-point
+select-rectangle
+clear-selection
+select-tower-type
+select-pad
+build-selected-pad
+order-selected-units
+start-wave
+set-pause
+focus-selection
 ```
 
-Preserve the detailed action-authority work already recorded in the `2026-07-10T23-40-35-04-00` audit set.
+- [ ] Separate pad selection from build execution.
+- [ ] Make build payloads explicit about pad ID and tower type.
+- [ ] Make order payloads explicit about selected unit IDs, target point, and optional enemy target.
+- [ ] Classify pause and camera operations as gameplay or presentation commands.
+
+### Source adapters
+
+- [ ] Add browser pointer adapter.
+- [ ] Add browser keyboard adapter.
+- [ ] Add GameHost adapter.
+- [ ] Add replay and fixture adapters.
+- [ ] Ensure adapters translate input but never mutate campaign state.
+
+### Sequence and target tick
+
+- [ ] Allocate one monotonic sequence per admitted campaign session.
+- [ ] Assign commands observed before application to `currentTick + 1`.
+- [ ] Apply multiple same-tick commands in sequence order.
+- [ ] Return the prior terminal result for duplicate command IDs.
+- [ ] Reject stale-session commands.
+
+### Preflight and result
+
+- [ ] Make preflight pure and immutable.
+- [ ] Return typed accepted, rejected, or no-op results.
+- [ ] Preserve explicit reasons for terminal state, active wave, missing pad, occupied pad, insufficient souls, no selected units, invalid point, and unchanged selection.
+- [ ] Record pre- and post-state fingerprints and changed paths.
+
+### Fixed-step application
+
+- [ ] Queue accepted commands by target tick.
+- [ ] Apply commands before simulation services for the declared tick.
+- [ ] Emit ordered domain events.
+- [ ] Bound command, result, and event journals with dropped-row counters.
+- [ ] Keep journal truncation outside simulation authority.
+
+### Committed frame
+
+- [ ] Create an immutable presentation snapshot after tick commit.
+- [ ] Record frame ID, tick range, applied command sequences, and state fingerprint.
+- [ ] Record world, HUD, minimap, modal, source-canvas, and CRT consumption results.
+- [ ] Preserve the last successful frame when a consumer fails.
+- [ ] Expose clone-safe observations through GameHost.
+
+### Fixtures
+
+- [ ] Add `tests/phantom-command-action-result-fixture.mjs`.
+- [ ] Add `tests/phantom-command-fixed-step-replay-fixture.mjs`.
+- [ ] Add `tests/phantom-command-frame-consumption-fixture.mjs`.
+- [ ] Prove equivalent RAF chunking produces identical results, events, tick fingerprints, and final state.
+- [ ] Prove browser, GameHost, replay, and fixture sources have result parity.
 
 ## Goal 3: Runtime session lifecycle authority
 
-- [ ] Add explicit menu and campaign route sessions.
+- [ ] Add explicit menu and campaign session IDs.
 - [ ] Own and cancel RAF requests.
-- [ ] register and remove listeners.
-- [ ] dispose AudioContext and CRT WebGL resources.
-- [ ] add partial-start rollback, stop, dispose, and restart.
-- [ ] reject stale callbacks by session identity.
+- [ ] Register and remove listeners through a ledger.
+- [ ] Dispose AudioContext and CRT WebGL resources.
+- [ ] Add partial-start rollback, stop, dispose, and restart.
+- [ ] Reject stale callbacks by session identity.
 
 ## Goal 4: Versioned resume fidelity
 
-After resolver, action, and lifecycle authority:
-
 ```txt
 versioned full-state save envelope
-  -> atomic hydration into a new session
+  -> atomic hydration into a new admitted session
   -> saved/hydrated fingerprint parity
   -> ID, queue, journal, frame, and lifecycle parity
   -> resume-fidelity fixture
