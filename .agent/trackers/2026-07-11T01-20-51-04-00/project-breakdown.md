@@ -18,8 +18,8 @@
 - [x] Define candidate classification, precedence, decision, route-intent, and startup-admission contracts.
 - [x] Add timestamped architecture, render, gameplay, interaction, save-authority, deploy, and turn-ledger records.
 - [x] Refresh the required root `.agent` documents.
-- [ ] Update the central repo ledger.
-- [ ] Add the central internal change-log entry.
+- [x] Update the central repo ledger.
+- [x] Add the central internal change-log entry.
 - [x] Push only to `main`.
 - [x] Create no branch or pull request.
 
