@@ -1,27 +1,25 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T15-08-41-04-00`
+**Timestamp:** `2026-07-11T16-49-51-04-00`
 
 ## Summary
 
-This pass changed documentation only. Source inspection confirms that Continue is enabled by raw nonempty storage data, no save candidate is parsed or selected, `campaign=continue` is not consumed, and the campaign always constructs its default state. No executable fixture currently proves candidate precedence, startup-mode admission, hydration rollback or first resumed-frame parity.
+This pass changed documentation only. Source inspection confirms a same-tick dead-actor path: `update()` captures the unit collection, `damage()` can delete a later actor, and `updateUnit()` can still execute that deleted actor from the captured array. Existing checks are source-pattern checks and do not execute combat order, liveness, cleanup or frame provenance.
 
 ## Plan ledger
 
-**Goal:** separate verified source facts from the planned Continue authority and its future executable proof.
+**Goal:** separate verified source facts from planned combat authority and future executable proof.
 
-- [x] Confirm the default branch is `main`.
+- [x] Confirm default branch `main`.
 - [x] Compare all ten accessible Publish repositories.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Skip the active same-window `HorrorCorridor` interaction-target documentation sequence.
-- [x] Read all three save keys, both storage layers, Continue projection, route transition, campaign startup and victory write source.
-- [x] Verify that any nonempty raw string can enable Continue.
-- [x] Verify that no candidate parsing, schema validation or deterministic precedence exists.
-- [x] Verify that the query mode is ignored by campaign startup.
-- [x] Verify that Continue and Begin construct the same default campaign state.
-- [x] Define the missing candidate-resolution, startup-admission and fixture boundary.
-- [x] Push repo-local documentation and central tracking to `main`.
-- [ ] Run behavioral validation after the authority boundary exists.
+- [x] Select only `PhantomCommand`.
+- [x] Read spawn, unit, targeting, damage, deletion, reward, core, wave, render and check paths.
+- [x] Verify that unit iteration captures an array before lethal deletion.
+- [x] Verify that `updateUnit()` has no live-membership rejection.
+- [x] Verify that rendering reads post-deletion live maps.
+- [x] Define combat-order, liveness, checkpoint parity and frame fixtures.
+- [ ] Run behavioral validation after runtime extraction exists.
 
 ## Current scripts
 
@@ -55,107 +53,103 @@ browser smoke: not run
 ## Verified by source inspection
 
 ```txt
-save key count: 3
-storage layer count: 2
-possible candidate slots: 6
-slot reads independently typed: no
-raw payload parsed: no
-schema validated: no
-content revision validated: no
-candidate precedence policy: absent
-candidate identity retained: no
-malformed nonempty value enables Continue: yes
-storage exception classification: absent
-Continue routes to campaign=continue: yes
-Begin routes to campaign=new: yes
-campaign reads location.search: no
-campaign reads any save key: no
-campaign hydration path: absent
-Continue constructs default state: yes
-Begin constructs default state: yes
-victory writer uses localStorage phantomCommand.save: yes
-written payload fields: scene, souls, wave
-checkpoint fingerprint: absent
-startup result identity: absent
-first resumed-frame receipt: absent
+simulation step: 1/60
+unit collection: object keyed by unit ID
+unit iteration snapshot: Object.values(state.units)
+lethal unit removal: delete state.units[target.id]
+liveness check at updateUnit entry: absent
+same-tick dead actor execution possible: yes
+spawned enemies included in same-tick unit snapshot: yes
+spawn first-action policy declared: no
+actor order policy declared: no
+actor order source: object insertion order
+nearest-target tie-break policy declared: no
+nearest-target tie behavior: first encountered
+melee damage mode: immediate sequential
+entity retirement result ID: absent
+reference cleanup transaction: absent
+combat result identity: absent
+combat event journal: absent
+combat state fingerprint: absent
+render frame correlation: absent
 ```
 
-## Source-backed candidate fixture
-
-The minimal pure resolver matrix should provide:
+## Concrete dead-actor fixture
 
 ```txt
-slot 1: phantomCommand.save / local / malformed JSON
-slot 2: phantomCommand.save / session / valid supported checkpoint
-slot 3: nexus.sceneSnapshot / local / unsupported legacy schema
-slot 4: nexus.sceneSnapshot / session / empty
-slot 5: phantom.command.campaign / local / valid older checkpoint
-slot 6: phantom.command.campaign / session / read failure
+create ally A and enemy E
+place A before E in stable/captured order
+set E health <= A lethal melee damage
+set E close enough to attack A or breach core
+execute one tick
+
+required:
+  E retires once
+  E produces no movement
+  E produces no attack
+  E creates no projectile
+  E creates no post-retirement effect
+  E causes no core damage
+  reward settles once
+  committed frame omits E and contains no E-sourced consequence
 ```
 
-The future resolver must:
+## Order parity fixture
 
 ```txt
-classify every slot independently
-reject malformed and unsupported candidates
-preserve the read failure as evidence
-select the valid supported candidate deterministically
-publish the selected slot and candidate fingerprint
+build two semantically identical states
+state 1 inserts entities in order A,B,C
+state 2 inserts entities in order C,B,A
+execute same admitted commands and tick
+assert identical:
+  target choices
+  movement events
+  attack events
+  damage events
+  retired IDs
+  rewards
+  core health
+  wave evidence
+  state fingerprint
 ```
 
-## Source-backed browser parity fixture
+## Checkpoint order fixture
 
 ```txt
-seed a valid candidate
-load index.html
-assert Continue enabled and selected candidate ID visible through diagnostics
-activate Continue
-assert URL mode is continue
-assert campaign startup revalidates the same candidate
-assert resumed state differs from default Begin state
-assert first frame carries the same startup result ID
+capture committed state
+hydrate entity records in a different container insertion order
+rebuild references and counters
+execute next tick
+assert CombatResolutionResult and fingerprint match original continuation
+```
+
+## Browser frame smoke
+
+```txt
+load deterministic lethal-before-turn fixture
+execute one admitted tick
+read CombatResolutionResult
+capture world/HUD/minimap/CRT acknowledgements
+assert one shared frameId and stateFingerprint
+assert no damage/effect/projectile references a rejected dead actor
 ```
 
 ## Existing check limitations
 
-`check-menu.mjs` verifies that menu source contains `BEGIN CAMPAIGN`, the new-campaign URL and `window.PhantomMenu`. It does not seed storage, execute `hasCampaignSave()`, classify payloads or test Continue.
-
-`check-campaign.mjs` verifies source declarations and `window.GameHost`. It does not execute query-mode startup, read storage, hydrate state, compare Begin and Continue or observe a first resumed frame.
+`check-campaign.mjs` verifies declarations and source patterns. It does not import a pure simulation, create deterministic state, execute a tick, inspect events, compare order variants, validate references or observe a committed frame.
 
 ## Missing future gates
 
 ```txt
-npm run fixture:continue-slots
-npm run fixture:continue-candidates
-npm run fixture:continue-precedence
-npm run fixture:continue-storage-failure
-npm run fixture:campaign-startup
-npm run fixture:campaign-hydration-rollback
-npm run smoke:continue-browser
-npm run smoke:resume-first-frame
-npm run fixture:crt-projection-parity
-npm run fixture:phase-admission
-npm run fixture:fixed-step-cadence
-npm run fixture:command-replay
-npm run fixture:terminal-outcome
-npm run fixture:lifecycle
-npm run fixture:checkpoint
-```
-
-## Continue fixture assertions
-
-```txt
-raw presence never directly enables Continue
-malformed payloads are rejected without throwing
-one failed slot does not hide other valid slots
-valid lower-priority candidate can beat malformed higher slot
-multiple valid candidates resolve deterministically
-menu capability includes selected candidate identity and policy version
-new mode never hydrates a candidate
-continue mode requires the selected candidate
-changed candidate fingerprint is rejected at startup
-hydration failure leaves default/live state unmodified
-resumed state, startup result and first frame share one identity
+npm run fixture:combat-dead-entity
+npm run fixture:combat-order-parity
+npm run fixture:combat-target-tie
+npm run fixture:combat-reward-settlement
+npm run fixture:combat-reference-cleanup
+npm run fixture:combat-spawn-eligibility
+npm run fixture:combat-checkpoint-order
+npm run fixture:combat-terminal-evidence
+npm run smoke:combat-frame
 ```
 
 ## Current claim boundary
@@ -164,11 +158,10 @@ resumed state, startup result and first frame share one identity
 repo inventory compared: yes
 root .agent state confirmed: yes
 repo-local documentation pushed to main: yes
-central ledger updated on main: yes
-central internal change log added on main: yes
-runtime Continue implementation: raw Boolean presence only
-deterministic candidate resolver: no
-campaign continue-mode admission: no
-atomic hydration: no
-first resumed-frame proof: no
+runtime combat authority implemented: no
+dead actor rejected after retirement: no
+deterministic entity order: no
+checkpoint order parity: no
+combat result identity: no
+committed combat frame proof: no
 ```
