@@ -2,50 +2,39 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-11T05-50-43-04-00`
+**Last aligned:** `2026-07-11T07-38-25-04-00`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a fixed-step grave-ring campaign. The fourth architecture gate is now fully mapped: Continue must restore a versioned, validated checkpoint through an atomic resume transaction rather than navigate into a fresh campaign from a three-field completion summary.
+PhantomCommand is a static pixel-isometric RTS with a procedural graveyard menu and a fixed-step grave-ring campaign. The current audit refines the second implementation gate: pause, win and loss stop fixed-step updates but do not stop direct pointer, keyboard or `GameHost` mutation, so campaign phase must become part of typed command admission.
 
 ## Plan ledger
 
-**Goal:** preserve current gameplay and presentation while implementing the four authority gates required for deterministic Continue, commands, lifecycle and full-session resume.
+**Goal:** preserve current gameplay and presentation while implementing deterministic Continue, command admission, lifecycle ownership and full-session resume.
 
 - [ ] Implement the Continue capability resolver and save-candidate precedence fixtures.
 - [ ] Implement typed campaign commands and fixed-step action-result authority.
+- [ ] Add canonical campaign phase and a complete command-to-phase admission matrix inside action authority.
+- [ ] Reject gameplay mutation while paused, terminal, transitioning or disposed.
+- [ ] Correlate world, HUD, minimap, overlay and CRT consumption to one committed phase/frame.
 - [ ] Implement runtime-session lifecycle ownership and ordered teardown.
-- [ ] Implement versioned checkpoint capture at committed simulation ticks.
-- [ ] Add schema/content identity, migration, invariant validation and canonical fingerprints.
-- [ ] Stage hydration off-line and commit one new resume epoch atomically.
-- [ ] Add rollback, first-frame acknowledgement and bounded persistence observation.
-- [ ] Add roundtrip, corruption, migration and browser resume fixture gates.
+- [ ] Implement versioned checkpoint capture, validation, atomic resume and first-frame proof.
+- [ ] Add executable candidate, action, phase, lifecycle and checkpoint fixture gates.
 
 ## Current implementation queue
 
 ```txt
-1. PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
-2. PhantomCommand Campaign Action Result Authority + Fixed-Step Replay/Frame Fixture Gate
-3. PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
-4. PhantomCommand Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate
+1. Continue Capability Resolver + Save Candidate Precedence Fixture Gate
+2. Campaign Action Result Authority
+   2a. Campaign Phase Admission + Paused/Terminal Mutation Fixture Gate
+   2b. Fixed-Step Replay + Committed Frame Fixture Gate
+3. Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
+4. Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate
 ```
 
 ## Selection result
 
-The accessible `LuminaryLabs-Publish` inventory contains ten repositories. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `PhantomCommand` was selected by the oldest documented-selection rule from its prior `2026-07-11T03-41-49-04-00` timestamp.
-
-```txt
-PhantomCommand       selected / 2026-07-11T03-41-49-04-00
-ZombieOrchard        tracked  / 2026-07-11T03-48-31-04-00
-TheUnmappedHouse     tracked  / 2026-07-11T04-00-07-04-00
-AetherVale           tracked  / 2026-07-11T04-28-33-04-00
-IntoTheMeadow        tracked  / 2026-07-11T04-49-30-04-00
-MyCozyIsland         tracked  / 2026-07-11T05-10-36-04-00
-TheOpenAbove         tracked  / 2026-07-11T05-25-29-04-00
-HorrorCorridor       tracked  / 2026-07-11T05-28-29-04-00
-PrehistoricRush      tracked  / 2026-07-11T05-39-11-04-00
-TheCavalryOfRome     excluded
-```
+The current Publish inventory contains ten accessible repositories. `TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `HorrorCorridor` was skipped because a same-window documentation sequence was actively writing there; `PhantomCommand` was selected as the oldest stable eligible fallback.
 
 ## Product route
 
@@ -61,51 +50,47 @@ The campaign uses a `640 x 360` source canvas, seven rings, four lanes, generate
 ## Current interaction loop
 
 ```txt
-menu module import
-  -> allocate art, source canvas, CRT, mutable state and listeners
-  -> read settings
-  -> scan three keys across local/session storage
-  -> collapse save evidence to Boolean presence
-  -> Begin or Continue starts a timed fade
-  -> navigate to game.html?campaign=new|continue
+menu boot
+  -> settings and raw save-presence scan
+  -> Begin or Continue navigation
 
-campaign module import
-  -> ignore campaign mode and candidate identity
-  -> allocate fresh pads, units, counters, camera, input and state
-  -> browser/GameHost actions mutate live state
-  -> apply exact 1/60 simulation steps
-  -> render world, HUD, minimap, overlay and CRT
-  -> victory writes { scene, souls, wave }
+campaign boot
+  -> allocate descriptors, counters, camera, input and mutable state
+  -> attach browser callbacks
+  -> callbacks mutate live state directly
+  -> RAF updates camera
+  -> fixed accumulator calls update(1/60)
+  -> update returns early for paused/won/lost
+  -> render world, HUD, minimap and overlay
+  -> CRT upload/draw
+  -> repeat
 ```
 
-## Persistence finding
-
-The existing save is a completion summary, not resumable campaign state. It cannot restore:
+## Main finding
 
 ```txt
-units, towers or pad ownership
-spawn queue or projectiles
-selection or camera continuity
-uid/pid/tid counters
-fixed-step tick or command sequence
-terminal and pause state
-schema/content identity or fingerprint
+state.paused/won/lost
+  -> stop update()
+  -> do not stop selectAt(), build(), order() or all startWave paths
+  -> do not stop camera mutation
+  -> do not prevent GameHost bypass
+  -> do not carry phase sequence or typed result
 ```
 
-The campaign has no load/hydration path, does not read `campaign=continue`, and publishes no resume epoch or first-frame acknowledgement.
+The overlay can therefore display `PAUSED`, `GRAVE RING SECURED` or `SANCTUM LOST` while authoritative state changes underneath it.
 
-## Required resume chain
+## Required phase chain
 
 ```txt
-resolved candidate
-  -> schema/content admission
-  -> migration when supported
-  -> canonical fingerprint validation
-  -> staged state graph and rebuilt references
-  -> invariant validation
-  -> atomic resume commit
-  -> new resume epoch
-  -> first world/HUD/minimap/CRT frame acknowledgement
+source intent
+  -> typed CampaignCommand
+  -> session/run/observed-phase preflight
+  -> campaign phase admission matrix
+  -> gameplay preflight
+  -> fixed-step application when applicable
+  -> typed result and phase event
+  -> committed state/frame fingerprint
+  -> world/HUD/minimap/overlay/CRT acknowledgement
 ```
 
 ## Domains in use
@@ -114,17 +99,14 @@ resolved candidate
 route shell and menu presentation
 settings persistence and procedural audio
 save presence, candidate provenance and Continue capability
-menu transition timing and navigation
 campaign content, mutable state and fixed-step simulation
-selection, building, orders, wave start, pause and camera input
+selection, building, orders, wave, phase and camera interaction
 spawning, AI, combat, economy and terminal progression
-world, HUD, minimap, overlay and CRT rendering
+world, HUD, minimap, modal overlay and CRT rendering
 victory-summary persistence
-PhantomMenu and GameHost diagnostics
-runtime allocation, RAF, listeners, globals, audio, WebGL and navigation lifecycle
-checkpoint schema, content identity, capture, migration, validation, hydration,
-atomic resume, rollback, epoch, journal and first-frame proof
-source checks, static build, Pages deployment and central audit sync
+GameHost diagnostics
+runtime allocation, lifecycle and deployment proof
+checkpoint capture, migration, hydration, atomic resume and first-frame proof
 ```
 
 ## Implemented kits
@@ -152,7 +134,7 @@ construct-piece-state-kit
 construct-sequence-update-kit
 ```
 
-The exact current and planned service map is in `.agent/kit-registry.json`.
+The exact current, planned and phase-authority service map is in `.agent/kit-registry.json`.
 
 ## Read first
 
@@ -161,16 +143,16 @@ The exact current and planned service map is in `.agent/kit-registry.json`.
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/trackers/2026-07-11T05-50-43-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-11T05-50-43-04-00.md
-.agent/architecture-audit/2026-07-11T05-50-43-04-00-versioned-checkpoint-resume-dsk-map.md
-.agent/render-audit/2026-07-11T05-50-43-04-00-resume-first-frame-consumption-gap.md
-.agent/gameplay-audit/2026-07-11T05-50-43-04-00-checkpoint-hydration-campaign-loop.md
-.agent/interaction-audit/2026-07-11T05-50-43-04-00-continue-resume-command-result-map.md
-.agent/persistence-audit/2026-07-11T05-50-43-04-00-checkpoint-envelope-atomic-resume-contract.md
-.agent/deploy-audit/2026-07-11T05-50-43-04-00-roundtrip-corruption-first-frame-fixture-gate.md
+.agent/trackers/2026-07-11T07-38-25-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-11T07-38-25-04-00.md
+.agent/architecture-audit/2026-07-11T07-38-25-04-00-campaign-phase-admission-dsk-map.md
+.agent/render-audit/2026-07-11T07-38-25-04-00-paused-terminal-overlay-state-correlation-gap.md
+.agent/gameplay-audit/2026-07-11T07-38-25-04-00-paused-terminal-mutation-loop.md
+.agent/interaction-audit/2026-07-11T07-38-25-04-00-phase-command-admission-map.md
+.agent/phase-authority-audit/2026-07-11T07-38-25-04-00-campaign-phase-mutation-barrier-contract.md
+.agent/deploy-audit/2026-07-11T07-38-25-04-00-phase-admission-fixture-gate.md
 ```
 
 ## Validation state
 
-Documentation only. Runtime source, scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration did not change. No branch or pull request was created. Checkpoint/resume fixtures and browser first-frame smoke do not yet exist and were not run.
+Documentation only. Runtime source, scripts, dependencies, routes, gameplay, rendering, persistence and deployment configuration did not change. No branch or pull request was created. Phase-admission fixtures and browser phase smoke do not yet exist and were not run.
