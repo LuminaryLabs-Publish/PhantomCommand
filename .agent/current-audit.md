@@ -1,24 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T09-40-19-04-00`
+**Timestamp:** `2026-07-11T11-51-06-04-00`
 
 ## Summary
 
-PhantomCommand renders through a CRT transform but accepts input through a different coordinate transform. The WebGL shader applies containment and radial curvature before sampling the source canvas, while `screenToSource()` applies only containment. Menu and campaign input can therefore target a different source point than the one visibly under the pointer.
+PhantomCommand uses exact `1/60` combat updates, but authoritative commands are not scheduled through that fixed-step boundary. Browser callbacks mutate live campaign and camera state immediately, wall-clock delta is capped at 50 ms, and rendered frames have no tick, state-fingerprint or command provenance. Deterministic replay is not established.
 
 ## Plan ledger
 
-**Goal:** catalogue the current interaction/runtime architecture and define one authoritative projection chain from display pixels to source-canvas coordinates, isometric world coordinates and typed campaign commands.
+**Goal:** catalogue the full runtime and define one authoritative path from browser intent to target tick, committed state and correlated render frame.
 
-- [x] Reconcile the full Publish inventory and central ledgers.
-- [x] Skip active same-window work on `HorrorCorridor`.
-- [x] Select only `PhantomCommand` as the oldest stable eligible fallback.
-- [x] Read CRT shader, screen mapping, menu hit tests, campaign input, render and validation source.
-- [x] Identify all domains, implemented kits and services.
-- [x] Trace display-to-source, source-to-world, wheel-anchor and drag-selection paths.
-- [x] Define projection descriptors, revisions, typed results and parity fixtures.
-- [ ] Implement shared CPU/GLSL projection authority.
-- [ ] Add behavioral fixtures and browser pointer smoke.
+- [x] Compare the full Publish inventory with the central ledger.
+- [x] Exclude `TheCavalryOfRome`.
+- [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
+- [x] Select only `PhantomCommand` as the oldest eligible entry.
+- [x] Read campaign clock, callbacks, fixed-step update, render, `GameHost`, package scripts and prior audits.
+- [x] Identify the interaction loop, all domains, implemented kits and services.
+- [x] Trace immediate browser mutations relative to accumulator ticks.
+- [x] Define command sequence, target-tick, overrun, fingerprint, replay and frame receipts.
+- [ ] Implement the authority boundary and executable fixtures.
 
 ## Selection audit
 
@@ -27,68 +27,97 @@ accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 central ledger entries: 9/9
 root .agent state: 9/9
-active same-window repo skipped: HorrorCorridor
 selected: LuminaryLabs-Publish/PhantomCommand
+prior central timestamp: 2026-07-11T09-40-19-04-00
 excluded: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
 ## Interaction loops
 
-### Menu
+### Browser command path
 
 ```txt
-pointer client coordinate
-  -> CRT canvas CSS rectangle
-  -> screenToSource contain correction
-  -> menuHitIndex or panelHitIndex
-  -> hover, selection or activation
+pointerdown / pointerup / wheel / keydown
+  -> project current pointer with current mutable camera
+  -> direct selectAt / build / order / startWave / pause / tower-type mutation
+  -> no command envelope
+  -> no target tick
+  -> no typed result
+  -> no journal
 ```
 
-### Campaign click and order
+### Frame and simulation path
 
 ```txt
-pointer client coordinate
-  -> screenToSource contain correction
-  -> screenToWorld inverse isometric transform
-  -> nearest ally, pad or enemy
-  -> direct select, build or order mutation
+RAF(now)
+  -> dt = min(0.05, (now - last) / 1000)
+  -> variable-step camera velocity, position and zoom
+  -> accumulator += dt
+  -> while accumulator >= 1/60
+       update(1/60)
+       accumulator -= 1/60
+  -> render current mutable state and camera
+  -> CRT render with performance.now()/1000
 ```
 
-### Campaign drag selection
+### Observation path
 
 ```txt
-source-screen rectangle
-  -> inverse-project only two diagonal corners
-  -> create axis-aligned world bounds
-  -> admit allies inside that world AABB
+world + HUD + minimap + overlay
+  -> read mutable state directly
+CRT
+  -> uploads current source canvas
+GameHost
+  -> exposes mutable state, mutable camera and direct startWave/build/setZoom
 ```
 
-### Render
+## Main finding
+
+The combat loop is fixed-step, but mutation admission is event-time driven. The same logical input can land before or after a simulation tick depending on browser callback timing and display cadence.
 
 ```txt
-source canvas
-  -> containUv(output UV)
-  -> curveUv(contained UV) when CRT enabled
-  -> source texture sample
-  -> scanline, grille, grain, vignette and fade
+fixed-step update: deterministic only for an already-established state
+input-to-state ordering: browser-event dependent
+camera/projection state: variable-frame dependent
+render correlation: absent
 ```
 
-## Exact projection gap
+### Silent wall-clock loss
 
-`screenToSource()` reproduces the shader's containment transform but not its CRT curve. For a displayed point near an edge, the shader samples a curved source UV while input reports the uncurved UV.
+`dt` is capped at `.05`. Any frame gap above 50 ms is discarded before entering the accumulator. The current loop can execute at most three `1/60` updates after a stall, with no `ClockOverrunResult`, dropped-duration counter, visibility policy or replay receipt.
+
+### Immediate command mutation
+
+The following mutate outside the fixed-step loop:
 
 ```txt
-render source UV = curveUv(containUv(display UV))
-input source UV  = containUv(display UV)
+start wave
+tower-type selection
+pause toggle
+unit and pad selection
+construction
+move or target order
+wheel-anchored camera change
+middle-button pan
+keyboard camera pan state
+GameHost startWave/build/setZoom
 ```
 
-The same `screenToSource()` result drives menu hit tests, campaign selection, orders, wheel zoom anchoring and drag endpoints.
+### Mixed render provenance
 
-## Drag-selection gap
+Each frame combines:
 
-An axis-aligned rectangle in source-screen space maps to a rotated parallelogram in world space. The runtime inverse-projects only two diagonal corners and converts them into a world AABB. That test can include allies visually outside the drag box or omit allies visibly inside it.
-
-The stable rule is simpler: project each selectable ally into the committed source frame and test that projected point against the visual drag rectangle.
+```txt
+latest completed simulation state
+variable-step camera state
+current pointer/drag state
+independent CRT animation time
+no immutable snapshot
+no tickId
+no frameId
+no stateFingerprint
+no command cursor
+```
 
 ## Domains in use
 
@@ -125,7 +154,7 @@ drag-selection-domain
 projection-revision-domain-next
 ```
 
-### Campaign content and simulation
+### Campaign content and state
 
 ```txt
 ring-map-domain
@@ -141,6 +170,11 @@ campaign-message-domain
 campaign-terminal-state-domain
 camera-pan-zoom-domain
 identity-counter-domain
+```
+
+### Commands and simulation
+
+```txt
 build-action-domain
 order-action-domain
 wave-start-action-domain
@@ -156,6 +190,11 @@ effect-domain
 win-loss-domain
 save-on-win-domain
 fixed-step-simulation-domain
+command-sequence-domain-next
+target-tick-domain-next
+clock-overrun-domain-next
+replay-journal-domain-next
+state-fingerprint-domain-next
 ```
 
 ### Render, observation and proof
@@ -169,7 +208,10 @@ crt-upload-domain
 crt-draw-domain
 phantom-menu-diagnostics-domain
 gamehost-diagnostics-domain
-projection-parity-proof-domain-next
+committed-tick-domain-next
+render-frame-domain-next
+frame-consumer-ack-domain-next
+cadence-replay-proof-domain-next
 runtime lifecycle and checkpoint domains
 source checks, static build, Pages deploy and central sync
 ```
@@ -178,7 +220,7 @@ source checks, static build, Pages deploy and central sync
 
 | Kit | Current services |
 |---|---|
-| `crt-renderer-kit` | WebGL setup, source texture upload, contain framing, CRT curvature, scanlines, grain, draw, resize and partial coordinate projection |
+| `crt-renderer-kit` | WebGL setup, source upload, contain framing, CRT curvature, animation-time effects, draw, resize and partial coordinate projection |
 | `graveyard-art-kit` | Procedural menu composition and animated source-canvas drawing |
 | `menu-route-kit` | Menu selection, panels, Begin/Continue routing and fade timing |
 | `menu-settings-persistence-kit` | Read, normalize and write CRT, grain and ambience settings |
@@ -192,55 +234,77 @@ source checks, static build, Pages deploy and central sync
 | check/build/deploy kits | Source-pattern checks, static artifact copy and Pages publishing |
 | retained construct kits | Historical concentric construction descriptors and sequence helpers |
 
-## Candidate projection kits
+## Candidate fixed-step and frame kits
 
 ```txt
-phantom-command-presentation-transform-kit
-phantom-command-contain-projection-kit
-phantom-command-crt-curve-projection-kit
-phantom-command-display-to-source-kit
-phantom-command-pointer-projection-result-kit
-phantom-command-source-to-world-projection-kit
-phantom-command-screen-selection-volume-kit
-phantom-command-wheel-anchor-projection-kit
-phantom-command-projection-revision-kit
-phantom-command-projection-journal-kit
-phantom-command-projection-observation-kit
-phantom-command-cpu-glsl-projection-parity-fixture-kit
-phantom-command-pointer-roundtrip-fixture-kit
-phantom-command-drag-selection-visual-parity-fixture-kit
+phantom-command-monotonic-frame-sample-kit
+phantom-command-simulation-clock-kit
+phantom-command-fixed-step-accumulator-kit
+phantom-command-simulation-tick-id-kit
+phantom-command-command-envelope-kit
+phantom-command-command-sequence-kit
+phantom-command-target-tick-policy-kit
+phantom-command-fixed-step-command-queue-kit
+phantom-command-command-application-kit
+phantom-command-catchup-budget-kit
+phantom-command-clock-overrun-result-kit
+phantom-command-state-fingerprint-kit
+phantom-command-committed-tick-receipt-kit
+phantom-command-render-frame-id-kit
+phantom-command-committed-frame-receipt-kit
+phantom-command-frame-consumer-ack-kit
+phantom-command-replay-journal-kit
+phantom-command-cadence-parity-fixture-kit
+phantom-command-stall-policy-fixture-kit
+phantom-command-command-replay-fixture-kit
+phantom-command-frame-correlation-fixture-kit
 ```
 
-## Required projection chain
+## Required authority chain
 
 ```txt
-committed frame identity
-  -> PresentationTransform
-       output rect
-       source resolution
-       contain mode
-       CRT enabled
-       curve coefficient
-       transform revision
-  -> displayToSource(clientX, clientY)
-  -> PointerProjectionResult
-  -> optional sourceToWorld()
-  -> typed campaign command
-  -> action result
-  -> render acknowledgement
+browser intent
+  -> projection result and revision
+  -> CampaignCommand
+       sessionId, commandId, sequence, source
+       observedPhase, targetTick, payload
+  -> preflight and phase admission
+  -> ordered fixed-step queue
+  -> apply exactly once before target tick update
+  -> domain events and state fingerprint
+  -> CommittedTickReceipt
+  -> immutable render snapshot
+  -> CommittedFrameReceipt
+       frameId, tickId, fingerprint, command cursor
+       camera revision, projection revision, consumer acknowledgements
 ```
+
+## Clock policy required
+
+```txt
+monotonic frame sample
+  -> visibility policy
+  -> elapsed duration
+  -> accumulator
+  -> bounded catch-up count
+  -> explicit overrun result
+  -> zero or more simulation ticks
+```
+
+The implementation must declare whether excess time is simulated, suspended or dropped. It must never discard time silently.
 
 ## Required proof
 
 ```txt
-CPU projection matches shader sampling within tolerance
-CRT off maps display center and edges correctly
-CRT on maps the visible source point under the pointer
-letterbox and pillarbox outside regions reject
-wheel zoom preserves the visually anchored world point
-drag selection equals source-screen inclusion
-menu and campaign use the same transform revision
-stale pointer projections reject after resize or settings change
+same command journal produces the same state fingerprint
+20, 30, 60 and 120 Hz frame schedules converge
+irregular frame schedule converges
+50 ms and longer stalls follow declared policy
+commands apply once at the declared target tick
+commands received around a RAF boundary have stable ordering
+pause and terminal phases reject forbidden mutations
+world, HUD, minimap, overlay and CRT acknowledge one frame receipt
+GameHost cannot bypass command scheduling
 ```
 
 ## Ordered implementation queue
@@ -250,11 +314,11 @@ stale pointer projections reject after resize or settings change
 2. Campaign Action Result Authority
    2a. CRT Display/Input Projection Authority
    2b. Campaign Phase Admission Authority
-   2c. Fixed-Step Replay and Committed Frame Authority
+   2c. Fixed-Step Command Scheduling, Replay and Committed Frame Authority
 3. Runtime Session Lifecycle Authority
 4. Versioned Campaign Checkpoint and Atomic Resume Authority
 ```
 
 ## Validation status
 
-Documentation only. Runtime behavior was not changed. `npm run check`, `npm run build`, projection fixtures and browser pointer smoke were not run.
+Documentation only. Runtime behavior was not changed. `npm run check`, `npm run build`, cadence fixtures, stall fixtures, replay fixtures and browser frame-correlation smoke were not run.

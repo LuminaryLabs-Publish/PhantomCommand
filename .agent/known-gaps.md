@@ -1,10 +1,10 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T09-40-19-04-00`
+**Timestamp:** `2026-07-11T11-51-06-04-00`
 
 ## Summary
 
-PhantomCommand still lacks four connected authority gates. The campaign-action gate now has an earlier coordinate blocker: the CRT display and pointer mapper do not use the same projection, so visually equivalent inputs can resolve to different source and world coordinates.
+PhantomCommand still lacks four connected authority gates. Within campaign action authority, the fixed-step update does not own command application, clock overruns or frame publication, so deterministic replay and committed-frame proof remain absent.
 
 ## Plan ledger
 
@@ -12,10 +12,11 @@ PhantomCommand still lacks four connected authority gates. The campaign-action g
 
 - [ ] Continue/save-candidate resolution.
 - [ ] CRT display/input projection parity.
-- [ ] Campaign command, phase-admission and fixed-step action-result authority.
+- [ ] Campaign command and phase admission.
+- [ ] Fixed-step command scheduling, clock-overrun and replay authority.
+- [ ] Committed-tick and render-frame authority.
 - [ ] Runtime session lifecycle authority.
 - [ ] Versioned checkpoint capture and atomic resume authority.
-- [ ] Committed-frame and first-frame acknowledgements.
 
 ## Gate 1: Continue resolution gaps
 
@@ -29,63 +30,76 @@ candidate identity is not carried into startup
 
 ## Gate 2a: Projection gaps
 
-### CRT display mismatch
-
 ```txt
-shader render path: containUv -> curveUv -> source sample
-pointer path: contain correction -> source coordinate
-screenToSource does not apply CRT curvature
-menu and campaign both consume the mismatched result
-error increases toward display edges
+shader: containUv -> curveUv -> source sample
+pointer: contain correction only
+no transform revision or typed rejection reason
+click, order and wheel anchor use mismatched coordinates
+drag selection uses a two-corner world AABB instead of visual inclusion
 ```
 
-### Containment and boundary mismatch
-
-```txt
-pointer inside flag covers the uncurved contained UV
-shader may curve that UV outside the source and draw black
-no typed outside-letterbox/outside-source/curved-out reason
-no transform revision across resize or settings changes
-```
-
-### Campaign world projection
-
-```txt
-click/order/wheel anchor depend on mismatched source coordinates
-screenToWorld returns no projection identity or result
-pointer commands carry no source coordinate provenance
-```
-
-### Drag selection
-
-```txt
-visual source rectangle is inverse-projected with two corners only
-screen rectangle maps to a world parallelogram, not a world AABB
-selection can include visually outside allies or omit visible allies
-no visual-selection parity fixture exists
-```
-
-### Projection observation
-
-```txt
-no PresentationTransform descriptor
-no projection revision or fingerprint
-no CPU/GLSL parity proof
-no source/world projection journal
-no frame-to-pointer transform correlation
-```
-
-## Gate 2b/2c: Campaign action and phase gaps
+## Gate 2b: Command and phase gaps
 
 ```txt
 pointer, keyboard and GameHost mutate live state
-no command identity, sequence or target tick
+no command identity, source, sequence or target tick
 invalid requests silently return
 paused/won/lost are independent Boolean flags
 no command-to-phase admission matrix
-camera and gameplay mutation continue outside active simulation
+no typed command result or bounded journal
+```
+
+## Gate 2c: Fixed-step, clock and replay gaps
+
+### Command scheduling
+
+```txt
+startWave, build, select and order apply in browser callbacks
+pause and tower-type changes apply immediately
+command ordering depends on callback timing relative to RAF
+no deterministic (targetTick, sequence) queue
+no duplicate or stale command handling
+```
+
+### Clock policy
+
+```txt
+wall-clock delta is capped at 50 ms
+elapsed duration above 50 ms is silently discarded
+maximum catch-up is an accidental consequence of the clamp
+no hidden-tab policy
+no clock-overrun result
+no dropped-duration or catch-up counters
+```
+
+### Camera and projection timing
+
+```txt
+camera pan and zoom use variable frame delta outside fixed steps
+pointer-to-world commands consume mutable camera state
+no camera revision is carried into commands or frames
+```
+
+### Replay and state proof
+
+```txt
+no simulationTickId
+no appliedCommandCursor
+no ordered domain-event journal
+no canonical state fingerprint
+no replay input journal
+same run cannot be reproduced from recorded commands
+```
+
+### Render proof
+
+```txt
 world/HUD/minimap/overlay read live mutable state
-no committed frame identity or CRT acknowledgement
+CRT time uses performance.now independently
+no immutable render snapshot
+no frameId or committed tick receipt
+no consumer acknowledgements
+no state/camera/projection/frame correlation
 ```
 
 ## Gate 3: Lifecycle gaps
@@ -116,18 +130,19 @@ no first resumed-frame acknowledgement
 
 ```txt
 current checks are source-pattern checks
-no CPU/GLSL projection parity fixture
-no pointer roundtrip fixture
-no aspect-ratio boundary fixture
-no wheel-anchor fixture
-no drag-selection visual parity fixture
 no candidate precedence fixture
-no command/replay or phase fixture
+no CPU/GLSL projection fixture
+no command or phase fixture
+no cadence-parity fixture
+no irregular-frame fixture
+no stall/visibility fixture
+no command replay or state-fingerprint fixture
+no committed-frame consumer fixture
 no lifecycle fixture
 no checkpoint roundtrip/migration/corruption/rollback fixture
-no browser pointer, Continue or phase smoke
+no browser pointer, cadence, Continue or resume smoke
 ```
 
 ## Do not claim
 
-Do not claim that visible pointer targets are exact under CRT curvature, drag selection matches the drawn rectangle, wheel zoom remains visually anchored, Continue works, pause freezes authoritative state, terminal state is immutable, fixed-step commands are deterministic, restart is lifecycle-safe or checkpoint resume works until the corresponding fixtures and browser smoke pass on `main`.
+Do not claim Continue works, pointer targeting is exact, pause freezes all authoritative mutation, fixed-step commands are deterministic, stalls preserve declared time, replays reproduce state, frames correspond to a committed tick, restart is lifecycle-safe or checkpoint resume works until the corresponding fixtures pass on `main`.

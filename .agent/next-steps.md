@@ -1,73 +1,79 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T09-40-19-04-00`
+**Timestamp:** `2026-07-11T11-51-06-04-00`
 
 ## Summary
 
-Keep the existing dependency order, but add display/input projection parity inside campaign action authority before pointer-derived commands are admitted. A typed command is not deterministic if the visible point under the cursor and the source/world coordinate in the command are produced by different transforms.
+Keep the existing dependency order. The next fixed-step ledge must move all gameplay mutations behind a sequenced command queue, define explicit stall/catch-up behavior and publish immutable committed-tick and render-frame receipts.
 
 ## Plan ledger
 
-**Goal:** implement deterministic Continue and campaign commands with one shared CRT display, pointer, source-canvas and isometric world projection contract.
+**Goal:** make command order, simulation progress and visible frame provenance reproducible across display cadence, stalls and replay.
 
 - [ ] Finish save-candidate resolution first.
-- [ ] Extract one versioned `PresentationTransform` shared by render and input.
-- [ ] Reproduce contain and CRT curvature in CPU pointer projection.
-- [ ] Return typed projection results with revision and rejection reason.
-- [ ] Replace world-AABB drag selection with source-screen inclusion.
-- [ ] Normalize browser and `GameHost` actions into typed commands.
-- [ ] Add canonical campaign phase and legal transitions.
-- [ ] Apply admitted gameplay commands only in fixed-step updates.
-- [ ] Publish typed results, journals, fingerprints and committed frames.
-- [ ] Finish runtime lifecycle ownership and checkpoint resume.
-- [ ] Add projection, phase, replay, lifecycle and resume fixtures.
+- [ ] Finish shared CRT display/input projection.
+- [ ] Define typed campaign commands and canonical phase admission.
+- [ ] Assign one monotonic command sequence and deterministic target tick.
+- [ ] Apply admitted commands exactly once inside the fixed-step boundary.
+- [ ] Add simulation tick IDs and committed state fingerprints.
+- [ ] Replace silent 50 ms truncation with an explicit catch-up/overrun policy.
+- [ ] Separate authoritative simulation time from presentation time.
+- [ ] Publish render-frame receipts and consumer acknowledgements.
+- [ ] Quarantine direct `GameHost` mutation bypasses.
+- [ ] Add cadence, stall, replay and frame-correlation fixtures.
+- [ ] Complete lifecycle and checkpoint gates afterward.
 
 ## Ordered implementation sequence
 
 ### Gate 1: Continue capability
 
-1. Enumerate all candidate slots once.
-2. Parse and classify each candidate independently.
-3. Validate schema, content identity and provenance.
-4. Apply deterministic precedence.
-5. Publish one candidate or typed rejection.
-6. Pass candidate identity into campaign startup.
+1. Enumerate candidate slots.
+2. Parse, classify and validate each candidate.
+3. Apply deterministic precedence.
+4. Publish one typed candidate or rejection.
+5. Carry candidate identity into campaign startup.
 
 ### Gate 2a: Display/input projection authority
 
-1. Extract shader containment and radial curve parameters into `PresentationTransform`.
-2. Version the transform on resize, source-resolution change and CRT settings change.
-3. Implement pure `containDisplayUv()` and `curveSourceUv()` helpers used by CPU tests.
-4. Implement `displayToSource()` that mirrors shader source sampling.
-5. Return `insideDisplay`, `insideSource`, source coordinate, transform revision and reason.
-6. Reject pointer commands projected with a stale transform revision.
-7. Use the same result for menu hover, activation, campaign click, order and wheel anchor.
-8. Keep source/world conversion separate and pure.
-9. For drag selection, project selectable entities to source-screen space and test the visual rectangle.
-10. Record projection provenance in typed campaign commands and debug observation.
+1. Extract one versioned `PresentationTransform`.
+2. Mirror shader containment and curvature in CPU projection.
+3. Reject stale transform revisions.
+4. Use visual-space drag inclusion.
+5. Attach projection provenance to commands.
 
-### Gate 2b: Campaign action and phase authority
+### Gate 2b: Campaign command and phase authority
 
-1. Extract browser callbacks and `GameHost` mutators into source adapters.
-2. Define `CampaignCommand` with command ID, source, session, run, projection revision, observed phase, sequence and target tick.
-3. Add canonical phase, legal transitions and command-to-phase admission.
-4. Reject select/build/order/start-wave outside `ACTIVE`.
-5. Retire held keys, drag and middle-pan state on phase changes.
-6. Run gameplay preflight after projection and phase preflight.
-7. Queue admitted gameplay commands for deterministic fixed-step application.
-8. Publish accepted, rejected, idempotent and duplicate results.
+1. Convert browser callbacks and `GameHost` actions into source adapters.
+2. Define `CampaignCommand` with identity, source, phase, sequence and target tick.
+3. Add canonical phase and an admission matrix.
+4. Return typed accepted, rejected, duplicate and stale results.
+5. Retire held input when phase changes.
 
-### Gate 2c: Fixed-step and committed-frame authority
+### Gate 2c: Fixed-step command scheduling and frame authority
 
-1. Apply commands at deterministic target ticks.
-2. Record ordered domain events.
-3. Publish canonical state fingerprints.
-4. Commit immutable frame identity including projection and phase revisions.
-5. Correlate world, HUD, minimap, overlay and CRT consumption.
+1. Add `simulationTickId`, `commandSequence`, `appliedCommandCursor` and `frameId`.
+2. Queue commands in deterministic `(targetTick, sequence)` order.
+3. Apply commands before the corresponding `update(1/60)` call.
+4. Record ordered domain events and a canonical state fingerprint.
+5. Publish a `CommittedTickReceipt` after every authoritative tick.
+6. Extract a detached immutable render snapshot from that receipt.
+7. Version camera and projection state consumed by the frame.
+8. Publish a `CommittedFrameReceipt` after world, HUD, minimap, overlay and CRT consumption.
+9. Add consumer acknowledgements and stale-frame rejection.
+
+### Clock and stall policy
+
+1. Replace anonymous `last` and `accumulator` variables with a clock owner.
+2. Record raw elapsed duration before clamping.
+3. Define hidden-tab behavior.
+4. Define a maximum catch-up budget.
+5. Publish `ClockOverrunResult` whenever elapsed time exceeds policy.
+6. Keep authoritative simulation time independent from CRT animation time.
+7. Never discard duration without a typed receipt.
 
 ### Gate 3: Runtime lifecycle
 
-1. Extract menu and campaign factories from module scope.
+1. Extract menu and campaign factories.
 2. Add session/run identity and lifecycle states.
 3. Lease RAF, listeners, timers, globals, audio and CRT resources.
 4. Fence stale callbacks by run generation.
@@ -76,45 +82,45 @@ Keep the existing dependency order, but add display/input projection parity insi
 ### Gate 4: Versioned checkpoint and atomic resume
 
 1. Capture only at a committed simulation tick.
-2. Add schema and campaign content identity.
-3. Capture canonical detached authoritative state.
-4. Validate, migrate and stage hydration.
-5. Commit one new resume epoch atomically or roll back unchanged.
-6. Acknowledge the first resumed frame.
+2. Include schema, content identity, tick, command cursor and fingerprint.
+3. Validate, migrate and stage hydration.
+4. Commit a new resume epoch atomically or roll back unchanged.
+5. Acknowledge the first resumed frame.
 
 ## First target files
 
 ```txt
+src/campaign/campaign-command.js
+src/campaign/campaign-clock.js
+src/campaign/campaign-replay.js
+src/campaign/campaign-frame.js
+src/campaign/campaign-scene.js
 src/menu/crt-projection.js
 src/menu/crt-renderer.js
-src/menu/graveyard-menu.js
-src/campaign/isometric-projection.js
-src/campaign/campaign-command.js
-src/campaign/campaign-scene.js
-tests/crt-projection-parity.fixture.mjs
-tests/pointer-roundtrip.fixture.mjs
-tests/drag-selection.fixture.mjs
-scripts/check-projection.mjs
+tests/fixed-step-cadence.fixture.mjs
+tests/stall-policy.fixture.mjs
+tests/command-replay.fixture.mjs
+tests/frame-correlation.fixture.mjs
+scripts/check-campaign-runtime.mjs
 package.json
 ```
 
 ## Required fixtures
 
 ```txt
-CPU versus shader projection samples
-CRT enabled and disabled pointer parity
-letterbox and pillarbox rejection
-resize/settings transform revision
-menu hit-test visual parity
-campaign click/order visual parity
-wheel-anchor stability
-drag selection visual inclusion
-stale projection rejection
 candidate precedence
+CPU/GLSL projection parity
 phase transition and mutation barriers
-fixed-step replay and frame correlation
+20/30/60/120 Hz cadence parity
+irregular cadence parity
+stall and hidden-tab policy
+command target-tick ordering
+command duplicate/idempotency handling
+same-journal state-fingerprint replay
+world/HUD/minimap/overlay/CRT frame correlation
+GameHost bypass rejection
 runtime teardown
-checkpoint roundtrip/corruption/migration/rollback
+checkpoint roundtrip, migration, corruption and rollback
 ```
 
 ## Out of scope for this ledge

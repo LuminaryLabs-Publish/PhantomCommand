@@ -1,32 +1,32 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-11T09-40-19-04-00",
-  "status": "continue-first-projection-action-phase-lifecycle-checkpoint-audited",
-  "sourceTracker": ".agent/trackers/2026-07-11T09-40-19-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T09-40-19-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T09-40-19-04-00-display-input-projection-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-11T09-40-19-04-00-crt-source-pointer-parity-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T09-40-19-04-00-pointer-world-action-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T09-40-19-04-00-display-source-world-admission-map.md",
-  "latestInputProjectionAudit": ".agent/input-projection-audit/2026-07-11T09-40-19-04-00-crt-and-drag-selection-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T09-40-19-04-00-projection-parity-fixture-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-11T07-38-25-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-11T11-51-06-04-00",
+  "status": "fixed-step-command-scheduling-replay-committed-frame-authority-audited",
+  "sourceTracker": ".agent/trackers/2026-07-11T11-51-06-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T11-51-06-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T11-51-06-04-00-fixed-step-command-frame-authority-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-11T11-51-06-04-00-simulation-tick-render-frame-correlation-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T11-51-06-04-00-event-command-fixed-step-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T11-51-06-04-00-event-command-target-tick-admission-map.md",
+  "latestSimulationClockAudit": ".agent/simulation-clock-audit/2026-07-11T11-51-06-04-00-catchup-stall-replay-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T11-51-06-04-00-cadence-replay-frame-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-11T09-40-19-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "reason": "all nine eligible non-Cavalry repositories were tracked and documented; HorrorCorridor had active same-window documentation writes, so PhantomCommand was the oldest stable eligible fallback",
-    "priorCentralTimestamp": "2026-07-11T07-38-25-04-00",
+    "reason": "all nine eligible non-Cavalry repositories were tracked and documented; PhantomCommand had the oldest current central-ledger timestamp",
+    "priorCentralTimestamp": "2026-07-11T09-40-19-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "centralLedgerCount": 9,
     "rootAgentCount": 9,
-    "skippedActiveRepo": "LuminaryLabs-Publish/HorrorCorridor",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
   "implementationQueue": [
     "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
     "PhantomCommand CRT Display/Input Projection Authority + CPU/GLSL Parity Fixture Gate",
-    "PhantomCommand Campaign Action Result Authority + Campaign Phase Admission + Fixed-Step Replay/Frame Fixture Gate",
+    "PhantomCommand Campaign Phase Admission + Paused/Terminal Mutation Fixture Gate",
+    "PhantomCommand Fixed-Step Command Scheduling, Replay and Committed Frame Authority + Cadence/Stall/Replay/Frame Fixture Gate",
     "PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate",
     "PhantomCommand Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate"
   ],
@@ -39,16 +39,18 @@
     "sourceCanvas": [640, 360],
     "menuSourceCanvas": [480, 270],
     "simulationStep": "1/60",
+    "frameDeltaClampSeconds": 0.05,
+    "commandsAppliedInsideFixedStep": false,
+    "simulationTickId": null,
+    "commandSequence": null,
+    "targetTick": null,
+    "clockOverrunResult": null,
+    "stateFingerprint": null,
+    "committedFrame": null,
+    "replayJournal": null,
     "renderProjection": ["containUv", "curveUv"],
     "pointerProjection": ["contain-only"],
-    "projectionRevision": null,
-    "cpuGlslProjectionParity": false,
-    "dragSelectionVisualParity": false,
     "campaignReadsSessionMode": false,
-    "candidateSlotCount": 6,
-    "actionResultShape": null,
-    "canonicalPhase": false,
-    "committedFrame": null,
     "checkpointSchema": null,
     "atomicResume": false
   },
@@ -61,22 +63,21 @@
       "navigate to campaign new or continue"
     ],
     "campaign": [
-      "map client pointer through contain-only screenToSource",
-      "convert source point to isometric world point",
-      "mutate select, build, order, pan or zoom state",
-      "apply exact 1/60 updates unless paused, won or lost",
-      "render source frame",
-      "sample it through containUv and optional curveUv",
-      "draw CRT output"
+      "browser callbacks mutate selection, build, order, wave, pause, tower and camera state immediately",
+      "RAF caps elapsed frame duration at 50 ms",
+      "camera advances with variable frame delta",
+      "accumulator runs zero to three exact 1/60 simulation updates",
+      "world, HUD, minimap and overlay read live state",
+      "CRT renders with independent performance.now time"
     ],
-    "targetProjection": [
-      "read committed PresentationTransform",
-      "map display coordinate through contain and CRT curve",
-      "publish typed PointerProjectionResult with revision",
-      "convert source to world only when required",
-      "attach projection provenance to CampaignCommand",
-      "admit command against phase and gameplay state",
-      "correlate action result with committed render frame"
+    "targetAuthority": [
+      "normalize intent into CampaignCommand",
+      "attach projection revision, observed phase, sequence and target tick",
+      "admit and queue in deterministic order",
+      "apply exactly once before the target simulation update",
+      "publish state fingerprint and CommittedTickReceipt",
+      "render immutable snapshot",
+      "publish CommittedFrameReceipt and consumer acknowledgements"
     ]
   },
   "domains": {
@@ -90,8 +91,7 @@
       "crt-display-domain", "contain-projection-domain", "crt-curve-domain",
       "source-resolution-domain", "pointer-hit-domain", "source-to-world-domain",
       "world-to-source-domain", "wheel-anchor-domain", "drag-selection-domain",
-      "display-to-source-authority-domain-next", "projection-revision-domain-next",
-      "projection-parity-proof-domain-next"
+      "display-to-source-authority-domain-next", "projection-revision-domain-next"
     ],
     "campaignContentState": [
       "ring-map-domain", "lane-domain", "build-pad-domain", "unit-archetype-domain",
@@ -106,15 +106,24 @@
       "projectile-domain", "damage-reward-domain", "effect-domain", "win-loss-domain",
       "save-on-win-domain", "fixed-step-simulation-domain"
     ],
+    "clockCommandReplayNext": [
+      "monotonic-frame-sample-domain-next", "simulation-clock-domain-next",
+      "fixed-step-accumulator-domain-next", "simulation-tick-id-domain-next",
+      "command-sequence-domain-next", "target-tick-domain-next",
+      "fixed-step-command-queue-domain-next", "clock-overrun-domain-next",
+      "state-fingerprint-domain-next", "replay-journal-domain-next"
+    ],
     "renderObservation": [
       "world-render-domain", "hud-projection-domain", "minimap-domain",
       "modal-overlay-domain", "crt-upload-domain", "crt-draw-domain",
-      "phantom-menu-diagnostics-domain", "gamehost-diagnostics-domain"
+      "phantom-menu-diagnostics-domain", "gamehost-diagnostics-domain",
+      "committed-tick-domain-next", "committed-frame-domain-next",
+      "frame-consumer-ack-domain-next"
     ],
     "authorityNext": [
       "save-candidate-resolution-domain-next", "campaign-command-domain-next",
-      "campaign-phase-domain-next", "committed-frame-domain-next",
-      "runtime-lifecycle-domain-next", "checkpoint-resume-domain-next"
+      "campaign-phase-domain-next", "runtime-lifecycle-domain-next",
+      "checkpoint-resume-domain-next"
     ],
     "proofDeploy": [
       "menu-static-check-domain", "campaign-static-check-domain", "static-build-domain",
@@ -149,29 +158,66 @@
       "phantom-command-drag-selection-visual-parity-fixture-kit"
     ],
     "continueResolver": [
-      "phantom-command-candidate-slot-registry-kit", "phantom-command-save-classifier-kit",
-      "phantom-command-candidate-precedence-kit", "phantom-command-save-candidate-resolver-kit",
-      "phantom-command-continue-capability-kit", "phantom-command-candidate-provenance-kit",
-      "phantom-command-campaign-session-mode-kit", "phantom-command-candidate-resolver-fixture-kit"
+      "phantom-command-candidate-slot-registry-kit",
+      "phantom-command-save-classifier-kit",
+      "phantom-command-candidate-precedence-kit",
+      "phantom-command-save-candidate-resolver-kit",
+      "phantom-command-continue-capability-kit",
+      "phantom-command-candidate-provenance-kit",
+      "phantom-command-campaign-session-mode-kit",
+      "phantom-command-candidate-resolver-fixture-kit"
     ],
     "actionAndPhaseAuthority": [
-      "phantom-command-action-source-adapter-kit", "phantom-command-action-command-envelope-kit",
-      "phantom-command-action-sequence-kit", "phantom-command-target-tick-policy-kit",
-      "phantom-command-action-preflight-kit", "phantom-command-action-result-kit",
-      "phantom-command-fixed-step-command-queue-kit", "phantom-command-command-application-kit",
-      "phantom-command-state-fingerprint-kit", "phantom-command-committed-frame-kit",
-      "phantom-command-campaign-phase-kit", "phantom-command-phase-transition-kit",
-      "phantom-command-phase-admission-matrix-kit", "phantom-command-phase-result-kit",
-      "phantom-command-phase-frame-correlation-kit", "phantom-command-phase-admission-fixture-kit"
+      "phantom-command-action-source-adapter-kit",
+      "phantom-command-action-command-envelope-kit",
+      "phantom-command-action-sequence-kit",
+      "phantom-command-action-preflight-kit",
+      "phantom-command-action-result-kit",
+      "phantom-command-campaign-phase-kit",
+      "phantom-command-phase-transition-kit",
+      "phantom-command-phase-admission-matrix-kit",
+      "phantom-command-phase-result-kit",
+      "phantom-command-phase-frame-correlation-kit",
+      "phantom-command-phase-admission-fixture-kit"
+    ],
+    "fixedStepReplayFrameAuthority": [
+      "phantom-command-monotonic-frame-sample-kit",
+      "phantom-command-simulation-clock-kit",
+      "phantom-command-fixed-step-accumulator-kit",
+      "phantom-command-simulation-tick-id-kit",
+      "phantom-command-command-envelope-kit",
+      "phantom-command-command-sequence-kit",
+      "phantom-command-target-tick-policy-kit",
+      "phantom-command-fixed-step-command-queue-kit",
+      "phantom-command-command-application-kit",
+      "phantom-command-catchup-budget-kit",
+      "phantom-command-clock-overrun-result-kit",
+      "phantom-command-state-fingerprint-kit",
+      "phantom-command-committed-tick-receipt-kit",
+      "phantom-command-render-frame-id-kit",
+      "phantom-command-committed-frame-receipt-kit",
+      "phantom-command-frame-consumer-ack-kit",
+      "phantom-command-replay-journal-kit",
+      "phantom-command-cadence-parity-fixture-kit",
+      "phantom-command-stall-policy-fixture-kit",
+      "phantom-command-command-replay-fixture-kit",
+      "phantom-command-frame-correlation-fixture-kit"
     ],
     "lifecycleAndCheckpoint": [
-      "phantom-command-runtime-session-authority-kit", "phantom-command-resource-ledger-kit",
-      "phantom-command-animation-frame-lease-kit", "phantom-command-listener-lease-kit",
-      "phantom-command-crt-resource-owner-kit", "phantom-command-ordered-dispose-kit",
-      "phantom-command-checkpoint-envelope-kit", "phantom-command-checkpoint-capture-kit",
-      "phantom-command-checkpoint-fingerprint-kit", "phantom-command-save-admission-kit",
-      "phantom-command-hydration-stage-kit", "phantom-command-atomic-resume-transaction-kit",
-      "phantom-command-resume-result-kit", "phantom-command-first-frame-resume-ack-kit",
+      "phantom-command-runtime-session-authority-kit",
+      "phantom-command-resource-ledger-kit",
+      "phantom-command-animation-frame-lease-kit",
+      "phantom-command-listener-lease-kit",
+      "phantom-command-crt-resource-owner-kit",
+      "phantom-command-ordered-dispose-kit",
+      "phantom-command-checkpoint-envelope-kit",
+      "phantom-command-checkpoint-capture-kit",
+      "phantom-command-checkpoint-fingerprint-kit",
+      "phantom-command-save-admission-kit",
+      "phantom-command-hydration-stage-kit",
+      "phantom-command-atomic-resume-transaction-kit",
+      "phantom-command-resume-result-kit",
+      "phantom-command-first-frame-resume-ack-kit",
       "phantom-command-roundtrip-fixture-kit"
     ]
   },
@@ -182,17 +228,22 @@
       "source-canvas CRT presentation", "contain-only pointer coordinate mapping",
       "campaign descriptor generation", "unit and pad selection", "tower construction",
       "ally move and target orders", "wave admission and spawning", "fixed-step combat and economy",
-      "world, HUD, minimap, modal and CRT rendering", "victory completion-summary write",
-      "aggregate GameHost diagnostics", "source-pattern checks", "static artifact copy and Pages deployment"
+      "variable-frame camera pan and zoom", "world, HUD, minimap, modal and CRT rendering",
+      "victory completion-summary write", "aggregate GameHost diagnostics",
+      "source-pattern checks", "static artifact copy and Pages deployment"
     ],
-    "projectionNeeded": [
-      "versioned presentation transform", "CPU mirror of shader containment and curvature",
-      "typed display-to-source result", "source-to-world projection result",
-      "stale transform rejection", "visual drag-selection semantics", "wheel anchor stability",
-      "projection journal and clone-safe observation", "CPU/GLSL and browser parity fixtures"
+    "fixedStepReplayFrameNeeded": [
+      "monotonic frame sampling", "explicit visibility and stall policy",
+      "bounded catch-up and clock-overrun results", "simulation tick identity",
+      "sequenced target-tick command queue", "exactly-once command application",
+      "ordered event journal", "canonical state fingerprint",
+      "committed tick receipt", "immutable render snapshot",
+      "committed frame receipt", "camera and projection revision correlation",
+      "world/HUD/minimap/overlay/CRT consumer acknowledgements",
+      "cadence, stall, replay and frame-correlation fixtures"
     ]
   },
-  "currentBlocker": "The CRT shader samples curveUv(containUv(displayUv)), while screenToSource applies containment only. Menu and campaign actions therefore use coordinates that can differ from the source point visibly under the pointer, and drag selection further converts a screen rectangle into an inaccurate world AABB.",
+  "currentBlocker": "The campaign fixes combat dt at 1/60, but browser and GameHost actions mutate live state outside the fixed-step loop. RAF delta is capped at 50 ms with silent time loss, camera state is variable-step, and no tick, command cursor, state fingerprint, replay journal or committed-frame receipt exists.",
   "validation": {
     "runtimeSourceChanged": false,
     "packageScriptsChanged": false,
@@ -202,6 +253,9 @@
     "npmCheckRun": false,
     "npmBuildRun": false,
     "browserSmokeRun": false,
-    "projectionFixturesPresent": false
+    "cadenceFixturesPresent": false,
+    "stallFixturesPresent": false,
+    "replayFixturesPresent": false,
+    "frameCorrelationFixturesPresent": false
   }
 }
