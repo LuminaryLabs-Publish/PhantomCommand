@@ -1,21 +1,22 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T07-38-25-04-00`
+**Timestamp:** `2026-07-11T09-40-19-04-00`
 
 ## Summary
 
-This pass changed documentation only. The repository still has source-pattern checks and a static build, but no executable campaign-phase fixture proving that pause and terminal overlays correspond to immutable authoritative state.
+This pass changed documentation only. Source inspection confirms that the CRT shader and pointer mapper use different transforms, while existing checks only assert that both `curveUv` and `screenToSource` exist. No executable fixture currently proves that a displayed point maps back to the source or world point visually under the cursor.
 
 ## Plan ledger
 
-**Goal:** separate verified repository facts from planned phase-admission, command, lifecycle and resume proof.
+**Goal:** separate verified repository facts from planned projection, command, phase, lifecycle and resume proof.
 
 - [x] Confirm default branch is `main`.
 - [x] Confirm no branch or pull request was created.
-- [x] Read campaign callbacks, fixed-step update, render, package and current `.agent` state.
-- [x] Verify direct paused and terminal mutation paths.
+- [x] Read CRT shader, pointer mapping, menu hit tests, campaign interaction and current `.agent` state.
+- [x] Verify CRT curve is omitted from `screenToSource()`.
+- [x] Verify drag selection converts two inverse-projected corners into a world AABB.
 - [x] Record current scripts and missing fixtures.
-- [ ] Run behavioral validation after phase authority exists.
+- [ ] Run behavioral validation after projection authority exists.
 
 ## Current scripts
 
@@ -49,65 +50,65 @@ browser smoke: not run
 ## Verified by source inspection
 
 ```txt
-fixed simulation step: 1/60
-update() early return: paused || won || lost
-pointer selection path checks phase: no
-build() checks paused/won/lost: no
-order() checks paused/won/lost: no
-startWave() checks paused: no
-camera RAF checks paused/won/lost: no
-GameHost shared phase admission: no
-overlay committed-frame identity: absent
+shader containment: containUv(vUv)
+shader CRT geometry: curveUv(uv) when enabled
+pointer containment: implemented
+pointer CRT curve: absent
+pointer transform revision: absent
+pointer projection result: untyped object
+menu uses screenToSource: yes
+campaign click/order/wheel uses screenToSource: yes
+drag selection visual-space test: no
+drag selection inverse corners: 2
+drag selection world AABB: yes
+CPU/GLSL parity fixture: absent
 ```
 
 ## Missing future gates
 
 ```txt
+npm run fixture:crt-projection-parity
+npm run fixture:pointer-roundtrip
+npm run fixture:pointer-boundaries
+npm run fixture:wheel-anchor
+npm run fixture:drag-selection
 npm run fixture:candidate-resolver
 npm run fixture:action-authority
 npm run fixture:phase-admission
-npm run fixture:phase-source-parity
-npm run fixture:phase-frame
+npm run fixture:fixed-step-replay
 npm run fixture:lifecycle
 npm run fixture:checkpoint
-npm run smoke:phase-browser
+npm run smoke:pointer-browser
 npm run smoke:resume
 ```
 
-## Phase fixture assertions
+## Projection fixture assertions
 
 ```txt
-canonical phase transitions are legal and monotonic
-select/build/order/start-wave reject outside ACTIVE
-rejected commands preserve authoritative fingerprint
-pause/terminal entry retires held keys, drag and middle-pan
-pointer, keyboard and GameHost receive equivalent result semantics
-stale session/run/observed-phase commands reject
-terminal state remains immutable
-camera policy outside ACTIVE is explicit
-```
-
-## Frame assertions
-
-```txt
-world, HUD, minimap and overlay consume one frame ID
-overlay phaseSequence matches committed phase
-CRT upload/draw acknowledges the same frame
-rejected paused/terminal commands do not alter the next state fingerprint
-no stale pre-transition callback renders under a new phase sequence
+CRT disabled display-to-source samples match containment math
+CRT enabled samples match curveUv(containUv(displayUv))
+center, corners, edge and radial samples remain within tolerance
+letterbox and pillarbox regions reject with stable reasons
+resize and CRT setting changes advance transform revision
+stale projection revision rejects before command mutation
+menu hit tests use the visually sampled source point
+campaign click and right-click use the same source/world point
+wheel zoom preserves the visually anchored world point
+drag selection equals projected-entity inclusion in the drawn rectangle
 ```
 
 ## Browser smoke
 
 ```txt
-start campaign
-pause
-attempt select, double-click build, right-click order and Space wave
-verify no gameplay mutation
-resume and verify valid actions work
-force win and loss
-repeat mutation attempts and verify terminal immutability
-verify typed restart/exit and teardown
+open menu with CRT enabled
+hover and activate items near center and outer menu bounds
+open campaign at several aspect ratios
+click allies and pads near center and outer rings
+right-click visible enemies and ground points
+wheel zoom while pointer is near outer rings
+box-select allies using tight rectangles
+repeat with CRT disabled
+compare action target to visibly sampled point
 ```
 
 ## Current claim boundary
@@ -116,8 +117,9 @@ verify typed restart/exit and teardown
 repo inventory compared: yes
 root .agent state confirmed: yes
 documentation pushed to main: yes
-runtime phase implementation: no
-pause authoritative freeze: no
-terminal immutability: no
-phase/frame proof: no
+runtime projection implementation: no
+CRT pointer parity: no
+drag-selection visual parity: no
+wheel-anchor proof: no
+projection/frame proof: no
 ```
