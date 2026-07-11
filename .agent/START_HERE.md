@@ -2,33 +2,33 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T20-19-35-04-00`
+**Last aligned:** `2026-07-10T21-49-26-04-00`
 
 ## Current implementation queue
 
 ```txt
 1. PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate
 2. PhantomCommand Campaign Action Result Authority + Fixed-Step Frame Fixture Gate
+3. PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate
+4. PhantomCommand Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
 
-The first item remains the queue head because the menu still exposes a stale Boolean Continue capability while the campaign ignores session intent. This pass makes the next campaign-internal proof boundary implementation-ready.
+Continue resolution remains first because the menu exposes a Boolean capability while the campaign ignores route intent. Action-result authority remains second because gameplay commands need deterministic results before lifecycle can reject terminal or stale-session requests consistently. This pass makes route lifecycle and resource ownership implementation-ready.
 
 ## Selection result
 
-The full accessible `LuminaryLabs-Publish` inventory contains ten repositories. All nine eligible non-Cavalry repositories are centrally tracked and have root `.agent` state. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded.
-
-`PhantomCommand` was selected as the oldest eligible documented fallback.
+The accessible `LuminaryLabs-Publish` inventory contains ten repositories. All nine eligible non-Cavalry repositories are centrally tracked and have root `.agent` state. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded.
 
 ```txt
-PhantomCommand       selected / prior 2026-07-10T18-40-13-04-00
-ZombieOrchard        tracked  / 2026-07-10T18-49-54-04-00
-TheUnmappedHouse     tracked  / 2026-07-10T19-00-19-04-00
-MyCozyIsland         tracked  / 2026-07-10T19-11-19-04-00
-PrehistoricRush      tracked  / 2026-07-10T19-30-36-04-00
-AetherVale           tracked  / 2026-07-10T19-38-41-04-00
-IntoTheMeadow        tracked  / 2026-07-10T19-48-39-04-00
-TheOpenAbove         tracked  / 2026-07-10T19-58-34-04-00
-HorrorCorridor       tracked  / 2026-07-10T20-08-46-04-00
+PhantomCommand       selected / prior 2026-07-10T20-19-35-04-00
+ZombieOrchard        tracked  / 2026-07-10T20-30-23-04-00
+TheUnmappedHouse     tracked  / 2026-07-10T20-38-24-04-00
+MyCozyIsland         tracked  / 2026-07-10T20-48-55-04-00
+PrehistoricRush      tracked  / 2026-07-10T21-00-16-04-00
+AetherVale           tracked  / 2026-07-10T21-08-52-04-00
+IntoTheMeadow        tracked  / 2026-07-10T21-19-36-04-00
+TheOpenAbove         tracked  / 2026-07-10T21-31-01-04-00
+HorrorCorridor       tracked  / 2026-07-10T21-39-22-04-00
 TheCavalryOfRome     excluded by rule
 ```
 
@@ -48,28 +48,29 @@ The campaign uses a `640 x 360` source canvas, seven rings, four lanes, 58 gener
 ## Current interaction loop
 
 ```txt
-open menu
-  -> read settings
-  -> scan 3 keys across 2 storage layers twice
-  -> collapse candidate evidence into Boolean Continue state
-  -> emit campaign=new or campaign=continue route
-  -> campaign ignores route intent and initializes fresh
-  -> pointer and keyboard events mutate live campaign state
-  -> select allies or pads
-  -> repeated pad click implicitly attempts build
-  -> right-click implicitly attempts order
-  -> Space implicitly attempts wave start
-  -> fixed-step combat/economy/core simulation
-  -> render live state through world, HUD, minimap, modal, and CRT
-  -> expose mutable state/camera and aggregate GameHost counters
-  -> victory writes a minimal completion summary
+menu module constructs source canvas, art, CRT renderer, state, listeners, optional audio, and RAF loop
+  -> Begin or Continue starts fade and browser navigation
+  -> campaign module constructs descriptors, fresh mutable state, CRT renderer, listeners, and RAF loop
+  -> pointer and keyboard callbacks mutate camera or campaign state
+  -> fixed 1/60 simulation updates
+  -> world, HUD, minimap, modal, and CRT render
+  -> win/loss freezes simulation
+  -> R reloads or Escape navigates to menu
 ```
 
-## Main finding
+## Main findings
 
-The Continue resolver remains unresolved. The newly mapped campaign blocker is action authority: `selectAt()`, `build()`, `order()`, and `startWave()` directly mutate live state and return no typed result. Invalid build, order, and wave-start requests silently return, and repeated pad selection hides a build request inside selection logic.
+### Queue head
 
-Browser events also apply gameplay mutations outside the fixed-step queue. No command sequence, target tick, accepted/rejected result, journal, state fingerprint, committed frame, render-consumption row, or correlated GameHost observation exists. Current checks only inspect source patterns.
+The menu scans three keys across two storage layers, collapses evidence into Boolean presence, and the campaign ignores `campaign=new|continue`.
+
+### Campaign action authority
+
+`selectAt()`, `build()`, `order()`, and `startWave()` mutate live state and return no typed accepted, rejected, or no-op result. Browser and GameHost actions are not sequenced to fixed simulation ticks or committed frames.
+
+### Runtime lifecycle authority
+
+Both routes construct at module evaluation, install listeners, and recursively request animation frames without retaining frame IDs. The menu owns AudioContext resources. Both routes own CRT WebGL programs, buffers, textures, and shaders. No route host provides `stop()`, `dispose()`, startup rollback, restart, lifecycle state, resource ownership, or idempotency proof. Reload/navigation is currently the only cleanup boundary.
 
 ## Read first
 
@@ -79,14 +80,14 @@ Browser events also apply gameplay mutations outside the fixed-step queue. No co
 .agent/known-gaps.md
 .agent/validation.md
 .agent/kit-registry.json
-.agent/trackers/2026-07-10T20-19-35-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T20-19-35-04-00.md
-.agent/architecture-audit/2026-07-10T20-19-35-04-00-campaign-action-result-authority-dsk-map.md
-.agent/render-audit/2026-07-10T20-19-35-04-00-committed-frame-render-consumption-gap.md
-.agent/gameplay-audit/2026-07-10T20-19-35-04-00-action-precondition-result-loop.md
-.agent/interaction-audit/2026-07-10T20-19-35-04-00-pointer-keyboard-command-admission-map.md
-.agent/command-authority-audit/2026-07-10T20-19-35-04-00-action-sequence-rejection-journal-contract.md
-.agent/deploy-audit/2026-07-10T20-19-35-04-00-action-fixture-build-gate.md
+.agent/trackers/2026-07-10T21-49-26-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-10T21-49-26-04-00.md
+.agent/architecture-audit/2026-07-10T21-49-26-04-00-runtime-session-lifecycle-authority-dsk-map.md
+.agent/render-audit/2026-07-10T21-49-26-04-00-crt-resource-disposal-frame-loop-gap.md
+.agent/gameplay-audit/2026-07-10T21-49-26-04-00-menu-campaign-session-start-stop-reentry-loop.md
+.agent/interaction-audit/2026-07-10T21-49-26-04-00-listener-route-transition-lifecycle-map.md
+.agent/lifecycle-audit/2026-07-10T21-49-26-04-00-menu-campaign-stop-dispose-restart-contract.md
+.agent/deploy-audit/2026-07-10T21-49-26-04-00-lifecycle-idempotency-fixture-gate.md
 ```
 
 ## Validation state
