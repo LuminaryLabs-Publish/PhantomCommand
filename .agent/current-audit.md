@@ -1,24 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T16-49-51-04-00`
+**Timestamp:** `2026-07-11T18-21-09-04-00`
 
 ## Summary
 
-PhantomCommand has an exact `1/60` update step, but combat inside that step is not yet deterministic or liveness-safe. `update()` captures `Object.values(state.units)`, and `damage()` can delete a later actor from `state.units` before that actor's captured entry is processed. Because `updateUnit()` does not re-check liveness, a killed unit can still move, attack, create a projectile or damage the sanctum in the same tick. Rendering then omits the deleted actor, creating a visible-causality gap.
+PhantomCommand can commit contradictory terminal state inside one fixed update. An enemy that reaches the sanctum can set `lost=true` and delete itself. The update then continues through remaining actors, towers, projectiles and the wave-clear predicate. If the breach came from the last enemy of the final wave, the same update can also set `won=true`, overwrite the defeat message, grant the clear reward and write a victory summary. Rendering prefers victory when both flags are true.
 
 ## Plan ledger
 
-**Goal:** preserve the complete architecture census and define one staged combat-resolution transaction that is independent from object insertion order and produces a committed, renderable result.
+**Goal:** define one exclusive and monotonic terminal transaction that consumes committed combat evidence and controls persistence, presentation, diagnostics, restart and exit.
 
-- [x] Compare the complete current Publish inventory with the central ledger.
+- [x] Compare the complete current Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
 - [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Read campaign content, input, fixed-step update, targeting, damage, deletion, rewards, terminal checks, rendering and validation.
+- [x] Read campaign input, fixed update, core breach, enemy retirement, wave clear, rewards, save write, rendering and GameHost projection.
 - [x] Identify the full interaction loop.
-- [x] Identify all domains in use.
+- [x] Identify all active and missing domains.
 - [x] Identify all implemented kits and current services.
-- [x] Define combat input, liveness, ordering, intent, damage, retirement, cleanup, result and fixture contracts.
+- [x] Define terminal evidence, arbitration, latch, persistence, projection and fixture contracts.
 - [ ] Implement and execute the authority boundary.
 
 ## Selection audit
@@ -30,23 +30,23 @@ central ledger entries: 9/9
 root .agent state: 9/9
 new or missing eligible repositories: 0
 selected: LuminaryLabs-Publish/PhantomCommand
-selected prior central timestamp: 2026-07-11T15-08-41-04-00
+selected prior central timestamp: 2026-07-11T16-49-51-04-00
 excluded: LuminaryLabs-Publish/TheCavalryOfRome
 other Publish repositories changed: none
 ```
 
-Stable comparison:
+Current central order before this run:
 
 ```txt
-PhantomCommand     2026-07-11T15-08-41-04-00 selected
-ZombieOrchard      2026-07-11T15-20-27-04-00
-TheUnmappedHouse   2026-07-11T15-30-50-04-00
-AetherVale         2026-07-11T15-38-27-04-00
-IntoTheMeadow      2026-07-11T15-49-49-04-00
-PrehistoricRush    2026-07-11T15-59-12-04-00
-MyCozyIsland       2026-07-11T16-10-58-04-00
-TheOpenAbove       2026-07-11T16-30-25-04-00
-HorrorCorridor     2026-07-11T16-38-10-04-00
+PhantomCommand     2026-07-11T16-49-51-04-00 selected
+ZombieOrchard      2026-07-11T17-01-11-04-00
+TheUnmappedHouse   2026-07-11T17-10-50-04-00
+AetherVale         2026-07-11T17-20-20-04-00
+IntoTheMeadow      2026-07-11T17-30-56-04-00
+PrehistoricRush    2026-07-11T17-39-47-04-00
+MyCozyIsland       2026-07-11T17-50-37-04-00
+TheOpenAbove       2026-07-11T18-01-38-04-00
+HorrorCorridor     2026-07-11T18-11-21-04-00
 TheCavalryOfRome   excluded
 ```
 
@@ -71,77 +71,75 @@ input callback
   -> immediate live mutation of selection, order, build, wave, pause or camera
 
 RAF
-  -> sample wall-clock time
-  -> clamp accepted delta to 50 ms
+  -> sample and clamp wall-clock time
   -> update variable-delta camera
   -> run zero or more exact 1/60 updates
-  -> draw world, HUD, minimap and overlay
+  -> draw world, HUD, minimap and terminal overlay
   -> upload and draw CRT
 ```
 
-## Combat-resolution loop
+## Terminal path today
 
 ```txt
-update(dt)
-  -> decrement due spawn rows
-  -> insert spawned enemies
-  -> capture Object.values(state.units)
-  -> process captured units in insertion order
-       cooldown
-       target selection
-       movement or attack
-       immediate damage or projectile creation
-       immediate deletion and reward
-       possible core breach and self-deletion
-  -> process towers
-  -> process projectiles and splash damage
-  -> age effects
-  -> evaluate wave completion and terminal state
+fixed update entry
+  -> return only if paused, won or lost was already true
+  -> process spawns and captured units
+  -> enemy may reach core
+       core -= enemy.core
+       enemy deletes itself
+       lost = true when core <= 0
+  -> continue processing the same update
+  -> process towers and projectiles
+  -> evaluate no-spawn/no-enemy wave clear
+  -> advance wave and grant reward
+  -> final wave sets won = true
+  -> overwrite message and write victory summary
+  -> render checks won before lost
 ```
 
 ## Main finding
 
-### Dead actor can still act
+### Simultaneous terminal evidence is possible
 
 ```txt
-const actors = Object.values(state.units)
-earlier actor kills later actor
-damage() deletes state.units[laterActor.id]
-actors still contains laterActor
-updateUnit(laterActor) executes
+final-wave state
+spawn queue empty
+a single enemy remains
+core health <= enemy core damage
+
+enemy breaches core
+  -> defeat evidence
+  -> enemy removed
+
+wave-clear predicate runs later
+  -> no enemies remain
+  -> victory evidence
 ```
 
-The deleted actor can still:
+### Mutable outcomes are contradictory
 
 ```txt
-select a target
-move
-perform melee damage
-launch a projectile
-breach the sanctum
-create visible effects
+state.lost = true
+state.won = true
+state.message = victory copy
+localStorage victory summary = written
+overlay = victory because won is checked first
+GameHost = exposes won:true and lost:true
 ```
 
-### Combat result depends on incidental order
+### No authoritative terminal result exists
 
 ```txt
-allies are inserted before enemies
-enemies are inserted by spawn order
-nearest() resolves equal distance by first encountered entry
-immediate damage changes which later entries survive
-checkpoint reconstruction order can alter next-tick behavior
-```
-
-### Spawn and cleanup policy is implicit
-
-```txt
-newly spawned enemies act during the same update
-unit target cleanup is lazy
-projectile target cleanup occurs in the projectile phase
-selection cleanup occurs inside damage()
-reward settlement occurs inside deletion
-core breach occurs inside unit iteration
-wave clear occurs after mutable subsystem passes
+run epoch: absent
+terminal candidate IDs: absent
+evidence revision: absent
+arbitration policy/version: absent
+exclusive result enum: absent
+terminal latch: absent
+terminal result ID: absent
+persistence admission result: absent
+terminal frame receipt: absent
+restart/exit result: absent
 ```
 
 ## Domains in use
@@ -201,7 +199,7 @@ identity-counter-domain
 campaign-phase-domain-next
 ```
 
-### Input, command and fixed step
+### Input, clock and combat
 
 ```txt
 build-action-domain
@@ -212,61 +210,51 @@ gamehost-action-domain
 fixed-step-simulation-domain
 command-sequence-domain-next
 target-tick-domain-next
-clock-overrun-domain-next
-replay-journal-domain-next
-state-fingerprint-domain-next
-```
-
-### Combat resolution
-
-```txt
 spawn-queue-domain
-spawn-admission-domain-next
 entity-liveness-domain-next
 deterministic-entity-order-domain-next
 unit-ai-domain
 enemy-pathing-domain
 ally-targeting-domain
 tower-targeting-domain
-target-tie-break-domain-next
-unit-intent-domain-next
-attack-intent-domain-next
 projectile-domain
-damage-intent-domain-next
 damage-resolution-domain-next
 entity-retirement-domain-next
-reference-cleanup-domain-next
-damage-reward-domain
-core-breach-event-domain-next
-wave-clear-predicate-domain
+reward-settlement-domain-next
 combat-resolution-result-domain-next
-combat-resolution-journal-domain-next
 ```
 
-### Terminal, lifecycle and persistence
+### Terminal outcome
 
 ```txt
+core-breach-evidence-domain-next
+final-wave-clear-evidence-domain-next
 victory-predicate-domain
 defeat-predicate-domain
+terminal-outcome-policy-domain-next
 terminal-outcome-arbitration-domain-next
-terminal-transition-domain-next
+terminal-outcome-latch-domain-next
 terminal-result-domain-next
-victory-summary-write-domain
+terminal-persistence-admission-domain-next
+terminal-message-projection-domain-next
+terminal-overlay-projection-domain-next
+terminal-gamehost-projection-domain-next
+terminal-frame-correlation-domain-next
+terminal-restart-exit-domain-next
+```
+
+### Lifecycle, checkpoint, proof and deployment
+
+```txt
 runtime-lifecycle-domain-next
 versioned-checkpoint-domain-next
 atomic-resume-domain-next
-```
-
-### Render, proof and deployment
-
-```txt
 world-render-domain
 hud-projection-domain
 minimap-domain
 modal-overlay-domain
 crt-upload-domain
 crt-draw-domain
-phantom-menu-diagnostics-domain
 gamehost-diagnostics-domain
 committed-tick-domain-next
 committed-frame-domain-next
@@ -290,7 +278,7 @@ central-ledger-sync-domain
 | `menu-audio-kit` | AudioContext, ambience and UI tones |
 | `campaign-route-shell-kit` | Campaign page and module bootstrap |
 | `pixel-campaign-runtime-kit` | Content, mutable state, selection, construction, orders, waves, camera and input |
-| `fixed-step-campaign-simulation-kit` | Spawning, AI, movement, targeting, towers, projectiles, damage, rewards, core damage and wave completion |
+| `fixed-step-campaign-simulation-kit` | Spawning, AI, movement, targeting, towers, projectiles, damage, rewards, core damage, wave completion and direct terminal mutation |
 | `pixel-campaign-render-kit` | World, HUD, minimap, terminal overlay and source-frame drawing |
 | `legacy-gamehost-diagnostics-kit` | Mutable state/camera exposure and direct actions |
 | `menu-static-check-kit` | Menu source-pattern checks |
@@ -303,82 +291,55 @@ central-ledger-sync-domain
 | `construct-piece-state-kit` | Retained piece state |
 | `construct-sequence-update-kit` | Retained sequence updates |
 
-## Required combat-resolution kits
+## Required terminal-outcome kits
 
 ```txt
-phantom-command-combat-frame-input-kit
-phantom-command-entity-liveness-index-kit
-phantom-command-deterministic-entity-order-kit
-phantom-command-spawn-admission-phase-kit
-phantom-command-unit-intent-kit
-phantom-command-target-selection-policy-kit
-phantom-command-attack-intent-kit
-phantom-command-damage-intent-kit
-phantom-command-damage-resolution-policy-kit
-phantom-command-entity-retirement-kit
-phantom-command-reference-cleanup-kit
-phantom-command-reward-settlement-kit
-phantom-command-core-breach-event-kit
-phantom-command-wave-clear-evaluation-kit
-phantom-command-combat-resolution-result-kit
-phantom-command-combat-resolution-journal-kit
-phantom-command-dead-entity-no-action-fixture-kit
-phantom-command-combat-order-parity-fixture-kit
-phantom-command-checkpoint-order-parity-fixture-kit
-phantom-command-ghost-action-frame-smoke-kit
+phantom-command-terminal-evidence-input-kit
+phantom-command-core-breach-evidence-kit
+phantom-command-final-wave-clear-evidence-kit
+phantom-command-terminal-policy-kit
+phantom-command-terminal-arbitration-kit
+phantom-command-terminal-outcome-result-kit
+phantom-command-terminal-latch-kit
+phantom-command-terminal-transition-kit
+phantom-command-terminal-persistence-admission-kit
+phantom-command-terminal-message-projection-kit
+phantom-command-terminal-overlay-projection-kit
+phantom-command-terminal-gamehost-projection-kit
+phantom-command-terminal-frame-correlation-kit
+phantom-command-terminal-restart-exit-kit
+phantom-command-terminal-journal-kit
+phantom-command-simultaneous-outcome-fixture-kit
+phantom-command-terminal-persistence-fixture-kit
+phantom-command-terminal-frame-smoke-kit
 ```
 
-## Required transaction
+## Required result contract
 
 ```txt
-admitted commands for tick
-  -> immutable CombatFrameInput
-  -> due spawn admission
-  -> alive entity index
-  -> versioned stable entity order
-  -> movement/target/attack intent collection
-  -> damage intent collection
-  -> declared damage resolution
-  -> exactly-once retirement
-  -> eager reference cleanup
-  -> reward and core-breach settlement
-  -> wave-clear evidence
-  -> CombatResolutionResult
-  -> terminal arbitration
-  -> committed state fingerprint
-  -> immutable render snapshot
-  -> world/HUD/minimap/CRT acknowledgement
+TerminalOutcomeResult
+  resultId
+  runEpoch
+  sourceCombatResultId
+  sourceTickId
+  evidenceRevision
+  policyId
+  policyVersion
+  previousPhase
+  outcome: ACTIVE | VICTORY | DEFEAT
+  acceptedVictoryEvidence[]
+  acceptedDefeatEvidence[]
+  rejectedEvidence[]
+  persistenceDecision
+  transitionDecision
+  stateFingerprint
+  journalRange
 ```
 
-## Implementation order
+## Recommended arbitration policy
 
-```txt
-1. Continue Capability Resolver
-2. Campaign Action Result Authority
-   2a. Projection Authority
-   2b. Phase Admission Authority
-   2c. Fixed-Step Command/Replay/Frame Authority
-   2d. Combat Resolution and Entity Liveness Authority
-   2e. Exclusive Terminal Outcome Authority
-3. Runtime Session Lifecycle Authority
-4. Versioned Checkpoint and Atomic Resume Authority
-```
+The policy must be explicit and versioned. For the current survival objective, defeat should win when the sanctum reaches zero in the same committed combat result that clears the final wave. This prevents a destroyed objective from being reported and persisted as victory. A different design is valid only if authored as a named policy and covered by fixtures.
 
 ## Validation boundary
 
-```txt
-runtime source changed: no
-package scripts changed: no
-dependencies changed: no
-gameplay changed: no
-rendering changed: no
-persistence changed: no
-deployment changed: no
-npm run check: not run
-npm run build: not run
-browser smoke: not run
-dead-entity fixture: absent
-combat-order fixture: absent
-checkpoint-order parity fixture: absent
-ghost-action committed-frame smoke: absent
-```
+This pass changes documentation only. It does not implement exclusive outcome state, change gameplay, run browser fixtures or claim the terminal race is fixed.
