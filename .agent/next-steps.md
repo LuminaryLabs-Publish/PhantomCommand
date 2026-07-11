@@ -1,172 +1,127 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T05-50-43-04-00`
+**Timestamp:** `2026-07-11T07-38-25-04-00`
 
 ## Summary
 
-Keep the dependency order intact. Candidate resolution, fixed-step action authority and runtime lifecycle must land before the versioned checkpoint/resume transaction. The checkpoint implementation must capture only committed state, validate a complete staged graph, advance a resume epoch atomically and prove first-frame consumption.
+Keep the existing dependency order. The newly documented campaign-phase authority belongs inside the second gate, before any command reaches fixed-step application. Pause and terminal overlays cannot be trusted until all gameplay mutation sources share that admission boundary.
 
 ## Plan ledger
 
-**Goal:** implement deterministic Continue from candidate selection through an acknowledged resumed frame without allowing partial hydration, stale callbacks or invalid relational state.
+**Goal:** implement deterministic Continue and campaign commands while enforcing one authoritative phase mutation barrier.
 
 - [ ] Finish save-candidate resolution first.
-- [ ] Finish fixed-step command/action-result authority second.
-- [ ] Finish runtime lifecycle ownership third.
-- [ ] Add committed checkpoint admission.
-- [ ] Add versioned envelope and content identity.
-- [ ] Add canonical fingerprint and migration registry.
-- [ ] Add staged hydration and invariant validation.
-- [ ] Add atomic resume commit, rollback and resume epoch.
-- [ ] Add detached persistence observation and first-frame acknowledgement.
-- [ ] Add roundtrip, corruption, migration and browser resume gates.
+- [ ] Normalize browser and `GameHost` actions into typed commands.
+- [ ] Add canonical campaign phase and legal transitions.
+- [ ] Add a complete command-to-phase admission matrix.
+- [ ] Retire held/drag input on pause, terminal and transition entry.
+- [ ] Apply admitted gameplay commands only in fixed-step updates.
+- [ ] Publish typed results, journals, fingerprints and committed frames.
+- [ ] Finish runtime lifecycle ownership.
+- [ ] Finish versioned checkpoint capture and atomic resume.
+- [ ] Add phase, replay, lifecycle and resume fixture gates.
 
 ## Ordered implementation sequence
 
 ### Gate 1: Continue capability
 
-1. Replace Boolean save presence with a candidate-slot registry.
-2. Parse each local/session candidate independently.
-3. Classify schema, content identity and provenance.
+1. Enumerate all candidate slots once.
+2. Parse and classify each candidate independently.
+3. Validate schema, content identity and provenance.
 4. Apply deterministic precedence.
-5. Publish one selected candidate or a typed rejection.
+5. Publish one candidate or typed rejection.
 6. Pass candidate identity into campaign startup.
 
-### Gate 2: Campaign action authority
+### Gate 2: Campaign action and phase authority
 
-1. Normalize pointer, keyboard and GameHost sources into commands.
-2. Add command IDs, sequences and target ticks.
-3. Preflight commands without mutation.
-4. Apply accepted commands only inside fixed-step updates.
-5. Publish typed results, domain events and canonical state fingerprints.
-6. Publish committed-frame consumption rows.
+1. Extract browser callbacks and `GameHost` mutators into source adapters.
+2. Define `CampaignCommand` with command ID, source, session, run, observed phase, sequence and target tick.
+3. Define canonical phases: `BOOTING`, `ACTIVE`, `PAUSED`, `WON`, `LOST`, `TRANSITIONING`, `DISPOSED`.
+4. Replace writes to `paused`, `won` and `lost` with typed phase transitions.
+5. Add legal transition preflight and monotonic phase sequence.
+6. Add command-to-phase admission matrix.
+7. Reject select/build/order/start-wave outside `ACTIVE`.
+8. Decide and encode camera policy outside `ACTIVE`.
+9. Retire held keys, drag and middle-pan state on phase changes.
+10. Run gameplay preflight after phase preflight.
+11. Queue admitted gameplay commands for deterministic fixed-step application.
+12. Publish accepted, rejected, idempotent and duplicate results.
+13. Record stable reason codes and bounded events.
+14. Publish canonical state fingerprints and immutable committed frames.
+15. Correlate world, HUD, minimap, overlay and CRT consumption.
 
 ### Gate 3: Runtime lifecycle
 
 1. Extract menu and campaign factories from module scope.
-2. Add session identity and lifecycle states.
-3. Add startup transaction and rollback.
-4. Lease RAF, listeners, timers, globals, audio and CRT resources.
+2. Add session/run identity and lifecycle states.
+3. Lease RAF, listeners, timers, globals, audio and CRT resources.
+4. Fence stale callbacks by run generation.
 5. Complete teardown before navigation, reload or restart.
-6. Fence stale callbacks by run generation.
-7. Expose detached lifecycle observation.
+6. Expose detached lifecycle observation.
 
 ### Gate 4: Versioned checkpoint and atomic resume
 
-1. **Add a committed checkpoint boundary**
-   - Capture only after a completed fixed simulation tick.
-   - Require no partially applied command.
-   - Record tick and applied command sequence cursor.
-   - Reset or reject nonzero accumulator remainder.
+1. Capture only at a committed simulation tick.
+2. Add schema and campaign content identity.
+3. Capture canonical detached authoritative state.
+4. Add stable checkpoint fingerprint.
+5. Validate and migrate supported candidates.
+6. Stage hydration and rebuild references off-line.
+7. Validate entity, relationship, counter, phase and terminal invariants.
+8. Commit one new resume epoch atomically or roll back unchanged.
+9. Reset transient input, wall time and accumulator.
+10. Acknowledge the first world/HUD/minimap/overlay/CRT frame.
 
-2. **Define schema and content identity**
-   - `schema = phantom-command.campaign-checkpoint`.
-   - Explicit schema version.
-   - Explicit campaign content ID/version.
-   - Stable content hash for rings, lanes, pads, archetypes and waves.
+## Phase admission matrix
 
-3. **Capture a canonical detached payload**
-   - Scalars: time, souls, core, wave, waveActive.
-   - Entity state: spawn, units, towers, projectiles.
-   - Relationships: pad tower ownership, selection, targets.
-   - Identity: uid, pid, tid.
-   - Continuity: selectedPad, towerType, camera.
-   - Terminal: paused, won, lost, message.
-   - Exclude live DOM, WebGL, audio, listeners, timers, RAF and input handles.
-
-4. **Fingerprint the checkpoint**
-   - Canonical key and collection ordering.
-   - Stable numeric normalization.
-   - Fingerprint covers all authoritative payload fields.
-   - Roundtrip capture must reproduce the same fingerprint.
-
-5. **Add admission and migration**
-   - Enforce size/type limits before parsing.
-   - Reject malformed JSON, unknown schema and content mismatch.
-   - Migrate only through declared deterministic functions.
-   - Recompute and verify fingerprint after migration.
-
-6. **Stage hydration off-line**
-   - Build new maps/arrays/counters away from the live session.
-   - Restore units and towers before references.
-   - Rebuild pads, selection, target and projectile links.
-   - Restore counters only after collision checks.
-
-7. **Validate invariants**
-   - Unique IDs.
-   - Valid references.
-   - Valid archetypes, lanes and wave bounds.
-   - Counter monotonicity.
-   - Valid terminal combinations.
-   - Canonical fingerprint parity.
-
-8. **Commit atomically**
-   - Preserve the active session while staging.
-   - Stop new input/command admission.
-   - Replace one complete state graph.
-   - Advance `resumeEpoch` exactly once.
-   - Reset input, wall-clock timestamp and accumulator.
-   - Roll back to the unchanged prior session on failure.
-
-9. **Acknowledge the first resumed frame**
-   - World, HUD and minimap consume the same tick/fingerprint.
-   - CRT upload acknowledges the same source frame.
-   - Publish one first-frame result for the resume epoch.
-   - Reject stale pre-resume RAF callbacks.
-
-10. **Add persistence observation**
-    - Selected candidate metadata.
-    - Last save/load result.
-    - Schema/content versions.
-    - Checkpoint ID/fingerprint.
-    - Resume epoch.
-    - Bounded clone-safe journal.
-
-11. **Add fixtures**
-    - Fresh and mid-wave roundtrip.
-    - Active towers, projectiles, selections and camera continuity.
-    - Paused and terminal states.
-    - Corrupt fingerprint.
-    - Unsupported schema and content mismatch.
-    - Duplicate/missing references and counter collision.
-    - Failed hydrate/commit leaves active session unchanged.
-    - Idempotent duplicate Resume command.
-    - Migration from every supported version.
-    - First-frame acknowledgement.
-
-12. **Add deployment gate**
-    - `npm run check`.
-    - `npm run fixture:checkpoint`.
-    - `npm run build`.
-    - Browser Continue/resume smoke.
-    - Publish only after all pass on `main`.
+| Command family | ACTIVE | PAUSED | WON/LOST | TRANSITIONING | DISPOSED |
+|---|---:|---:|---:|---:|---:|
+| select/build/order/start wave | allow with gameplay preflight | reject | reject | reject | reject |
+| pause | transition | idempotent/reject duplicate | reject | reject | reject |
+| resume | reject/no-op | transition | reject | reject | reject |
+| camera | explicit policy | explicit policy | explicit policy | reject | reject |
+| restart/exit | typed lifecycle command | typed lifecycle command | typed lifecycle command | idempotent/reject duplicate | reject |
 
 ## First target files
 
 ```txt
-src/persistence/checkpoint-envelope.js
-src/persistence/checkpoint-capture.js
-src/persistence/checkpoint-validation.js
-src/persistence/checkpoint-migrations.js
-src/persistence/hydration-stage.js
-src/persistence/resume-transaction.js
-src/persistence/storage-adapter.js
+src/campaign/campaign-phase.js
+src/campaign/campaign-command.js
+src/campaign/phase-admission.js
+src/campaign/command-preflight.js
+src/campaign/command-queue.js
+src/campaign/committed-frame.js
 src/runtime/runtime-session.js
-src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-tests/checkpoint-roundtrip.fixture.mjs
-scripts/check-checkpoint.mjs
+tests/phase-admission.fixture.mjs
+tests/phase-frame.fixture.mjs
+scripts/check-phase-admission.mjs
 package.json
+```
+
+## Required fixtures
+
+```txt
+candidate precedence
+phase transition legality
+paused select/build/order/start-wave rejection
+won/lost mutation rejection
+source parity across pointer/keyboard/GameHost
+rejected fingerprint immutability
+fixed-step replay
+phase/frame correlation
+runtime teardown
+checkpoint roundtrip/corruption/migration/rollback
+browser pause, terminal and Continue smoke
 ```
 
 ## Out of scope for this ledge
 
 ```txt
 new waves, units or towers
-new save-slot UI
-cloud or remote saves
-networked co-op persistence
-renderer replacement
 visual polish
+new save-slot UI
+networked play
+renderer replacement
 construct-profile revival
 ```
