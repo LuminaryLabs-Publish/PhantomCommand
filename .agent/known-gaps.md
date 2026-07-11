@@ -1,21 +1,21 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T07-38-25-04-00`
+**Timestamp:** `2026-07-11T09-40-19-04-00`
 
 ## Summary
 
-PhantomCommand still lacks four connected authority gates. The second gate now has a more precise blocker: campaign phase is not an enforceable mutation barrier, so paused and terminal sessions continue to accept direct gameplay actions.
+PhantomCommand still lacks four connected authority gates. The campaign-action gate now has an earlier coordinate blocker: the CRT display and pointer mapper do not use the same projection, so visually equivalent inputs can resolve to different source and world coordinates.
 
 ## Plan ledger
 
 **Goal:** keep unresolved risks explicit and ordered by dependency.
 
 - [ ] Continue/save-candidate resolution.
+- [ ] CRT display/input projection parity.
 - [ ] Campaign command, phase-admission and fixed-step action-result authority.
 - [ ] Runtime session lifecycle authority.
 - [ ] Versioned checkpoint capture and atomic resume authority.
 - [ ] Committed-frame and first-frame acknowledgements.
-- [ ] Broader content and visual work only after these gates.
 
 ## Gate 1: Continue resolution gaps
 
@@ -27,59 +27,65 @@ campaign ignores campaign=new|continue
 candidate identity is not carried into startup
 ```
 
-## Gate 2: Campaign action and phase gaps
+## Gate 2a: Projection gaps
 
-### Direct mutation
+### CRT display mismatch
+
+```txt
+shader render path: containUv -> curveUv -> source sample
+pointer path: contain correction -> source coordinate
+screenToSource does not apply CRT curvature
+menu and campaign both consume the mismatched result
+error increases toward display edges
+```
+
+### Containment and boundary mismatch
+
+```txt
+pointer inside flag covers the uncurved contained UV
+shader may curve that UV outside the source and draw black
+no typed outside-letterbox/outside-source/curved-out reason
+no transform revision across resize or settings changes
+```
+
+### Campaign world projection
+
+```txt
+click/order/wheel anchor depend on mismatched source coordinates
+screenToWorld returns no projection identity or result
+pointer commands carry no source coordinate provenance
+```
+
+### Drag selection
+
+```txt
+visual source rectangle is inverse-projected with two corners only
+screen rectangle maps to a world parallelogram, not a world AABB
+selection can include visually outside allies or omit visible allies
+no visual-selection parity fixture exists
+```
+
+### Projection observation
+
+```txt
+no PresentationTransform descriptor
+no projection revision or fingerprint
+no CPU/GLSL parity proof
+no source/world projection journal
+no frame-to-pointer transform correlation
+```
+
+## Gate 2b/2c: Campaign action and phase gaps
 
 ```txt
 pointer, keyboard and GameHost mutate live state
 no command identity, sequence or target tick
 invalid requests silently return
-no typed result or stable reason catalog
-no replay journal or canonical fingerprint
-```
-
-### Phase authority
-
-```txt
 paused/won/lost are independent Boolean flags
-no canonical CampaignPhase
-no legal transition table
-no phase sequence or transition result
 no command-to-phase admission matrix
-no stale observed-phase rejection
-```
-
-### Paused mutation
-
-```txt
-update() returns while paused
-selectAt() remains admitted
-build() remains admitted
-order() remains admitted
-startWave() does not check paused
-camera continues updating in RAF
-held/drag input is not retired on pause entry
-```
-
-### Terminal mutation
-
-```txt
-update() returns when won or lost
-selection/build/order callbacks remain active
-camera still mutates
-terminal state is not immutable
-restart/exit bypass typed lifecycle authority
-```
-
-### Render proof
-
-```txt
+camera and gameplay mutation continue outside active simulation
 world/HUD/minimap/overlay read live mutable state
-no committed frame identity
-no phase sequence on render input
-overlay can claim PAUSED/WON/LOST while underlying state changes
-CRT upload/draw returns no phase/frame acknowledgement
+no committed frame identity or CRT acknowledgement
 ```
 
 ## Gate 3: Lifecycle gaps
@@ -92,7 +98,6 @@ no sessionId, runId or runGeneration
 no startup rollback
 no audio or CRT resource owner
 navigation/reload bypass typed transition and teardown
-no lifecycle journal or clone-safe observation
 ```
 
 ## Gate 4: Checkpoint and resume gaps
@@ -104,7 +109,6 @@ no committed tick or command cursor
 no full entity graph or identity counters
 no load path, migration, staged hydration or reference rebuild
 no atomic commit, rollback or resume epoch
-no phase invariant validation
 no first resumed-frame acknowledgement
 ```
 
@@ -112,17 +116,18 @@ no first resumed-frame acknowledgement
 
 ```txt
 current checks are source-pattern checks
+no CPU/GLSL projection parity fixture
+no pointer roundtrip fixture
+no aspect-ratio boundary fixture
+no wheel-anchor fixture
+no drag-selection visual parity fixture
 no candidate precedence fixture
-no command/replay fixture
-no phase transition fixture
-no paused/terminal mutation fixture
-no source-parity fixture
-no phase/frame correlation fixture
+no command/replay or phase fixture
 no lifecycle fixture
 no checkpoint roundtrip/migration/corruption/rollback fixture
-no browser Continue or phase smoke
+no browser pointer, Continue or phase smoke
 ```
 
 ## Do not claim
 
-Do not claim Continue works, pause freezes authoritative state, terminal state is immutable, GameHost obeys campaign phase, fixed-step commands are deterministic, restart is lifecycle-safe, checkpoint resume works or rendered overlays prove committed phase until the corresponding fixtures and browser smoke pass on `main`.
+Do not claim that visible pointer targets are exact under CRT curvature, drag selection matches the drawn rectangle, wheel zoom remains visually anchored, Continue works, pause freezes authoritative state, terminal state is immutable, fixed-step commands are deterministic, restart is lifecycle-safe or checkpoint resume works until the corresponding fixtures and browser smoke pass on `main`.
