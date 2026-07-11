@@ -1,27 +1,31 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-10T20-19-35-04-00",
-  "status": "continue-resolver-first-action-result-authority-second-fixture-gates-planned",
-  "sourceTracker": ".agent/trackers/2026-07-10T20-19-35-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T20-19-35-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T20-19-35-04-00-campaign-action-result-authority-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-10T20-19-35-04-00-committed-frame-render-consumption-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T20-19-35-04-00-action-precondition-result-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T20-19-35-04-00-pointer-keyboard-command-admission-map.md",
-  "latestCommandAuthorityAudit": ".agent/command-authority-audit/2026-07-10T20-19-35-04-00-action-sequence-rejection-journal-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T20-19-35-04-00-action-fixture-build-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-10T18-40-13-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-10T21-49-26-04-00",
+  "status": "continue-resolver-first-action-authority-second-lifecycle-third-planned",
+  "sourceTracker": ".agent/trackers/2026-07-10T21-49-26-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-10T21-49-26-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-10T21-49-26-04-00-runtime-session-lifecycle-authority-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-10T21-49-26-04-00-crt-resource-disposal-frame-loop-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-10T21-49-26-04-00-menu-campaign-session-start-stop-reentry-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-10T21-49-26-04-00-listener-route-transition-lifecycle-map.md",
+  "latestLifecycleAudit": ".agent/lifecycle-audit/2026-07-10T21-49-26-04-00-menu-campaign-stop-dispose-restart-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-10T21-49-26-04-00-lifecycle-idempotency-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-10T20-19-35-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "reason": "all nine eligible non-Cavalry repositories were tracked and documented; PhantomCommand had the oldest prior audit timestamp",
-    "priorTimestamp": "2026-07-10T18-40-13-04-00",
+    "priorTimestamp": "2026-07-10T20-19-35-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
-  "currentNextSlice": "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
-  "nextCampaignSlice": "PhantomCommand Campaign Action Result Authority + Fixed-Step Frame Fixture Gate",
+  "implementationQueue": [
+    "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
+    "PhantomCommand Campaign Action Result Authority + Fixed-Step Frame Fixture Gate",
+    "PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown Fixture Gate",
+    "PhantomCommand Versioned Save Envelope + Atomic Resume Fidelity Gate"
+  ],
   "runtime": {
     "type": "static-vite-pixel-isometric-campaign-game",
     "entrypoints": [
@@ -33,6 +37,10 @@
     "sourceCanvas": [
       640,
       360
+    ],
+    "menuSourceCanvas": [
+      480,
+      270
     ],
     "rings": 7,
     "lanes": 4,
@@ -54,6 +62,18 @@
     ],
     "waves": 6,
     "simulationStep": "1/60",
+    "menuRafRequestRetained": false,
+    "campaignRafRequestRetained": false,
+    "menuListenerLedger": false,
+    "campaignListenerLedger": false,
+    "crtRendererDispose": false,
+    "menuAudioRouteTeardown": false,
+    "routeSessionId": false,
+    "routeLifecycleState": false,
+    "routeStop": false,
+    "routeDispose": false,
+    "routeRestartTransaction": false,
+    "startupRollback": false,
     "campaignActionFunctions": [
       "selectAt",
       "build",
@@ -83,31 +103,31 @@
   },
   "interactionLoops": {
     "menu": [
-      "read settings",
-      "scan six candidate slots twice and collapse to Boolean",
+      "construct route resources at module evaluation",
+      "read settings and raw save presence",
+      "install listeners",
+      "start recursive animation frame loop",
       "choose Begin or Continue",
-      "animate route transition"
+      "animate fade and navigate"
     ],
     "campaign": [
-      "initialize fresh descriptors and mutable state",
-      "translate pointer and keyboard events directly into mutation functions",
-      "select allies or pads",
-      "second pad click implicitly attempts build",
-      "right click implicitly attempts order",
-      "Space implicitly attempts wave start",
+      "construct route resources and fresh mutable state at module evaluation",
+      "install listeners",
+      "start recursive animation frame loop",
+      "translate pointer and keyboard events into direct mutation",
       "advance fixed-step simulation",
-      "render mutable state through world HUD minimap modal and CRT",
-      "expose aggregate GameHost counters"
+      "render world HUD minimap modal and CRT",
+      "reload or navigate on restart/exit"
     ],
-    "targetCampaign": [
-      "normalize input into typed commands",
-      "assign stable sequence and requested frame",
-      "preflight against one committed state",
-      "execute at a deterministic simulation tick",
-      "return accepted rejected or no-op result",
-      "append bounded command result and event journals",
-      "commit immutable frame snapshot and fingerprint",
-      "record render consumption and GameHost observation"
+    "targetLifecycle": [
+      "allocate route session ID",
+      "construct resources through a startup transaction",
+      "retain frame request and listener ownership",
+      "commit running state",
+      "stop input simulation and frame scheduling",
+      "dispose audio WebGL listeners and globals in order",
+      "restart with one new session",
+      "record bounded lifecycle and resource results"
     ]
   },
   "domains": {
@@ -175,6 +195,23 @@
       "render-consumption-domain-next",
       "gamehost-observation-domain-next"
     ],
+    "lifecycleNext": [
+      "runtime-session-authority-domain-next",
+      "runtime-session-state-domain-next",
+      "runtime-session-id-domain-next",
+      "startup-transaction-domain-next",
+      "partial-start-rollback-domain-next",
+      "animation-frame-ownership-domain-next",
+      "listener-registration-ledger-domain-next",
+      "audio-resource-ownership-domain-next",
+      "webgl-resource-ownership-domain-next",
+      "ordered-teardown-domain-next",
+      "idempotent-disposal-domain-next",
+      "route-transition-result-domain-next",
+      "runtime-restart-domain-next",
+      "lifecycle-result-journal-domain-next",
+      "lifecycle-observation-domain-next"
+    ],
     "inputRenderProofDeploy": [
       "keyboard-input-domain",
       "pointer-input-domain",
@@ -221,7 +258,7 @@
       "phantom-command-campaign-session-mode-kit",
       "phantom-command-candidate-resolver-fixture-kit"
     ],
-    "nextCampaign": [
+    "actionAuthority": [
       "phantom-command-action-command-kit",
       "phantom-command-action-preflight-kit",
       "phantom-command-action-result-kit",
@@ -233,8 +270,26 @@
       "phantom-command-committed-frame-kit",
       "phantom-command-render-consumption-kit",
       "phantom-command-gamehost-observation-kit",
-      "phantom-command-action-fixture-kit",
-      "phantom-command-build-fixture-gate-kit"
+      "phantom-command-action-fixture-kit"
+    ],
+    "lifecycle": [
+      "phantom-command-runtime-session-authority-kit",
+      "phantom-command-runtime-session-state-kit",
+      "phantom-command-runtime-session-id-kit",
+      "phantom-command-startup-transaction-kit",
+      "phantom-command-partial-start-rollback-kit",
+      "phantom-command-animation-frame-owner-kit",
+      "phantom-command-listener-ledger-kit",
+      "phantom-command-audio-resource-owner-kit",
+      "phantom-command-crt-resource-owner-kit",
+      "phantom-command-ordered-dispose-kit",
+      "phantom-command-idempotent-disposal-kit",
+      "phantom-command-route-transition-result-kit",
+      "phantom-command-runtime-restart-kit",
+      "phantom-command-lifecycle-result-journal-kit",
+      "phantom-command-gamehost-lifecycle-observation-kit",
+      "phantom-command-lifecycle-fixture-kit",
+      "phantom-command-lifecycle-build-gate-kit"
     ],
     "followOn": [
       "phantom-command-save-envelope-kit",
@@ -267,27 +322,22 @@
       "source-pattern checks",
       "static artifact copy and Pages deployment"
     ],
-    "queueHead": [
-      "stable save-candidate enumeration and classification",
-      "deterministic candidate precedence",
-      "truthful Continue capability",
-      "shared menu and campaign session resolution"
-    ],
-    "nextCampaign": [
-      "typed command normalization",
-      "explicit precondition evaluation",
-      "accepted rejected and no-op result rows",
-      "stable command sequencing",
-      "deterministic tick admission",
-      "bounded command result and event journals",
-      "canonical state fingerprints",
-      "immutable committed-frame snapshots",
-      "render-consumption correlation",
-      "bounded GameHost observations",
-      "DOM-free action and fixed-step fixtures"
+    "lifecycleNeeded": [
+      "route session construction and state",
+      "RAF request ownership and cancellation",
+      "listener registration and removal",
+      "audio resource ownership and release",
+      "CRT WebGL resource ownership and release",
+      "startup rollback",
+      "ordered idempotent stop and dispose",
+      "restart transaction",
+      "stale-session rejection",
+      "lifecycle and resource journals",
+      "clone-safe host lifecycle observation",
+      "DOM-free and browser lifecycle fixtures"
     ]
   },
-  "currentBlocker": "The queue head remains the shared Continue resolver. The next campaign-internal blocker is that selectAt, build, order, and startWave mutate live state directly, silently reject invalid requests, and are not sequenced to simulation ticks or correlated with committed frames, rendering, or GameHost readback.",
+  "currentBlocker": "The queue head remains the shared Continue resolver and action authority remains second. The newly documented route-level blocker is that menu and campaign construct eagerly, install unowned listeners, start unretained recursive RAF loops, and allocate audio/WebGL resources without stop, dispose, rollback, restart, lifecycle state, or resource-release proof.",
   "validation": {
     "runtimeSourceChangedThisPass": false,
     "branchCreated": false,
@@ -296,7 +346,9 @@
     "npmBuildRun": false,
     "candidateResolverFixtureRun": false,
     "actionFixtureRun": false,
-    "fixedStepFrameFixtureRun": false,
+    "lifecycleFixtureRun": false,
+    "resourceDisposalFixtureRun": false,
+    "restartIdempotencyFixtureRun": false,
     "browserSmokeRun": false
   }
 }
