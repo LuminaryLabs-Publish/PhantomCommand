@@ -9,7 +9,8 @@ status: continue-resolver-first-action-authority-implementation-ready
 runtime source changed: no
 branch: main
 root .agent state: refreshed
-central ledger sync: pending until repo-local audit completes
+central ledger sync: complete
+central internal change log: complete
 ```
 
 ## Selection audit
@@ -176,6 +177,7 @@ candidate resolver fixture: absent / not run
 action-result fixture: absent / not run
 fixed-step replay fixture: absent / not run
 frame-consumption fixture: absent / not run
-repo-local documentation pushed to main: in progress
-central ledger update: pending
+repo-local documentation pushed to main: yes
+central ledger updated: yes
+central internal change log added: yes
 ```
