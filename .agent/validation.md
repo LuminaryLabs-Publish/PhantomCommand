@@ -23,6 +23,7 @@
 - Verified check-menu.mjs and check-campaign.mjs are source-pattern checks rather than behavioral fixtures.
 - Added timestamped architecture, render, gameplay, interaction, action-authority, deploy, tracker, and turn-ledger records.
 - Refreshed all required root .agent files.
+- Updated the central repo ledger and added an internal change-log entry.
 - Pushed only to main.
 - Created no branch or pull request.
 ```
@@ -135,6 +136,6 @@ fixed-step replay fixture: absent / not run
 frame-consumption fixture: absent / not run
 lifecycle fixtures: absent / not run
 repo-local documentation pushed to main: yes
-central ledger update: pending
-central internal change log: pending
+central ledger updated: yes
+central internal change log added: yes
 ```
