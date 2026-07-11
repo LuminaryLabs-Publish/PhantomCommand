@@ -1,25 +1,25 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T13-28-37-04-00`
+**Timestamp:** `2026-07-11T15-08-41-04-00`
 
 ## Summary
 
-This pass changed documentation only. Source inspection confirms a reachable same-tick path that sets both `lost` and `won`, presents victory and writes a success save after core health reaches zero. No executable fixture currently proves terminal exclusivity, persistence admission, replay convergence or terminal-frame correlation.
+This pass changed documentation only. Source inspection confirms that Continue is enabled by raw nonempty storage data, no save candidate is parsed or selected, `campaign=continue` is not consumed, and the campaign always constructs its default state. No executable fixture currently proves candidate precedence, startup-mode admission, hydration rollback or first resumed-frame parity.
 
 ## Plan ledger
 
-**Goal:** separate verified source facts from planned terminal-outcome authority and executable proof.
+**Goal:** separate verified source facts from the planned Continue authority and its future executable proof.
 
 - [x] Confirm the default branch is `main`.
 - [x] Compare all ten accessible Publish repositories.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Skip the active same-window `HorrorCorridor` documentation sequence.
-- [x] Read campaign core damage, unit deletion, wave completion, save, overlay, restart and `GameHost` source.
-- [x] Verify defeat can be admitted inside unit iteration.
-- [x] Verify the parent update continues after defeat evidence.
-- [x] Verify final-wave completion can then admit victory and write a save.
-- [x] Verify overlay priority resolves conflicting state as victory.
-- [x] Define the missing terminal arbitration and fixture boundary.
+- [x] Skip the active same-window `HorrorCorridor` interaction-target documentation sequence.
+- [x] Read all three save keys, both storage layers, Continue projection, route transition, campaign startup and victory write source.
+- [x] Verify that any nonempty raw string can enable Continue.
+- [x] Verify that no candidate parsing, schema validation or deterministic precedence exists.
+- [x] Verify that the query mode is ignored by campaign startup.
+- [x] Verify that Continue and Begin construct the same default campaign state.
+- [x] Define the missing candidate-resolution, startup-admission and fixture boundary.
 - [ ] Run behavioral validation after the authority boundary exists.
 
 ## Current scripts
@@ -54,89 +54,107 @@ browser smoke: not run
 ## Verified by source inspection
 
 ```txt
-state has independent won and lost booleans: yes
-core breach can set lost inside updateUnit: yes
-breaching enemy is deleted: yes
-parent update continues after lost is set: yes
-wave-clear evaluation runs later in same update: yes
-final-wave clear can set won: yes
-victory save can run after lost was set in the same tick: yes
-overlay checks won before lost: yes
-GameHost exposes won and lost independently: yes
-R restart uses location.reload: yes
-exclusive outcome enum: absent
-terminal arbitration policy: absent
-terminal latch: absent
-terminal result ID: absent
-terminal persistence decision: absent
-terminal frame receipt: absent
+save key count: 3
+storage layer count: 2
+possible candidate slots: 6
+slot reads independently typed: no
+raw payload parsed: no
+schema validated: no
+content revision validated: no
+candidate precedence policy: absent
+candidate identity retained: no
+malformed nonempty value enables Continue: yes
+storage exception classification: absent
+Continue routes to campaign=continue: yes
+Begin routes to campaign=new: yes
+campaign reads location.search: no
+campaign reads any save key: no
+campaign hydration path: absent
+Continue constructs default state: yes
+Begin constructs default state: yes
+victory writer uses localStorage phantomCommand.save: yes
+written payload fields: scene, souls, wave
+checkpoint fingerprint: absent
+startup result identity: absent
+first resumed-frame receipt: absent
 ```
 
-## Source-backed failure fixture
+## Source-backed candidate fixture
 
-The minimal deterministic fixture should construct:
+The minimal pure resolver matrix should provide:
 
 ```txt
-wave = waves.length - 1
-waveActive = true
-spawn = []
-core = 1
-one enemy at breach distance
-no other enemies
+slot 1: phantomCommand.save / local / malformed JSON
+slot 2: phantomCommand.save / session / valid supported checkpoint
+slot 3: nexus.sceneSnapshot / local / unsupported legacy schema
+slot 4: nexus.sceneSnapshot / session / empty
+slot 5: phantom.command.campaign / local / valid older checkpoint
+slot 6: phantom.command.campaign / session / read failure
 ```
 
-Then one fixed `update(1/60)` should currently allow:
+The future resolver must:
 
 ```txt
-core = 0
-lost = true
-won = true
+classify every slot independently
+reject malformed and unsupported candidates
+preserve the read failure as evidence
+select the valid supported candidate deterministically
+publish the selected slot and candidate fingerprint
 ```
 
-The future authority must instead commit:
+## Source-backed browser parity fixture
 
 ```txt
-terminalOutcome = DEFEAT
-won compatibility projection = false
-lost compatibility projection = true
-victory persistence decision = rejected
+seed a valid candidate
+load index.html
+assert Continue enabled and selected candidate ID visible through diagnostics
+activate Continue
+assert URL mode is continue
+assert campaign startup revalidates the same candidate
+assert resumed state differs from default Begin state
+assert first frame carries the same startup result ID
 ```
 
-## Existing check limitation
+## Existing check limitations
 
-`check-campaign.mjs` verifies source text and expected declarations. It does not instantiate campaign state, run fixed updates, inspect terminal ordering, intercept storage writes, replay a journal or correlate the terminal frame.
+`check-menu.mjs` verifies that menu source contains `BEGIN CAMPAIGN`, the new-campaign URL and `window.PhantomMenu`. It does not seed storage, execute `hasCampaignSave()`, classify payloads or test Continue.
+
+`check-campaign.mjs` verifies source declarations and `window.GameHost`. It does not execute query-mode startup, read storage, hydrate state, compare Begin and Continue or observe a first resumed frame.
 
 ## Missing future gates
 
 ```txt
-npm run fixture:candidate-resolver
+npm run fixture:continue-slots
+npm run fixture:continue-candidates
+npm run fixture:continue-precedence
+npm run fixture:continue-storage-failure
+npm run fixture:campaign-startup
+npm run fixture:campaign-hydration-rollback
+npm run smoke:continue-browser
+npm run smoke:resume-first-frame
 npm run fixture:crt-projection-parity
 npm run fixture:phase-admission
 npm run fixture:fixed-step-cadence
 npm run fixture:command-replay
 npm run fixture:terminal-outcome
-npm run fixture:terminal-persistence
-npm run fixture:terminal-frame
 npm run fixture:lifecycle
 npm run fixture:checkpoint
-npm run smoke:terminal-browser
-npm run smoke:restart-browser
-npm run smoke:resume
 ```
 
-## Terminal fixture assertions
+## Continue fixture assertions
 
 ```txt
-core breach commits defeat only
-final-wave clear with positive core commits victory only
-simultaneous breach and clear resolves through declared priority
-no committed state contains both outcomes
-terminal outcome is monotonic for one run epoch
-success persistence requires committed victory
-success persistence rejects defeat evidence
-terminal result and state fingerprint replay identically
-world, HUD, minimap, overlay, CRT and GameHost consume one terminal result
-restart advances run epoch and cannot retain predecessor terminal identity
+raw presence never directly enables Continue
+malformed payloads are rejected without throwing
+one failed slot does not hide other valid slots
+valid lower-priority candidate can beat malformed higher slot
+multiple valid candidates resolve deterministically
+menu capability includes selected candidate identity and policy version
+new mode never hydrates a candidate
+continue mode requires the selected candidate
+changed candidate fingerprint is rejected at startup
+hydration failure leaves default/live state unmodified
+resumed state, startup result and first frame share one identity
 ```
 
 ## Current claim boundary
@@ -144,10 +162,10 @@ restart advances run epoch and cannot retain predecessor terminal identity
 ```txt
 repo inventory compared: yes
 root .agent state confirmed: yes
-documentation pushed to main: pending final run synchronization
-runtime terminal implementation: conflicting Boolean mutations
-exclusive terminal arbitration: no
-terminal persistence safety: no
-terminal replay fidelity: no
-terminal frame proof: no
+documentation pushed to main: in progress during this synchronization
+runtime Continue implementation: raw Boolean presence only
+deterministic candidate resolver: no
+campaign continue-mode admission: no
+atomic hydration: no
+first resumed-frame proof: no
 ```
