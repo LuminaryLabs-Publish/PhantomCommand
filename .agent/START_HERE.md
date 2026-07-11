@@ -2,7 +2,7 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
-**Last aligned:** `2026-07-10T23-40-35-04-00`
+**Last aligned:** `2026-07-11T01-20-51-04-00`
 
 ## Current implementation queue
 
@@ -13,30 +13,13 @@
 4. PhantomCommand Versioned Save Envelope + Atomic Resume Fidelity Gate
 ```
 
-Continue resolution remains first because the menu exposes raw Boolean save presence while the campaign ignores `campaign=new|continue`. This pass makes the second slice implementation-ready: every browser, host, and replay request must become a sequenced command with a deterministic target tick, typed result, journal row, state fingerprint, and committed-frame consumption proof.
-
 ## Selection result
 
-The accessible `LuminaryLabs-Publish` inventory contains ten repositories:
-
-```txt
-AetherVale
-HorrorCorridor
-IntoTheMeadow
-MyCozyIsland
-PhantomCommand
-PrehistoricRush
-TheCavalryOfRome
-TheOpenAbove
-TheUnmappedHouse
-ZombieOrchard
-```
-
-All nine eligible non-Cavalry repositories are centrally tracked and have root `.agent` state. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded. `PhantomCommand` was selected as the oldest eligible documented repository from its prior central timestamp, `2026-07-10T21-49-26-04-00`.
+The accessible `LuminaryLabs-Publish` inventory contains ten repositories. `LuminaryLabs-Publish/TheCavalryOfRome` remains excluded. All nine eligible repositories are centrally tracked and have root `.agent` state. `PhantomCommand` was selected as the oldest current documented fallback from its prior central timestamp, `2026-07-10T23-40-35-04-00`.
 
 ## Product read
 
-`PhantomCommand` is a static Vite browser game with a procedural graveyard menu and a pixel-isometric grave-ring campaign.
+`PhantomCommand` is a static Vite browser RTS prototype with a procedural graveyard menu and a pixel-isometric grave-ring campaign.
 
 ```txt
 index.html
@@ -45,62 +28,89 @@ index.html
   -> src/campaign/campaign-scene.js
 ```
 
-The live campaign uses a `640 x 360` source canvas, seven rings, four lanes, 58 generated build pads, six starter allies, three tower types, seven unit archetypes, six waves, fixed `1/60` simulation, HUD, minimap, modal overlays, CRT presentation, victory-only persistence, and `window.GameHost` diagnostics.
+The campaign uses a `640 x 360` source canvas, seven rings, four lanes, generated build pads, six starter allies, three tower types, seven unit archetypes, six waves, exact `1/60` simulation, HUD, minimap, terminal modal, CRT presentation, victory-summary persistence, and `window.GameHost` diagnostics.
 
 ## Current interaction loop
 
 ```txt
-menu constructs settings, save presence, art, CRT, audio, listeners, and RAF
-  -> Begin or Continue fades and navigates
-  -> campaign constructs descriptors, live state, CRT, listeners, and RAF
-  -> pointer, keyboard, and GameHost paths mutate live state directly
-  -> accumulator advances fixed 1/60 simulation steps
-  -> render consumes live state through world, HUD, minimap, modal, and CRT
-  -> terminal state freezes update
-  -> reload or navigation replaces the route
+menu evaluates
+  -> reads settings
+  -> scans 3 keys x 2 storage layers
+  -> collapses evidence to Boolean Continue capability
+  -> constructs art, CRT, audio, listeners, and RAF
+  -> emits campaign=new or campaign=continue
+  -> campaign ignores route intent
+  -> constructs the same fresh state
+  -> pointer, keyboard, and GameHost paths mutate live state
+  -> fixed 1/60 simulation advances
+  -> world, HUD, minimap, modal, CRT, and GameHost expose uncorrelated mutable observations
+  -> victory writes a three-field completion summary
 ```
 
-## Current architecture findings
+## Queue-head finding
 
-### Queue head
-
-The menu scans three keys across local and session storage, collapses the evidence into Boolean presence, and the campaign does not parse or hydrate the requested session mode.
-
-### Fixed-step command authority
-
-`selectAt()`, `build()`, `order()`, and `startWave()` mutate live state and return no accepted, rejected, or no-op result. Selection and building are coupled. Browser callbacks and GameHost methods have no common command adapter, sequence, target tick, journal, or fingerprint.
+`hasCampaignSave()` checks these keys in both local and session storage:
 
 ```txt
-input callback
-  -> direct state mutation
-  -> fixed-step update may run before or after depending on browser timing
-  -> render reads the same mutable state
+phantomCommand.save
+nexus.sceneSnapshot
+phantom.command.campaign
 ```
 
-The fixed-step accumulator therefore stabilizes integration but not command ordering or replay.
+It returns only Boolean presence and is called twice during menu construction. Any non-empty value can enable Continue. No slot ID, parse result, schema, version, candidate kind, precedence, selected candidate, or decision reason survives the scan.
 
-### Committed-frame proof
+The campaign never parses `campaign=new|continue`, so Continue currently starts the same fresh state as Begin Campaign. The only current writer stores `{ scene, souls, wave }` after victory. That payload is a completion summary, not a resumable session.
 
-World, HUD, minimap, modal, CRT upload/draw, and GameHost readback do not reference one immutable committed frame ID and fingerprint.
-
-### Runtime lifecycle
-
-Both routes still construct eagerly, install unowned listeners, and recursively request frames without retaining request IDs. No route session exposes startup rollback, stop, dispose, restart, or resource-release proof.
-
-## Required action boundary
+## Required admission boundary
 
 ```txt
-source request
-  -> CampaignCommand
-  -> sequence
-  -> target tick
-  -> pure preflight
-  -> accepted/rejected/no-op result
-  -> fixed-step queue application
-  -> ordered events
-  -> canonical fingerprint
-  -> immutable committed frame
-  -> render and GameHost consumption rows
+stable six-slot registry
+  -> candidate reader
+  -> parser and classifier
+  -> deterministic precedence
+  -> immutable Continue decision
+  -> route-intent admission
+  -> fresh or resume startup result
+  -> menu, campaign, PhantomMenu, GameHost, and fixture projections
+```
+
+## Domains in use
+
+```txt
+route shell and menu presentation
+settings persistence and procedural audio
+raw save-presence detection
+menu transition and route emission
+campaign content and mutable state
+fixed-step simulation and spawn queues
+selection, building, orders, and wave start
+AI, pathing, targeting, projectiles, damage, rewards, and terminal state
+camera and input
+world, HUD, minimap, modal, and CRT rendering
+victory-summary persistence
+PhantomMenu and GameHost diagnostics
+source checks, static build, Pages deployment, and central audit sync
+```
+
+## Implemented kits
+
+```txt
+crt-renderer-kit
+graveyard-art-kit
+menu-route-kit
+menu-settings-persistence-kit
+menu-save-presence-kit
+menu-audio-kit
+campaign-route-shell-kit
+pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
+pixel-campaign-render-kit
+legacy-gamehost-diagnostics-kit
+menu-static-check-kit
+campaign-static-check-kit
+static-build-copy-kit
+pages-deploy-kit
+retained construct kits
 ```
 
 ## Read first
@@ -110,17 +120,16 @@ source request
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/kit-registry.json
-.agent/trackers/2026-07-10T23-40-35-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-10T23-40-35-04-00.md
-.agent/architecture-audit/2026-07-10T23-40-35-04-00-fixed-step-command-authority-dsk-map.md
-.agent/render-audit/2026-07-10T23-40-35-04-00-committed-frame-render-consumption-gap.md
-.agent/gameplay-audit/2026-07-10T23-40-35-04-00-command-preflight-result-loop.md
-.agent/interaction-audit/2026-07-10T23-40-35-04-00-input-host-command-admission-map.md
-.agent/action-authority-audit/2026-07-10T23-40-35-04-00-command-sequence-target-tick-contract.md
-.agent/deploy-audit/2026-07-10T23-40-35-04-00-fixed-step-replay-fixture-gate.md
+.agent/trackers/2026-07-11T01-20-51-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-11T01-20-51-04-00.md
+.agent/architecture-audit/2026-07-11T01-20-51-04-00-continue-capability-resolver-dsk-map.md
+.agent/render-audit/2026-07-11T01-20-51-04-00-resume-provenance-projection-gap.md
+.agent/gameplay-audit/2026-07-11T01-20-51-04-00-new-continue-startup-loop.md
+.agent/interaction-audit/2026-07-11T01-20-51-04-00-menu-route-session-admission-map.md
+.agent/save-authority-audit/2026-07-11T01-20-51-04-00-six-slot-candidate-precedence-contract.md
+.agent/deploy-audit/2026-07-11T01-20-51-04-00-candidate-resolver-fixture-gate.md
 ```
 
 ## Validation state
 
-Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence, and deployment configuration did not change. No branch or pull request was created. Runtime and browser fixtures remain absent and were not run.
+Documentation only. Runtime source, package scripts, dependencies, routes, gameplay, rendering, persistence, and deployment configuration did not change. No branch or pull request was created. Behavioral fixtures remain absent and were not run.
