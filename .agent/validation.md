@@ -1,23 +1,25 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-11T11-51-06-04-00`
+**Timestamp:** `2026-07-11T13-28-37-04-00`
 
 ## Summary
 
-This pass changed documentation only. Source inspection confirms an exact `1/60` simulation update, but browser callbacks mutate gameplay and camera state outside that boundary, wall-clock delta is silently capped at 50 ms, and no tick, replay or committed-frame receipts exist.
+This pass changed documentation only. Source inspection confirms a reachable same-tick path that sets both `lost` and `won`, presents victory and writes a success save after core health reaches zero. No executable fixture currently proves terminal exclusivity, persistence admission, replay convergence or terminal-frame correlation.
 
 ## Plan ledger
 
-**Goal:** separate verified source facts from planned command-scheduling, clock, replay and frame proof.
+**Goal:** separate verified source facts from planned terminal-outcome authority and executable proof.
 
 - [x] Confirm the default branch is `main`.
 - [x] Compare all ten accessible Publish repositories.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Read campaign callbacks, accumulator loop, render path, `GameHost`, package scripts and current audits.
-- [x] Verify simulation updates use exact `1/60` steps.
-- [x] Verify command mutations occur outside fixed steps.
-- [x] Verify delta above 50 ms is discarded without a receipt.
-- [x] Verify no tick, command cursor, state fingerprint or frame receipt exists.
+- [x] Skip the active same-window `HorrorCorridor` documentation sequence.
+- [x] Read campaign core damage, unit deletion, wave completion, save, overlay, restart and `GameHost` source.
+- [x] Verify defeat can be admitted inside unit iteration.
+- [x] Verify the parent update continues after defeat evidence.
+- [x] Verify final-wave completion can then admit victory and write a save.
+- [x] Verify overlay priority resolves conflicting state as victory.
+- [x] Define the missing terminal arbitration and fixture boundary.
 - [ ] Run behavioral validation after the authority boundary exists.
 
 ## Current scripts
@@ -52,28 +54,57 @@ browser smoke: not run
 ## Verified by source inspection
 
 ```txt
-simulation step: exactly 1/60
-wall-clock delta clamp: 0.05 seconds
-raw elapsed duration retained: no
-clock overrun result: absent
-visibility policy: absent
-simulation tick ID: absent
-command sequence: absent
-target tick: absent
-fixed-step command queue: absent
-browser commands mutate immediately: yes
-camera update outside fixed loop: yes
-CRT time independent from simulation: yes
-state fingerprint: absent
-committed tick receipt: absent
-render frame ID: absent
-consumer acknowledgements: absent
-GameHost direct mutation bypass: present
+state has independent won and lost booleans: yes
+core breach can set lost inside updateUnit: yes
+breaching enemy is deleted: yes
+parent update continues after lost is set: yes
+wave-clear evaluation runs later in same update: yes
+final-wave clear can set won: yes
+victory save can run after lost was set in the same tick: yes
+overlay checks won before lost: yes
+GameHost exposes won and lost independently: yes
+R restart uses location.reload: yes
+exclusive outcome enum: absent
+terminal arbitration policy: absent
+terminal latch: absent
+terminal result ID: absent
+terminal persistence decision: absent
+terminal frame receipt: absent
+```
+
+## Source-backed failure fixture
+
+The minimal deterministic fixture should construct:
+
+```txt
+wave = waves.length - 1
+waveActive = true
+spawn = []
+core = 1
+one enemy at breach distance
+no other enemies
+```
+
+Then one fixed `update(1/60)` should currently allow:
+
+```txt
+core = 0
+lost = true
+won = true
+```
+
+The future authority must instead commit:
+
+```txt
+terminalOutcome = DEFEAT
+won compatibility projection = false
+lost compatibility projection = true
+victory persistence decision = rejected
 ```
 
 ## Existing check limitation
 
-`check-campaign.mjs` verifies source text such as `createCrtRenderer`, dimensions, archetype declarations, `camera.targetZoom` and `window.GameHost`. It does not execute the clock, command ordering, replay or frame-consumption behavior.
+`check-campaign.mjs` verifies source text and expected declarations. It does not instantiate campaign state, run fixed updates, inspect terminal ordering, intercept storage writes, replay a journal or correlate the terminal frame.
 
 ## Missing future gates
 
@@ -82,32 +113,30 @@ npm run fixture:candidate-resolver
 npm run fixture:crt-projection-parity
 npm run fixture:phase-admission
 npm run fixture:fixed-step-cadence
-npm run fixture:irregular-cadence
-npm run fixture:stall-policy
-npm run fixture:command-target-tick
 npm run fixture:command-replay
-npm run fixture:state-fingerprint
-npm run fixture:frame-correlation
+npm run fixture:terminal-outcome
+npm run fixture:terminal-persistence
+npm run fixture:terminal-frame
 npm run fixture:lifecycle
 npm run fixture:checkpoint
-npm run smoke:pointer-browser
-npm run smoke:cadence-browser
+npm run smoke:terminal-browser
+npm run smoke:restart-browser
 npm run smoke:resume
 ```
 
-## Fixed-step fixture assertions
+## Terminal fixture assertions
 
 ```txt
-20, 30, 60 and 120 Hz schedules produce the same committed state
-irregular frame schedules produce the same committed state
-stalls follow one declared catch-up/drop/suspend policy
-commands apply once in (targetTick, sequence) order
-commands around RAF boundaries resolve identically
-pause and terminal states reject forbidden commands
-same command journal reproduces the same fingerprint
-camera/projection revisions are recorded with the frame
-world, HUD, minimap, overlay and CRT acknowledge one frame receipt
-GameHost cannot mutate authoritative state outside the gateway
+core breach commits defeat only
+final-wave clear with positive core commits victory only
+simultaneous breach and clear resolves through declared priority
+no committed state contains both outcomes
+terminal outcome is monotonic for one run epoch
+success persistence requires committed victory
+success persistence rejects defeat evidence
+terminal result and state fingerprint replay identically
+world, HUD, minimap, overlay, CRT and GameHost consume one terminal result
+restart advances run epoch and cannot retain predecessor terminal identity
 ```
 
 ## Current claim boundary
@@ -115,10 +144,10 @@ GameHost cannot mutate authoritative state outside the gateway
 ```txt
 repo inventory compared: yes
 root .agent state confirmed: yes
-documentation pushed to main: pending this run
-runtime fixed-step implementation: partial simulation only
-deterministic command scheduling: no
-clock-overrun policy: no
-replay fidelity: no
-committed-frame proof: no
+documentation pushed to main: pending final run synchronization
+runtime terminal implementation: conflicting Boolean mutations
+exclusive terminal arbitration: no
+terminal persistence safety: no
+terminal replay fidelity: no
+terminal frame proof: no
 ```
