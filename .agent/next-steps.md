@@ -1,38 +1,61 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T13-28-37-04-00`
+**Timestamp:** `2026-07-11T15-08-41-04-00`
 
 ## Summary
 
-Keep the current dependency order, but add an explicit terminal-outcome transaction inside the fixed-step command and phase gate. The next implementation must prevent one tick from committing both defeat and victory, prevent success persistence after defeat evidence, and publish one terminal result consumed by rendering, diagnostics, replay and checkpoints.
+Implement Continue capability first. The menu, campaign startup and future checkpoint system need one shared resolver that reads every candidate slot independently, validates and ranks candidates deterministically, carries the selected identity into startup and either commits a resumed run atomically or leaves the fresh campaign untouched.
 
 ## Plan ledger
 
-**Goal:** make command order, simulation progress, terminal outcome and visible frame provenance reproducible and internally consistent.
+**Goal:** make menu capability, route intent, selected save identity, hydrated campaign state and first resumed frame agree on one typed startup result.
 
-- [ ] Finish save-candidate resolution first.
-- [ ] Finish shared CRT display/input projection.
-- [ ] Define typed campaign commands and canonical phase admission.
-- [ ] Assign command sequence and deterministic target tick.
-- [ ] Apply admitted commands exactly once inside the fixed-step boundary.
-- [ ] Collect terminal evidence without mutating `won` or `lost` during subsystem updates.
-- [ ] Arbitrate exactly one `ACTIVE | VICTORY | DEFEAT` result per tick.
-- [ ] Latch terminal outcome for the run epoch.
-- [ ] Gate success persistence on the committed terminal result.
-- [ ] Publish committed tick, terminal and frame receipts.
-- [ ] Quarantine direct `GameHost` mutation and raw Boolean outcome exposure.
-- [ ] Add simultaneous breach/clear, persistence and frame fixtures.
-- [ ] Complete lifecycle and checkpoint gates afterward.
+- [ ] Define the six candidate slots explicitly.
+- [ ] Return a typed read result for every slot.
+- [ ] Parse and classify every readable nonempty payload.
+- [ ] Define supported schemas and content revisions.
+- [ ] Define deterministic candidate precedence and tie-breaking.
+- [ ] Publish a typed `ContinueCapabilityResult` to the menu.
+- [ ] Carry the selected candidate ID and fingerprint into campaign startup.
+- [ ] Revalidate the exact candidate before hydration.
+- [ ] Stage hydration without mutating live campaign state.
+- [ ] Commit either a fresh run or a resumed run atomically.
+- [ ] Publish a typed `CampaignStartupResult` and first-frame acknowledgement.
+- [ ] Add pure, storage-failure and browser parity fixtures.
+- [ ] Continue with projection, command, phase, replay, terminal, lifecycle and checkpoint gates afterward.
 
 ## Ordered implementation sequence
 
-### Gate 1: Continue capability
+### Gate 1: Continue capability resolver
 
-1. Enumerate candidate slots.
-2. Parse, classify and validate each candidate.
-3. Apply deterministic precedence.
-4. Publish one typed candidate or rejection.
-5. Carry candidate identity into campaign startup.
+1. Create `save-slot-registry.js` with the six canonical slots.
+2. Read slots independently so one denied or failed slot cannot hide the others.
+3. Normalize slot results into `empty`, `read`, `denied` or `failed`.
+4. Parse nonempty values without throwing through the menu loop.
+5. Classify candidate kind:
+   - current resumable checkpoint
+   - current completion summary
+   - supported legacy snapshot
+   - unsupported legacy payload
+   - malformed payload
+6. Validate schema version, content revision and required fields.
+7. Calculate a stable raw hash and candidate fingerprint.
+8. Apply a versioned precedence policy.
+9. Publish one selected candidate or a typed no-capability result.
+10. Render Continue from the result rather than raw presence.
+
+### Gate 1b: Campaign startup admission
+
+1. Parse `campaign=new|continue` through one startup-mode kit.
+2. For new mode, explicitly reject candidate hydration.
+3. For continue mode, require a selected candidate identity.
+4. Re-read the exact slot at campaign startup.
+5. Reject changed raw hashes or stale candidate fingerprints.
+6. Build a detached hydration plan.
+7. Validate references, counters, phase and content identity.
+8. Commit the complete candidate state atomically.
+9. Roll back unchanged on any failure.
+10. Publish `CampaignStartupResult` and first-frame receipt.
 
 ### Gate 2a: Display/input projection authority
 
@@ -46,7 +69,7 @@ Keep the current dependency order, but add an explicit terminal-outcome transact
 
 1. Convert browser callbacks and `GameHost` actions into source adapters.
 2. Define `CampaignCommand` with identity, source, phase, sequence and target tick.
-3. Replace `paused`, `won` and `lost` phase authority with one canonical campaign phase.
+3. Replace independent `paused`, `won` and `lost` authority with one phase.
 4. Add an admission matrix and typed command results.
 5. Retire held input when phase changes.
 
@@ -54,41 +77,18 @@ Keep the current dependency order, but add an explicit terminal-outcome transact
 
 1. Add `simulationTickId`, `commandSequence`, `appliedCommandCursor` and `frameId`.
 2. Queue commands in deterministic `(targetTick, sequence)` order.
-3. Apply commands before the corresponding `update(1/60)` call.
+3. Apply commands before the corresponding fixed update.
 4. Record ordered domain events and a canonical state fingerprint.
-5. Publish a `CommittedTickReceipt` after every authoritative tick.
-6. Extract a detached render snapshot.
-7. Version camera and projection state.
-8. Publish a `CommittedFrameReceipt` after all consumers acknowledge the frame.
+5. Publish committed tick and frame receipts.
 
 ### Gate 2d: Exclusive terminal-outcome transaction
 
-1. Remove terminal mutations from `updateUnit()` and wave-clear branches.
-2. Emit evidence rows instead:
-   - `CORE_BREACHED`
-   - `FINAL_WAVE_CLEARED`
-   - `WAVE_CLEARED`
-3. Build `TerminalEvaluationInput` after combat subsystems finish.
-4. Evaluate defeat and victory predicates without mutating state.
-5. Apply a versioned arbitration policy:
-   - defeat when `coreHealth <= 0`
-   - victory only when final wave is clear and `coreHealth > 0`
-   - otherwise active
-6. Commit one `TerminalOutcomeResult` atomically.
-7. Latch victory or defeat for the current run epoch.
-8. Derive message, overlay, persistence and `GameHost` projection from the result.
-9. Reject victory persistence when defeat evidence exists.
-10. Correlate the first terminal frame with the result ID and state fingerprint.
-
-### Clock and stall policy
-
-1. Replace anonymous `last` and `accumulator` variables with a clock owner.
-2. Record raw elapsed duration before clamping.
-3. Define hidden-tab behavior.
-4. Define a maximum catch-up budget.
-5. Publish `ClockOverrunResult` for excess time.
-6. Keep authoritative simulation time independent from CRT animation time.
-7. Never discard duration without a receipt.
+1. Remove terminal mutation from subsystem iteration.
+2. Collect core-breach and final-wave-clear evidence.
+3. Evaluate pure victory and defeat predicates.
+4. Arbitrate one `ACTIVE | VICTORY | DEFEAT` result.
+5. Latch the result for the run epoch.
+6. Gate persistence and projection on that result.
 
 ### Gate 3: Runtime lifecycle
 
@@ -96,14 +96,12 @@ Keep the current dependency order, but add an explicit terminal-outcome transact
 2. Add session, run and generation identity.
 3. Lease RAF, listeners, timers, globals, audio and CRT resources.
 4. Fence stale callbacks by generation.
-5. Replace `location.reload()` restart with an admitted restart transaction.
-6. Retire the prior terminal result and advance the run epoch.
-7. Complete teardown before navigation or reload.
+5. Replace reload restart with an admitted transaction.
 
 ### Gate 4: Versioned checkpoint and atomic resume
 
-1. Capture only from a committed tick and terminal result.
-2. Include schema, content identity, tick, command cursor, outcome and fingerprint.
+1. Capture only from a committed tick.
+2. Include schema, content identity, tick, command cursor, phase and fingerprint.
 3. Validate, migrate and stage hydration.
 4. Commit a new resume epoch atomically or roll back unchanged.
 5. Acknowledge the first resumed frame.
@@ -111,35 +109,37 @@ Keep the current dependency order, but add an explicit terminal-outcome transact
 ## First target files
 
 ```txt
-src/campaign/campaign-outcome.js
-src/campaign/campaign-phase.js
-src/campaign/campaign-command.js
-src/campaign/campaign-clock.js
-src/campaign/campaign-frame.js
+src/persistence/save-slot-registry.js
+src/persistence/save-candidate.js
+src/persistence/save-precedence.js
+src/persistence/continue-capability.js
+src/campaign/campaign-startup.js
+src/campaign/campaign-hydration.js
+src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-src/menu/crt-projection.js
-src/menu/crt-renderer.js
-tests/terminal-outcome.fixture.mjs
-tests/terminal-persistence.fixture.mjs
-tests/terminal-frame.fixture.mjs
-scripts/check-campaign-runtime.mjs
+tests/continue-candidate-resolver.fixture.mjs
+tests/continue-storage-failure.fixture.mjs
+tests/campaign-startup.fixture.mjs
+scripts/check-continue-runtime.mjs
 package.json
 ```
 
-## Required terminal fixtures
+## Required Continue fixtures
 
 ```txt
-core breach before final wave -> defeat only
-final wave clear with positive core -> victory only
-simultaneous last-enemy breach and final-wave clear -> defeat only
-no state contains both victory and defeat
-terminal outcome cannot change inside one run epoch
-victory save rejected after core breach
-victory save includes terminal result ID and fingerprint
-overlay and GameHost consume one terminal result
-replay journal reproduces terminal outcome and state fingerprint
-restart advances run epoch and clears predecessor terminal identity
-first terminal frame acknowledges terminal result ID
+all slots empty -> disabled / no-candidate
+malformed payload only -> disabled / invalid-candidate
+unsupported schema only -> disabled / unsupported-schema
+one valid current checkpoint -> selected
+valid legacy plus current checkpoint -> current selected
+malformed higher slot plus valid lower slot -> valid lower selected
+two valid candidates with equal timestamps -> deterministic tie-break
+one storage layer denied -> remaining slots still evaluated
+candidate changes after menu resolution -> startup rejects stale candidate
+new mode with valid candidate present -> fresh state, no hydration
+continue mode with valid candidate -> admitted resumed state
+continue hydration failure -> no partial mutation
+menu result, URL mode, startup result and first frame share one identity
 ```
 
 ## Out of scope for this ledge
@@ -147,8 +147,9 @@ first terminal frame acknowledges terminal result ID
 ```txt
 new waves, units or towers
 visual redesign
-new save-slot UI
+new save-slot selection UI
 networked play
 renderer replacement
 construct-profile revival
+full checkpoint schema implementation beyond the minimal resolver contract
 ```
