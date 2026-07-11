@@ -1,6 +1,6 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-10T20-19-35-04-00`
+**Timestamp:** `2026-07-10T21-49-26-04-00`
 
 ## Validation performed in this pass
 
@@ -10,31 +10,27 @@
 - Confirmed all nine eligible repositories are centrally tracked and have root .agent state.
 - Selected PhantomCommand as the oldest eligible documented fallback.
 - Read package.json.
+- Read index.html.
 - Read src/menu/graveyard-menu.js.
 - Read src/menu/crt-renderer.js.
 - Read src/campaign/campaign-scene.js.
-- Read scripts/check-menu.mjs.
-- Read scripts/check-campaign.mjs.
-- Read .github/workflows/deploy-pages.yml.
-- Read the current root .agent docs, latest architecture audit, and kit registry.
-- Verified source canvas 640 x 360, 7 rings, 4 lanes, 58 pads, 6 starter allies, 3 tower types, 7 unit archetypes, 6 waves, and fixed 1/60 simulation.
-- Verified selectAt(), build(), order(), and startWave() are direct mutation functions.
-- Verified selectAt() combines pad selection and repeated-click build admission.
-- Verified build(), order(), and startWave() silently return when preconditions fail.
-- Verified campaign actions return no typed success or rejection result.
-- Verified pointer, keyboard, and GameHost sources have no shared command envelope.
-- Verified gameplay actions are not sequenced or scheduled to deterministic simulation ticks.
-- Verified no command, result, event, tick, frame, or fingerprint journal exists.
-- Verified render() reads live state, camera, and drag state.
-- Verified CRT submission has no source-frame readback.
-- Verified GameHost exposes mutable state/camera and aggregate counters only.
-- Verified current checks are source-pattern assertions rather than behavioral fixtures.
-- Retained the Continue resolver as the implementation queue head.
-- Added action-result authority as the next campaign-internal proof slice.
-- Updated required root .agent docs.
-- Added timestamped architecture, render, gameplay, interaction, command-authority, and deploy audits.
-- Updated the central repo ledger.
-- Added the central internal change-log entry.
+- Read the current central PhantomCommand ledger.
+- Read the current root .agent docs and kit registry.
+- Reconfirmed the menu and campaign interaction loops, domains, kits, and services.
+- Verified both route modules start recursive requestAnimationFrame loops.
+- Verified neither route retains a frame request ID or exposes frame cancellation.
+- Verified menu and campaign listeners have no coordinated registration/removal ledger.
+- Verified most route handlers are anonymous and no route disposal service exists.
+- Verified the menu AudioContext is closed only when ambience is explicitly disabled.
+- Verified createCrtRenderer allocates shaders, program, buffer, and texture but returns no dispose method.
+- Verified campaign restart uses location.reload() and exit uses location navigation.
+- Verified PhantomMenu and GameHost expose no lifecycle state, journal, stop, dispose, or restart surface.
+- Retained Continue resolution as implementation queue head.
+- Retained action-result authority as the second implementation slice.
+- Added runtime-session lifecycle authority as the third implementation slice.
+- Added timestamped architecture, render, gameplay, interaction, lifecycle, and deploy audits.
+- Refreshed all required root .agent files.
+- Updated the central repo ledger and added an internal change-log entry.
 - Pushed only to main.
 - Created no branch or pull request.
 ```
@@ -50,65 +46,57 @@
 - GitHub Pages deployment was not checked.
 - no candidate resolver fixture was run because it does not exist yet.
 - no action-result fixture was run because it does not exist yet.
-- no fixed-step command fixture was run because it does not exist yet.
-- no frame-consumption fixture was run because it does not exist yet.
-- no resume-fidelity fixture was run because it does not exist yet.
+- no fixed-step frame fixture was run because it does not exist yet.
+- no menu lifecycle fixture was run because it does not exist yet.
+- no campaign lifecycle fixture was run because it does not exist yet.
+- no listener-ledger fixture was run because it does not exist yet.
+- no CRT resource-disposal fixture was run because it does not exist yet.
+- no restart-idempotency fixture was run because it does not exist yet.
 - no runtime source file was changed.
 ```
 
 ## Source evidence captured
 
 ```txt
-campaign action functions:
-  selectAt(world, add)
-  build()
-  order(world)
-  startWave()
+menu route:
+  module-evaluation construction
+  recursive RAF without retained ID
+  canvas/document/hidden-button listeners
+  optional AudioContext graph
+  fade then browser navigation
 
-build rejection conditions:
-  no selected pad
-  occupied pad
-  insufficient souls
+campaign route:
+  module-evaluation construction
+  recursive RAF without retained ID
+  canvas/window listeners
+  fixed 1/60 simulation accumulator
+  reload restart and navigation exit
 
-order rejection condition:
-  no selected units
+CRT renderer allocations:
+  vertex shader
+  fragment shader
+  linked program
+  position buffer
+  source texture
 
-wave rejection conditions:
-  wave already active
-  campaign won
-  campaign lost
-  no wave remaining
+CRT renderer public surface:
+  render
+  resize
+  screenToSource
+  gl
+  no dispose
 
-action result shape:
-  undefined for success and rejection
-
-command sequence:
-  none
-
-target simulation tick:
-  none
-
-action/result/event journals:
-  none
-
-tick ID and frame ID:
-  none
-
-state fingerprint:
-  none
-
-render source:
-  live mutable state and camera
-
-GameHost:
-  raw state and camera references
-  startWave
-  build
-  aggregate getState
-  setZoom
-
-current checks:
-  static source-pattern assertions
+lifecycle surface:
+  session ID: none
+  lifecycle state: none
+  retained RAF ID: none
+  listener ledger: none
+  startup rollback: none
+  stop: none
+  dispose: none
+  restart transaction: none
+  lifecycle journal: none
+  resource journal: none
 ```
 
 ## Required validation after implementation
@@ -118,6 +106,11 @@ node tests/phantom-command-candidate-resolver-fixture.mjs
 node tests/phantom-command-action-result-fixture.mjs
 node tests/phantom-command-fixed-step-command-fixture.mjs
 node tests/phantom-command-frame-consumption-fixture.mjs
+node tests/phantom-command-menu-lifecycle-fixture.mjs
+node tests/phantom-command-campaign-lifecycle-fixture.mjs
+node tests/phantom-command-crt-resource-fixture.mjs
+node tests/phantom-command-listener-ledger-fixture.mjs
+node tests/phantom-command-restart-idempotency-fixture.mjs
 node tests/phantom-command-resume-fidelity-fixture.mjs
 npm run check
 npm run build
@@ -126,13 +119,17 @@ npm run build
 ## Required behavioral proof
 
 ```txt
-- one terminal result for every valid command
-- stable accepted, rejected, and no-op statuses
-- stable rejection reasons
-- rejected command leaves canonical state fingerprint unchanged
-- same commands and target ticks produce identical results and fingerprints
-- world, HUD, minimap, modal, CRT, and GameHost report one committed frame
-- menu and campaign consume one Continue resolver result
+- one active session per route host
+- one retained RAF owner per running session
+- no frame rescheduling after stop or dispose
+- one removal result for every listener registration
+- one release result for every owned audio and WebGL resource
+- zero remaining owned resources after disposal
+- idempotent stop and dispose
+- partial-start rollback releases completed allocations
+- restart creates exactly one new session and rejects stale callbacks
+- menu transition records duplicate rejection and teardown status
+- existing routes, visuals, controls, simulation constants, and legacy host fields remain compatible
 ```
 
 ## Current status
@@ -147,7 +144,9 @@ browser smoke: not run
 candidate resolver fixture: absent / not run
 action result fixture: absent / not run
 fixed-step frame fixture: absent / not run
-resume fidelity fixture: absent / not run
+lifecycle fixtures: absent / not run
+resource disposal fixture: absent / not run
+restart idempotency fixture: absent / not run
 repo-local documentation pushed to main: yes
 central ledger updated: yes
 central internal change log added: yes
