@@ -1,84 +1,107 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T04-18-44-04-00`
+**Timestamp:** `2026-07-12T05-49-04-04-00`
 
 ## Goal
 
-Add menu-audio lifecycle authority while preserving the current ambience character and keeping it subordinate to the existing runtime-session lifecycle plan.
+Implement one campaign bootstrap and resume authority so Begin and Continue produce distinct, validated and observable runtime generations.
 
 ## Plan ledger
 
-- [ ] Create one menu audio session and context generation.
-- [ ] Replace `ensureAudio()` void behavior with a typed start/resume result.
-- [ ] Observe `AudioContext.state` and subscribe to state changes.
-- [ ] Resume a suspended context only after a qualifying user gesture.
-- [ ] Own master, drone, wind, UI voices and delayed-close timer as leases.
-- [ ] Stop/disconnect graph nodes before closing the context.
-- [ ] Cancel or fence stale delayed-close callbacks.
-- [ ] Add visibility suspend/resume policy.
-- [ ] Add `pagehide`, `pageshow`, bfcache and navigation retirement policy.
-- [ ] Correlate ambience settings with admitted audible state.
-- [ ] Expose detached audio diagnostics, not raw AudioContext owners.
-- [ ] Add pure lifecycle fixtures and real-browser audio smokes.
-- [ ] Run `npm run check` after the fixtures are wired.
+- [ ] Introduce one canonical `CampaignLaunchIntent` parsed from the campaign route.
+- [ ] Define one canonical save key and explicit fallback/legacy-key policy.
+- [ ] Replace presence-only Continue enablement with a typed resume-capability result.
+- [ ] Add a versioned `CampaignSaveEnvelope` with schema and content fingerprints.
+- [ ] Parse, validate, migrate or quarantine candidate saves before runtime construction.
+- [ ] Define explicit new-run handling for predecessor saves.
+- [ ] Build new or resumed campaign state as a detached candidate.
+- [ ] Validate unit, tower, projectile, pad and selection references before commit.
+- [ ] Reseed unit, projectile and tower ID counters from hydrated content.
+- [ ] Commit one campaign generation atomically.
+- [ ] Return a typed `CampaignBootstrapResult`.
+- [ ] Return a typed `CampaignSaveCommitResult` for checkpoint writes.
+- [ ] Publish detached bootstrap diagnostics instead of raw mutable owners.
+- [ ] Bind the first visible resumed frame to bootstrap ID and campaign generation.
+- [ ] Add Node fixtures and real-browser route/storage smokes.
+- [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
 src/menu/graveyard-menu.js
-menu-audio-kit
-menu-settings-persistence-kit
+src/campaign/campaign-scene.js
+menu-save-presence-kit
 menu-route-kit
-window.PhantomMenu adapter
-Runtime Session Lifecycle Authority
+campaign-route-shell-kit
+pixel-campaign-runtime-kit
+legacy-gamehost-diagnostics-kit
 scripts/check-menu.mjs
+scripts/check-campaign.mjs
 package.json
 ```
 
-## Result contract
+## Bootstrap result contract
 
 ```txt
-AudioLifecycleResult
-  commandId
-  audioSessionId
-  contextGeneration
+CampaignBootstrapResult
+  bootstrapId
+  launchIntent
+  campaignGeneration
   status
-  previousContextState
-  nextContextState
-  graphLeaseCount
-  voiceLeaseCount
-  timerLeaseCount
+  sourceKey
+  sourceScope
+  sourceVersion
+  migrationCount
+  quarantined
+  stateRevision
+  stateFingerprint
   reason
-  resolvedAtMs
+  committedAtMs
+```
+
+## Save commit result contract
+
+```txt
+CampaignSaveCommitResult
+  saveCommitId
+  campaignGeneration
+  stateRevision
+  key
+  scope
+  schemaVersion
+  payloadFingerprint
+  durable
+  status
+  reason
+  committedAtMs
 ```
 
 ## Fixture gate
 
 ```txt
-first gesture starts one graph
-suspended context resumes on later gesture
-repeated ensure is idempotent
-rapid off/on toggle does not cross-close generations
-pagehide retires or suspends under policy
-bfcache restore revalidates before audio resumes
-transition retires menu graph before navigation
-UI-tone voices return to zero live leases
-settings and observed audible state agree
+Begin creates a clean generation regardless of stale presence data
+Continue rejects malformed JSON without partial hydration
+Continue rejects unrelated Nexus snapshot payloads
+legacy compatible payload migrates exactly once
+invalid reference graphs are quarantined
+hydrated counters cannot collide with existing IDs
+winning save round-trips into an equivalent resumed read model
+new-run predecessor-save policy is deterministic
+first resumed frame cites bootstrap and campaign generation
+menu Continue state matches validated resume capability
 ```
 
 ## Dependency order
 
 ```txt
-Continue admission
-  -> public host quarantine
-  -> CRT projection
-  -> campaign phase admission
-  -> fixed-step scheduling
-  -> committed read model
-  -> combat/terminal authority
-  -> runtime session lifecycle
-  -> menu audio lifecycle specialization
-  -> checkpoint capture
+Campaign Bootstrap and Continue Resume Authority
+  -> Public Host Owner Quarantine and Typed Command Admission
+  -> CRT Display/Input Projection Authority
+  -> Campaign Phase Admission Authority
+  -> Fixed-Step Command Scheduling and Committed Frame Authority
+  -> Combat and Terminal Authorities
+  -> Runtime Session and Menu Audio Lifecycle Authorities
+  -> Versioned Full Checkpoint Capture Authority
 ```
 
-Do not expose the raw AudioContext through `PhantomMenu`. Publish immutable capability and lifecycle results only.
+Do not add more save keys. Consolidate identity and compatibility through one admitted envelope and one explicit migration surface.
