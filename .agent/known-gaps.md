@@ -1,79 +1,126 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T13-59-50-04-00`
+**Timestamp:** `2026-07-12T16-00-03-04-00`
 
 ## Summary
 
-The newest documented gap is Campaign Bootstrap and Continue Resume Authority. Continue can be enabled by any truthy configured storage value, but the campaign ignores the launch query, reads no save and always creates default state.
+The leading documented gap is Menu Pointer-Hit Admission Authority. Pointer misses and letterbox clicks can execute stale selected actions, settings-panel misses can mutate stale selected rows, and pointer geometry does not invert the visible CRT curve.
 
 ## Plan ledger
 
-**Goal:** require complete, versioned and atomic campaign bootstrap before treating Continue as functional.
+**Goal:** close pointer policy, geometry, hit admission, zero-mutation rejection and visible-proof gaps while preserving the campaign bootstrap, phase, fixed-step, combat, lifecycle and persistence queues.
 
-- [ ] Owned save-key and storage-scope policy.
-- [ ] Typed save probe instead of boolean presence.
-- [ ] Save schema, version, fingerprint and migration.
-- [ ] Complete campaign checkpoint payload.
-- [ ] Launch-intent admission and identity.
-- [ ] Distinct New and Continue bootstrap paths.
-- [ ] Detached candidate construction and validation.
-- [ ] Atomic hydration and stale-result rejection.
-- [ ] Typed save read/write and bootstrap results.
-- [ ] First restored-frame acknowledgement.
-- [ ] Local, built and Pages resume fixtures.
-- [ ] Retain runtime lifecycle, pointer, phase, fixed-step, combat and host gates.
+- [x] Record main-menu miss and stale-selection gaps.
+- [x] Record settings-panel miss and stale-row gaps.
+- [x] Record containment and CRT transform gaps.
+- [x] Record pointer policy, result and fixture gaps.
+- [x] Preserve previous authority queues.
+- [ ] Implement in dependency order.
 
-## Campaign bootstrap gaps
+## Pointer policy gaps
 
 ```txt
-matched save key retained: no
-matched storage scope retained: no
-save bytes parsed by menu: no
-save compatibility validated: no
-campaign launch query consumed: no
-new-session predecessor-save policy: no
-campaign save read: no
-complete checkpoint capture: no
-save schema/version: no
-save/content fingerprint: no
-migration: no
-candidate graph: no
-atomic hydration: no
-save write receipt: no
-bootstrap revision: no
-stale bootstrap rejection: no
-first restored-frame receipt: no
-resume browser fixtures: no
+input source identity
+pointer sample id
+pointer sequence id
+primary-pointer policy
+primary-button policy
+pointer capture
+pointer cancel
+pointer down/up coherence
+drag threshold
+duplicate sequence rejection
 ```
 
-## Concrete risks
+## Geometry gaps
 
 ```txt
-malformed JSON can mark Continue BOUND
-foreign Nexus or legacy data can mark Continue BOUND
-Continue always renders a default campaign
-victory save cannot reconstruct units, towers, core, camera or IDs
-storage write failure is swallowed
-Begin does not explicitly clear, archive or supersede an old save
-future live-object hydration could leave partial state after failure
-restored ID counters could collide unless persisted and validated
-HUD, CRT and GameHost cannot prove which save produced the frame
+menu surface generation
+source-canvas revision
+viewport/display rectangle revision
+DPR revision
+containment transform revision
+CRT state and curve revision
+inverse CRT input projection
+control layout revision
+panel generation
+visible/logical geometry parity
 ```
 
-## Retained gaps
+## Hit and admission gaps
 
 ```txt
-Menu pointer misses can execute the selected action
-Campaign pointer commands ignore visible-surface and CRT-curve admission
-GameHost exposes live mutable owners
-Campaign phase does not fence commands
-Commands are not fixed-step scheduled
-Combat liveness and exclusive terminal result remain unimplemented
-Runtime callbacks and WebGL/audio resources lack explicit retirement
-Menu audio activation policy remains incomplete
-Full checkpoint capture and replay remain incomplete
+typed containment result
+typed control hit result
+control identity
+terminal miss rejection
+terminal outside-surface rejection
+stale transform/layout/panel rejection
+MenuActionCommand
+MenuActionResult
+transition admission result
+zero-mutation rejection fence
+first visible action-frame acknowledgement
+```
+
+## Concrete current risks
+
+```txt
+empty graveyard click launches previously selected route
+letterbox click launches previously selected route
+row-gap click launches previously selected route
+settings gap click toggles previously selected setting
+settings miss can close the panel
+secondary mouse button can activate
+secondary pointer can activate
+visible curved control and logical hit rectangle can disagree
+public PhantomMenu activation has no capability/source identity
+```
+
+## Test gaps
+
+```txt
+main row center hits
+main row gap misses
+empty canvas misses
+wide/tall letterbox misses
+settings row center hits
+settings row gap misses
+CRT forward/inverse geometry
+primary/secondary pointer policy
+stale resize/DPR rejection
+duplicate sequence rejection
+zero settings/storage/audio/navigation mutation after miss
+keyboard/accessibility parity
+source/build/Pages parity
+```
+
+## Retained campaign gaps
+
+```txt
+Campaign Bootstrap and Continue Resume Authority
+Campaign Action Result Authority
+Campaign World-Pointer Admission Authority
+Public Host Owner Quarantine and Typed Command Admission
+Campaign Phase Admission Authority
+Fixed-Step Command Scheduling Replay and Committed Frame Authority
+Public Host Committed Read Model
+Combat Resolution and Entity Liveness Authority
+Exclusive Terminal Outcome Transaction
+Versioned Full Campaign Checkpoint Capture Authority
+```
+
+## Retained lifecycle/product gaps
+
+```txt
+Runtime Session Resource Lifecycle Authority
+CRT Display/Input Projection Authority
+Menu Audio Activation and Lifecycle Authority
+WebGL context loss/restore and disposal
+save schema, migration and atomic hydration
+complete campaign replay and restored-frame proof
 ```
 
 ## Completion boundary
 
-Do not claim resume support because Continue is visible, enabled or carries a query string. Completion requires a complete versioned payload, typed save admission, atomic hydration, migration policy, stale-result rejection and first-visible-frame proof.
+Do not count a selected menu item, `inside` boolean, integer hit index, visible highlight or successful route transition as pointer-admission proof. Completion requires current visible-geometry hit evidence, typed rejection with zero mutation for every miss/stale path, one terminal action result and a first-visible-frame acknowledgement.
