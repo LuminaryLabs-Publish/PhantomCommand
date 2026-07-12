@@ -1,70 +1,79 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T19-48-09-04-00`
+**Timestamp:** `2026-07-11T21-31-19-04-00`
 
 ## Summary
 
-Keep the existing dependency order. When Gate 3 is reached, replace module-scope ownership and direct navigation with session factories, resource leases, typed stop/dispose commands and a first-frame-confirmed replacement generation.
+Implement Gate 1 before extending save/load. Continue must be derived from a validated candidate, and campaign startup must explicitly choose NEW or RESUME. The existing victory summary should be classified as legacy completion metadata until a real checkpoint schema exists.
 
 ## Plan ledger
 
-**Goal:** make all public work belong to one session and prove it is retired before navigation or restart.
+**Goal:** replace raw storage presence and ignored query parameters with typed candidate resolution and atomic campaign admission.
 
-- [ ] Finish Gates 1 and 2 identities first.
-- [ ] Extract menu and campaign runtime factories.
-- [ ] Add sessionId, runEpoch and runtimeGeneration.
-- [ ] Add a resource lease registry.
-- [ ] Retain RAF IDs and named listener functions.
-- [ ] Add timer, audio, CRT and global capability leases.
-- [ ] Add stale-callback fences.
-- [ ] Add idempotent stop and dispose commands.
-- [ ] Replace direct navigation/reload with typed results.
-- [ ] Add pagehide/pageshow policy.
-- [ ] Prove first replacement frame and repeated-cycle leak freedom.
+- [ ] Create a versioned PhantomCommand save envelope.
+- [ ] Define game ID, campaign ID, content revision and checkpoint kind.
+- [ ] Read candidates with key and storage-scope provenance.
+- [ ] Parse without mutating or overwriting raw bytes.
+- [ ] Classify the existing victory summary as non-resumable legacy data.
+- [ ] Add deterministic precedence across keys and storage scopes.
+- [ ] Publish a typed Continue capability result.
+- [ ] Parse and admit `campaign=new|continue`.
+- [ ] Stage and validate a complete campaign graph before commit.
+- [ ] Add run epoch, checkpoint ID and state fingerprint.
+- [ ] Publish a typed resume result.
+- [ ] Prove the first resumed frame consumed the selected checkpoint.
+- [ ] Add rejected-candidate and storage-failure fixtures.
 
-## Gate 3 implementation sequence
+## Gate 1 implementation sequence
 
-1. Create `createMenuRuntime()` and `createCampaignRuntime()` factories with no module-evaluation side effects.
-2. Define lifecycle phases: `CREATED`, `STARTING`, `READY`, `STOPPING`, `STOPPED`, `DISPOSING`, `DISPOSED`, `FAILED`.
-3. Allocate `sessionId` and `runtimeGeneration` before any callback or global is published.
-4. Register every RAF, listener, timer, audio node/context, WebGL object and global as a lease.
-5. Extend `createCrtRenderer()` with idempotent resource disposal.
-6. Convert anonymous listeners to named handlers retained by the lease registry.
-7. Fence every callback against session, generation and lifecycle phase.
-8. Implement `StopSessionCommand` and cancel frame/timer work first.
-9. Implement reverse-order `DisposeSessionCommand`.
-10. Revoke `PhantomMenu` and `GameHost` before navigation.
-11. Implement explicit bfcache policy on `pagehide` and `pageshow`.
-12. Implement `NavigateCommand` and `RestartCommand`.
-13. Publish readiness only after the first replacement-generation frame.
-14. Add lifecycle journal and leak counters.
+1. Add `src/persistence/save-envelope.js`.
+2. Add `src/persistence/save-candidate-resolver.js`.
+3. Add `src/persistence/checkpoint-schema.js`.
+4. Add `src/persistence/checkpoint-migrations.js`.
+5. Add `src/persistence/checkpoint-validation.js`.
+6. Replace `hasCampaignSave()` with `resolveContinueCapability()`.
+7. Store the selected candidate ID in menu state.
+8. Preserve raw rejected candidates and expose a non-destructive error result.
+9. Parse `campaign` route intent in `campaign-scene.js`.
+10. Reject unsupported or stale resume requests instead of silently starting fresh.
+11. Add `createNewCampaignState()` and `hydrateCampaignState(checkpoint)`.
+12. Stage IDs, units, towers, pads, queues and derived references off-line.
+13. Commit one new run epoch only after full validation.
+14. Publish `CampaignStartResult`.
+15. Correlate the first rendered frame with checkpoint and run identity.
+16. Add candidate, migration, hydration and first-frame fixtures.
 
 ## Target files
 
 ```txt
-src/runtime/session-lifecycle.js
-src/runtime/resource-lease-registry.js
-src/runtime/lifecycle-results.js
 src/menu/graveyard-menu.js
-src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
-tests/runtime-lifecycle.fixture.mjs
-tests/runtime-resource-retirement.fixture.mjs
-scripts/smoke-runtime-restart.mjs
+src/persistence/save-envelope.js
+src/persistence/save-candidate-resolver.js
+src/persistence/checkpoint-schema.js
+src/persistence/checkpoint-migrations.js
+src/persistence/checkpoint-validation.js
+src/persistence/campaign-hydration.js
+tests/save-candidate.fixture.mjs
+tests/continue-route.fixture.mjs
+tests/campaign-hydration.fixture.mjs
+scripts/smoke-continue-resume.mjs
 package.json
 ```
 
 ## Required fixtures
 
 ```txt
-menu start -> one RAF, expected listeners and one global
-menu dispose -> zero RAF, listeners, timers, audio and global leases
-campaign start -> one RAF and one GameHost generation
-campaign dispose -> zero callbacks and revoked GameHost
-CRT dispose twice -> idempotent, no live owned objects
-pagehide persisted -> declared suspend or dispose policy
-pageshow persisted -> declared resume or new generation
-restart -> old generation rejects callbacks
-20 menu/campaign/restart cycles -> stable lease and WebGL counts
-first replacement frame -> matching sessionId, generation and frameId
+no candidates -> Continue disabled
+malformed candidate -> rejected, raw bytes preserved
+foreign nexus.sceneSnapshot -> wrong-game rejection
+multiple candidates -> deterministic selected candidate
+session-only candidate -> provenance retained
+legacy victory summary -> not resumable
+campaign=new -> fresh defaults, no storage hydration
+campaign=continue without selected candidate -> typed rejection
+valid checkpoint -> exact staged state and rebuilt references
+invalid semantic checkpoint -> zero live-state mutation
+storage read failure -> unavailable result, no false Continue
+first resumed frame -> matching checkpointId, fingerprint, runEpoch and frameId
 ```
