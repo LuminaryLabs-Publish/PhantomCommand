@@ -1,37 +1,42 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T05-49-04-04-00`
+**Timestamp:** `2026-07-12T07-29-32-04-00`
 
 ## Summary
 
-This run changed documentation only. Source inspection proves that the menu emits distinct Begin and Continue URLs and scans three save keys, but the campaign module reads neither the query nor storage. Every launch builds the same default state, while the terminal save is minimal and unconsumed.
+This run changed documentation only. Source inspection proves the menu creates a Web Audio graph, stores a partial owner object, clears that object before delayed close, and never observes or resumes a suspended/interrupted context. No browser lifecycle or teardown fixture currently exists.
 
 ## Plan ledger
 
-**Goal:** distinguish visible save affordances from executable resume correctness.
+**Goal:** distinguish audio graph construction from admitted, observable and disposable audio lifecycle correctness.
 
-- [x] Inspect menu save-presence scanning.
-- [x] Inspect Begin and Continue transition URLs.
-- [x] Inspect campaign startup and default state construction.
-- [x] Inspect all campaign storage reads and writes.
-- [x] Inspect restart and public host paths.
-- [x] Inspect current static menu and campaign checks.
-- [x] Document bootstrap, envelope, hydration, result and fixture requirements.
+- [x] Inspect persisted ambience settings.
+- [x] Inspect `ensureAudio()`, `stopAmbience()` and `playUiTone()`.
+- [x] Inspect all stored and unstored audio nodes.
+- [x] Inspect pointer and keyboard activation paths.
+- [x] Inspect transition timing and navigation.
+- [x] Confirm no visibility, pagehide, statechange or dispose handling exists.
+- [x] Inspect current static menu checks.
+- [x] Document lifecycle commands, results, generations and fixture requirements.
 - [ ] Execute fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-SAVE_KEYS contains three legacy keys
-hasCampaignSave accepts any truthy string from localStorage or sessionStorage
-Begin emits game.html?campaign=new
-Continue emits game.html?campaign=continue
-campaign-scene.js never reads location.search
-campaign-scene.js performs no storage read
-campaign startup always constructs default camera, state and six units
-victory writes phantomCommand.save with scene, souls and wave only
-victory write returns no typed result
-R reloads the current page without an explicit restart transaction
+ambience defaults enabled unless persisted false
+first pointerdown or keydown calls ensureAudio()
+ensureAudio returns when state.audio is truthy
+ensureAudio creates AudioContext, master, drone and looping wind source
+ensureAudio never observes AudioContext.state
+ensureAudio never calls context.resume()
+stopAmbience clears state.audio before context close
+stopAmbience schedules an untracked 300 ms delayed close
+rapid re-enable can create a replacement before predecessor close
+UI tone oscillators are transient and not registered
+no visibilitychange listener exists
+no pagehide listener exists
+no AudioContext statechange listener exists
+navigation performs no explicit audio disposal
 ```
 
 ## Existing checks prove
@@ -40,33 +45,34 @@ R reloads the current page without an explicit restart transaction
 menu and campaign HTML/module references exist
 menu labels and campaign URLs exist
 PhantomMenu and GameHost globals exist
-campaign source contains expected gameplay tokens
+CRT and campaign source tokens exist
 static build copies source files
 ```
 
 ## Existing checks do not prove
 
 ```txt
-Continue candidate JSON is parseable
-candidate schema and producer are compatible
-Begin and Continue produce different bootstrap modes
-saved state is hydrated
-entity references and counters remain valid
-save writes are durable
-new-run save policy is correct
-resumed state reaches the first visible frame
-menu capability matches campaign capability
+browser user activation was admitted
+audio context reached running state
+suspended or interrupted context can resume
+one current graph generation exists
+rapid toggles cannot overlap contexts
+all nodes and timers retire on stop
+navigation and pagehide dispose audio
+settings projection matches runtime audio state
+stale delayed callbacks are rejected
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
+menu behavior changed: no
 campaign behavior changed: no
-persistence behavior changed: no
-navigation changed: no
+audio behavior changed: no
 rendering changed: no
-audio changed: no
+persistence changed: no
+navigation changed: no
 package scripts changed: no
 dependencies changed: no
 deployment changed: no
@@ -74,24 +80,28 @@ branch created: no
 pull request created: no
 npm run check: not run
 npm run build: not run
-browser resume smoke: not run
+browser audio smoke: not run
 ```
 
 ## Required fixtures
 
 ```txt
-fixture:launch-intent-parse
-fixture:malformed-save-rejection
-fixture:unrelated-key-rejection
-fixture:legacy-save-migration
-fixture:new-run-save-policy
-fixture:hydration-reference-validation
-fixture:entity-counter-reseed
-fixture:save-roundtrip-parity
-fixture:first-resumed-frame
-smoke:menu-begin-route
-smoke:menu-continue-route
-smoke:pages-campaign-resume
+fixture:audio-lifecycle-state-machine
+fixture:context-generation
+fixture:graph-generation
+fixture:stale-command-rejection
+fixture:node-registry-disposal
+fixture:delayed-close-cancellation
+fixture:rapid-toggle-replacement
+fixture:idempotent-stop-dispose
+smoke:first-pointer-audio-activation
+smoke:first-keyboard-audio-activation
+smoke:suspended-context-resume
+smoke:background-foreground-audio
+smoke:audio-statechange-interruption
+smoke:navigation-audio-retirement
+smoke:pagehide-audio-retirement
+smoke:pages-audio-lifecycle
 ```
 
-No campaign-resume, save-compatibility, hydration, durability or first-frame correctness claim is made.
+No audio activation, running-state, interruption recovery, rapid-toggle safety, ordered teardown or browser compatibility claim is made.
