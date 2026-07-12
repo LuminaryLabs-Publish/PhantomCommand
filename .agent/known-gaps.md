@@ -1,73 +1,73 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T19-48-09-04-00`
+**Timestamp:** `2026-07-11T21-31-19-04-00`
 
 ## Summary
 
-The architecture still lacks connected Continue, projection, command, fixed-step, combat, terminal, lifecycle and checkpoint authority. The newest audit deepens Gate 3: module-scope RAF, listeners, audio, CRT WebGL objects and globals have no lease registry, deterministic teardown or generation fence.
+The highest-priority gap is a false Continue capability. Raw storage presence enables Continue even though the campaign ignores the route and cannot hydrate the partial save. Later projection, command, combat, terminal, lifecycle and checkpoint work remains ordered behind a trustworthy startup decision.
 
 ## Plan ledger
 
-**Goal:** keep unresolved risks explicit and ordered by dependency.
+**Goal:** keep unresolved risks explicit and dependency ordered.
 
-- [ ] Continue save-candidate resolution and startup admission.
+- [ ] Continue candidate resolution and startup admission.
+- [ ] Versioned checkpoint capture and migration.
 - [ ] Display/input projection parity.
 - [ ] Command, phase and fixed-step scheduling.
 - [ ] Deterministic combat and exclusive terminal result.
 - [ ] Runtime session lifecycle, teardown and restart.
-- [ ] Versioned checkpoint capture and atomic resume.
+- [ ] Atomic resume and first resumed-frame proof.
 
-## Runtime lifecycle gaps
+## Continue and checkpoint gaps
 
 ```txt
-menu and campaign allocate at module evaluation time
-RAF IDs are discarded
-recursive frames have no stop flag or generation fence
-anonymous listeners cannot be deterministically removed
-hidden menu buttons retain click listeners
-AudioContext and looping sources are not mandatory teardown dependencies
-audio close timeout is untracked
-CRT renderer has no dispose() service
-WebGL shaders, program, buffer and texture lack retirement receipts
-window.PhantomMenu is not revoked
-window.GameHost is not revoked
-navigation relies on browser document replacement
-restart uses location.reload()
-Escape exit uses direct location assignment
-no StopSessionCommand or DisposeSessionCommand
-no teardown ordering or idempotency result
-no pagehide/pageshow or bfcache policy
-no first replacement-session frame acknowledgement
-no repeated-cycle leak proof
+three save keys are accepted by presence only
+both localStorage and sessionStorage are scanned without source precedence
+candidate bytes are not parsed before Continue is enabled
+candidate key and storage scope are not retained
+no schemaVersion, gameId, campaignId or contentRevision
+no checkpointId, runEpoch, stateRevision or stateFingerprint
+no migration registry
+no semantic validation
+no corrupt-save quarantine
+no multiple-candidate ambiguity result
+campaign query intent is not parsed
+campaign startup always creates fresh defaults
+RESUME cannot be distinguished from NEW
+current save is only a victory summary
+current save cannot rebuild towers, units, queues, camera or IDs
+no staged hydration transaction
+no rollback on hydration failure
+no resumed-state observation model
+no first resumed-frame receipt
 ```
 
-## Existing earlier gates
+## Existing downstream gaps
 
 ```txt
-Continue: raw slot presence, no selected candidate or atomic hydration
-Projection: CPU mapping omits CRT curve
+Projection: CPU pointer mapping omits CRT curve
 Commands: browser callbacks mutate live state
 Clock: commands are outside fixed-step scheduling
 Combat: deleted captured entities can still act
 Terminal: won and lost can both commit
-Checkpoint: no full schema, migration, reference rebuild or resume epoch
+Lifecycle: module-owned RAF, listeners, audio, WebGL and globals lack teardown
+Checkpoint capture: no stable-boundary or full-state policy
 ```
 
 ## Validation gaps
 
 ```txt
-no menu teardown fixture
-no campaign teardown fixture
-no RAF-count fixture
-no listener-count fixture
-no audio retirement fixture
-no CRT WebGL retirement fixture
-no global revocation fixture
-no bfcache pagehide/pageshow fixture
-no restart-generation fixture
-no repeated-cycle leak fixture
+no save-candidate precedence fixture
+no malformed or foreign-candidate fixture
+no legacy summary classification fixture
+no storage-scope provenance fixture
+no route-intent fixture
+no semantic checkpoint fixture
+no atomic hydration rollback fixture
+no first resumed-frame fixture
+no browser Continue smoke
 ```
 
 ## Do not claim
 
-Do not claim menu or campaign teardown, navigation safety, restart safety, bfcache safety, WebGL retirement or leak-free repeated sessions until the lifecycle fixtures pass on `main`.
+Do not claim Continue, checkpoint compatibility, migration, resume, first-frame coherence or persistence safety until the documented fixtures pass on `main`.
