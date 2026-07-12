@@ -1,24 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T04-18-44-04-00`  
+**Timestamp:** `2026-07-12T05-49-04-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
 ## Summary
 
-The menu owns a Web Audio graph through one mutable `state.audio` reference. The graph can be created and closed, but it has no session identity, context generation, state observation, resume path, callback fencing, page-lifecycle policy, transition handoff, graph lease accounting or typed result. A suspended context remains non-null, so every later `ensureAudio()` call exits without attempting `context.resume()`.
+The menu distinguishes Begin and Continue in its URL, but the campaign runtime does not read the query string or any saved state. Continue is enabled through a presence-only scan across three legacy keys. Every launch constructs the same default campaign, and the only terminal save payload is written on victory without schema, version, commit result or later hydration.
 
 ## Plan ledger
 
-**Goal:** define one lifecycle authority for menu audio without changing runtime behavior in this documentation pass.
+**Goal:** define one authoritative campaign bootstrap transaction without changing runtime behavior in this documentation pass.
 
 - [x] Compare the full Publish inventory with central ledgers.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Skip `IntoTheMeadow` and `HorrorCorridor` after detecting newer concurrent repo-local audits.
-- [x] Select only `PhantomCommand`.
-- [x] Inspect `src/menu/graveyard-menu.js`, menu HTML, static checks, current docs and registry.
-- [x] Identify the complete loop, domains, all 20 implemented kits and their services.
-- [x] Trace context creation, ambience nodes, tone voices, delayed close, transition and RAF.
-- [x] Define lifecycle commands, leases, results, observations and fixture gates.
+- [x] Confirm nine eligible repositories have central ledger and root `.agent` coverage.
+- [x] Select only `PhantomCommand` as the oldest eligible repository.
+- [x] Inspect menu storage scanning, transition routing, campaign startup, fixed-step state, terminal persistence, restart and public host exposure.
+- [x] Identify the complete interaction loop, domains, all 20 implemented kits and offered services.
+- [x] Trace every available save key and every campaign storage read/write.
+- [x] Define launch intent, save envelope, migration, quarantine, hydration, commit result and frame-proof boundaries.
 - [x] Change documentation only.
 - [ ] Implement and execute the authority.
 
@@ -28,9 +28,9 @@ The menu owns a Web Audio graph through one mutable `state.audio` reference. The
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new/ledger-missing/root-agent-missing eligible repositories: 0
-IntoTheMeadow: skipped because repo-local documentation advanced during this run
-HorrorCorridor: skipped because repo-local documentation advanced during this run
-PhantomCommand: selected as next oldest stable eligible repository
+oldest eligible central timestamp: PhantomCommand at 2026-07-12T04-18-44-04-00
+selected repository: LuminaryLabs-Publish/PhantomCommand
+excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
 ## Complete interaction loop
@@ -38,98 +38,125 @@ PhantomCommand: selected as next oldest stable eligible repository
 ```txt
 menu module evaluation
   -> create source canvas, CRT renderer and graveyard art
-  -> read settings and save presence
-  -> attach pointer, keyboard and hidden-button listeners
-  -> start recursive RAF
+  -> read settings
+  -> scan SAVE_KEYS in localStorage and sessionStorage
+  -> mark Continue enabled when any stored value is truthy
+  -> install input listeners and recursive RAF
   -> publish window.PhantomMenu
 
-audio startup
-  -> first pointerdown or keydown calls ensureAudio
-  -> if ambience false or state.audio non-null, return
-  -> create AudioContext, master gain, drone oscillator and looping wind buffer
-  -> start drone and wind
-  -> store context/master/drone/wind
-
-UI tone
-  -> ensureAudio
-  -> create oscillator and gain
-  -> connect to master
-  -> start/stop oscillator
-  -> no voice result or explicit disconnect receipt
-
-ambience disable
-  -> state.audio = null
-  -> ramp old master to zero
-  -> schedule old context.close after 300 ms
-
-transition
-  -> fade for 0.95 s
+Begin Campaign
+  -> beginTransition("./game.html?campaign=new")
+  -> fade
   -> assign window.location.href
-  -> RAF/listeners/audio have no explicit pre-navigation retirement
+
+Continue
+  -> beginTransition("./game.html?campaign=continue")
+  -> fade
+  -> assign window.location.href
+
+campaign module evaluation
+  -> create source canvas and CRT renderer
+  -> construct authored rings, pads, waves and archetypes
+  -> construct camera, input and default mutable state
+  -> create six default player units
+  -> ignore location.search
+  -> read no save key
+  -> start recursive fixed-step RAF
+  -> publish window.GameHost
+
+campaign victory
+  -> set won and terminal message
+  -> write phantomCommand.save with scene, souls and wave
+  -> return no persistence result
+  -> render terminal overlay
 ```
 
 ## Source-backed findings
 
 ```txt
-context creation is gesture-adjacent: yes
-context.state observation: no
-context.resume call: no
-context suspend policy: no
-context generation: no
-statechange listener: no
-visibilitychange listener: no
-pagehide listener: no
-pageshow/bfcache restore handler: no
-navigation handoff: no
-delayed-close timer identity/cancellation: no
-ambience graph lease: no
-UI-tone voice registry: no
-typed lifecycle result: no
-audio observation/journal: no
+menu launch URLs: campaign=new and campaign=continue
+campaign query parsing: absent
+campaign storage reads: absent
+save-key precedence: absent
+candidate parse result: absent
+schema/version: absent
+migration: absent
+invalid save quarantine: absent
+new-run reset policy: absent
+runtime hydration: absent
+entity reference validation after hydrate: absent
+entity counter reseeding after hydrate: absent
+save commit result: absent
+resume observation: absent
+first resumed frame receipt: absent
 ```
 
-### Suspended-context trap
+### Presence-only Continue admission
+
+`hasCampaignSave()` checks these keys:
 
 ```txt
-state.audio exists
-  -> AudioContext becomes suspended
-  -> later pointer/key action calls ensureAudio()
-  -> function returns because state.audio is non-null
-  -> context.resume() is never attempted
-  -> settings can still display ambience enabled
+phantomCommand.save
+nexus.sceneSnapshot
+phantom.command.campaign
 ```
 
-### Toggle churn
+For each key it accepts any truthy localStorage or sessionStorage string. It does not parse JSON, identify the producer, check a scene, validate a version or prove compatibility with the current campaign module.
+
+### Begin and Continue collapse
 
 ```txt
-ambience off
-  -> old context scheduled to close in 300 ms
-  -> state.audio cleared immediately
+Begin
+  -> game.html?campaign=new
 
-ambience on before timer fires
-  -> new context and graph created
-  -> old context remains live until timer
-  -> no generation or timer lease distinguishes the two graphs
+Continue
+  -> game.html?campaign=continue
+
+campaign-scene.js
+  -> never reads location.search
+  -> never reads storage
+  -> always initializes souls=145, core=24, wave=0
+  -> always creates the same six player units
 ```
 
-### Navigation and bfcache
+The routes are visually distinct but behaviorally equivalent at campaign bootstrap.
 
-The transition changes `window.location.href` after the fade. There is no explicit menu-session stop, audio graph retirement, listener removal or RAF cancellation before navigation. Browser unload may eventually reclaim resources, but the runtime has no result proving retirement and no bfcache policy.
+### Winning save is not a checkpoint
+
+The terminal write contains only:
+
+```json
+{"scene":"grave-ring","souls":0,"wave":0}
+```
+
+The actual values vary, but the shape omits core health, wave-active state, spawn queue, units, towers, projectiles, effects, selection, pad selection, tower type, pause state, camera, time, accumulator, entity counters, schema version, content fingerprint and commit revision. No source consumes even this minimal payload.
+
+### New-run semantics are also undefined
+
+A Begin launch does not clear, replace or supersede an older save. Returning to the menu can therefore continue to display `BOUND` even after choosing Begin. There is no policy defining whether new-run admission must archive, retain or remove the predecessor save.
+
+### Restart semantics
+
+The campaign `R` key calls `location.reload()`. The current query remains in the URL, but because launch intent is ignored, reload always reconstructs the default campaign. It is neither a typed new-run transaction nor a resumed checkpoint transaction.
 
 ## Domains in use
 
 ```txt
-static route and source-canvas shell
-menu selection, panels, settings, save presence and fade transition
+static menu and campaign route shells
+menu selection panels settings save presence and fade transition
+campaign launch-intent parsing and bootstrap admission gap
+save key ownership envelope validation migration quarantine and commit gap
+campaign state construction and runtime hydration gap
 procedural graveyard source rendering
-CRT WebGL context/program/buffer/texture and projection
-Web Audio context, ambience, UI tone and settings adapter
-pointer, keyboard and hidden-button input
-recursive menu RAF and document lifecycle
-campaign content, state, actions, fixed-step simulation and rendering
-public menu/campaign host projection
-phase, command, terminal, lifecycle and checkpoint authority gaps
-source checks, static build, Pages and audit tracking
+CRT WebGL context program buffer texture and projection
+Web Audio ambience and UI tone lifecycle
+pointer keyboard wheel and browser navigation interaction
+campaign rings lanes pads waves economy core and terminal state
+selection building orders pause camera and fixed-step simulation
+unit tower projectile combat reward and terminal mutation
+CPU world HUD minimap and overlay rendering
+public menu and campaign host capability projection
+source checks static build Pages deployment and audit tracking
 ```
 
 ## Implemented kits
@@ -160,67 +187,78 @@ construct-sequence-update-kit
 ## Offered services
 
 ```txt
-menu routing, fade and hidden-button activation
+menu routing selection panels fade and hidden-button activation
 settings persistence and CRT/ambience selection
-save-presence scanning
+presence-only save scanning across legacy keys and storage scopes
 procedural graveyard drawing
-AudioContext creation, drone/wind ambience and UI tones
-CRT shader resources, source upload, contain/curve presentation
-campaign defaults, selection, construction, orders, waves, pause and camera
-fixed-step spawn, AI, movement, combat, reward and terminal mutation
-world, HUD, minimap and overlays
-mutable public host read/mutation
+AudioContext ambience and UI tones
+CRT context shader program buffer texture upload and source projection
+default campaign content and mutable state construction
+selection building orders wave start pause camera and restart
+fixed-step spawning AI movement targeting combat rewards and terminal mutation
+minimal victory save write
+world HUD minimap pause and terminal overlay rendering
+mutable public host read and direct mutation
 construction intro sequencing
-source checks, build and Pages deployment
+source checks static build and GitHub Pages deployment
 ```
 
 ## Required parent domain
 
 ```txt
-phantom-command-menu-audio-lifecycle-authority-domain
+phantom-command-campaign-bootstrap-resume-authority-domain
 ```
 
 ## Candidate kits
 
 ```txt
-phantom-command-audio-session-id-kit
-phantom-command-audio-context-generation-kit
-phantom-command-audio-start-command-kit
-phantom-command-audio-gesture-admission-kit
-phantom-command-audio-context-state-observation-kit
-phantom-command-audio-context-resume-kit
-phantom-command-ambience-graph-lease-kit
-phantom-command-ui-tone-voice-lease-kit
-phantom-command-audio-settings-adapter-kit
-phantom-command-visibility-audio-policy-kit
-phantom-command-pagehide-audio-retirement-kit
-phantom-command-transition-audio-handoff-kit
-phantom-command-audio-stop-command-kit
-phantom-command-audio-retirement-result-kit
-phantom-command-delayed-close-timer-lease-kit
-phantom-command-stale-audio-callback-rejection-kit
-phantom-command-audio-observation-kit
-phantom-command-audio-journal-kit
-phantom-command-suspended-context-resume-fixture-kit
-phantom-command-audio-toggle-churn-fixture-kit
-phantom-command-audio-bfcache-fixture-kit
-phantom-command-transition-audio-teardown-smoke-kit
+phantom-command-campaign-launch-intent-kit
+phantom-command-save-key-policy-kit
+phantom-command-save-envelope-schema-kit
+phantom-command-save-version-kit
+phantom-command-save-canonicalization-kit
+phantom-command-save-parse-result-kit
+phantom-command-save-validation-kit
+phantom-command-save-migration-kit
+phantom-command-save-quarantine-kit
+phantom-command-new-run-reset-policy-kit
+phantom-command-continue-admission-kit
+phantom-command-bootstrap-command-kit
+phantom-command-bootstrap-id-kit
+phantom-command-bootstrap-generation-kit
+phantom-command-runtime-hydration-kit
+phantom-command-entity-reference-validation-kit
+phantom-command-entity-id-reseed-kit
+phantom-command-bootstrap-commit-kit
+phantom-command-bootstrap-result-kit
+phantom-command-save-commit-kit
+phantom-command-save-commit-result-kit
+phantom-command-bootstrap-observation-kit
+phantom-command-bootstrap-journal-kit
+phantom-command-first-resumed-frame-kit
+phantom-command-malformed-save-fixture-kit
+phantom-command-wrong-key-save-fixture-kit
+phantom-command-new-continue-parity-fixture-kit
+phantom-command-resume-frame-fixture-kit
+phantom-command-menu-campaign-route-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-one active audio generation per menu session
-non-null graph does not imply running context
-every audible start/resume requires an accepted result
-every graph node and delayed timer has a lease
-predecessor-generation timers cannot affect the active graph
-pagehide/navigation retires or explicitly transfers audio
-bfcache restore revalidates document and context state
-settings UI cites actual admitted audio state
-static checks do not substitute for browser audio proof
+one explicit launch intent per campaign generation
+Continue cannot be admitted from presence alone
+only one canonical save key and precedence policy is active
+invalid or incompatible payloads never partially hydrate runtime state
+new-run handling of predecessor saves is explicit
+hydration validates all entity references and reseeds all ID counters
+bootstrap commits atomically or leaves the predecessor generation unchanged
+save writes return a durable commit result
+menu state cites validated resume capability, not raw key presence
+first visible resumed frame cites bootstrap ID and campaign generation
+static token checks do not substitute for route/storage/browser proof
 ```
 
 ## Validation boundary
 
-Documentation only. Audio output, Web Audio nodes, menu behavior, navigation, shaders, package scripts, dependencies and deployment were not changed.
+Documentation only. Campaign behavior, persistence, rendering, audio, package scripts, dependencies and deployment were not changed.
