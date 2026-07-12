@@ -1,64 +1,56 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T07-29-32-04-00`
+**Timestamp:** `2026-07-12T09-28-05-04-00`
 
 ## Summary
 
-The newest documented gap is menu audio activation and lifecycle authority. The menu can construct ambience and UI-tone nodes, but it has no context-state recovery, graph generation, delayed-work ownership or ordered retirement.
+The newest documented gap is menu pointer-hit admission. The runtime computes valid hit and miss information, but the `pointerdown` path executes the previously selected command even when the current event hit no actionable target.
 
 ## Plan ledger
 
-**Goal:** keep audio activation, runtime state and teardown explicit while preserving campaign, command, render, combat and persistence gates.
+**Goal:** preserve keyboard selection while making pointer execution require a current, generation-bound target.
 
-- [ ] Trusted user-activation evidence.
-- [ ] Context and graph generation identity.
-- [ ] AudioContext state observation and `statechange` handling.
-- [ ] Suspended/interrupted context resume transaction.
-- [ ] Closed/failed context replacement policy.
-- [ ] Complete node and transient-tone registry.
-- [ ] Delayed close timer identity and cancellation.
-- [ ] Rapid-toggle overlap prevention.
-- [ ] Visibility, pagehide and navigation retirement.
-- [ ] Typed create/resume/suspend/stop/dispose results.
-- [ ] Audio diagnostics and bounded journal.
-- [ ] Real-browser activation, interruption and teardown fixtures.
-- [ ] Retain campaign bootstrap/resume and all downstream authority gates.
+- [ ] Pointer-event identity.
+- [ ] Surface and panel generation identity.
+- [ ] Selection revision identity.
+- [ ] Typed source-coordinate projection result.
+- [ ] Typed menu and settings hit-test results.
+- [ ] Pointer activation admission.
+- [ ] Explicit miss and outside-surface no-op results.
+- [ ] Stale hit-result rejection.
+- [ ] Disabled-target result.
+- [ ] Pointer action observation and bounded journal.
+- [ ] Background, letterbox and settings-panel miss fixtures.
+- [ ] Real-browser pointer-target smoke.
+- [ ] Retain audio, bootstrap, host, render, combat and checkpoint gates.
 
-## Audio lifecycle gaps
+## Pointer-hit gaps
 
 ```txt
-context state observation: absent
-context statechange subscription: absent
-resume path: absent
-suspend policy: absent
-trusted activation receipt: absent
-context generation: absent
-graph generation: absent
-complete node registry: absent
-transient tone ownership: absent
-delayed close task identity: absent
-delayed close cancellation: absent
-rapid replacement fence: absent
-visibilitychange adapter: absent
-pagehide adapter: absent
-navigation retirement: absent
-module disposal API: absent
-typed lifecycle results: absent
-audio observation/journal: absent
-browser lifecycle fixtures: absent
+pointer command ID: absent
+surface generation: absent
+panel generation: absent
+selection revision fence: absent
+typed coordinate projection: absent
+typed Hit/Miss result: absent
+pointer miss rejection: absent
+letterbox miss rejection: absent
+settings-panel miss rejection: absent
+stale target rejection: absent
+disabled-target result: absent
+pointer action journal: absent
+browser target fixtures: absent
 ```
 
 ## Concrete risks
 
 ```txt
-browser-suspended audio can remain permanently silent because ensureAudio() returns on non-null state.audio
-closed or interrupted contexts can remain represented as current
-rapid ambience off/on can overlap old and new graph generations
-stale delayed close callbacks have no generation fence
-transient tones and intermediate nodes are not registered for disposal
-navigation can transfer page ownership without an explicit audio terminal result
-settings can display ambience enabled while no running context is proven
-unrelated keydown events can attempt audio activation before command classification
+first click on any canvas background can start Begin Campaign
+clicking a letterbox margin can activate the selected menu item
+clicking between rows can activate the previously selected row
+settings panel background can toggle the selected setting
+hovering one row and clicking elsewhere can execute the hovered row
+visual selection is incorrectly treated as current pointer targeting evidence
 ```
 
 ## Retained gaps
@@ -71,9 +63,10 @@ campaign phase does not fence commands
 commands are not fixed-step scheduled
 combat liveness and exclusive terminal result remain unimplemented
 runtime RAF/listener/WebGL lifecycle remains unowned
+menu audio activation and lifecycle remain unimplemented
 full checkpoint capture and replay remain incomplete
 ```
 
 ## Completion boundary
 
-Do not claim audio activation or lifecycle correctness because nodes were constructed or `state.audio` is non-null. Completion requires observed context state, generation-safe transactions, ordered teardown and real-browser evidence.
+Do not claim pointer-target correctness because `menuHitIndex()` or `panelHitIndex()` exists. Completion requires miss-safe admission, current target identity, stale-result rejection and browser evidence.
