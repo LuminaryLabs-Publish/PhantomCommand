@@ -1,62 +1,59 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T09-28-05-04-00`
+**Timestamp:** `2026-07-12T11-40-50-04-00`
 
 ## Summary
 
-This run changed documentation only. Source inspection proves that source-coordinate containment and row hit tests exist, but the canvas `pointerdown` path activates the current selection after a miss. No executable pointer-target or miss-safety fixture currently exists.
+This run changed documentation only. Source inspection proves that containment metadata exists, but campaign pointer handlers do not use it before state or camera mutation. It also proves that visible CRT curvature and CPU input projection do not share one inverse-compatible transform.
 
 ## Plan ledger
 
-**Goal:** distinguish coordinate projection and visual selection from admitted pointer targeting.
+**Goal:** distinguish source-coordinate calculation from admitted, visible-world campaign interaction.
 
-- [x] Inspect `screenToSource()` contain projection and `inside` classification.
-- [x] Inspect `menuHitIndex()` and `panelHitIndex()`.
-- [x] Inspect pointer move and pointer down paths.
-- [x] Inspect keyboard activation and hidden-button activation separately.
-- [x] Confirm pointer miss results are discarded before action execution.
-- [x] Confirm settings-panel misses execute the current selected row.
-- [x] Document command, hit-result, generation, observation and fixture requirements.
+- [x] Inspect `screenToSource()` containment and `inside` classification.
+- [x] Inspect CRT shader contain and curve transforms.
+- [x] Inspect campaign point selection, rectangle selection, orders, pan and wheel paths.
+- [x] Confirm outside-surface coordinates reach `screenToWorld()` and mutation owners.
+- [x] Confirm camera/display generations and typed results are absent.
+- [x] Document authority, command, result, observation and fixture requirements.
 - [ ] Execute fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-canvas covers the viewport
-source frame is 480x270
+campaign source frame is 640x360
 renderer uses contain projection
 screenToSource returns x, y and inside
-letterbox coordinates produce inside=false
-menuHitIndex returns -1 outside actionable rows
-panelHitIndex returns -1 outside settings rows
-pointer move only updates selection after a hit
-no-panel pointerdown always calls activateMain(current selection)
-settings pointerdown always calls activatePanel(current selection)
-keyboard Enter/Space intentionally activates current selection
+letterbox coordinates can return out-of-range x/y with inside=false
+campaign handlers retain the flag but do not admit against it
+right-click always calls order(screenToWorld(pointer))
+left drag can select from outside-surface coordinates
+middle drag mutates camera from source-coordinate deltas
+wheel mutates zoom and camera around the projected point
+visible CRT mode applies curveUv before texture sampling
+CPU screenToSource does not invert curveUv
 ```
 
 ## Existing checks prove
 
 ```txt
-menu and campaign HTML/module references exist
-menu labels and campaign URLs exist
-PhantomMenu and GameHost globals exist
-CRT and campaign source tokens exist
-static build copies source files
+campaign HTML and module references exist
+campaign source contains expected rings, lanes, content and host tokens
+CRT source contains expected texture-upload and resolution tokens
+static build copies deployable source files
 ```
 
 ## Existing checks do not prove
 
 ```txt
-background pointer misses are inert
-letterbox pointer misses are inert
-between-row clicks are inert
-settings-panel misses are inert
-pointer hit belongs to current surface or panel generation
-stale hit results are rejected
-disabled targets return typed results
-pointer result correlates with route or settings revision
-keyboard and pointer admission remain distinct
+letterbox selection/order/pan/zoom are inert
+CRT-enabled input matches visible pixels
+source-to-world projection uses a current camera revision
+drag and pan have bounded gesture ownership
+stale display, camera or gesture results are rejected
+campaign pointer commands return typed terminal results
+applied results correlate with visible frames
+local and Pages behavior match
 ```
 
 ## Change boundary
@@ -66,7 +63,8 @@ runtime source changed: no
 menu behavior changed: no
 campaign behavior changed: no
 pointer behavior changed: no
-keyboard behavior changed: no
+camera behavior changed: no
+simulation changed: no
 rendering changed: no
 audio changed: no
 persistence changed: no
@@ -78,26 +76,25 @@ branch created: no
 pull request created: no
 npm run check: not run
 npm run build: not run
-browser pointer smoke: not run
+browser campaign-pointer smoke: not run
+Pages campaign-pointer smoke: not run
 ```
 
 ## Required fixtures
 
 ```txt
-fixture:pointer-background-miss
-fixture:pointer-letterbox-left-right-miss
-fixture:pointer-letterbox-top-bottom-miss
-fixture:pointer-between-row-miss
-fixture:pointer-disabled-target
-fixture:pointer-settings-background-miss
-fixture:pointer-settings-outside-miss
-fixture:pointer-stale-surface-generation
-fixture:pointer-stale-panel-generation
-fixture:pointer-selection-revision
-fixture:pointer-hit-action-correlation
-smoke:menu-pointer-target-browser
-smoke:menu-keyboard-pointer-parity
-smoke:pages-pointer-target
+fixture:campaign-letterbox-point-noop
+fixture:campaign-letterbox-order-noop
+fixture:campaign-letterbox-pan-noop
+fixture:campaign-letterbox-wheel-noop
+fixture:campaign-drag-boundary-policy
+fixture:crt-curve-inverse-roundtrip
+fixture:display-generation-stale-rejection
+fixture:camera-revision-stale-rejection
+fixture:gesture-lease-cancellation
+fixture:campaign-pointer-command-frame-correlation
+smoke:campaign-pointer-browser
+smoke:campaign-pointer-pages
 ```
 
-No pointer-target correctness, miss safety, stale-result rejection or pointer-to-action correlation claim is made.
+No campaign pointer correctness, visible-pixel parity, stale-result rejection, gesture ownership or deployment-readiness claim is made.
