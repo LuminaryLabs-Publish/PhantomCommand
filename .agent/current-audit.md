@@ -1,126 +1,138 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T13-59-50-04-00`  
-**Repository:** `LuminaryLabs-Publish/PhantomCommand`
+**Timestamp:** `2026-07-12T16-00-03-04-00`  
+**Repository:** `LuminaryLabs-Publish/PhantomCommand`  
+**Status:** `menu-pointer-hit-admission-authority-audited`
 
 ## Summary
 
-The current audit isolates Campaign Bootstrap and Continue Resume Authority. `graveyard-menu.js` enables Continue when any configured local or session storage key contains any truthy string and navigates to `game.html?campaign=continue`. `campaign-scene.js` never consumes the query, never reads a save and always constructs the same default campaign. The only campaign writer runs after victory and stores an incomplete unversioned payload.
+The current audit isolates Menu Pointer-Hit Admission Authority. `pointerdown` calculates a main-menu or settings hit, updates selection only when the hit succeeds, and then unconditionally executes the current selection. A failed hit therefore uses stale selection as action evidence.
+
+The CRT renderer visibly curves the source image when enabled. Pointer projection reverses aspect containment only and does not invert the curve, so the visible and logical control geometries are not governed by one transform revision.
 
 ## Plan ledger
 
-**Goal:** make menu save admission, New/Continue launch, complete campaign construction and the first visible frame one typed, revisioned transaction.
+**Goal:** make pointer-sourced menu actions require current visible-control hit evidence and produce one typed terminal result with first-visible-frame proof.
 
-- [x] Compare all ten accessible Publish repositories.
-- [x] Exclude `TheCavalryOfRome`.
-- [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Select only `PhantomCommand` as the oldest eligible central-ledger entry.
-- [x] Inspect save keys, storage scopes, launch URLs, default construction, victory persistence and checks.
-- [x] Identify the complete interaction loop, domains, 20 implemented kits and offered services.
-- [x] Define save probing, schema/versioning, migration, candidate hydration, bootstrap results and frame receipts.
-- [x] Change documentation only on `main`.
-- [ ] Implement and execute the authority.
+- [x] Compare all eligible Publish repositories and select only `PhantomCommand`.
+- [x] Inspect menu geometry, CRT projection, pointer listeners, panels, keyboard/accessibility activation and checks.
+- [x] Identify the complete interaction loop and active domains.
+- [x] Preserve all 20 implemented kits and offered services.
+- [x] Define pointer, geometry, hit, command, result and frame-proof boundaries.
+- [x] Add timestamped tracker and system audits.
+- [x] Refresh root `.agent` state and central tracking.
+- [x] Push only to `main`; create no branch or pull request.
+- [ ] Implement and execute the authority later.
 
-## Selection state
+## Selection
 
 ```txt
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new/ledger-missing/root-agent-missing eligible repositories: 0
 selected repository: LuminaryLabs-Publish/PhantomCommand
-selection reason: oldest eligible central ledger and highest queued unimplemented authority
-prior central timestamp: 2026-07-12T11-48-43-04-00
+selection reason: oldest eligible synchronized central-ledger entry
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
 ## Complete interaction loop
 
 ```txt
-menu startup
-  -> read menu settings
-  -> probe phantomCommand.save, nexus.sceneSnapshot and phantom.command.campaign
-  -> check both localStorage and sessionStorage
-  -> enable Continue for any truthy bytes
-  -> retain no matched key, scope, version or fingerprint
+menu boot
+  -> create 480 × 270 source canvas, graveyard art and CRT renderer
+  -> read settings and save presence
+  -> create main-menu state and optional panels
+  -> attach pointer, keyboard and hidden-button listeners
+  -> publish PhantomMenu and start RAF
 
-menu launch
-  -> Begin emits game.html?campaign=new
-  -> Continue emits game.html?campaign=continue
-  -> transition fades and navigates
+pointer hover
+  -> screenToSource reverses aspect containment
+  -> main/panel hit test runs against uncurved source rectangles
+  -> selection changes only for a successful hit
 
-campaign startup
-  -> ignore URL query
-  -> allocate rings, lanes, pads, camera, input and default state
-  -> initialize souls=145, core=24, wave=0
-  -> create six default allied units and fresh ID counters
-  -> publish GameHost and start RAF
+main pointer down
+  -> compute hit index
+  -> optionally replace menu.selected
+  -> activateMain(menu.items[menu.selected]) regardless of hit status
 
-campaign victory
-  -> set won and terminal message
-  -> write phantomCommand.save with scene, souls and wave only
-  -> swallow storage failure
+panel pointer down
+  -> compute settings-row hit index
+  -> optionally replace state.panel.selected
+  -> activatePanel() regardless of hit status
 
-resume attempt
-  -> read no save
-  -> perform no migration or hydration
-  -> render default source canvas and CRT frame
+keyboard/accessibility
+  -> Enter/Space or hidden button activates a selected/named item directly
+  -> input source and terminal result are not recorded
+
+frame
+  -> draw source controls
+  -> contain and optionally curve through CRT shader
+  -> render fade/grain/aberration
+  -> schedule successor RAF
 ```
 
 ## Source-backed findings
 
 ```txt
-save keys probed: 3
-storage scopes probed: 2
-matched key/scope retained: no
-payload parsed by menu: no
-campaign compatibility validated: no
-launch query emitted: yes
-launch query consumed: no
-save read by campaign: no
-save payload complete: no
-schema/version/fingerprint: no
-migration policy: no
-candidate graph: no
-atomic hydration: no
-save write receipt: no
-bootstrap revision: no
-visible restored-frame acknowledgement: no
-resume fixtures: no
+main-menu item count: 4
+settings row count: 4
+main menu x bounds: 55..245
+main row top: 119 + index*22
+main row height: 18
+settings x bounds: 102..378
+settings row top: 110 + index*23
+settings row height: 18
+
+main miss terminal rejection: absent
+settings miss terminal rejection: absent
+letterbox rejection before dispatch: absent
+primary button policy: absent
+isPrimary policy: absent
+pointer capture/cancel: absent
+pointer down/up sequence: absent
+CRT inverse projection: absent
+surface/layout/panel revisions: absent
+typed hit result: absent
+typed action result: absent
+first visible action-frame acknowledgement: absent
+pointer behavior fixtures: absent
 ```
 
-### Save presence is not save admissibility
+### Main-menu miss executes predecessor selection
 
-`hasCampaignSave()` returns true for any truthy value under any configured key in either storage scope. Malformed JSON, unrelated legacy state or an incomplete payload can mark Continue as `BOUND`.
+The pointer listener calls `activateMain(menu.items[menu.selected])` after the hit test whether or not `menuHitIndex` returned a control. Empty canvas, row gaps and contained-source misses can execute the previously hovered or keyboard-selected item.
 
-### New and Continue are the same runtime path
+### Settings miss mutates predecessor row
 
-The campaign module never reads `location.search`, `URLSearchParams` or a launch command. Both menu choices create the same default state, entities, camera and counters.
+When a panel is open, pointer-down always calls `activatePanel()`. A miss in the settings panel can toggle the previously selected setting or close the panel.
 
-### The victory payload cannot reconstruct the campaign
+### Containment is informative, not authoritative
 
-The write omits core health, active-wave state, spawn queue, units, towers, pad occupancy, projectiles, selection, camera, simulation time, phases and next-ID counters.
+`screenToSource()` returns `inside=false` for letterbox pixels. Hit testing returns `-1`, but dispatch still occurs. The containment result is not an action-admission fence.
 
-### Storage success is not reported
+### Visible CRT geometry is not input geometry
 
-The victory write is wrapped in a silent `try/catch`. The UI and future menu receive no typed result indicating whether bytes were committed or which save is valid.
+The shader uses `curveUv()` when CRT is enabled. The input transform reverses only aspect containment. No shared immutable geometry or inverse curve links the displayed control to the hit test.
+
+### Existing checks do not execute input
+
+`scripts/check-menu.mjs` verifies source tokens. It does not create a browser, dispatch pointer events, compare visible/logical geometry or assert zero mutation after rejected input.
 
 ## Domains in use
 
 ```txt
 static menu and campaign route shells
 menu settings, save presence, selection, panels, fade and navigation
-campaign launch intent and route admission
-browser storage capability, key ownership and scope selection
-save schema, version, fingerprint, validation and migration
-new-session default candidate construction
-continue-session candidate hydration and atomic commit
-campaign rings, lanes, pads, units, towers, economy and camera
-selection, build, orders, waves, pause and restart
-fixed-step spawning, movement, targeting, projectiles, damage, rewards and terminal state
-procedural graveyard and campaign world/HUD/minimap rendering
-CRT WebGL presentation and visible-frame acknowledgement
-public PhantomMenu and GameHost capabilities
-runtime-session and browser-resource lifecycle
+viewport-to-source projection and containment
+CRT curved visual presentation
+pointer, keyboard and hidden accessible control input
+menu and settings control layout/hit testing
+route and panel action dispatch
+Web Audio activation, ambience and UI tones
+campaign bootstrap, state, fixed-step combat and persistence
+campaign rendering, pointer/camera control and public host
+procedural graveyard, HUD, minimap and CRT rendering
+WebGL resource lifecycle
 source checks, static build, Pages deployment and audit tracking
 ```
 
@@ -152,78 +164,100 @@ construct-sequence-update-kit
 ## Offered services
 
 ```txt
-menu routing, selection, panels, settings persistence, save-presence scanning, fade and hidden-button activation
-pointer, keyboard, wheel, drag, focus and route interactions
-procedural graveyard and campaign source rendering
-WebGL compile/link, buffer/texture upload, containment, curve, grain, fade and draw
+menu drawing, selection, settings, save-presence scanning, panels, fade and routing
+viewport containment, source-coordinate projection and CRT curved presentation
+pointer move/down/leave, keyboard and hidden-button activation
 AudioContext ambience, UI tones and delayed close
-campaign state, selection, building, orders, waves, pause, camera, restart and navigation
+campaign state, selection, building, orders, waves, pause, camera and restart
 fixed-step spawning, movement, targeting, projectiles, damage, rewards and terminal mutation
+world, HUD, minimap and overlay rendering
 public state snapshots and direct mutation capabilities
-construction intro sequencing
+construction intro scheduling and piece-state updates
 source checks, static build and GitHub Pages deployment
 ```
 
-## Required parent domain
+The exact per-kit service map is retained in the current tracker and machine registry.
+
+## Required authority
 
 ```txt
-phantom-command-campaign-bootstrap-continue-resume-authority-domain
+phantom-command-menu-pointer-hit-admission-authority-domain
+```
+
+### Required transaction
+
+```txt
+physical input
+  -> identify source and pointer sequence
+  -> enforce primary-pointer/button policy
+  -> cite current surface, transform, layout and panel revisions
+  -> project through visible geometry
+  -> produce typed containment and hit results
+  -> reject miss/stale/outside/unsupported paths with zero mutation
+  -> create one MenuActionCommand only from admitted evidence
+  -> commit one MenuActionResult
+  -> acknowledge the first visible menu frame
 ```
 
 ## Candidate kits
 
 ```txt
-campaign-launch-intent-kit
-campaign-launch-intent-id-kit
-campaign-launch-intent-admission-kit
-campaign-save-key-registry-kit
-campaign-save-probe-result-kit
-campaign-save-schema-kit
-campaign-save-version-kit
-campaign-save-fingerprint-kit
-campaign-save-read-result-kit
-campaign-save-validation-kit
-campaign-save-migration-kit
-campaign-save-candidate-kit
-campaign-hydration-plan-kit
-campaign-hydration-result-kit
-campaign-new-session-bootstrap-kit
-campaign-continue-session-bootstrap-kit
-campaign-bootstrap-command-kit
-campaign-bootstrap-result-kit
-campaign-bootstrap-revision-kit
-stale-campaign-bootstrap-rejection-kit
-campaign-bootstrap-journal-kit
-campaign-visible-frame-ack-kit
-campaign-save-browser-fixture-kit
-campaign-continue-browser-fixture-kit
-campaign-invalid-save-fixture-kit
-campaign-pages-resume-smoke-kit
+menu-input-source-kind-kit
+menu-pointer-sample-id-kit
+menu-pointer-sequence-kit
+menu-pointer-button-policy-kit
+menu-pointer-primary-policy-kit
+menu-surface-generation-kit
+menu-viewport-transform-revision-kit
+menu-crt-inverse-projection-kit
+menu-containment-result-kit
+menu-control-layout-revision-kit
+menu-control-id-kit
+menu-hit-test-result-kit
+menu-panel-generation-kit
+menu-action-command-kit
+menu-action-admission-kit
+menu-action-result-kit
+menu-pointer-capture-kit
+stale-menu-pointer-rejection-kit
+duplicate-menu-action-rejection-kit
+menu-visible-frame-ack-kit
+menu-input-observation-kit
+menu-input-journal-kit
+menu-pointer-miss-fixture-kit
+menu-panel-miss-fixture-kit
+menu-crt-projection-fixture-kit
+menu-accessibility-parity-fixture-kit
+menu-pages-input-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-Storage presence never equals save validity.
-New and Continue return distinct typed results.
-Every admitted save identifies one key, scope, schema, version and fingerprint.
-Hydration constructs and validates a detached candidate before live mutation.
-Failed hydration leaves the live/default graph untouched.
-IDs and references remain valid after resume and subsequent ticks.
-The first canvas, HUD and GameHost read model acknowledge one bootstrap revision.
+pointer miss performs zero menu/settings/navigation mutation
+letterbox click is rejected
+settings miss never toggles stale selection
+non-primary input is rejected
+stale transform/layout/panel evidence is rejected
+one physical sequence produces at most one action result
+CRT-on and CRT-off hit geometry matches visible controls
+keyboard/accessibility activation has explicit source identity
+first visible frame cites the accepted result
 ```
 
-## Retained dependencies
+## Repo-local output
 
 ```txt
-Versioned Full Campaign Checkpoint Capture Authority
-Runtime Session Resource Lifecycle Authority
-Fixed-Step Scheduling Replay and Committed Frames
-CRT Display/Input Projection Authority
-Public Host Committed Read Model
-Campaign Phase and Action Result Authorities
+.agent/trackers/2026-07-12T16-00-03-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T16-00-03-04-00.md
+.agent/architecture-audit/2026-07-12T16-00-03-04-00-menu-pointer-hit-admission-authority-dsk-map.md
+.agent/render-audit/2026-07-12T16-00-03-04-00-crt-visible-control-hit-geometry-gap.md
+.agent/gameplay-audit/2026-07-12T16-00-03-04-00-menu-miss-stale-action-loop.md
+.agent/interaction-audit/2026-07-12T16-00-03-04-00-pointer-sample-hit-action-result-map.md
+.agent/menu-input-audit/2026-07-12T16-00-03-04-00-miss-containment-curve-contract.md
+.agent/deploy-audit/2026-07-12T16-00-03-04-00-menu-pointer-browser-fixture-gate.md
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, menu, campaign, persistence, input, camera, simulation, rendering, audio, package scripts, dependencies and deployment were not changed.
+Documentation only. Runtime, pointer, keyboard, menu, settings, navigation, audio, campaign, rendering, package scripts, dependencies and deployment were not changed. No executable pointer fixture was run.
