@@ -1,68 +1,68 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-11T23-28-29-04-00`
+**Timestamp:** `2026-07-12T01-20-00-04-00`
 
 ## Summary
 
-Preserve Continue admission as Gate 1, then remove raw `state` and `camera` references from `window.GameHost`. Public mutation must become a typed command path, and public observation must come from one immutable committed-frame record rather than independently sampled live owners.
+Preserve Continue admission and public-host quarantine as earlier gates, then unify the CRT display and pointer projection. The immediate projection ledge is a pure, immutable descriptor with matching CPU and GLSL adapters, followed by outside-region admission and browser pixel-pick fixtures.
 
 ## Plan ledger
 
-**Goal:** close the public owner-bypass path without creating a second command or frame authority.
+**Goal:** close visible/semantic coordinate drift without creating a second render, input or command authority.
 
-- [ ] Preserve the existing Continue/checkpoint Gate 1 ordering.
-- [ ] Define the supported public read and command capabilities.
-- [ ] Remove raw `state` and `camera` references from `window.GameHost`.
-- [ ] Remove direct public `startWave`, `build` and `setZoom` mutators.
-- [ ] Add command IDs, host session identity and expected run/phase revisions.
-- [ ] Validate all numeric inputs as finite and bounded.
-- [ ] Route accepted host commands through the same command authority as browser input.
-- [ ] Publish typed rejection, pending, committed and failed results.
-- [ ] Build an immutable host read model from a committed frame.
-- [ ] Correlate host observations with simulation tick, run epoch and render receipt.
-- [ ] Retain a bounded public journal with no owner handles.
-- [ ] Add host-isolation, stale-command, terminal and frame-coherence fixtures.
+- [ ] Preserve Continue/checkpoint Gate 1.
+- [ ] Preserve public-host owner quarantine and typed command admission.
+- [ ] Add one immutable projection descriptor.
+- [ ] Move contain and curve constants into the descriptor.
+- [ ] Compile CPU and GLSL adapters from the same descriptor.
+- [ ] Make pointer mapping settings-aware.
+- [ ] Return typed mapping results with projection and surface revisions.
+- [ ] Reject letterbox, pillarbox and curved-black regions.
+- [ ] Require campaign commands to consume admitted mapping results.
+- [ ] Correlate mapping, command and visible frame.
+- [ ] Add pure parity and browser pixel-pick fixtures.
 
 ## Immediate safe ledge
 
-1. Replace the current host assignment with a factory that closes over private owners.
-2. Publish explicit capability descriptors.
-3. Return `structuredClone` plus deep freeze from read methods.
-4. Remove the raw `state` and `camera` properties.
-5. Reject every mutation until a typed command gateway exists.
-6. Keep browser controls operating through existing internal functions.
-7. Add a temporary compatibility result for callers that previously expected direct mutators.
+1. Extract pure contain and curve reference functions.
+2. Add `ProjectionDescriptor` with source size, output size, CRT enablement and curve strength.
+3. Make shader uniforms and `screenToSource()` consume the descriptor.
+4. Declare `CENTER_GREEN` as the semantic sample policy.
+5. Return `MAPPED_INSIDE_VISIBLE_SOURCE` or a typed rejection.
+6. Reject campaign actions when mapping is not admitted.
+7. Add numeric parity fixtures before changing higher-level command routing.
 
 ## Full implementation sequence
 
-1. Add `src/host/host-capabilities.js`.
-2. Add `src/host/host-command-schema.js`.
-3. Add `src/host/host-command-admission.js`.
-4. Add `src/host/host-read-model.js`.
-5. Add `src/host/host-journal.js`.
-6. Introduce `hostSessionId`, `runEpoch`, `phaseRevision` and `frameId`.
-7. Refactor browser actions into reusable internal command handlers.
-8. Route public commands to those handlers through explicit capability checks.
-9. Reject non-finite zoom and coordinate values before mutation.
-10. Replace public `state` and `camera` with immutable descriptors.
-11. Publish `getCommittedState()` only after render commit.
-12. Publish `HostCommandResult` with command and frame correlation.
-13. Add teardown so old hosts reject commands after navigation or reload.
-14. Add pure fixtures and one browser smoke.
+1. Add `src/projection/projection-descriptor.js`.
+2. Add `src/projection/contain-projection.js`.
+3. Add `src/projection/curve-projection.js`.
+4. Add `src/projection/pointer-mapping-result.js`.
+5. Refactor `src/menu/crt-renderer.js` to compile render and input adapters from one descriptor.
+6. Pass menu CRT settings revision into the active descriptor.
+7. Update menu pointer paths to consume typed results.
+8. Update campaign click, drag, order, pan and wheel paths to reject outside results.
+9. Add projection and surface revisions.
+10. Add projection frame receipts.
+11. Add pure CPU/GLSL reference fixtures.
+12. Add menu and campaign browser pixel-pick smokes.
 
 ## Target files
 
 ```txt
+src/menu/crt-renderer.js
+src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-src/host/host-capabilities.js
-src/host/host-command-schema.js
-src/host/host-command-admission.js
-src/host/host-read-model.js
-src/host/host-journal.js
-tests/host-mutation-isolation.fixture.mjs
-tests/host-command-admission.fixture.mjs
-tests/host-read-model.fixture.mjs
-scripts/smoke-public-host.mjs
+src/projection/projection-descriptor.js
+src/projection/contain-projection.js
+src/projection/curve-projection.js
+src/projection/pointer-mapping-result.js
+tests/projection-reference.fixture.mjs
+tests/projection-parity.fixture.mjs
+tests/projection-revision.fixture.mjs
+scripts/smoke-menu-projection.mjs
+scripts/smoke-campaign-projection.mjs
+scripts/check-menu.mjs
 scripts/check-campaign.mjs
 package.json
 ```
@@ -70,18 +70,19 @@ package.json
 ## Required fixtures
 
 ```txt
-host object contains no raw state or camera reference
-mutating returned read model cannot mutate runtime
-unsupported capability performs zero mutation
-missing command ID is rejected
-stale host session is rejected
-stale run epoch is rejected
-stale phase revision is rejected
-NaN, Infinity and out-of-range zoom are rejected
-terminal-state wave/build commands are rejected
-accepted browser and host commands produce equivalent internal results
-getCommittedState remains unchanged between frame commits
-host frameId matches the visible render receipt
-old host rejects commands after disposal or navigation
-legacy compatibility exposes no owner handle
+contain parity for wide, tall and equal aspects
+curved parity at center, quadrants, edges and corners
+CRT-disabled menu pointer parity
+CRT-enabled menu pointer parity
+curved-black-region rejection
+campaign center and edge selection parity
+campaign right-click order parity
+campaign drag-selection parity
+wheel-anchor parity
+resize and CRT-toggle stale-result rejection
+first frame after projection revision receipt
 ```
+
+## Do not claim
+
+Do not claim pointer accuracy, CRT input parity, border rejection, zoom-anchor correctness or frame-coherent targeting until these fixtures pass on `main`.
