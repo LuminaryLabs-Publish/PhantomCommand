@@ -2,134 +2,126 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T13-59-50-04-00`
+**Last aligned:** `2026-07-12T16-00-03-04-00`  
+**Status:** `menu-pointer-hit-admission-authority-audited`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign game with a procedural graveyard menu, CRT WebGL presentation, browser audio, direct controls, fixed-step combat, persistence and public diagnostics.
+PhantomCommand is a static pixel-isometric campaign game with a procedural graveyard menu, CRT WebGL presentation, persisted settings, Web Audio, fixed-step combat, browser persistence and public diagnostics.
 
-The current audit isolates **Campaign Bootstrap and Continue Resume Authority**. The menu enables Continue when any configured storage key contains any truthy string and navigates with `campaign=continue`, but the campaign never reads the query or any save. Both New and Continue build the same default campaign, while the only save writer stores an incomplete unversioned victory payload.
+The current audit isolates Menu Pointer-Hit Admission Authority. Pointer-down performs a hit test but dispatches the previously selected main-menu item or settings row even when the hit returns `-1`. Letterbox pixels, empty graveyard space and row gaps can therefore launch routes or mutate settings. The pointer transform also does not invert the visible CRT curve.
 
 ## Plan ledger
 
-**Goal:** make New and Continue distinct, validated and observable bootstrap transactions with complete state hydration and first-visible-frame proof.
+**Goal:** require a current visible control hit before pointer-sourced menu mutation, while retaining keyboard and accessible controls as explicit non-pointer command sources.
 
-- [x] Compare the complete Publish inventory with central tracking.
+- [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Select only `PhantomCommand` as the oldest eligible central-ledger entry.
-- [x] Identify the full interaction loop, all active domains, all 20 implemented kits and services.
-- [x] Trace menu save probing, launch URLs, campaign construction, victory writes and static checks.
-- [x] Define typed launch, probe, validation, migration, hydration, bootstrap and frame results.
-- [x] Update documentation on `main`; create no branch or pull request.
-- [ ] Implement and execute the bootstrap/resume authority.
+- [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
+- [x] Select only `PhantomCommand` as the oldest eligible synchronized repository.
+- [x] Identify the complete interaction loop, domains, 20 implemented kits and services.
+- [x] Trace containment, hit, stale selection, settings mutation and CRT geometry.
+- [x] Define typed pointer, hit, action, observation and visible-frame contracts.
+- [x] Add timestamped tracker and architecture/system audits.
+- [x] Refresh required root `.agent` state.
+- [x] Push only to `main`; create no branch or pull request.
+- [ ] Runtime fixes and executable pointer fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T13-59-50-04-00/project-breakdown.md
+.agent/trackers/2026-07-12T16-00-03-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T16-00-03-04-00.md
+.agent/architecture-audit/2026-07-12T16-00-03-04-00-menu-pointer-hit-admission-authority-dsk-map.md
+.agent/render-audit/2026-07-12T16-00-03-04-00-crt-visible-control-hit-geometry-gap.md
+.agent/gameplay-audit/2026-07-12T16-00-03-04-00-menu-miss-stale-action-loop.md
+.agent/interaction-audit/2026-07-12T16-00-03-04-00-pointer-sample-hit-action-result-map.md
+.agent/menu-input-audit/2026-07-12T16-00-03-04-00-miss-containment-curve-contract.md
+.agent/deploy-audit/2026-07-12T16-00-03-04-00-menu-pointer-browser-fixture-gate.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-12T13-59-50-04-00-campaign-bootstrap-continue-resume-authority-dsk-map.md
-.agent/render-audit/2026-07-12T13-59-50-04-00-continue-save-visible-frame-truth-gap.md
-.agent/gameplay-audit/2026-07-12T13-59-50-04-00-menu-continue-default-campaign-loop.md
-.agent/interaction-audit/2026-07-12T13-59-50-04-00-launch-intent-save-hydration-result-map.md
-.agent/persistence-audit/2026-07-12T13-59-50-04-00-save-key-schema-hydration-contract.md
-.agent/deploy-audit/2026-07-12T13-59-50-04-00-continue-resume-browser-fixture-gate.md
-.agent/turn-ledger/2026-07-12T13-59-50-04-00.md
 .agent/kit-registry.json
 ```
 
-## Current interaction loop
+## Current pointer loop
 
 ```txt
-menu boot
-  -> read settings
-  -> probe three keys in localStorage/sessionStorage
-  -> enable Continue for any truthy value
-  -> perform no parse or campaign validation
+pointer move
+  -> project through aspect containment only
+  -> update selection when a control is hit
+  -> retain predecessor selection on miss
 
-menu activation
-  -> Begin navigates with campaign=new
-  -> Continue navigates with campaign=continue
+pointer down on main menu
+  -> calculate hit
+  -> optionally update selection
+  -> always activate current selected item
 
-campaign boot
-  -> ignore location.search
-  -> build default rings, pads, economy, units, IDs and camera
-  -> publish GameHost
-  -> start fixed-step RAF
+pointer down in settings
+  -> calculate row hit
+  -> optionally update selected row
+  -> always activate current selected row
 
-victory
-  -> write only scene, souls and wave
-  -> swallow storage failure
-
-Continue or reload
-  -> read no save
-  -> hydrate no state
-  -> render the default campaign
+render
+  -> draw source controls
+  -> contain and optionally curve them through CRT shader
+  -> publish no input/action/frame provenance
 ```
 
 ## Main findings
 
 ```txt
-save presence validation: absent
-save key/scope identity: absent
-campaign query consumption: absent
-new/continue behavioral distinction: absent
-complete save capture: absent
-schema/version/fingerprint: absent
-migration: absent
-atomic candidate hydration: absent
-save read/write result: absent
-bootstrap revision: absent
-first restored-frame acknowledgement: absent
-browser resume fixtures: absent
+main-menu miss can execute Begin, Continue, Settings or Credits
+settings-panel miss can toggle CRT, grain or ambience, or close the panel
+letterbox containment=false does not stop dispatch
+non-primary button and secondary pointer are not rejected
+pointer capture/cancel/down-up sequence is absent
+visible CRT curve has no inverse input projection
+static checks dispatch no pointer events
 ```
-
-## Domains and kit groups
-
-```txt
-menu and campaign route shells
-menu settings, save presence, selection, fade and navigation
-campaign launch intent and route admission
-storage capability, key ownership, schema, migration and fingerprints
-new-session bootstrap and continue-session hydration
-campaign state, commands, fixed-step simulation and terminal mutation
-procedural graveyard, campaign world, HUD, minimap and CRT presentation
-public hosts and diagnostics
-runtime-session and browser-resource lifecycle
-source checks, static build, Pages and audit tracking
-```
-
-Implemented kit count: `20`. The current audit, tracker and machine registry contain the complete per-kit service inventory.
 
 ## Required parent domain
 
 ```txt
-phantom-command-campaign-bootstrap-continue-resume-authority-domain
+phantom-command-menu-pointer-hit-admission-authority-domain
 ```
 
-It coordinates launch intent, save ownership, typed probing, schema/version/fingerprint validation, migration, detached candidate construction, atomic New/Continue commit, stale-result rejection, journals and first-visible-frame acknowledgement.
-
-## Ordered architecture queue
+Required flow:
 
 ```txt
-1. Campaign Bootstrap and Continue Resume Authority
-2. Campaign Action Result Authority
-   2a. Menu Pointer-Hit Admission Authority
-   2b. Campaign World-Pointer Admission Authority
-   2c. Public Host Owner Quarantine and Typed Command Admission
-   2d. CRT Display/Input Projection Authority
-   2e. Campaign Phase Admission Authority
-   2f. Fixed-Step Scheduling, Replay and Committed Frames
-   2g. Public Host Committed Read Model
-   2h. Combat and Exclusive Terminal Authorities
-3. Runtime Session Resource Lifecycle Authority
-   3a. Menu Audio Activation and Lifecycle Authority
-4. Versioned Full Campaign Checkpoint Capture Authority
+physical input
+  -> pointer/source identity and policy
+  -> current surface/transform/layout/panel revisions
+  -> visible-geometry projection
+  -> typed containment and hit results
+  -> zero-mutation rejection or one action command
+  -> terminal action result
+  -> first visible action-frame acknowledgement
 ```
 
-Campaign Bootstrap now has a complete audit specification but remains unimplemented. It depends on Versioned Full Campaign Checkpoint Capture for complete payloads and Runtime Session Resource Lifecycle for route-generation fencing.
+Keyboard and hidden accessible buttons must identify their own input source and must not fabricate pointer evidence.
 
-Do not treat a truthy storage value, Continue label or query string as proof of resume support. Completion requires complete versioned capture, validated hydration and a visible-frame receipt.
+## Kit census
+
+```txt
+implemented source-backed kits: 20
+planned pointer-admission authority kits: 27
+```
+
+The complete kit and offered-service inventory is in the current tracker and machine registry.
+
+## Validation boundary
+
+```txt
+runtime/menu/pointer/render behavior changed: no
+package scripts/dependencies/deployment changed: no
+npm run check: not run
+npm run build: not run
+browser/Pages pointer smoke: not run
+pointer-admission fixtures: unavailable
+branch created: no
+pull request created: no
+```
+
+Do not treat hover selection, source containment or a visible menu row as pointer admission proof. A pointer action requires a current successful hit result and one terminal action result.
