@@ -1,22 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T23-28-29-04-00`
+**Timestamp:** `2026-07-12T01-20-00-04-00`
 
 ## Summary
 
-The campaign publishes its live gameplay and camera owners through `window.GameHost`. The public surface includes raw `state` and `camera` references plus untyped `startWave`, `build` and `setZoom` functions. External same-page code can mutate gameplay, terminal, camera and presentation inputs outside the browser interaction path and outside fixed-step command ordering. `getState()` returns a detached subset, but it samples the mutable owners without a committed frame ID, run epoch, phase revision or render receipt.
+The shared CRT renderer has two projection implementations. The fragment shader maps output UV through aspect containment and then radial CRT curvature before sampling the source canvas. The CPU `screenToSource()` mapper applies containment only and has no CRT settings input. Menu hit tests and campaign commands therefore operate on semantic coordinates that do not match the displayed pixels when CRT is enabled. Campaign pointer handlers also ignore `inside`, permitting black border regions to mutate selection, orders and camera state.
 
 ## Plan ledger
 
-**Goal:** define a public host boundary that exposes immutable committed observations and routes every mutation through capability-scoped, revision-fenced commands.
+**Goal:** define one versioned projection contract consumed by WebGL presentation, CPU pointer mapping, command admission and visible-frame evidence.
 
 - [x] Compare the current Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Inspect the menu and campaign public globals.
-- [x] Trace public references and callable mutators into live runtime state.
+- [x] Inspect `src/menu/crt-renderer.js`.
+- [x] Inspect `src/menu/graveyard-menu.js`.
+- [x] Inspect `src/campaign/campaign-scene.js`.
+- [x] Trace menu and campaign pointer consumers.
 - [x] Identify the complete interaction loop, domains, kits and services.
-- [x] Define owner quarantine, command admission and committed read-model contracts.
+- [x] Define projection, admission, parity and frame-receipt contracts.
 - [ ] Implement and execute the documented fixtures.
 
 ## Selection audit
@@ -27,15 +29,15 @@ eligible non-Cavalry repositories: 9
 new or central-ledger-missing eligible repositories: 0
 root-.agent-missing eligible repositories: 0
 
-PhantomCommand     2026-07-11T21-31-19-04-00 selected oldest
-ZombieOrchard      2026-07-11T21-40-49-04-00
-TheUnmappedHouse   2026-07-11T21-48-44-04-00
-AetherVale         2026-07-11T22-02-01-04-00
-MyCozyIsland       2026-07-11T22-20-00-04-00
-PrehistoricRush    2026-07-11T22-38-54-04-00
-TheOpenAbove       2026-07-11T23-12-03-04-00
-HorrorCorridor     2026-07-11T23-18-16-04-00
-IntoTheMeadow      2026-07-11T23-22-14-04-00
+PhantomCommand     2026-07-11T23-28-29-04-00 selected oldest
+ZombieOrchard      2026-07-11T23-48-14-04-00
+TheUnmappedHouse   2026-07-12T00-01-25-04-00
+AetherVale         2026-07-12T00-10-23-04-00
+MyCozyIsland       2026-07-12T00-20-01-04-00
+PrehistoricRush    2026-07-12T00-30-49-04-00
+TheOpenAbove       2026-07-12T00-39-05-04-00
+IntoTheMeadow      2026-07-12T00-58-12-04-00
+HorrorCorridor     2026-07-12T01-08-06-04-00
 TheCavalryOfRome   excluded
 ```
 
@@ -45,143 +47,149 @@ Only `LuminaryLabs-Publish/PhantomCommand` is in scope for Publish changes.
 
 ```txt
 menu module evaluation
-  -> create source canvas, art, CRT renderer, settings and menu state
+  -> create 480x270 source canvas
+  -> create shared CRT renderer
+  -> load menu settings and save presence
   -> attach pointer, keyboard and hidden-button listeners
   -> start recursive menu RAF
   -> publish window.PhantomMenu
 
+menu frame
+  -> draw source art and UI
+  -> submit source canvas to WebGL
+  -> apply aspect containment
+  -> optionally apply CRT curvature
+  -> apply aberration, scanlines, grain, vignette and fade
+
+menu pointer
+  -> sample client coordinates
+  -> CPU contain-only screenToSource
+  -> menu/panel hit test
+  -> selection or activation
+
 campaign module evaluation
-  -> create rings, pads, archetypes, waves, camera and input owners
-  -> create mutable campaign state, entities and IDs
+  -> create 640x360 source canvas
+  -> create shared CRT renderer
+  -> create content, state, camera, input and IDs
   -> attach pointer, wheel, keyboard, keyup and blur listeners
-  -> start recursive campaign RAF
+  -> start fixed-step campaign RAF
   -> publish window.GameHost
 
-browser interaction
-  -> pointer and keyboard callbacks mutate selection, orders, wave, pause and camera
-  -> RAF samples held input and updates camera
-  -> fixed accumulator calls update(1/60)
-  -> combat, economy and terminal fields mutate
-  -> CPU canvas renders world, HUD, minimap and overlay
-  -> CRT renderer submits the source canvas
+campaign frame
+  -> integrate camera from held input
+  -> execute update(1/60) through accumulator
+  -> draw world, HUD, minimap and overlay to source canvas
+  -> submit source through contain + always-on curve
 
-public host interaction
-  -> caller reads or mutates GameHost.state and GameHost.camera directly
-  -> caller invokes startWave, build or setZoom without a command envelope
-  -> getState samples mutable state and camera independently of render commit
-  -> no command receipt, run/phase fence or frame provenance is returned
+campaign pointer
+  -> sample client coordinates
+  -> CPU contain-only screenToSource
+  -> ignore inside flag
+  -> map source point to world under current camera
+  -> select, drag-select, order, pan or zoom
 ```
 
 ## Source-backed defects
 
-### Raw gameplay owner is public
+### GLSL and CPU geometry differ
 
-`window.GameHost.state` is the same object consumed by update, rendering, input callbacks and persistence. Public code can directly change:
-
-```txt
-souls
-core
-wave
-waveActive
-spawn
-units
-towers
-projectiles
-effects
-selected
-selectedPad
-towerType
-paused
-won
-lost
-message
-```
-
-No validation, command ID, expected revision, phase check or journal row is involved.
-
-### Raw camera owner is public
-
-`window.GameHost.camera` exposes:
+The fragment shader evaluates:
 
 ```txt
-x
-z
-zoom
-targetZoom
-min
-max
-vx
-vz
+output UV
+  -> containUv
+  -> curveUv when CRT enabled
+  -> post-curve bounds check
+  -> source sample
 ```
 
-Public mutation can bypass zoom clamps, finite-number checks, camera bounds and input ordering. The camera is read by world/screen transforms and every render projection.
-
-### Public mutators are untyped
-
-The host exposes:
+The CPU mapper evaluates:
 
 ```txt
-startWave()
-build()
-setZoom(value)
+client coordinate
+  -> canvas CSS normalization
+  -> contain correction
+  -> pre-curve inside check
+  -> source coordinate
 ```
 
-These return no result. They do not accept a command ID, expected run epoch, phase revision, frame revision or caller capability. `build()` depends on mutable ambient `selectedPad` and `towerType`, while `startWave()` uses ambient campaign state.
+The CPU path never evaluates the radial curve.
 
-### Non-finite zoom is admitted
+### Menu settings change only display projection
 
-`setZoom(z)` assigns `clamp(z, min, max)`. The clamp is built from `Math.min` and `Math.max`, so `NaN` remains `NaN`. On the next RAF, `camera.zoom` becomes `NaN`, and world projection produces non-finite screen coordinates.
+Menu rendering passes `settings.crt`. `screenToSource()` receives no settings or projection descriptor. Toggling CRT changes visible geometry while pointer geometry remains contain-only.
 
-### Public terminal mutation bypasses arbitration
+### Campaign always uses the mismatched path
 
-A caller can execute:
+Campaign rendering always submits `{ crt: true }`. Its single click, drag rectangle, right-click order, middle-button pan and wheel-anchor calculations are all based on uncurved source coordinates.
 
-```js
-GameHost.state.won = true;
-```
+### Campaign ignores outside status
 
-The fixed-step update then exits early because `state.won` is true. The next render displays the victory overlay, but no terminal predicate, persistence policy, terminal result or save receipt was committed.
+`screenToSource()` returns `inside`, but campaign handlers never reject false values. The shader can also display black when the post-curve UV leaves source bounds while CPU `inside` remains true. Both letterbox/pillarbox and curved-black areas can therefore issue commands.
 
-### Readback is not a committed frame
+### Aberration has no semantic sample policy
 
-`getState()` structured-clones a subset of live state and camera fields. It includes no:
+The visible red and blue channels sample offset source coordinates while green samples the center. No declaration states which source sample owns semantic interaction. A canonical center/green policy is required.
+
+### No projection provenance exists
+
+No:
 
 ```txt
-runId
-runEpoch
-phaseRevision
-simulationTick
-frameId
-renderReceipt
-stateFingerprint
-commandSequence
+projectionId
+projectionRevision
+outputSurfaceRevision
+sourceSurfaceRevision
+crtSettingsRevision
+pointerSampleId
+mappingResultId
+semanticSamplePolicy
+cameraRevision
+visibleFrameId
+projectionFrameReceipt
+adapterFingerprint
 ```
 
-A caller can mutate `state.souls`, immediately call `getState()`, and observe the new value while the canvas still represents the prior RAF.
-
-### Menu global also lacks lifecycle identity
-
-`window.PhantomMenu` exposes `getState()` and `activate(action)` without a menu session ID or disposal fence. Its state is less dangerous because `activateMain()` still checks item enablement, but the surface remains an unversioned global owned by a module-level RAF and listeners.
+correlates input with the visible output.
 
 ## Domains in use
 
 ```txt
-static route and page shell
+static route and full-window canvas shell
 menu selection, panels, settings, audio and fade transition
 save-key discovery and Continue capability projection
-procedural graveyard art and source-canvas presentation
-CRT WebGL setup, contain mapping, upload, resize and draw
-campaign route intent and startup admission
+procedural graveyard source-canvas rendering
 campaign rings, lanes, pads, archetypes, waves, economy and core health
 selection, construction, orders, pause, camera and fixed-step simulation
-unit, tower, projectile, combat, rewards and terminal mutation
-world, HUD, minimap and terminal overlay rendering
+unit, tower, projectile, combat, reward and terminal mutation
+CPU world, HUD, minimap and terminal overlay rendering
+WebGL context, shader, program, buffer and texture lifecycle
+output-surface sizing and DPR policy
+aspect-contain source projection
+CRT curvature, aberration, scanlines, grain, vignette and fade
+client-coordinate pointer observation
+CPU screen-to-source projection
+menu and panel hit testing
+campaign screen-to-world projection
 public menu and campaign host projection
-public host capability descriptors and owner quarantine: missing
-typed public command admission and result authority: missing
-committed host read model and frame provenance: missing
-checkpoint, command, phase, combat, terminal and lifecycle authority: planned
-validation, static build, Pages deployment and central tracking
+source checks, static build, Pages deployment and central tracking
+```
+
+Missing projection domains:
+
+```txt
+projection descriptor, identity and revision
+output/source surface observations
+settings-aware projection policy
+CPU and GLSL adapter parity
+canonical semantic sample policy
+pointer sample and mapping-result identity
+outside-visible-source admission
+stale resize/settings result rejection
+camera and command correlation
+visible projection frame receipt
+bounded projection observation journal
+pure and browser parity fixtures
 ```
 
 ## Implemented kits
@@ -213,112 +221,102 @@ construct-sequence-update-kit
 
 ```txt
 menu routing, fade and hidden-button activation
-settings persistence
+settings persistence and CRT enablement
 raw save-presence scanning across three keys and two storage scopes
 procedural graveyard source-canvas drawing
 AudioContext ambience and UI tones
-CRT WebGL creation, containment mapping, texture upload and rendering
-campaign content and default-state construction
+WebGL context/program/buffer/texture creation
+source-canvas texture upload and full-screen drawing
+aspect-contain projection and CRT visual effects
+CSS-client to source-canvas contain-only mapping
+menu and settings-panel hit testing
+campaign default-state and content construction
 selection, building, orders, wave start, pause and camera control
 fixed-step spawning, AI, movement, targeting, damage, rewards and terminal mutation
 world, HUD, minimap and terminal overlay rendering
-mutable GameHost owner exposure and untyped zoom/wave/build control
+mutable GameHost owner exposure and direct zoom/wave/build mutation
 source-pattern checks, static build and GitHub Pages deployment
 ```
 
 ## Required parent domain
 
 ```txt
-phantom-command-public-host-capability-authority-domain
+phantom-command-display-input-projection-authority-domain
 ```
 
 Candidate kits:
 
 ```txt
-phantom-command-host-surface-policy-kit
-phantom-command-host-session-identity-kit
-phantom-command-host-capability-descriptor-kit
-phantom-command-host-owner-handle-quarantine-kit
-phantom-command-host-read-capability-kit
-phantom-command-host-command-capability-kit
-phantom-command-host-command-envelope-kit
-phantom-command-host-command-id-kit
-phantom-command-host-command-admission-kit
-phantom-command-host-run-epoch-fence-kit
-phantom-command-host-phase-revision-fence-kit
-phantom-command-host-finite-value-policy-kit
-phantom-command-host-command-result-kit
-phantom-command-host-committed-read-model-kit
-phantom-command-host-frame-provenance-kit
-phantom-command-host-state-fingerprint-kit
-phantom-command-host-observation-journal-kit
-phantom-command-legacy-gamehost-adapter-kit
-phantom-command-host-mutation-isolation-fixture-kit
-phantom-command-host-read-model-coherence-fixture-kit
-phantom-command-host-stale-command-fixture-kit
-phantom-command-host-terminal-command-fixture-kit
+phantom-command-projection-policy-kit
+phantom-command-projection-id-kit
+phantom-command-projection-revision-kit
+phantom-command-output-surface-observation-kit
+phantom-command-source-surface-descriptor-kit
+phantom-command-crt-settings-revision-kit
+phantom-command-contain-projection-kit
+phantom-command-curve-projection-kit
+phantom-command-semantic-sample-policy-kit
+phantom-command-cpu-projection-adapter-kit
+phantom-command-glsl-projection-adapter-kit
+phantom-command-pointer-sample-id-kit
+phantom-command-pointer-mapping-result-kit
+phantom-command-surface-admission-kit
+phantom-command-stale-projection-rejection-kit
+phantom-command-projection-command-correlation-kit
+phantom-command-projection-frame-receipt-kit
+phantom-command-projection-observation-kit
+phantom-command-projection-journal-kit
+phantom-command-cpu-glsl-parity-fixture-kit
+phantom-command-black-border-admission-fixture-kit
+phantom-command-menu-campaign-pointer-parity-fixture-kit
+phantom-command-browser-pixel-pick-smoke-kit
 ```
 
-## Required public surface
+## Required projection transaction
 
 ```txt
-window.GameHost = {
-  version,
-  sessionId,
-  capabilities,
-  getCommittedState(),
-  getJournal(),
-  submit(command)
-}
+PointerObservation
+  -> validate route, runtime session and active surface
+  -> snapshot output rect, source size, settings and camera revision
+  -> resolve canonical projection descriptor
+  -> evaluate contain and optional curve using the same policy as GLSL
+  -> classify post-transform visible-source admission
+  -> select canonical center/green semantic sample
+  -> return typed mapping result
+  -> reject stale result after resize or settings change
+  -> route menu/campaign command
+  -> correlate command effect with projection frame receipt
+  -> append bounded detached observation
 ```
 
-The public object must not contain raw runtime owners, render objects, collections or direct mutation functions.
-
-## Required command transaction
+## Required result classes
 
 ```txt
-HostCommand
-  -> validate host session and capability
-  -> validate command ID and command schema
-  -> validate finite values and bounded payload
-  -> validate expected run epoch and phase revision
-  -> route to the existing authoritative owner
-  -> commit or reject through the fixed-step command path
-  -> publish a typed HostCommandResult
-  -> correlate any visible effect with a committed frame
-  -> append one bounded journal row
-```
-
-Required result classes:
-
-```txt
-REJECTED_INVALID_COMMAND
-REJECTED_UNSUPPORTED_CAPABILITY
-REJECTED_STALE_SESSION
-REJECTED_STALE_RUN
-REJECTED_STALE_PHASE
-REJECTED_TERMINAL
-ACCEPTED_PENDING
-COMMITTED
-FAILED
+MAPPED_INSIDE_VISIBLE_SOURCE
+REJECTED_OUTSIDE_CANVAS
+REJECTED_LETTERBOX_OR_PILLARBOX
+REJECTED_CURVED_BLACK_REGION
+REJECTED_ZERO_AREA_SURFACE
+REJECTED_STALE_SURFACE
+REJECTED_STALE_SETTINGS
+REJECTED_STALE_FRAME
+REJECTED_NON_FINITE_COORDINATE
 ```
 
 ## Required invariants
 
 ```txt
-public host exposes no mutable owner reference
-read results are detached and immutable
-read results describe one committed frame only
-all numeric command fields are finite and bounded
-all mutations require a declared capability
-all commands carry command ID, session and expected run/phase identity
-terminal state cannot be created through raw host mutation
-host command effects use the same authority as browser input
-stale commands perform zero mutation
-render and host observations cite the same frame provenance
-legacy compatibility cannot reintroduce owner handles
+CPU and GLSL adapters consume one immutable descriptor
+CRT toggle advances one settings/projection revision
+post-curve black regions perform zero mutation
+campaign commands require inside-visible-source
+menu hit tests target the displayed source texel
+wheel zoom preserves the displayed source point
+selection rectangles cite compatible projection revisions
+resize invalidates predecessor mapping results
+visible-frame claims include projection receipt
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime source, persistence, gameplay, rendering, package scripts and deployment were not changed. Host isolation, finite command admission and committed read-model coherence remain unproved until the documented fixtures exist and pass.
+Documentation only. Runtime source, pointer behavior, gameplay, rendering, persistence, package scripts, dependencies and deployment were not changed. Projection parity, outside-region rejection and visible pointer correctness remain unproved until the documented fixtures exist and pass.
