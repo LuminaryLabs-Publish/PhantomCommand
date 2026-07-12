@@ -1,77 +1,80 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T05-49-04-04-00`
+**Timestamp:** `2026-07-12T07-29-32-04-00`
 
 ## Goal
 
-Implement one campaign bootstrap and resume authority so Begin and Continue produce distinct, validated and observable runtime generations.
+Implement one menu audio activation and lifecycle authority so context state, graph ownership, interruption recovery and teardown are explicit and testable.
 
 ## Plan ledger
 
-- [ ] Introduce one canonical `CampaignLaunchIntent` parsed from the campaign route.
-- [ ] Define one canonical save key and explicit fallback/legacy-key policy.
-- [ ] Replace presence-only Continue enablement with a typed resume-capability result.
-- [ ] Add a versioned `CampaignSaveEnvelope` with schema and content fingerprints.
-- [ ] Parse, validate, migrate or quarantine candidate saves before runtime construction.
-- [ ] Define explicit new-run handling for predecessor saves.
-- [ ] Build new or resumed campaign state as a detached candidate.
-- [ ] Validate unit, tower, projectile, pad and selection references before commit.
-- [ ] Reseed unit, projectile and tower ID counters from hydrated content.
-- [ ] Commit one campaign generation atomically.
-- [ ] Return a typed `CampaignBootstrapResult`.
-- [ ] Return a typed `CampaignSaveCommitResult` for checkpoint writes.
-- [ ] Publish detached bootstrap diagnostics instead of raw mutable owners.
-- [ ] Bind the first visible resumed frame to bootstrap ID and campaign generation.
-- [ ] Add Node fixtures and real-browser route/storage smokes.
+- [ ] Introduce `AudioSessionId`, `contextGeneration`, `graphGeneration` and `stateRevision`.
+- [ ] Replace direct `ensureAudio()` mutation with a typed `AudioLifecycleCommand` path.
+- [ ] Capture trusted user-activation evidence before create or resume admission.
+- [ ] Observe `AudioContext.state` and subscribe to `statechange`.
+- [ ] Resume suspended or interrupted contexts through an admitted transaction.
+- [ ] Treat closed and failed contexts as replaceable, not current.
+- [ ] Register all persistent and transient nodes by graph generation.
+- [ ] Assign identities to delayed close work and cancel stale timers before replacement.
+- [ ] Make rapid off/on/off sequences generation-safe and idempotent.
+- [ ] Add visibility, pagehide and navigation retirement adapters.
+- [ ] Add ordered stop and disposal with typed terminal results.
+- [ ] Distinguish ambience preference from actual runtime audio state in diagnostics.
+- [ ] Publish bounded lifecycle observations and a journal.
+- [ ] Add deterministic lifecycle fixtures and real-browser audio smokes.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
 src/menu/graveyard-menu.js
-src/campaign/campaign-scene.js
-menu-save-presence-kit
+menu-audio-kit
+menu-settings-persistence-kit
 menu-route-kit
-campaign-route-shell-kit
-pixel-campaign-runtime-kit
-legacy-gamehost-diagnostics-kit
+window.PhantomMenu diagnostics
 scripts/check-menu.mjs
-scripts/check-campaign.mjs
 package.json
 ```
 
-## Bootstrap result contract
+## Command contract
 
 ```txt
-CampaignBootstrapResult
-  bootstrapId
-  launchIntent
-  campaignGeneration
-  status
-  sourceKey
-  sourceScope
-  sourceVersion
-  migrationCount
-  quarantined
-  stateRevision
-  stateFingerprint
+AudioLifecycleCommand
+  commandId
+  audioSessionId
+  expectedContextGeneration
+  expectedGraphGeneration
+  action
+  userActivationEvidence
   reason
-  committedAtMs
+  requestedAtMs
 ```
 
-## Save commit result contract
+Actions:
 
 ```txt
-CampaignSaveCommitResult
-  saveCommitId
-  campaignGeneration
-  stateRevision
-  key
-  scope
-  schemaVersion
-  payloadFingerprint
-  durable
+CreateOrResume
+Suspend
+Stop
+Dispose
+Observe
+```
+
+## Result contract
+
+```txt
+AudioLifecycleResult
+  commandId
+  audioSessionId
+  contextGeneration
+  graphGeneration
+  requestedAction
+  previousState
+  observedState
   status
+  nodeCount
+  pendingTaskCount
+  userActivationObserved
   reason
   committedAtMs
 ```
@@ -79,29 +82,30 @@ CampaignSaveCommitResult
 ## Fixture gate
 
 ```txt
-Begin creates a clean generation regardless of stale presence data
-Continue rejects malformed JSON without partial hydration
-Continue rejects unrelated Nexus snapshot payloads
-legacy compatible payload migrates exactly once
-invalid reference graphs are quarantined
-hydrated counters cannot collide with existing IDs
-winning save round-trips into an equivalent resumed read model
-new-run predecessor-save policy is deterministic
-first resumed frame cites bootstrap and campaign generation
-menu Continue state matches validated resume capability
+untrusted synthetic input cannot create or resume audio
+first admitted pointer gesture creates one running generation
+first admitted keyboard gesture creates one running generation
+repeated gesture while running is idempotent
+suspended context resumes on the next admitted gesture
+closed context is replaced by a new generation
+rapid off/on cancels predecessor delayed work
+rapid off/on/off leaves one disposed terminal generation
+visibility and interruption state changes are observed
+Begin and Continue transitions retire the graph in order
+pagehide and reload leave no owned nodes or pending timers
+settings diagnostics distinguish preference from runtime state
 ```
 
 ## Dependency order
 
 ```txt
 Campaign Bootstrap and Continue Resume Authority
-  -> Public Host Owner Quarantine and Typed Command Admission
-  -> CRT Display/Input Projection Authority
-  -> Campaign Phase Admission Authority
-  -> Fixed-Step Command Scheduling and Committed Frame Authority
-  -> Combat and Terminal Authorities
-  -> Runtime Session and Menu Audio Lifecycle Authorities
-  -> Versioned Full Checkpoint Capture Authority
+  -> Runtime Session Lifecycle Authority
+     -> Menu Audio Activation and Lifecycle Authority
+        -> transition and navigation retirement
+        -> browser audio fixture gate
+  -> Public Host and Committed Read Model Authorities
+  -> Full Checkpoint Capture Authority
 ```
 
-Do not add more save keys. Consolidate identity and compatibility through one admitted envelope and one explicit migration surface.
+Do not call `context.resume()` or `context.close()` from unrelated menu branches. Route every lifecycle mutation through one session-scoped transaction.
