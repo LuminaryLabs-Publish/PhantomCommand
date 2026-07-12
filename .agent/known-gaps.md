@@ -1,65 +1,77 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T04-18-44-04-00`
+**Timestamp:** `2026-07-12T05-49-04-04-00`
 
 ## Summary
 
-The newest documented gap is menu audio lifecycle. The menu can create and close ambience, but it cannot prove that a retained context is running, resume a suspended context, retire nodes and timers at navigation/page lifecycle boundaries, or correlate the ambience setting with actual audible state.
+The newest documented gap is campaign bootstrap and resume authority. The menu can display Continue and emit a continue URL, but it only checks raw key presence. The campaign ignores launch intent and storage, always constructs the default state, and writes a minimal terminal payload that it never reloads.
 
 ## Plan ledger
 
-**Goal:** keep audio ownership explicit and preserve the existing dependency queue.
+**Goal:** keep campaign launch, persistence and first-frame ownership explicit while preserving the existing dependency queue.
 
-- [ ] Audio context state admission and resume.
-- [ ] Graph, voice and timer leases.
-- [ ] Visibility, pagehide, bfcache and navigation policy.
-- [ ] Typed start/suspend/resume/retire results.
-- [ ] Browser audio lifecycle fixtures.
-- [ ] Retain campaign phase, command, terminal, lifecycle and checkpoint gates.
+- [ ] Route launch-intent parsing.
+- [ ] Canonical save-key and storage-scope policy.
+- [ ] Versioned save envelope and compatibility fingerprint.
+- [ ] Parse, validation, migration and quarantine results.
+- [ ] Explicit new-run predecessor-save handling.
+- [ ] Detached runtime hydration and reference validation.
+- [ ] Atomic bootstrap commit and typed result.
+- [ ] Typed save commit result.
+- [ ] First resumed-frame acknowledgement.
+- [ ] Route/storage/browser fixtures.
+- [ ] Retain command, render, phase, combat, lifecycle, audio and full-checkpoint gates.
 
-## Audio lifecycle gaps
+## Bootstrap and resume gaps
 
 ```txt
-audio session ID: absent
-context generation: absent
-context.state observation: absent
-context.resume path: absent
-statechange listener: absent
-visibility suspend/resume: absent
-pagehide/pageshow handling: absent
-transition teardown result: absent
-graph node leases: absent
-UI-tone voice leases: absent
-delayed-close timer lease: absent
-stale timer rejection: absent
-typed lifecycle result: absent
-audio observation/journal: absent
-browser audio fixture: absent
+launch intent: URL only, not consumed
+Continue capability: raw presence only
+canonical save key: absent
+key precedence: absent
+save schema/version: absent
+content fingerprint: absent
+parse result: absent
+migration result: absent
+quarantine: absent
+new-run save policy: absent
+runtime hydration: absent
+reference validation: absent
+ID counter reseeding: absent
+atomic bootstrap commit: absent
+typed bootstrap result: absent
+typed save commit result: absent
+bootstrap observation/journal: absent
+first resumed frame receipt: absent
+browser resume fixtures: absent
 ```
 
 ## Concrete risks
 
 ```txt
-suspended context remains non-null and ensureAudio returns without resume
-rapid disable/enable can overlap old closing and new active generations
-navigation relies on browser reclamation rather than explicit retirement
-bfcache can preserve a page without a documented audio restore policy
-settings can say ambience enabled without audible-state proof
+malformed JSON can enable Continue
+unrelated nexus.sceneSnapshot data can enable Continue
+Begin and Continue both start wave zero with default resources
+winning save cannot resume the won or pre-win runtime
+old save remains visible after choosing Begin
+future hydration could collide entity IDs without reseeding
+future partial hydration could leave cross-object references invalid
+menu resume state can disagree with campaign capability
 ```
 
 ## Retained gaps
 
 ```txt
-Continue candidates are presence-only
-CPU and GLSL projection differ
 GameHost exposes live mutable owners
+CPU and GLSL CRT projection differ
 campaign phase does not fence commands
 commands are not fixed-step scheduled
 combat liveness and exclusive terminal result remain unimplemented
 runtime RAF/listener/WebGL lifecycle remains unowned
-checkpoint capture/resume remains incomplete
+menu AudioContext lifecycle remains unowned
+full checkpoint capture and replay remain incomplete
 ```
 
 ## Completion boundary
 
-Do not claim audio lifecycle correctness because tones play in one browser session. Completion requires context-state results, generation fencing, complete lease retirement and browser proof across suspension, toggle churn, navigation and bfcache.
+Do not claim Continue works because the menu route exists or because a save string is present. Completion requires validated launch admission, deterministic hydration, a typed bootstrap result and a visible resumed frame tied to the committed campaign generation.
