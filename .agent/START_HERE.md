@@ -1,142 +1,145 @@
 # PhantomCommand Agent Start
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Last aligned:** `2026-07-12T03-00-46-04-00`
+**Branch:** `main`  
+**Last aligned:** `2026-07-12T04-18-44-04-00`
 
 ## Summary
 
-PhantomCommand models campaign lifecycle through independent booleans such as `paused`, `waveActive`, `won`, and `lost`, but gameplay actions do not consume an authoritative phase. Pausing stops fixed-step simulation only: Space can still queue a wave, pointer input can still select or order, and building can still spend Souls. After victory or defeat, selection, orders, construction, tower-type changes, camera commands, and public `GameHost` mutations remain reachable.
+PhantomCommand creates menu ambience lazily through Web Audio, but the audio graph has no lifecycle authority. `ensureAudio()` treats any retained `state.audio` as ready even when its `AudioContext` is suspended or closed, navigation does not retire menu audio before leaving, and page visibility, `pagehide`, bfcache, delayed close, voice ownership and observable start/stop results are absent.
 
 ## Plan ledger
 
-**Goal:** establish one campaign-phase authority that admits or rejects every gameplay action against a revisioned phase and makes terminal state mutation-closed.
+**Goal:** make menu audio one gesture-admitted, state-observed and lifecycle-owned capability that suspends, resumes, transfers or retires deterministically across settings changes, visibility changes, navigation and bfcache.
 
-- [x] Compare the complete Publish inventory with central tracking.
+- [x] Compare all ten accessible Publish repositories with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Confirm all nine eligible repositories have ledger and root `.agent` coverage.
-- [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Trace pause, wave, build, selection, order, camera, terminal, keyboard, pointer, RAF, render and `GameHost` paths.
-- [x] Identify the interaction loop, all domains, implemented kits and offered services.
-- [x] Confirm pause fences simulation but not command mutation.
-- [x] Confirm terminal state does not fence construction, orders, selection or host mutation.
-- [x] Add the campaign-phase admission authority audit set.
-- [x] Preserve Continue, host, projection, clock, combat, terminal, lifecycle and checkpoint dependencies.
-- [ ] Implement typed phase admission and execute paused/terminal mutation fixtures.
-
-## Current implementation queue
-
-```txt
-1. Continue Capability and Checkpoint Admission Authority
-   + Save Candidate Precedence, Legacy Summary and First Resumed Frame Fixtures
-
-2. Campaign Action Result Authority
-   2a. Public Host Owner Quarantine and Command Admission
-   2b. CRT Display/Input Projection Authority
-   2c. Campaign Phase Admission Authority
-   2d. Fixed-Step Command Scheduling, Replay and Committed Frame Authority
-   2e. Public Host Committed Read Model and Frame Provenance
-   2f. Combat Resolution and Entity Liveness Authority
-   2g. Exclusive Terminal Outcome Transaction
-
-3. Runtime Session Lifecycle Authority
-   + Menu/Campaign Teardown, bfcache and Restart Leak Fixtures
-
-4. Versioned Campaign Checkpoint Capture Authority
-   + Stable Boundary Capture, Atomic Resume and Migration Fixtures
-```
+- [x] Detect newer concurrent repo-local work in `IntoTheMeadow` and `HorrorCorridor` and avoid overwriting it.
+- [x] Select only `PhantomCommand` as the next oldest stable eligible repository.
+- [x] Trace menu startup, settings, AudioContext creation, ambience graph, UI tones, transitions, RAF and static checks.
+- [x] Identify the interaction loop, all domains, 20 implemented kits and offered services.
+- [x] Confirm context state is not observed or resumed.
+- [x] Confirm page/transition lifecycle does not own audio retirement.
+- [x] Define audio session, graph leases, timers, results, observations and browser fixtures.
+- [x] Refresh required root `.agent` documents and registry.
+- [ ] Runtime implementation and executable audio fixtures remain future work.
 
 ## Current interaction loop
 
 ```txt
-campaign startup
-  -> construct mutable state with paused/waveActive/won/lost booleans
-  -> attach keyboard, pointer, wheel and public GameHost mutators
-  -> start fixed-step RAF
+menu load
+  -> read ambience setting
+  -> create CRT renderer and recursive RAF
+  -> audio remains null
 
-frame
-  -> camera consumes held keys even while gameplay is paused or terminal
-  -> accumulator calls update(1/60)
-  -> update exits when paused, won or lost
-  -> render consumes the same live mutable owners
+first pointer or key action
+  -> ensureAudio()
+  -> create AudioContext, master, drone and looping wind
+  -> store one mutable state.audio object
+  -> play UI tone
 
-commands
-  -> Space calls startWave directly
-  -> pointer selects, builds or orders directly
-  -> number keys replace tower type directly
-  -> P toggles paused directly
-  -> GameHost exposes startWave, build and mutable state/camera
-  -> no command obtains a phase snapshot or typed admission result
+settings ambience off
+  -> clear state.audio
+  -> ramp master toward zero
+  -> schedule context.close() after 300 ms
+
+settings ambience on
+  -> create another context immediately if state.audio is null
+
+Begin / Continue
+  -> begin fade
+  -> after 0.95 s assign window.location.href
+  -> no audio handoff or retirement result
 ```
 
-## Latest finding
+## Main finding
 
 ```txt
-pause behavior:
-  simulation update: fenced
-  startWave: reachable and mutating
-  select/build/order: reachable and mutating
-  tower-type changes: reachable and mutating
-  camera pan/zoom: reachable
-
-terminal behavior:
-  update: fenced
-  build/order/select: reachable and mutating
-  public owner mutation: reachable
-  terminal frame identity: absent
+AudioContext state observation: absent
+explicit resume() after suspension: absent
+visibility suspend/resume policy: absent
+pagehide/bfcache retirement: absent
+navigation audio handoff: absent
+context generation: absent
+graph/voice/timer leases: absent
+typed start/stop/resume results: absent
+stale delayed-close rejection: absent
+audio/menu-frame correlation: absent
+browser audio lifecycle fixtures: absent
 ```
 
-Concrete consequences:
+## Domains in use
 
 ```txt
-Space while paused can populate spawn[], set waveActive and replace the message
-building while paused can spend Souls and create a tower
-orders while paused can replace unit targets/move destinations and add effects
-building and ordering remain reachable after won/lost
-paused + won or paused + lost combinations are representable
-rendering cannot identify which phase revision admitted the visible mutations
+menu route, selection, panels, settings and fade transition
+save-presence discovery and Continue projection
+procedural graveyard drawing
+CRT WebGL presentation and pointer projection
+Web Audio context, ambience graph and UI tones
+menu keyboard/pointer interaction and recursive RAF
+campaign shell, mutable state, fixed-step simulation and rendering
+campaign phase, command, combat, terminal, lifecycle and checkpoint gaps
+static checks, build, Pages deployment and central tracking
 ```
 
-## Latest composed domain
+## Implemented kits and services
 
 ```txt
-phantom-command-campaign-phase-admission-authority-domain
-  -> phase schema, identity, revision and derivation
-  -> action kind, envelope, identity and policy matrix
-  -> phase snapshot and admission
-  -> typed action result
-  -> paused and terminal mutation fences
-  -> wave/build/order/selection/camera adapters
-  -> phase transition commit
-  -> stale-result rejection
-  -> render observation, journal and fixtures
+crt-renderer-kit
+graveyard-art-kit
+menu-route-kit
+menu-settings-persistence-kit
+menu-save-presence-kit
+menu-audio-kit
+campaign-route-shell-kit
+pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
+pixel-campaign-render-kit
+legacy-gamehost-diagnostics-kit
+menu-static-check-kit
+campaign-static-check-kit
+static-build-copy-kit
+pages-deploy-kit
+construct-spiral-intro-kit
+construct-spiral-schedule-kit
+construct-piece-id-kit
+construct-piece-state-kit
+construct-sequence-update-kit
 ```
 
-## Read first
+Services cover menu routing, settings, save detection, procedural art, AudioContext ambience and tones, CRT resources/projection, campaign state/actions/simulation/rendering, public diagnostics, construction sequencing, checks, static build and Pages deployment.
+
+## Required parent domain
 
 ```txt
-.agent/trackers/2026-07-12T03-00-46-04-00/project-breakdown.md
-.agent/current-audit.md
-.agent/known-gaps.md
-.agent/next-steps.md
-.agent/validation.md
-.agent/turn-ledger/2026-07-12T03-00-46-04-00.md
-.agent/architecture-audit/2026-07-12T03-00-46-04-00-campaign-phase-admission-authority-dsk-map.md
-.agent/render-audit/2026-07-12T03-00-46-04-00-phase-terminal-visible-frame-gap.md
-.agent/gameplay-audit/2026-07-12T03-00-46-04-00-paused-terminal-command-mutation-loop.md
-.agent/interaction-audit/2026-07-12T03-00-46-04-00-action-phase-admission-result-map.md
-.agent/phase-admission-audit/2026-07-12T03-00-46-04-00-pause-wave-terminal-mutation-contract.md
-.agent/deploy-audit/2026-07-12T03-00-46-04-00-phase-admission-fixture-gate.md
+phantom-command-menu-audio-lifecycle-authority-domain
 ```
 
-## Guardrails
+## Required transaction
 
 ```txt
-Push only to main.
-Create no branches or pull requests.
-Do not work on TheCavalryOfRome.
-Do not derive phase independently in each input handler.
-Do not treat paused as a render-only state.
-Do not permit terminal gameplay mutation without an explicit post-terminal policy.
-Do not call an action accepted without a typed result tied to phaseRevision.
-Do not call a visible phase coherent without a committed-frame receipt.
+AudioLifecycleCommand
+  -> validate menu session, document lifecycle and gesture admission
+  -> observe current context state and generation
+  -> start, resume, suspend, transfer or retire the graph
+  -> own ambience nodes, UI-tone voices and delayed-close timers as leases
+  -> reject stale callbacks from predecessor generations
+  -> return one typed AudioLifecycleResult
+  -> publish detached audio observation
+  -> correlate settings and menu frame with actual audible state
 ```
+
+## Read this pass first
+
+```txt
+.agent/trackers/2026-07-12T04-18-44-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T04-18-44-04-00.md
+.agent/architecture-audit/2026-07-12T04-18-44-04-00-menu-audio-lifecycle-authority-dsk-map.md
+.agent/render-audit/2026-07-12T04-18-44-04-00-audio-settings-visible-frame-state-gap.md
+.agent/gameplay-audit/2026-07-12T04-18-44-04-00-suspended-context-transition-loop.md
+.agent/interaction-audit/2026-07-12T04-18-44-04-00-gesture-visibility-audio-command-map.md
+.agent/audio-lifecycle-audit/2026-07-12T04-18-44-04-00-context-graph-timer-lease-contract.md
+.agent/deploy-audit/2026-07-12T04-18-44-04-00-browser-audio-lifecycle-fixture-gate.md
+```
+
+Do not treat `settings.ambience === true` or a non-null `state.audio` as proof that ambience is audible. Completion requires context-state admission, explicit lifecycle results, complete graph/timer retirement and browser proof across suspension, navigation and bfcache.
