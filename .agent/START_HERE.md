@@ -2,112 +2,104 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T09-28-05-04-00`
+**Last aligned:** `2026-07-12T11-40-50-04-00`
 
 ## Summary
 
 PhantomCommand is a static pixel-isometric campaign game with a procedural graveyard menu, CRT WebGL presentation, browser audio, direct controls, fixed-step combat, persistence and public diagnostics.
 
-The current audit isolates **menu pointer-hit admission**. A canvas `pointerdown` always activates the currently selected menu item when no panel is open, even when the pointer misses every menu row or lands in a letterbox margin. In the settings panel, every pointerdown activates the currently selected row even when no row was hit.
+The current audit isolates **campaign world-pointer admission**. The CRT renderer calculates whether a pointer is inside the visible source frame, but campaign selection, orders, camera pan and wheel anchoring ignore that result. The visible shader also curves the sampled source while the CPU input path does not invert that curve.
 
 ## Plan ledger
 
-**Goal:** require a current, explicit hit-test result before a pointer event can execute a menu or settings action, while preserving keyboard selection and activation as a separate admitted path.
+**Goal:** require a current display-correct projection and camera-bound world result before any campaign pointer gesture can mutate gameplay or camera state.
 
-- [x] Compare all ten accessible Publish repositories with central tracking.
+- [x] Compare the complete Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Confirm all nine eligible repositories have central ledger and root `.agent` coverage.
-- [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Inspect canvas containment, source-coordinate projection, menu and panel hit tests, pointer movement, pointer activation and hidden-button activation.
-- [x] Identify the complete interaction loop, all active domains, all 20 implemented kits and their services.
-- [x] Define hit identity, target generation, activation admission, typed miss results, observations and browser fixtures.
+- [x] Skip newer unsynchronized `IntoTheMeadow` work.
+- [x] Select only `PhantomCommand` as the next-oldest synchronized repository.
+- [x] Identify the full interaction loop, all active domains, all 20 implemented kits and their services.
+- [x] Trace left, right, middle, drag and wheel input paths.
+- [x] Define containment, inverse CRT projection, camera revision, gesture lease, command result and proof contracts.
 - [x] Update documentation on `main`; create no branch or pull request.
-- [ ] Runtime implementation and executable pointer-target fixtures remain future work.
+- [ ] Runtime implementation and executable campaign-pointer fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T09-28-05-04-00/project-breakdown.md
+.agent/trackers/2026-07-12T11-40-50-04-00/project-breakdown.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-12T09-28-05-04-00-menu-pointer-hit-admission-dsk-map.md
-.agent/render-audit/2026-07-12T09-28-05-04-00-letterbox-pointer-visible-target-gap.md
-.agent/gameplay-audit/2026-07-12T09-28-05-04-00-background-click-begin-campaign-loop.md
-.agent/interaction-audit/2026-07-12T09-28-05-04-00-pointer-hit-command-admission-map.md
-.agent/pointer-input-audit/2026-07-12T09-28-05-04-00-hit-result-target-generation-contract.md
-.agent/deploy-audit/2026-07-12T09-28-05-04-00-pointer-target-browser-fixture-gate.md
-.agent/turn-ledger/2026-07-12T09-28-05-04-00.md
+.agent/architecture-audit/2026-07-12T11-40-50-04-00-campaign-world-pointer-admission-dsk-map.md
+.agent/render-audit/2026-07-12T11-40-50-04-00-crt-visible-world-pointer-provenance-gap.md
+.agent/gameplay-audit/2026-07-12T11-40-50-04-00-letterbox-pointer-mutates-campaign-loop.md
+.agent/interaction-audit/2026-07-12T11-40-50-04-00-campaign-pointer-command-admission-map.md
+.agent/campaign-input-audit/2026-07-12T11-40-50-04-00-containment-curve-camera-generation-contract.md
+.agent/deploy-audit/2026-07-12T11-40-50-04-00-campaign-pointer-projection-fixture-gate.md
+.agent/turn-ledger/2026-07-12T11-40-50-04-00.md
 .agent/kit-registry.json
 ```
 
 ## Current interaction loop
 
 ```txt
-page boot
-  -> create 480x270 source canvas, graveyard art and CRT renderer
-  -> read settings and save presence
-  -> install pointer and keyboard handlers
-  -> start recursive RAF
+menu
+  -> graveyard source canvas and CRT renderer
+  -> settings and save-presence read
+  -> pointer/keyboard activation
+  -> fade and route to campaign
 
-pointer move
-  -> project viewport coordinates into source coordinates
-  -> update hover selection only when a menu or settings row is hit
-
-pointer down with no panel
-  -> project coordinates
-  -> optionally update selection when a row is hit
-  -> unconditionally activate the currently selected item
-
-pointer down with settings panel
-  -> optionally update selected row when a row is hit
-  -> unconditionally activate the currently selected row
-
-keyboard
-  -> move selection explicitly
-  -> Enter or Space activates the selected command
+campaign
+  -> create 640x360 source world and CRT renderer
+  -> install pointer, keyboard, wheel and blur handlers
+  -> project client pointer to source coordinates
+  -> selection, build, orders, pan and zoom
+  -> fixed-step spawning, combat and rewards
+  -> source-canvas world/HUD/minimap render
+  -> CRT WebGL presentation
 ```
 
 ## Main findings
 
 ```txt
-menu pointer miss rejection: absent
-letterbox miss rejection: absent
-settings-panel miss rejection: absent
-hit target identity: absent
-menu/panel generation identity: absent
-selection revision fence: absent
-pointer activation command ID: absent
-typed hit/miss result: absent
-pointer-to-action journal: absent
-browser pointer-target fixtures: absent
+inside/outside classification: implemented
+campaign containment admission: absent
+CRT visible curve: implemented
+CPU inverse CRT projection: absent
+display generation: absent
+camera revision binding: absent
+gesture lease: absent
+typed campaign pointer result: absent
+command-to-frame receipt: absent
+browser campaign-pointer fixtures: absent
 ```
 
 ## Domains and kit groups
 
 ```txt
 menu and campaign route shells
-menu selection, panels, settings, persistence and transition
-viewport-to-source coordinate projection and contain letterboxing
-menu and panel hit testing
-pointer and keyboard command admission
-procedural graveyard and CRT WebGL presentation
-Web Audio activation and lifecycle
-campaign content, fixed-step simulation, combat and rendering
-public menu and campaign host capabilities
-validation, static build, Pages and audit tracking
+menu state settings persistence audio and transition
+CRT contain and curved display projection
+pointer keyboard drag wheel focus and lifecycle
+campaign selection build orders camera wave and restart
+fixed-step simulation combat rewards and terminal state
+procedural menu and campaign source rendering
+WebGL and Web Audio resources
+public host diagnostics
+checks static build Pages and audit tracking
 ```
 
-Implemented kit count: `20`. The tracker and machine registry contain the complete per-kit service inventory.
+Implemented kit count: `20`. The current audit, tracker and machine registry contain the complete per-kit service inventory.
 
 ## Required parent domain
 
 ```txt
-phantom-command-menu-pointer-hit-admission-authority-domain
+phantom-command-campaign-world-pointer-admission-authority-domain
 ```
 
-It coordinates source-coordinate projection, hit-test identity, target generation, selection revision, pointer-command admission, typed miss results, observations, journals and browser fixtures.
+It coordinates event/session identity, surface containment, inverse CRT projection, camera revision, gesture ownership, command admission, typed results, observations, journals and browser proof.
 
 ## Ordered architecture queue
 
@@ -115,15 +107,16 @@ It coordinates source-coordinate projection, hit-test identity, target generatio
 1. Campaign Bootstrap and Continue Resume Authority
 2. Campaign Action Result Authority
    2a. Menu Pointer-Hit Admission Authority
-   2b. Public Host Owner Quarantine and Typed Command Admission
-   2c. CRT Display/Input Projection Authority
-   2d. Campaign Phase Admission Authority
-   2e. Fixed-Step Scheduling, Replay and Committed Frames
-   2f. Public Host Committed Read Model
-   2g. Combat and Exclusive Terminal Authorities
+   2b. Campaign World-Pointer Admission Authority
+   2c. Public Host Owner Quarantine and Typed Command Admission
+   2d. CRT Display/Input Projection Authority
+   2e. Campaign Phase Admission Authority
+   2f. Fixed-Step Scheduling, Replay and Committed Frames
+   2g. Public Host Committed Read Model
+   2h. Combat and Exclusive Terminal Authorities
 3. Runtime Session Lifecycle Authority
    3a. Menu Audio Activation and Lifecycle Authority
 4. Versioned Full Campaign Checkpoint Capture Authority
 ```
 
-Do not treat the current visual selection as proof that a pointer event targeted that selection.
+Do not treat source coordinates as actionable merely because they were calculated. Require current visible-surface, display-transform and camera evidence.
