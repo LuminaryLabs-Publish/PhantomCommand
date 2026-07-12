@@ -1,36 +1,33 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T07-29-32-04-00`
+**Timestamp:** `2026-07-12T09-28-05-04-00`
 
 ## Goal
 
-Implement one menu audio activation and lifecycle authority so context state, graph ownership, interruption recovery and teardown are explicit and testable.
+Implement one menu pointer-hit admission authority so only the row targeted by the current pointer event can execute, while keyboard activation remains explicitly selection-based.
 
 ## Plan ledger
 
-- [ ] Introduce `AudioSessionId`, `contextGeneration`, `graphGeneration` and `stateRevision`.
-- [ ] Replace direct `ensureAudio()` mutation with a typed `AudioLifecycleCommand` path.
-- [ ] Capture trusted user-activation evidence before create or resume admission.
-- [ ] Observe `AudioContext.state` and subscribe to `statechange`.
-- [ ] Resume suspended or interrupted contexts through an admitted transaction.
-- [ ] Treat closed and failed contexts as replaceable, not current.
-- [ ] Register all persistent and transient nodes by graph generation.
-- [ ] Assign identities to delayed close work and cancel stale timers before replacement.
-- [ ] Make rapid off/on/off sequences generation-safe and idempotent.
-- [ ] Add visibility, pagehide and navigation retirement adapters.
-- [ ] Add ordered stop and disposal with typed terminal results.
-- [ ] Distinguish ambience preference from actual runtime audio state in diagnostics.
-- [ ] Publish bounded lifecycle observations and a journal.
-- [ ] Add deterministic lifecycle fixtures and real-browser audio smokes.
+- [ ] Introduce menu input session, surface generation, panel generation and selection revision identities.
+- [ ] Normalize each pointer event into a bounded event envelope.
+- [ ] Preserve the existing contain projection and explicit `inside` result.
+- [ ] Replace integer-only hit tests with typed `Hit` and `Miss` results.
+- [ ] Bind every hit target to the current menu or panel generation.
+- [ ] Admit pointer activation only from the current event's `Hit` result.
+- [ ] Make pointer `Miss` return a typed no-op result.
+- [ ] Keep keyboard Enter and Space on a separate selection-based command path.
+- [ ] Reject stale hit results after panel, route or selection-generation changes.
+- [ ] Publish bounded pointer-action observations and a journal.
+- [ ] Add deterministic miss fixtures and real-browser pointer smokes.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
 src/menu/graveyard-menu.js
-menu-audio-kit
-menu-settings-persistence-kit
+src/menu/crt-renderer.js
 menu-route-kit
+crt-renderer-kit
 window.PhantomMenu diagnostics
 scripts/check-menu.mjs
 package.json
@@ -39,42 +36,48 @@ package.json
 ## Command contract
 
 ```txt
-AudioLifecycleCommand
+MenuPointerActivationCommand
   commandId
-  audioSessionId
-  expectedContextGeneration
-  expectedGraphGeneration
-  action
-  userActivationEvidence
-  reason
+  inputSessionId
+  surfaceGeneration
+  panelGeneration
+  selectionRevision
+  pointerEventId
+  clientX
+  clientY
+  sourceProjection
+  hitResult
   requestedAtMs
 ```
 
-Actions:
+## Hit result contract
 
 ```txt
-CreateOrResume
-Suspend
-Stop
-Dispose
-Observe
+MenuHitTestResult
+  pointerEventId
+  surfaceGeneration
+  panelGeneration
+  status: Hit | Miss | OutsideSurface | Stale
+  targetKind: MenuItem | SettingsRow | CreditsPanel | None
+  targetId
+  targetIndex
+  sourceX
+  sourceY
+  insideSource
 ```
 
 ## Result contract
 
 ```txt
-AudioLifecycleResult
+MenuPointerActivationResult
   commandId
-  audioSessionId
-  contextGeneration
-  graphGeneration
-  requestedAction
-  previousState
-  observedState
-  status
-  nodeCount
-  pendingTaskCount
-  userActivationObserved
+  pointerEventId
+  status: Applied | Miss | RejectedStale | RejectedDisabled | RejectedTransitioning
+  targetId
+  previousSelectionRevision
+  committedSelectionRevision
+  routeTarget
+  settingsRevision
   reason
   committedAtMs
 ```
@@ -82,30 +85,27 @@ AudioLifecycleResult
 ## Fixture gate
 
 ```txt
-untrusted synthetic input cannot create or resume audio
-first admitted pointer gesture creates one running generation
-first admitted keyboard gesture creates one running generation
-repeated gesture while running is idempotent
-suspended context resumes on the next admitted gesture
-closed context is replaced by a new generation
-rapid off/on cancels predecessor delayed work
-rapid off/on/off leaves one disposed terminal generation
-visibility and interruption state changes are observed
-Begin and Continue transitions retire the graph in order
-pagehide and reload leave no owned nodes or pending timers
-settings diagnostics distinguish preference from runtime state
+background click with Begin selected performs zero action
+left and right letterbox clicks perform zero action
+top and bottom letterbox clicks perform zero action
+click between menu rows performs zero action
+disabled Continue row returns RejectedDisabled
+settings panel background click performs zero mutation
+settings panel outside click performs zero mutation
+current row hit executes exactly that row
+stale hit from a prior panel generation performs zero mutation
+keyboard Enter still activates the selected row
+hidden native buttons still activate through native click semantics
+pointer result is correlated with route or settings revision
 ```
 
 ## Dependency order
 
 ```txt
-Campaign Bootstrap and Continue Resume Authority
+Menu Pointer-Hit Admission Authority
+  -> CRT Display/Input Projection Authority
   -> Runtime Session Lifecycle Authority
-     -> Menu Audio Activation and Lifecycle Authority
-        -> transition and navigation retirement
-        -> browser audio fixture gate
   -> Public Host and Committed Read Model Authorities
-  -> Full Checkpoint Capture Authority
 ```
 
-Do not call `context.resume()` or `context.close()` from unrelated menu branches. Route every lifecycle mutation through one session-scoped transaction.
+Do not infer a pointer target from the previously highlighted selection. Require a hit result from the current pointer event.
