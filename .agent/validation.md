@@ -1,71 +1,82 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T01-20-00-04-00`
+**Timestamp:** `2026-07-12T03-00-46-04-00`
 
 ## Summary
 
-This run changed internal documentation only. It source-inspected the shared CRT renderer, menu pointer path and campaign pointer path; confirmed the GLSL contain-plus-curve versus CPU contain-only mismatch; confirmed campaign input ignores the mapper's `inside` result; and documented the missing projection identity, revision, admission and frame-evidence contracts.
+This run changed internal documentation only. It source-inspected campaign phase booleans, fixed-step gating, wave start, construction, selection, orders, keyboard, pointer, camera, rendering, and `GameHost`; confirmed pause and terminal states stop simulation but not all command mutation; and documented the missing phase identity, action policy, typed result, mutation fence, and visible-frame contracts.
 
 ## Plan ledger
 
 **Goal:** record exactly what was observed and what remains unproved.
 
-- [x] Confirm GLSL applies `containUv()` before `curveUv()`.
-- [x] Confirm CPU `screenToSource()` omits curvature.
-- [x] Confirm menu rendering changes with `settings.crt` while pointer mapping does not.
-- [x] Confirm campaign rendering always enables CRT.
-- [x] Confirm campaign pointer handlers ignore `inside`.
-- [x] Confirm static checks do not prove coordinate parity.
+- [x] Confirm `update()` exits for paused, won, and lost.
+- [x] Confirm `startWave()` rejects active/terminal/exhausted states but not paused.
+- [x] Confirm `build()` has no pause, wave, or terminal phase guard.
+- [x] Confirm `selectAt()` can call `build()` without phase admission.
+- [x] Confirm `order()` has no pause or terminal guard.
+- [x] Confirm keyboard and pointer handlers mutate live state directly.
+- [x] Confirm `GameHost` exposes raw state/camera and direct mutators.
+- [x] Confirm render overlay has no phase/action/frame provenance.
 - [x] Document pure and browser fixture gates.
 - [ ] Execute fixtures after implementation.
 
 ## Static observations
 
 ```txt
-menu source surface: 480x270
-campaign source surface: 640x360
-output fit policy: contain
-GLSL curvature when CRT enabled: yes
-CPU curvature: absent
-menu CRT setting reaches renderer: yes
-menu CRT setting reaches pointer mapper: no
-campaign CRT enabled: always
-menu hit tests check inside: yes
-campaign input checks inside: no
-projection ID/revision: absent
-surface revision: absent
-settings revision: absent
-pointer sample/mapping result ID: absent
-visible projection frame receipt: absent
-CPU/GLSL parity fixture: absent
-browser pixel-pick smoke: absent
+campaign booleans: paused, waveActive, won, lost
+canonical phase enum: absent
+phase ID/revision: absent
+legal transition table: absent
+action policy matrix: absent
+fixed-step simulation pause fence: present
+wave-start paused fence: absent
+build paused fence: absent
+build terminal fence: absent
+order paused fence: absent
+order terminal fence: absent
+selection phase fence: absent
+public-host phase fence: absent
+typed action result: absent
+stale phase rejection: absent
+phase/action/tick/frame receipt: absent
 ```
 
 ## Source examples
 
 ```txt
-shader:
-  uv = containUv(vUv)
-  if CRT enabled: uv = curveUv(uv)
-  reject post-curve uv outside source
+update:
+  if paused || won || lost -> return
 
-CPU:
-  normalize client coordinates
-  apply contain correction
-  return source pixels and pre-curve inside flag
+startWave:
+  reject waveActive || won || lost || wave >= waves.length
+  paused is not checked
+  accepted path replaces spawn[], sets waveActive, changes message
 
-campaign:
-  setPointer(event)
-  use source point for screenToWorld, drag, order, pan and zoom
-  never reject input.pointer.inside === false
+build:
+  checks selected pad, occupancy and Souls
+  no phase check
+  accepted path spends Souls, creates tower, appends effect
+
+order:
+  checks only selected length and live unit lookup
+  no phase check
+  accepted path replaces target/move and appends effect
+
+render:
+  overlays when paused || won || lost
+  visible label precedence is won, then lost, then paused
+  no phase revision or action result is projected
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
-pointer behavior changed: no
-gameplay changed: no
+campaign action behavior changed: no
+pause behavior changed: no
+terminal behavior changed: no
+pointer or keyboard behavior changed: no
 rendering changed: no
 persistence behavior changed: no
 audio changed: no
@@ -83,14 +94,16 @@ pull request created: no
 npm run check: not run
 npm run build: not run
 browser smoke: not run
-CPU/GLSL reference fixture: unavailable
-CRT on/off parity fixture: unavailable
-black-border admission fixture: unavailable
-menu pixel-pick fixture: unavailable
-campaign pixel-pick fixture: unavailable
-wheel-anchor fixture: unavailable
-resize/settings stale-result fixture: unavailable
-projection/frame receipt fixture: unavailable
+phase derivation fixture: unavailable
+transition table fixture: unavailable
+paused mutation fixture: unavailable
+terminal mutation fixture: unavailable
+wave admission fixture: unavailable
+build policy fixture: unavailable
+public-host phase parity fixture: unavailable
+stale phase-revision fixture: unavailable
+phase/action/frame receipt fixture: unavailable
+Pages smoke: not run
 ```
 
-No projection parity, pointer-target accuracy, border rejection, zoom-anchor correctness or frame-correlation claim is made.
+No campaign-phase correctness, pause safety, terminal immutability, legal transition, action-admission, public-host parity, or phase/frame-correlation claim is made.
