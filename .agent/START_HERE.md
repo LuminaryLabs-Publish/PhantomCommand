@@ -1,25 +1,26 @@
 # PhantomCommand Agent Start
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Last aligned:** `2026-07-11T23-28-29-04-00`
+**Last aligned:** `2026-07-12T01-20-00-04-00`
 
 ## Summary
 
-PhantomCommand publishes live campaign owners through `window.GameHost`. The public object exposes the mutable `state` and `camera` objects plus `startWave`, `build` and `setZoom`. A same-page script or automation can therefore bypass input, phase, fixed-step, combat, terminal and frame authority, then make `getState()` report values that have not reached the visible canvas. The latest audit defines raw-owner quarantine, a capability-scoped command gateway and an immutable committed read model.
+PhantomCommand displays both menu and campaign source canvases through a shared CRT WebGL renderer. The visible shader applies aspect containment and then radial curvature, but CPU pointer mapping applies containment only. The menu therefore has settings-dependent display/input drift, while campaign selection, drag selection, orders, pan and zoom can target coordinates different from the displayed pixels. Campaign handlers also ignore the mapper's `inside` result, allowing black border regions to issue commands.
 
 ## Plan ledger
 
-**Goal:** stop public diagnostics from being an alternate gameplay authority while preserving safe observation and explicit automation capabilities.
+**Goal:** establish one settings-aware, versioned projection authority shared by GLSL presentation and CPU interaction.
 
-- [x] Compare the complete Publish organization inventory with central tracking.
+- [x] Compare the complete Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have ledger and root `.agent` coverage.
 - [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Trace `window.PhantomMenu`, `window.GameHost`, mutable owner exposure and public mutators.
-- [x] Identify the interaction loop, domains, implemented kits and offered services.
-- [x] Add the public-host capability authority audit set.
-- [x] Preserve Continue, command, combat, terminal, lifecycle and checkpoint dependencies.
-- [ ] Implement owner quarantine, typed command admission and committed-frame readback.
+- [x] Trace shader containment/curvature and CPU pointer mapping.
+- [x] Trace menu and campaign projection consumers.
+- [x] Identify interaction loops, domains, implemented kits and services.
+- [x] Add the display/input projection authority audit set.
+- [x] Preserve Continue, host, phase, clock, combat, terminal, lifecycle and checkpoint dependencies.
+- [ ] Implement CPU/GLSL parity, outside-region admission and visible-frame fixtures.
 
 ## Current implementation queue
 
@@ -47,86 +48,80 @@ PhantomCommand publishes live campaign owners through `window.GameHost`. The pub
 
 ```txt
 menu startup
-  -> creates mutable menu/settings/audio state
-  -> publishes window.PhantomMenu
-  -> public activate(action) can initiate navigation or panels
+  -> create 480x270 source canvas and shared CRT renderer
+  -> load CRT settings
+  -> attach pointer, keyboard and hidden-button interaction
+  -> render source through contain + optional curve
+
+menu pointer
+  -> client coordinate
+  -> contain-only screenToSource
+  -> menu/panel hit and activation
 
 campaign startup
-  -> creates mutable campaign state and camera owners
-  -> starts fixed-step update and render RAF
-  -> publishes window.GameHost with raw state and camera references
+  -> create 640x360 source canvas and shared CRT renderer
+  -> create campaign state, camera, input and fixed-step RAF
+  -> render source through contain + always-enabled curve
 
-normal play
-  -> browser input mutates selection, orders, waves, pause and camera
-  -> fixed-step update mutates combat, economy and terminal state
-  -> render projects world, HUD, minimap and terminal overlay
-
-public host path
-  -> external code directly mutates GameHost.state or GameHost.camera
-  -> or calls startWave, build or setZoom outside typed admission
-  -> getState independently samples the mutable owners
-  -> the visible canvas may still represent the previous RAF
+campaign pointer
+  -> client coordinate
+  -> contain-only screenToSource
+  -> inside flag ignored
+  -> screenToWorld
+  -> select, drag-select, order, pan or zoom
 ```
 
 ## Latest finding
 
 ```txt
-window.GameHost.state = live gameplay owner
-window.GameHost.camera = live camera owner
-window.GameHost.startWave/build/setZoom = untyped mutators
+visible mapping:
+  output UV -> contain -> CRT curve -> source texel
 
-external mutation
-  -> bypasses input and fixed-step command ordering
-  -> bypasses phase, terminal and run-epoch checks
-  -> can advance observable state ahead of the rendered frame
+semantic mapping:
+  client coordinate -> contain only -> source coordinate
 ```
 
-Concrete examples:
+Consequences:
 
 ```txt
-GameHost.state.won = true
-  -> next update is suppressed
-  -> next render shows victory without terminal arbitration or save admission
-
-GameHost.setZoom(NaN)
-  -> clamp returns NaN
-  -> targetZoom and then zoom become NaN
-  -> world projection loses finite coordinates
-
-GameHost.state.souls = 999
-  -> getState reports 999 immediately
-  -> current canvas can still show the previous soul count until the next RAF
+menu click target can drift from the visible item
+CRT toggle changes display geometry without changing input geometry
+campaign click/drag/order target can drift from the visible world point
+wheel zoom can preserve the wrong source point
+post-curve black and letterbox/pillarbox regions can still issue campaign commands
 ```
 
 ## Latest composed domain
 
 ```txt
-phantom-command-public-host-capability-authority-domain
-  -> host identity and capability descriptors
-  -> raw owner-handle quarantine
-  -> immutable committed read model
-  -> frame and run provenance
-  -> typed command envelope and admission
-  -> run, phase and revision fences
-  -> bounded command results and journal
-  -> compatibility adapter and isolation fixtures
+phantom-command-display-input-projection-authority-domain
+  -> projection policy, identity and revision
+  -> output/source surface observations
+  -> settings revision
+  -> contain and curve adapters
+  -> canonical semantic sample policy
+  -> pointer sample and mapping result
+  -> visible-surface admission
+  -> stale-result rejection
+  -> command and frame correlation
+  -> observations, journal and parity fixtures
 ```
 
 ## Read first
 
 ```txt
-.agent/trackers/2026-07-11T23-28-29-04-00/project-breakdown.md
+.agent/trackers/2026-07-12T01-20-00-04-00/project-breakdown.md
 .agent/current-audit.md
 .agent/known-gaps.md
 .agent/next-steps.md
 .agent/validation.md
-.agent/turn-ledger/2026-07-11T23-28-29-04-00.md
-.agent/architecture-audit/2026-07-11T23-28-29-04-00-public-host-capability-authority-dsk-map.md
-.agent/render-audit/2026-07-11T23-28-29-04-00-uncommitted-host-state-frame-gap.md
-.agent/gameplay-audit/2026-07-11T23-28-29-04-00-public-owner-bypass-loop.md
-.agent/interaction-audit/2026-07-11T23-28-29-04-00-window-gamehost-command-admission-map.md
-.agent/host-capability-audit/2026-07-11T23-28-29-04-00-owner-quarantine-read-model-command-contract.md
-.agent/deploy-audit/2026-07-11T23-28-29-04-00-public-host-isolation-fixture-gate.md
+.agent/turn-ledger/2026-07-12T01-20-00-04-00.md
+.agent/architecture-audit/2026-07-12T01-20-00-04-00-display-input-projection-authority-dsk-map.md
+.agent/render-audit/2026-07-12T01-20-00-04-00-crt-visible-semantic-coordinate-gap.md
+.agent/gameplay-audit/2026-07-12T01-20-00-04-00-curved-display-command-target-loop.md
+.agent/interaction-audit/2026-07-12T01-20-00-04-00-pointer-projection-command-admission-map.md
+.agent/projection-authority-audit/2026-07-12T01-20-00-04-00-cpu-glsl-projection-parity-contract.md
+.agent/deploy-audit/2026-07-12T01-20-00-04-00-projection-parity-fixture-gate.md
 ```
 
 ## Guardrails
@@ -135,8 +130,8 @@ phantom-command-public-host-capability-authority-domain
 Push only to main.
 Create no branches or pull requests.
 Do not work on TheCavalryOfRome.
-Do not expose mutable runtime owner references through public diagnostics.
-Do not report command success without a typed result.
-Do not call sampled mutable state a committed frame.
-Do not claim host isolation or read-model coherence until fixtures pass.
+Do not duplicate projection constants across CPU and GLSL paths.
+Do not admit campaign commands from outside the visible source.
+Do not call pointer targeting correct until CPU/GLSL and browser fixtures pass.
+Do not call a projection result frame-coherent without a visible-frame receipt.
 ```
