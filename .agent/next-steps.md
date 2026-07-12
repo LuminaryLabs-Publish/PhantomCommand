@@ -1,148 +1,167 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T13-59-50-04-00`
+**Timestamp:** `2026-07-12T16-00-03-04-00`
 
-## Goal
+## Summary
 
-Implement one Campaign Bootstrap and Continue Resume Authority so the menu admits only valid saves, New and Continue are distinct transactions, hydration is atomic, and the first visible frame proves which bootstrap revision was committed.
+The next implementation boundary is Menu Pointer-Hit Admission Authority. Refactor the existing menu and CRT owners so pointer-sourced actions require a current visible-control hit and every miss or stale result performs zero mutation.
 
 ## Plan ledger
 
-- [ ] Replace boolean save presence with typed `CampaignSaveProbeResult`.
-- [ ] Define one owned primary save key and explicit legacy adapters.
-- [ ] Separate localStorage and sessionStorage policies.
-- [ ] Add campaign save schema, version, content fingerprint and state fingerprint.
-- [ ] Capture the complete campaign graph at a committed fixed-step boundary.
-- [ ] Parse and validate the `campaign` launch intent before constructing live state.
-- [ ] Add `CampaignBootstrapCommand` and typed terminal result.
-- [ ] Build New and Continue candidates off to the side.
-- [ ] Validate unit/tower/projectile IDs and all references before commit.
-- [ ] Preserve or explicitly reset camera, selection, pause and transient effects by policy.
-- [ ] Make candidate commit atomic and stale-generation aware.
-- [ ] Add migration or quarantine for existing keys and minimal victory payloads.
-- [ ] Return typed save-write receipts instead of swallowing storage failures.
-- [ ] Expose bootstrap revision and immutable state fingerprint through GameHost.
-- [ ] Correlate source canvas, HUD, minimap and CRT frame with the bootstrap revision.
-- [ ] Add local, built and Pages New/Continue fixtures.
-- [ ] Add malformed, foreign, unsupported, unavailable-storage and failed-hydration fixtures.
+**Goal:** implement one deterministic pointer pipeline from event sampling through visible geometry, typed hit admission, action commit and first-frame acknowledgement.
+
+- [ ] Extract immutable main-menu and settings control descriptors.
+- [ ] Add surface, transform, layout and panel generations.
+- [ ] Version viewport bounds, source size, DPR, CRT state and curve coefficient.
+- [ ] Implement inverse CRT projection or shared display-space hit geometry.
+- [ ] Replace integer-only hit functions with typed `MenuHitTestResult`.
+- [ ] Make `inside=false` terminal `RejectedOutsideSurface`.
+- [ ] Make no-control hits terminal `RejectedMiss`.
+- [ ] Require primary pointer and admitted button.
+- [ ] Add pointer sequence, capture and cancel policy.
+- [ ] Construct pointer-sourced actions only from `status=Hit` evidence.
+- [ ] Keep keyboard and hidden controls as explicit input sources.
+- [ ] Add `MenuActionCommand` and terminal `MenuActionResult`.
+- [ ] Fence stale surface, transform, layout and panel results.
+- [ ] Deduplicate repeated pointer sequences.
+- [ ] Fence actions after route transition commit.
+- [ ] Return zero mutation for every rejected path.
+- [ ] Publish detached input/action observations and bounded journal.
+- [ ] Correlate accepted results with the first visible menu frame.
+- [ ] Add Node geometry and policy fixtures.
+- [ ] Add browser source-route, built-output and Pages fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
 src/menu/graveyard-menu.js
-src/campaign/campaign-scene.js
-menu-save-presence-kit
+src/menu/crt-renderer.js
+src/menu/graveyard-art.js
+index.html
 menu-route-kit
-campaign-route-shell-kit
-pixel-campaign-runtime-kit
-fixed-step-campaign-simulation-kit
-pixel-campaign-render-kit
-legacy-gamehost-diagnostics-kit
+crt-renderer-kit
+graveyard-art-kit
+menu-settings-persistence-kit
+menu-audio-kit
 menu-static-check-kit
-campaign-static-check-kit
-package.json
 window.PhantomMenu
-window.GameHost
+scripts/check-menu.mjs
+package.json
 ```
 
-## Save-probe contract
+## Control descriptor
 
 ```txt
-CampaignSaveProbeCommand
+MenuControlDescriptor {
+  controlId
+  actionId
+  panelKind
+  enabled
+  sourceShape
+  visibleShape
+  layoutRevision
+  panelGeneration
+}
+```
+
+## Geometry descriptor
+
+```txt
+MenuRenderGeometry {
+  surfaceGeneration
+  transformRevision
+  sourceSize
+  displayRect
+  devicePixelRatio
+  crtEnabled
+  curveCoefficient
+  layoutRevision
+  panelGeneration
+  controls[]
+}
+```
+
+## Pointer command
+
+```txt
+MenuPointerSample {
+  sampleId
+  sequenceId
+  pointerId
+  pointerType
+  isPrimary
+  button
+  buttons
+  viewportPoint
+  surfaceGeneration
+  transformRevision
+}
+
+MenuActionCommand {
   commandId
-  candidateKeys
-  allowedStorageScopes
-  expectedSchema
-  supportedVersions
-
-CampaignSaveProbeResult
-  status: Admissible | Missing | Malformed | Foreign | UnsupportedVersion | StorageUnavailable
-  saveKey
-  storageScope
-  schema
-  version
-  fingerprint
-  summary
-  reason
+  inputSource
+  pointerSampleId
+  hitResultId
+  controlId
+  actionId
+  expectedMenuRevision
+  expectedPanelGeneration
+  expectedTransitionRevision
+}
 ```
 
-## Bootstrap contract
+## Terminal results
 
 ```txt
-CampaignBootstrapCommand
-  commandId
-  launchIntentId
-  mode: New | Continue
-  selectedSaveKey
-  selectedStorageScope
-  expectedSaveFingerprint
-  expectedRuntimeGeneration
-  expectedPredecessorBootstrapRevision
-
-CampaignBootstrapResult
-  status: CommittedNew | CommittedContinue | RejectedInvalidSave | RejectedStale | FailedCandidate | FailedCommit
-  bootstrapRevision
-  runtimeGeneration
-  stateFingerprint
-  saveFingerprint
-  migratedFromVersion
-  firstFrameReceiptId
-  reason
+Committed
+RejectedOutsideSurface
+RejectedMiss
+RejectedPointerPolicy
+RejectedUnsupportedTransform
+RejectedStale
+RejectedDuplicate
+RejectedTransition
+RejectedDisabled
+RejectedCapability
 ```
 
-## Required save envelope
+## Minimal correction sequence
 
 ```txt
-schema
-version
-saveId
-createdAtMs
-updatedAtMs
-contentFingerprint
-committedTick
-bootstrapRevision
-stateFingerprint
-payload
-```
-
-## Required campaign payload
-
-```txt
-phase and simulation time
-souls and sanctum core
-wave, waveActive and spawn queue
-units, targets, movement and cooldowns
-towers, pad occupancy and cooldowns
-projectiles and target references
-selection, selected pad and tower type
-camera state
-next unit/projectile/tower IDs
-explicit transient-effect policy
+1. Calculate pointer policy result.
+2. Project against current geometry.
+3. Return typed containment and hit results.
+4. On any rejection, return without calling activateMain/activatePanel.
+5. On Hit, build one command for the named control.
+6. Commit selection/panel/settings/transition mutation once.
+7. Publish terminal result and first-frame acknowledgement.
 ```
 
 ## Fixture gate
 
 ```txt
-Continue disabled for malformed or foreign saves
-valid current save produces CommittedContinue
-valid legacy save produces migration receipt
-invalid hydration performs zero live mutation
-New applies an explicit predecessor-save policy
-resumed IDs remain unique after new spawns/builds
-HUD and GameHost match the hydrated state fingerprint
-first CRT-presented frame cites the bootstrap revision
-local, built and Pages results match
+main control centers commit expected actions
+main row gaps reject with zero mutation
+empty graveyard and letterbox reject with zero mutation
+settings row centers commit expected mutations
+settings row gaps reject with zero mutation
+secondary mouse and secondary touch reject
+CRT-on/off visible geometry matches hit geometry
+resize/DPR stale results reject
+keyboard and accessibility controls retain parity
+one physical sequence produces one result
+source, build and Pages results match
 ```
 
 ## Dependency order
 
 ```txt
-Versioned Full Campaign Checkpoint Capture Authority
-  -> Campaign Bootstrap and Continue Resume Authority
-  -> Fixed-Step Committed Frames
+Runtime Session Resource Lifecycle Authority
   -> CRT Display/Input Projection Authority
+  -> Menu Pointer-Hit Admission Authority
+  -> Campaign Bootstrap and Continue Resume Authority
   -> Public Host Committed Read Model
 ```
 
-Do not implement Continue as best-effort mutation of the live `state` object. Hydrate and validate a complete detached candidate, then commit once.
+Do not fix the defect by merely checking `index >= 0` in one listener and leaving geometry, stale-result, pointer-policy and proof gaps unowned. Update the existing owners under one explicit authority.
