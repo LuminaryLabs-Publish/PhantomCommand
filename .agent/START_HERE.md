@@ -2,93 +2,101 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T11-40-50-04-00`
+**Last aligned:** `2026-07-12T11-48-43-04-00`
 
 ## Summary
 
 PhantomCommand is a static pixel-isometric campaign game with a procedural graveyard menu, CRT WebGL presentation, browser audio, direct controls, fixed-step combat, persistence and public diagnostics.
 
-The current audit isolates **campaign world-pointer admission**. The CRT renderer calculates whether a pointer is inside the visible source frame, but campaign selection, orders, camera pan and wheel anchoring ignore that result. The visible shader also curves the sampled source while the CPU input path does not invert that curve.
+The current audit isolates **runtime-session and resource lifecycle ownership**. Menu and campaign routes allocate recursive RAF loops, anonymous listeners, WebGL resources, optional Web Audio resources and public hosts without a session generation, aggregate resource ledger, context-loss recovery or idempotent retirement result.
 
 ## Plan ledger
 
-**Goal:** require a current display-correct projection and camera-bound world result before any campaign pointer gesture can mutate gameplay or camera state.
+**Goal:** make startup, active callbacks, route transitions, WebGL context recovery and teardown part of one explicit runtime-session transaction.
 
 - [x] Compare the complete Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Skip newer unsynchronized `IntoTheMeadow` work.
-- [x] Select only `PhantomCommand` as the next-oldest synchronized repository.
+- [x] Select only `PhantomCommand` because repo-local audit state was newer than central tracking.
 - [x] Identify the full interaction loop, all active domains, all 20 implemented kits and their services.
-- [x] Trace left, right, middle, drag and wheel input paths.
-- [x] Define containment, inverse CRT projection, camera revision, gesture lease, command result and proof contracts.
+- [x] Trace menu/campaign RAF, listeners, timers, WebGL, audio, navigation and public-host ownership.
+- [x] Define lifecycle phases, resource leases, retirement results, context generations and browser proof.
 - [x] Update documentation on `main`; create no branch or pull request.
-- [ ] Runtime implementation and executable campaign-pointer fixtures remain future work.
+- [ ] Runtime implementation and executable lifecycle fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T11-40-50-04-00/project-breakdown.md
+.agent/trackers/2026-07-12T11-48-43-04-00/project-breakdown.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-12T11-40-50-04-00-campaign-world-pointer-admission-dsk-map.md
-.agent/render-audit/2026-07-12T11-40-50-04-00-crt-visible-world-pointer-provenance-gap.md
-.agent/gameplay-audit/2026-07-12T11-40-50-04-00-letterbox-pointer-mutates-campaign-loop.md
-.agent/interaction-audit/2026-07-12T11-40-50-04-00-campaign-pointer-command-admission-map.md
-.agent/campaign-input-audit/2026-07-12T11-40-50-04-00-containment-curve-camera-generation-contract.md
-.agent/deploy-audit/2026-07-12T11-40-50-04-00-campaign-pointer-projection-fixture-gate.md
-.agent/turn-ledger/2026-07-12T11-40-50-04-00.md
+.agent/architecture-audit/2026-07-12T11-48-43-04-00-runtime-session-resource-lifecycle-dsk-map.md
+.agent/render-audit/2026-07-12T11-48-43-04-00-webgl-resource-retirement-context-gap.md
+.agent/gameplay-audit/2026-07-12T11-48-43-04-00-menu-campaign-raf-lifecycle-loop.md
+.agent/interaction-audit/2026-07-12T11-48-43-04-00-session-retirement-admission-map.md
+.agent/runtime-lifecycle-audit/2026-07-12T11-48-43-04-00-raf-listener-webgl-audio-resource-contract.md
+.agent/deploy-audit/2026-07-12T11-48-43-04-00-runtime-lifecycle-browser-fixture-gate.md
+.agent/turn-ledger/2026-07-12T11-48-43-04-00.md
 .agent/kit-registry.json
 ```
 
 ## Current interaction loop
 
 ```txt
-menu
-  -> graveyard source canvas and CRT renderer
-  -> settings and save-presence read
-  -> pointer/keyboard activation
-  -> fade and route to campaign
+menu boot
+  -> source canvas and graveyard art
+  -> CRT WebGL allocation
+  -> settings/save reads and listeners
+  -> optional AudioContext graph
+  -> recursive RAF
+  -> PhantomMenu publication
 
-campaign
-  -> create 640x360 source world and CRT renderer
-  -> install pointer, keyboard, wheel and blur handlers
-  -> project client pointer to source coordinates
-  -> selection, build, orders, pan and zoom
-  -> fixed-step spawning, combat and rewards
-  -> source-canvas world/HUD/minimap render
-  -> CRT WebGL presentation
+menu transition
+  -> fade while RAF/audio continue
+  -> location navigation
+  -> browser destruction is implicit teardown
+
+campaign boot
+  -> source canvas and CRT WebGL allocation
+  -> campaign, camera and input state
+  -> global/canvas listeners
+  -> recursive fixed-step RAF
+  -> GameHost publication
+
+campaign frame
+  -> input and camera
+  -> fixed-step simulation
+  -> world/HUD/minimap source draw
+  -> CRT upload and presentation
+  -> successor RAF
 ```
 
 ## Main findings
 
 ```txt
-inside/outside classification: implemented
-campaign containment admission: absent
-CRT visible curve: implemented
-CPU inverse CRT projection: absent
-display generation: absent
-camera revision binding: absent
-gesture lease: absent
-typed campaign pointer result: absent
-command-to-frame receipt: absent
-browser campaign-pointer fixtures: absent
+runtime session identity: absent
+lifecycle phase/generation: absent
+RAF cancellation lease: absent
+listener and timer registries: absent
+WebGL resource inventory/dispose: absent
+context loss/restoration handling: absent
+AudioContext retirement receipt: absent
+public host revocation: absent
+stale callback rejection: absent
+repeated-session browser fixtures: absent
 ```
 
 ## Domains and kit groups
 
 ```txt
 menu and campaign route shells
-menu state settings persistence audio and transition
-CRT contain and curved display projection
-pointer keyboard drag wheel focus and lifecycle
-campaign selection build orders camera wave and restart
-fixed-step simulation combat rewards and terminal state
-procedural menu and campaign source rendering
-WebGL and Web Audio resources
-public host diagnostics
-checks static build Pages and audit tracking
+runtime-session startup active failure transition and retirement
+RAF timer listener pointer keyboard wheel focus and page lifecycle
+CRT source/display projection and WebGL resources
+Web Audio resource ownership
+campaign state commands simulation and rendering
+public hosts diagnostics validation build Pages and audit tracking
 ```
 
 Implemented kit count: `20`. The current audit, tracker and machine registry contain the complete per-kit service inventory.
@@ -96,10 +104,10 @@ Implemented kit count: `20`. The current audit, tracker and machine registry con
 ## Required parent domain
 
 ```txt
-phantom-command-campaign-world-pointer-admission-authority-domain
+phantom-command-runtime-session-resource-lifecycle-authority-domain
 ```
 
-It coordinates event/session identity, surface containment, inverse CRT projection, camera revision, gesture ownership, command admission, typed results, observations, journals and browser proof.
+It coordinates session identity, phases, RAF/listener/timer leases, WebGL context generations and inventories, audio ownership, route retirement, host revocation, typed results, observations, journals and browser proof.
 
 ## Ordered architecture queue
 
@@ -114,9 +122,9 @@ It coordinates event/session identity, surface containment, inverse CRT projecti
    2f. Fixed-Step Scheduling, Replay and Committed Frames
    2g. Public Host Committed Read Model
    2h. Combat and Exclusive Terminal Authorities
-3. Runtime Session Lifecycle Authority
+3. Runtime Session Resource Lifecycle Authority
    3a. Menu Audio Activation and Lifecycle Authority
 4. Versioned Full Campaign Checkpoint Capture Authority
 ```
 
-Do not treat source coordinates as actionable merely because they were calculated. Require current visible-surface, display-transform and camera evidence.
+Do not treat browser navigation as a sufficient lifecycle contract. Completion requires explicit callback, WebGL, audio and public-host retirement with real-browser evidence.
