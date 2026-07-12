@@ -1,120 +1,141 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T16-00-03-04-00`
+**Timestamp:** `2026-07-12T18-11-53-04-00`
 
 ## Summary
 
-The leading documented gap is Menu Pointer-Hit Admission Authority. Pointer misses and letterbox clicks can execute stale selected actions, settings-panel misses can mutate stale selected rows, and pointer geometry does not invert the visible CRT curve.
+The leading documented gap is Campaign Action Result Authority. Campaign action helpers cannot report whether work committed, why a request was rejected, which revision changed or which visible frame reflects the result.
 
 ## Plan ledger
 
-**Goal:** close pointer policy, geometry, hit admission, zero-mutation rejection and visible-proof gaps while preserving the campaign bootstrap, phase, fixed-step, combat, lifecycle and persistence queues.
+**Goal:** close action identity, revision admission, atomic commit, terminal-result, zero-mutation and visible-proof gaps while preserving the existing pointer, phase, replay, lifecycle and persistence queues.
 
-- [x] Record main-menu miss and stale-selection gaps.
-- [x] Record settings-panel miss and stale-row gaps.
-- [x] Record containment and CRT transform gaps.
-- [x] Record pointer policy, result and fixture gaps.
+- [x] Record void-helper and direct-mutation action paths.
+- [x] Record silent rejection and no-effect ambiguity.
+- [x] Record multi-resource atomicity gaps.
+- [x] Record public-host source and capability gaps.
+- [x] Record result, observation, frame and fixture gaps.
 - [x] Preserve previous authority queues.
 - [ ] Implement in dependency order.
 
-## Pointer policy gaps
+## Action identity gaps
 
 ```txt
-input source identity
-pointer sample id
-pointer sequence id
-primary-pointer policy
-primary-button policy
-pointer capture
-pointer cancel
-pointer down/up coherence
-drag threshold
-duplicate sequence rejection
+campaign session ID
+campaign session generation
+campaign state revision
+action ID
+action sequence
+action source kind
+action kind registry
+action payload schema
+source capability
 ```
 
-## Geometry gaps
+## Revision gaps
 
 ```txt
-menu surface generation
-source-canvas revision
-viewport/display rectangle revision
-DPR revision
-containment transform revision
-CRT state and curve revision
-inverse CRT input projection
-control layout revision
-panel generation
-visible/logical geometry parity
+phase revision
+selection revision
+economy revision
+pad revision
+target revision
+camera revision
+expected-revision admission
+stale action rejection
 ```
 
-## Hit and admission gaps
+## Transaction gaps
 
 ```txt
-typed containment result
-typed control hit result
-control identity
-terminal miss rejection
-terminal outside-surface rejection
-stale transform/layout/panel rejection
-MenuActionCommand
-MenuActionResult
-transition admission result
-zero-mutation rejection fence
-first visible action-frame acknowledgement
+detached action plan
+prepare results
+cross-resource invariant validation
+atomic commit
+rollback
+change set
+predecessor and successor revision
+idempotency ledger
+duplicate action rejection
+```
+
+## Result gaps
+
+```txt
+CampaignActionResult
+explicit success status
+explicit rejection reason
+zero-mutation rejection proof
+created/removed entity IDs
+selection delta
+economy delta
+phase delta
+message delta
+committed simulation step
 ```
 
 ## Concrete current risks
 
 ```txt
-empty graveyard click launches previously selected route
-letterbox click launches previously selected route
-row-gap click launches previously selected route
-settings gap click toggles previously selected setting
-settings miss can close the panel
-secondary mouse button can activate
-secondary pointer can activate
-visible curved control and logical hit rectangle can disagree
-public PhantomMenu activation has no capability/source identity
+wave-start request can be ignored without feedback
+build request can be ignored without distinguishing missing pad, occupancy or souls
+order request can be ignored when selection is empty
+missing selected units are skipped silently
+second pad activation can build without an explicit action boundary
+number keys and pause mutate shared state directly
+restart reloads without a coordinated result
+GameHost exposes direct mutators without source identity
+callers cannot retry safely because duplicate application cannot be detected
+HUD can retain unrelated predecessor messaging after a rejected request
+```
+
+## Observation and render gaps
+
+```txt
+detached action observation
+bounded action journal
+feedback projection result
+public readback projection result
+first visible action-frame acknowledgement
+stale result/frame rejection
 ```
 
 ## Test gaps
 
 ```txt
-main row center hits
-main row gap misses
-empty canvas misses
-wide/tall letterbox misses
-settings row center hits
-settings row gap misses
-CRT forward/inverse geometry
-primary/secondary pointer policy
-stale resize/DPR rejection
-duplicate sequence rejection
-zero settings/storage/audio/navigation mutation after miss
-keyboard/accessibility parity
+all action success paths
+all action rejection reasons
+zero state-digest change after rejection
+duplicate action ID idempotency
+stale revision rejection
+build atomicity
+wave-start atomicity
+rollback after prepare failure
+public/browser source parity
 source/build/Pages parity
+first visible frame correlation
 ```
 
 ## Retained campaign gaps
 
 ```txt
-Campaign Bootstrap and Continue Resume Authority
-Campaign Action Result Authority
+Menu Pointer-Hit Admission Authority
 Campaign World-Pointer Admission Authority
 Public Host Owner Quarantine and Typed Command Admission
+CRT Display/Input Projection Authority
 Campaign Phase Admission Authority
 Fixed-Step Command Scheduling Replay and Committed Frame Authority
 Public Host Committed Read Model
 Combat Resolution and Entity Liveness Authority
 Exclusive Terminal Outcome Transaction
 Versioned Full Campaign Checkpoint Capture Authority
+Campaign Bootstrap and Continue Resume Authority
 ```
 
 ## Retained lifecycle/product gaps
 
 ```txt
 Runtime Session Resource Lifecycle Authority
-CRT Display/Input Projection Authority
 Menu Audio Activation and Lifecycle Authority
 WebGL context loss/restore and disposal
 save schema, migration and atomic hydration
@@ -123,4 +144,4 @@ complete campaign replay and restored-frame proof
 
 ## Completion boundary
 
-Do not count a selected menu item, `inside` boolean, integer hit index, visible highlight or successful route transition as pointer-admission proof. Completion requires current visible-geometry hit evidence, typed rejection with zero mutation for every miss/stale path, one terminal action result and a first-visible-frame acknowledgement.
+Do not count direct mutation, a changed HUD value, a helper returning, or a public method completing without throwing as action-result proof. Completion requires one terminal result, zero mutation for every rejection, exactly-once mutation for accepted action IDs and a first-visible-frame acknowledgement.
