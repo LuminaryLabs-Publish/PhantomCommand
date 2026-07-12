@@ -1,78 +1,79 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T11-48-43-04-00`
+**Timestamp:** `2026-07-12T13-59-50-04-00`
 
 ## Summary
 
-The newest documented gap is runtime-session and resource lifecycle ownership. Both routes depend on page destruction to stop RAF loops, remove listeners, release WebGL resources, close audio and revoke public hosts.
+The newest documented gap is Campaign Bootstrap and Continue Resume Authority. Continue can be enabled by any truthy configured storage value, but the campaign ignores the launch query, reads no save and always creates default state.
 
 ## Plan ledger
 
-**Goal:** require explicit, generation-bound startup and retirement for every callback and native browser resource.
+**Goal:** require complete, versioned and atomic campaign bootstrap before treating Continue as functional.
 
-- [ ] Runtime session identity, phase and generation.
-- [ ] Detached candidate startup and typed start result.
-- [ ] RAF, listener and timer leases.
-- [ ] WebGL resource inventory and idempotent dispose.
-- [ ] Complete shader/program/buffer/texture rollback.
-- [ ] Context-loss and restoration generations.
-- [ ] Audio resource lease and close receipt.
-- [ ] Route transition retirement barrier.
-- [ ] Public host revocation.
-- [ ] Stale callback rejection.
-- [ ] Lifecycle observations and bounded journal.
-- [ ] Repeated-session, context-loss and Pages fixtures.
-- [ ] Retain campaign pointer, menu pointer, bootstrap, host, combat, phase and checkpoint gates.
+- [ ] Owned save-key and storage-scope policy.
+- [ ] Typed save probe instead of boolean presence.
+- [ ] Save schema, version, fingerprint and migration.
+- [ ] Complete campaign checkpoint payload.
+- [ ] Launch-intent admission and identity.
+- [ ] Distinct New and Continue bootstrap paths.
+- [ ] Detached candidate construction and validation.
+- [ ] Atomic hydration and stale-result rejection.
+- [ ] Typed save read/write and bootstrap results.
+- [ ] First restored-frame acknowledgement.
+- [ ] Local, built and Pages resume fixtures.
+- [ ] Retain runtime lifecycle, pointer, phase, fixed-step, combat and host gates.
 
-## Runtime lifecycle gaps
+## Campaign bootstrap gaps
 
 ```txt
-runtimeSessionId: no
-runtimeGeneration: no
-lifecycle phase: no
-start command/result: no
-retire command/result: no
-RAF request ownership: no
-listener lease registry: no
-timer lease registry: no
-resource ledger: no
-WebGL dispose: no
-context loss/restore handling: no
-context generation: no
-AudioContext retirement receipt: no
-public host revocation: no
-stale callback rejection: no
-idempotent duplicate retirement: no
-browser lifecycle fixtures: no
+matched save key retained: no
+matched storage scope retained: no
+save bytes parsed by menu: no
+save compatibility validated: no
+campaign launch query consumed: no
+new-session predecessor-save policy: no
+campaign save read: no
+complete checkpoint capture: no
+save schema/version: no
+save/content fingerprint: no
+migration: no
+candidate graph: no
+atomic hydration: no
+save write receipt: no
+bootstrap revision: no
+stale bootstrap rejection: no
+first restored-frame receipt: no
+resume browser fixtures: no
 ```
 
 ## Concrete risks
 
 ```txt
-recursive RAF can schedule a successor without checking route retirement
-anonymous listeners cannot be removed by an aggregate route owner
-successful WebGL shaders, program, buffer and texture have no explicit retirement path
-context loss has no typed degraded state or resource rebuild generation
-menu audio close uses an untracked delayed timer
-PhantomMenu and GameHost remain reachable until page destruction
-stale callbacks have no session fence
-repeated embedded or test mounts can accumulate callbacks/resources
+malformed JSON can mark Continue BOUND
+foreign Nexus or legacy data can mark Continue BOUND
+Continue always renders a default campaign
+victory save cannot reconstruct units, towers, core, camera or IDs
+storage write failure is swallowed
+Begin does not explicitly clear, archive or supersede an old save
+future live-object hydration could leave partial state after failure
+restored ID counters could collide unless persisted and validated
+HUD, CRT and GameHost cannot prove which save produced the frame
 ```
 
 ## Retained gaps
 
 ```txt
 Menu pointer misses can execute the selected action
-Campaign Begin and Continue lack validated bootstrap and hydration
 Campaign pointer commands ignore visible-surface and CRT-curve admission
 GameHost exposes live mutable owners
 Campaign phase does not fence commands
 Commands are not fixed-step scheduled
 Combat liveness and exclusive terminal result remain unimplemented
+Runtime callbacks and WebGL/audio resources lack explicit retirement
 Menu audio activation policy remains incomplete
 Full checkpoint capture and replay remain incomplete
 ```
 
 ## Completion boundary
 
-Do not claim lifecycle correctness because navigation normally destroys the page. Completion requires explicit lease ownership, context recovery, idempotent retirement, host revocation, stale-callback rejection and real-browser repeated-session proof.
+Do not claim resume support because Continue is visible, enabled or carries a query string. Completion requires a complete versioned payload, typed save admission, atomic hydration, migration policy, stale-result rejection and first-visible-frame proof.
