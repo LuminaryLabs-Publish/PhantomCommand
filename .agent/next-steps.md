@@ -1,133 +1,148 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T11-48-43-04-00`
+**Timestamp:** `2026-07-12T13-59-50-04-00`
 
 ## Goal
 
-Implement one runtime-session and resource-lifecycle authority so menu and campaign startup, callbacks, WebGL/audio ownership, route transition, context recovery and retirement are explicit and idempotent.
+Implement one Campaign Bootstrap and Continue Resume Authority so the menu admits only valid saves, New and Continue are distinct transactions, hydration is atomic, and the first visible frame proves which bootstrap revision was committed.
 
 ## Plan ledger
 
-- [ ] Add runtime session IDs, generations and lifecycle phases.
-- [ ] Convert route startup into a detached candidate-resource transaction.
-- [ ] Retain and cancel every RAF request through named leases.
-- [ ] Register every canvas, document, window and hidden-button listener in a removable lease registry.
-- [ ] Register delayed timers, including AudioContext close timers.
-- [ ] Make `createCrtRenderer()` return a typed resource inventory and idempotent `dispose()` result.
-- [ ] Retain successful shader handles or explicitly release them after link.
-- [ ] Roll back program, shader, buffer and texture candidates on every failure path.
-- [ ] Handle `webglcontextlost` and `webglcontextrestored` under context generations.
-- [ ] Reject draw, input and successor-RAF scheduling from stale or retiring sessions.
-- [ ] Move menu AudioContext, nodes and timers into the runtime resource ledger.
-- [ ] Revoke `window.PhantomMenu` and `window.GameHost` during retirement.
-- [ ] Make route navigation occur after a typed retirement policy result.
-- [ ] Add bounded lifecycle observations and a journal.
-- [ ] Add repeated-session, context-loss, duplicate-retirement and stale-callback browser fixtures.
+- [ ] Replace boolean save presence with typed `CampaignSaveProbeResult`.
+- [ ] Define one owned primary save key and explicit legacy adapters.
+- [ ] Separate localStorage and sessionStorage policies.
+- [ ] Add campaign save schema, version, content fingerprint and state fingerprint.
+- [ ] Capture the complete campaign graph at a committed fixed-step boundary.
+- [ ] Parse and validate the `campaign` launch intent before constructing live state.
+- [ ] Add `CampaignBootstrapCommand` and typed terminal result.
+- [ ] Build New and Continue candidates off to the side.
+- [ ] Validate unit/tower/projectile IDs and all references before commit.
+- [ ] Preserve or explicitly reset camera, selection, pause and transient effects by policy.
+- [ ] Make candidate commit atomic and stale-generation aware.
+- [ ] Add migration or quarantine for existing keys and minimal victory payloads.
+- [ ] Return typed save-write receipts instead of swallowing storage failures.
+- [ ] Expose bootstrap revision and immutable state fingerprint through GameHost.
+- [ ] Correlate source canvas, HUD, minimap and CRT frame with the bootstrap revision.
+- [ ] Add local, built and Pages New/Continue fixtures.
+- [ ] Add malformed, foreign, unsupported, unavailable-storage and failed-hydration fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
-src/menu/crt-renderer.js
 src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-crt-renderer-kit
+menu-save-presence-kit
 menu-route-kit
-menu-audio-kit
 campaign-route-shell-kit
 pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
+pixel-campaign-render-kit
+legacy-gamehost-diagnostics-kit
+menu-static-check-kit
+campaign-static-check-kit
+package.json
 window.PhantomMenu
 window.GameHost
-scripts/check-menu.mjs
-scripts/check-campaign.mjs
-package.json
 ```
 
-## Start contract
+## Save-probe contract
 
 ```txt
-RuntimeStartCommand
+CampaignSaveProbeCommand
   commandId
-  routeId
-  expectedPredecessorGeneration
-  requestedAtMs
+  candidateKeys
+  allowedStorageScopes
+  expectedSchema
+  supportedVersions
 
-RuntimeStartResult
-  status: Ready | RejectedStale | FailedAllocation | FailedAdmission
-  runtimeSessionId
-  runtimeGeneration
-  resourceLedgerRevision
-  webglContextGeneration
-  activeLeaseCounts
+CampaignSaveProbeResult
+  status: Admissible | Missing | Malformed | Foreign | UnsupportedVersion | StorageUnavailable
+  saveKey
+  storageScope
+  schema
+  version
+  fingerprint
+  summary
   reason
 ```
 
-## Retirement contract
+## Bootstrap contract
 
 ```txt
-RuntimeRetireCommand
-  retirementId
-  runtimeSessionId
+CampaignBootstrapCommand
+  commandId
+  launchIntentId
+  mode: New | Continue
+  selectedSaveKey
+  selectedStorageScope
+  expectedSaveFingerprint
   expectedRuntimeGeneration
-  reason
-  requestedAtMs
+  expectedPredecessorBootstrapRevision
 
-RuntimeRetireResult
-  status: Retired | AlreadyRetired | RejectedStale | FailedPartialRetirement
-  runtimeSessionId
+CampaignBootstrapResult
+  status: CommittedNew | CommittedContinue | RejectedInvalidSave | RejectedStale | FailedCandidate | FailedCommit
+  bootstrapRevision
   runtimeGeneration
-  cancelledRafCount
-  removedListenerCount
-  cancelledTimerCount
-  deletedWebglResourceCount
-  closedAudioContextCount
-  revokedHostCount
-  residualResourceIds
+  stateFingerprint
+  saveFingerprint
+  migratedFromVersion
+  firstFrameReceiptId
   reason
 ```
 
-## Context recovery contract
+## Required save envelope
 
 ```txt
-WebglContextLossResult
-  runtimeSessionId
-  runtimeGeneration
-  lostContextGeneration
-  status: Degraded | Retiring | Failed
+schema
+version
+saveId
+createdAtMs
+updatedAtMs
+contentFingerprint
+committedTick
+bootstrapRevision
+stateFingerprint
+payload
+```
 
-WebglContextRestoreResult
-  runtimeSessionId
-  runtimeGeneration
-  restoredContextGeneration
-  resourceLedgerRevision
-  firstFrameReceiptId
-  status: Restored | RejectedRetired | FailedRebuild
+## Required campaign payload
+
+```txt
+phase and simulation time
+souls and sanctum core
+wave, waveActive and spawn queue
+units, targets, movement and cooldowns
+towers, pad occupancy and cooldowns
+projectiles and target references
+selection, selected pad and tower type
+camera state
+next unit/projectile/tower IDs
+explicit transient-effect policy
 ```
 
 ## Fixture gate
 
 ```txt
-one RAF owner exists per current route
-route retirement removes all predecessor listeners
-route retirement cancels all predecessor timers
-WebGL resource inventory reaches zero after retirement
-AudioContext closes or returns an explicit failure
-public hosts are revoked before RETIRED
-forced context loss rejects draw acknowledgement
-context restoration uses a higher generation
-stale callbacks perform zero mutation and schedule no RAF
-repeated retirement returns AlreadyRetired
-local, built and Pages lifecycle results match
+Continue disabled for malformed or foreign saves
+valid current save produces CommittedContinue
+valid legacy save produces migration receipt
+invalid hydration performs zero live mutation
+New applies an explicit predecessor-save policy
+resumed IDs remain unique after new spawns/builds
+HUD and GameHost match the hydrated state fingerprint
+first CRT-presented frame cites the bootstrap revision
+local, built and Pages results match
 ```
 
 ## Dependency order
 
 ```txt
-Campaign World-Pointer Admission Authority
-  -> Runtime Session Resource Lifecycle Authority
+Versioned Full Campaign Checkpoint Capture Authority
+  -> Campaign Bootstrap and Continue Resume Authority
+  -> Fixed-Step Committed Frames
   -> CRT Display/Input Projection Authority
-  -> Menu Audio Activation and Lifecycle Authority
-  -> Public Host Quarantine and Committed Read Model Authorities
+  -> Public Host Committed Read Model
 ```
 
-Do not rely on page destruction as proof of cleanup. Every callback and native resource needs an explicit owner and terminal result.
+Do not implement Continue as best-effort mutation of the live `state` object. Hydrate and validate a complete detached candidate, then commit once.
