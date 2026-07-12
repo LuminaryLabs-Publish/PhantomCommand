@@ -1,42 +1,38 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T07-29-32-04-00`
+**Timestamp:** `2026-07-12T09-28-05-04-00`
 
 ## Summary
 
-This run changed documentation only. Source inspection proves the menu creates a Web Audio graph, stores a partial owner object, clears that object before delayed close, and never observes or resumes a suspended/interrupted context. No browser lifecycle or teardown fixture currently exists.
+This run changed documentation only. Source inspection proves that source-coordinate containment and row hit tests exist, but the canvas `pointerdown` path activates the current selection after a miss. No executable pointer-target or miss-safety fixture currently exists.
 
 ## Plan ledger
 
-**Goal:** distinguish audio graph construction from admitted, observable and disposable audio lifecycle correctness.
+**Goal:** distinguish coordinate projection and visual selection from admitted pointer targeting.
 
-- [x] Inspect persisted ambience settings.
-- [x] Inspect `ensureAudio()`, `stopAmbience()` and `playUiTone()`.
-- [x] Inspect all stored and unstored audio nodes.
-- [x] Inspect pointer and keyboard activation paths.
-- [x] Inspect transition timing and navigation.
-- [x] Confirm no visibility, pagehide, statechange or dispose handling exists.
-- [x] Inspect current static menu checks.
-- [x] Document lifecycle commands, results, generations and fixture requirements.
+- [x] Inspect `screenToSource()` contain projection and `inside` classification.
+- [x] Inspect `menuHitIndex()` and `panelHitIndex()`.
+- [x] Inspect pointer move and pointer down paths.
+- [x] Inspect keyboard activation and hidden-button activation separately.
+- [x] Confirm pointer miss results are discarded before action execution.
+- [x] Confirm settings-panel misses execute the current selected row.
+- [x] Document command, hit-result, generation, observation and fixture requirements.
 - [ ] Execute fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-ambience defaults enabled unless persisted false
-first pointerdown or keydown calls ensureAudio()
-ensureAudio returns when state.audio is truthy
-ensureAudio creates AudioContext, master, drone and looping wind source
-ensureAudio never observes AudioContext.state
-ensureAudio never calls context.resume()
-stopAmbience clears state.audio before context close
-stopAmbience schedules an untracked 300 ms delayed close
-rapid re-enable can create a replacement before predecessor close
-UI tone oscillators are transient and not registered
-no visibilitychange listener exists
-no pagehide listener exists
-no AudioContext statechange listener exists
-navigation performs no explicit audio disposal
+canvas covers the viewport
+source frame is 480x270
+renderer uses contain projection
+screenToSource returns x, y and inside
+letterbox coordinates produce inside=false
+menuHitIndex returns -1 outside actionable rows
+panelHitIndex returns -1 outside settings rows
+pointer move only updates selection after a hit
+no-panel pointerdown always calls activateMain(current selection)
+settings pointerdown always calls activatePanel(current selection)
+keyboard Enter/Space intentionally activates current selection
 ```
 
 ## Existing checks prove
@@ -52,15 +48,15 @@ static build copies source files
 ## Existing checks do not prove
 
 ```txt
-browser user activation was admitted
-audio context reached running state
-suspended or interrupted context can resume
-one current graph generation exists
-rapid toggles cannot overlap contexts
-all nodes and timers retire on stop
-navigation and pagehide dispose audio
-settings projection matches runtime audio state
-stale delayed callbacks are rejected
+background pointer misses are inert
+letterbox pointer misses are inert
+between-row clicks are inert
+settings-panel misses are inert
+pointer hit belongs to current surface or panel generation
+stale hit results are rejected
+disabled targets return typed results
+pointer result correlates with route or settings revision
+keyboard and pointer admission remain distinct
 ```
 
 ## Change boundary
@@ -69,8 +65,10 @@ stale delayed callbacks are rejected
 runtime source changed: no
 menu behavior changed: no
 campaign behavior changed: no
-audio behavior changed: no
+pointer behavior changed: no
+keyboard behavior changed: no
 rendering changed: no
+audio changed: no
 persistence changed: no
 navigation changed: no
 package scripts changed: no
@@ -80,28 +78,26 @@ branch created: no
 pull request created: no
 npm run check: not run
 npm run build: not run
-browser audio smoke: not run
+browser pointer smoke: not run
 ```
 
 ## Required fixtures
 
 ```txt
-fixture:audio-lifecycle-state-machine
-fixture:context-generation
-fixture:graph-generation
-fixture:stale-command-rejection
-fixture:node-registry-disposal
-fixture:delayed-close-cancellation
-fixture:rapid-toggle-replacement
-fixture:idempotent-stop-dispose
-smoke:first-pointer-audio-activation
-smoke:first-keyboard-audio-activation
-smoke:suspended-context-resume
-smoke:background-foreground-audio
-smoke:audio-statechange-interruption
-smoke:navigation-audio-retirement
-smoke:pagehide-audio-retirement
-smoke:pages-audio-lifecycle
+fixture:pointer-background-miss
+fixture:pointer-letterbox-left-right-miss
+fixture:pointer-letterbox-top-bottom-miss
+fixture:pointer-between-row-miss
+fixture:pointer-disabled-target
+fixture:pointer-settings-background-miss
+fixture:pointer-settings-outside-miss
+fixture:pointer-stale-surface-generation
+fixture:pointer-stale-panel-generation
+fixture:pointer-selection-revision
+fixture:pointer-hit-action-correlation
+smoke:menu-pointer-target-browser
+smoke:menu-keyboard-pointer-parity
+smoke:pages-pointer-target
 ```
 
-No audio activation, running-state, interruption recovery, rapid-toggle safety, ordered teardown or browser compatibility claim is made.
+No pointer-target correctness, miss safety, stale-result rejection or pointer-to-action correlation claim is made.
