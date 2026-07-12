@@ -1,68 +1,76 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-11T23-28-29-04-00`
+**Timestamp:** `2026-07-12T01-20-00-04-00`
 
 ## Summary
 
-The newest gap is the public runtime surface. `window.GameHost` exposes live campaign and camera owners plus direct mutators, so diagnostics and automation can become a second gameplay authority. Continue admission remains the first product gate, but raw owner exposure should be quarantined before expanding automation or public tooling.
+The newest gap is CRT display/input projection. The visible shader applies containment plus radial curvature, while CPU pointer mapping applies containment only. Menu and campaign interactions can therefore target semantic coordinates different from the displayed pixels, and campaign input can mutate state from black border regions.
 
 ## Plan ledger
 
-**Goal:** keep unresolved risks explicit, dependency ordered and fixture bounded.
+**Goal:** keep unresolved risks dependency ordered and fixture bounded.
 
 - [ ] Continue candidate resolution and startup admission.
 - [ ] Public host owner quarantine and typed command admission.
-- [ ] Display/input projection parity.
-- [ ] Phase and fixed-step command scheduling.
-- [ ] Committed-frame host read model.
+- [ ] Display/input projection parity and outside-region admission.
+- [ ] Campaign phase admission.
+- [ ] Fixed-step command scheduling and committed frame.
+- [ ] Public host committed read model.
 - [ ] Deterministic combat and exclusive terminal result.
 - [ ] Runtime session lifecycle, teardown and restart.
 - [ ] Versioned checkpoint capture, migration and atomic resume.
 
+## Projection gaps
+
+```txt
+GLSL applies contain then curve
+CPU screenToSource applies contain only
+CPU mapper has no CRT settings input
+menu CRT toggle changes display mapping only
+campaign always renders with CRT enabled
+campaign handlers ignore mapping inside flag
+post-curve black regions can be CPU-inside
+letterbox/pillarbox coordinates can issue campaign actions
+no semantic sample policy for chromatic aberration
+no projection ID or revision
+no output/source surface revision
+no CRT settings revision
+no pointer sample or mapping result ID
+no stale resize/settings rejection
+no camera revision on world-target derivation
+no projection frame receipt
+no CPU/GLSL parity fixture
+no browser pixel-pick fixture
+```
+
 ## Public host gaps
 
 ```txt
-window.GameHost exposes the live state object
-window.GameHost exposes the live camera object
-public callers can mutate gameplay without command admission
-public callers can mutate terminal flags without arbitration
-public callers can bypass fixed-step ordering
-public callers can bypass run, phase and revision checks
+window.GameHost exposes live state and camera
+public callers bypass command and phase admission
 startWave, build and setZoom return no typed result
-build depends on ambient selectedPad and towerType
-setZoom accepts NaN and can poison camera projection
-getState has no runId, runEpoch or phaseRevision
-getState has no simulationTick or frameId
-getState has no render receipt or state fingerprint
-getState can report state newer than the visible canvas
-no capability descriptor or caller budget
-no command ID or idempotency rule
-no bounded host journal
-no stale-host rejection after navigation or disposal
-window.PhantomMenu also has no session identity or teardown fence
+setZoom accepts NaN
+getState has no run, simulation or frame provenance
+no capability descriptor, command ID or bounded journal
+no stale-host rejection after navigation/disposal
+window.PhantomMenu has no session identity or teardown fence
 ```
 
 ## Continue and checkpoint gaps
 
 ```txt
 three save keys are accepted by presence only
-both localStorage and sessionStorage are scanned without source precedence
-candidate bytes are not parsed before Continue is enabled
-candidate key and storage scope are not retained
-no schemaVersion, gameId, campaignId or contentRevision
-no checkpointId, runEpoch, stateRevision or stateFingerprint
-no migration registry or semantic validation
-no corrupt-save quarantine
+localStorage and sessionStorage have no source precedence
+candidate bytes are not parsed before Continue enablement
 campaign query intent is not parsed
 campaign startup always creates fresh defaults
-current save is only a legacy victory summary
-no staged hydration, rollback or first resumed-frame receipt
+current save is a legacy terminal summary only
+no schema, migration, quarantine, rollback or first resumed-frame receipt
 ```
 
 ## Existing downstream gaps
 
 ```txt
-Projection: CPU pointer mapping omits CRT curve
 Commands: browser callbacks mutate live state
 Clock: commands are outside fixed-step scheduling
 Combat: deleted captured entities can still act
@@ -74,19 +82,17 @@ Checkpoint capture: no stable-boundary or full-state policy
 ## Validation gaps
 
 ```txt
+no CPU/GLSL projection parity fixture
+no black-border admission fixture
+no menu/campaign pixel-pick smoke
+no projection/frame receipt fixture
 no public owner-isolation fixture
-no detached read-model fixture
-no finite host-command fixture
-no stale session/run/phase fixture
-no terminal command rejection fixture
-no host/render frame-correlation fixture
-no legacy compatibility quarantine fixture
+no host command-admission fixture
 no save-candidate precedence fixture
 no atomic hydration rollback fixture
-no first resumed-frame fixture
-no browser host smoke
+no browser lifecycle smoke
 ```
 
 ## Do not claim
 
-Do not claim public host isolation, command safety, terminal integrity, frame-coherent diagnostics, Continue, checkpoint compatibility, migration or resume correctness until the corresponding fixtures pass on `main`.
+Do not claim projection parity, pointer accuracy, outside-region rejection, command safety, Continue, checkpoint compatibility, terminal integrity or lifecycle correctness until the corresponding fixtures pass on `main`.
