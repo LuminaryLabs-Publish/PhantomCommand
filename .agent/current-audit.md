@@ -1,22 +1,22 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T21-31-19-04-00`
+**Timestamp:** `2026-07-11T23-28-29-04-00`
 
 ## Summary
 
-The menu and campaign disagree about what Continue means. The menu scans `phantomCommand.save`, `nexus.sceneSnapshot` and `phantom.command.campaign` in both `localStorage` and `sessionStorage`. Any non-empty value enables Continue. The selected action emits `game.html?campaign=continue`, but the campaign never parses the query, never reads storage and immediately constructs its default state. The visible result is a fresh campaign presented as a resume.
+The campaign publishes its live gameplay and camera owners through `window.GameHost`. The public surface includes raw `state` and `camera` references plus untyped `startWave`, `build` and `setZoom` functions. External same-page code can mutate gameplay, terminal, camera and presentation inputs outside the browser interaction path and outside fixed-step command ordering. `getState()` returns a detached subset, but it samples the mutable owners without a committed frame ID, run epoch, phase revision or render receipt.
 
 ## Plan ledger
 
-**Goal:** define one typed authority from raw save discovery through candidate selection, validation, migration, atomic hydration and first resumed-frame proof.
+**Goal:** define a public host boundary that exposes immutable committed observations and routes every mutation through capability-scoped, revision-fenced commands.
 
 - [x] Compare the current Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Select only `PhantomCommand`.
-- [x] Inspect menu save keys, presence checks and route targets.
-- [x] Inspect campaign default construction, persistence write and public host.
-- [x] Inventory domains, kits and offered services.
-- [x] Define Continue and checkpoint admission contracts.
+- [x] Select only `PhantomCommand` as the oldest eligible repository.
+- [x] Inspect the menu and campaign public globals.
+- [x] Trace public references and callable mutators into live runtime state.
+- [x] Identify the complete interaction loop, domains, kits and services.
+- [x] Define owner quarantine, command admission and committed read-model contracts.
 - [ ] Implement and execute the documented fixtures.
 
 ## Selection audit
@@ -27,92 +27,141 @@ eligible non-Cavalry repositories: 9
 new or central-ledger-missing eligible repositories: 0
 root-.agent-missing eligible repositories: 0
 
-PhantomCommand     2026-07-11T19-48-09-04-00 selected oldest
-ZombieOrchard      2026-07-11T20-03-22-04-00
-TheUnmappedHouse   2026-07-11T20-11-26-04-00
-AetherVale         2026-07-11T20-30-33-04-00
-IntoTheMeadow      2026-07-11T20-38-07-04-00
-MyCozyIsland       2026-07-11T20-51-14-04-00
-PrehistoricRush    2026-07-11T21-00-00-04-00
-TheOpenAbove       2026-07-11T21-08-57-04-00
-HorrorCorridor     2026-07-11T21-21-12-04-00
+PhantomCommand     2026-07-11T21-31-19-04-00 selected oldest
+ZombieOrchard      2026-07-11T21-40-49-04-00
+TheUnmappedHouse   2026-07-11T21-48-44-04-00
+AetherVale         2026-07-11T22-02-01-04-00
+MyCozyIsland       2026-07-11T22-20-00-04-00
+PrehistoricRush    2026-07-11T22-38-54-04-00
+TheOpenAbove       2026-07-11T23-12-03-04-00
+HorrorCorridor     2026-07-11T23-18-16-04-00
+IntoTheMeadow      2026-07-11T23-22-14-04-00
 TheCavalryOfRome   excluded
 ```
+
+Only `LuminaryLabs-Publish/PhantomCommand` is in scope for Publish changes.
 
 ## Complete interaction loop
 
 ```txt
-menu startup
-  -> define three accepted save keys
-  -> read localStorage and sessionStorage
-  -> treat any truthy value as a campaign save
-  -> enable CONTINUE and display BOUND
+menu module evaluation
+  -> create source canvas, art, CRT renderer, settings and menu state
+  -> attach pointer, keyboard and hidden-button listeners
+  -> start recursive menu RAF
+  -> publish window.PhantomMenu
 
-Begin Campaign
-  -> navigate to game.html?campaign=new
+campaign module evaluation
+  -> create rings, pads, archetypes, waves, camera and input owners
+  -> create mutable campaign state, entities and IDs
+  -> attach pointer, wheel, keyboard, keyup and blur listeners
+  -> start recursive campaign RAF
+  -> publish window.GameHost
 
-Continue
-  -> navigate to game.html?campaign=continue
+browser interaction
+  -> pointer and keyboard callbacks mutate selection, orders, wave, pause and camera
+  -> RAF samples held input and updates camera
+  -> fixed accumulator calls update(1/60)
+  -> combat, economy and terminal fields mutate
+  -> CPU canvas renders world, HUD, minimap and overlay
+  -> CRT renderer submits the source canvas
 
-campaign startup
-  -> does not parse the campaign query
-  -> does not read any save candidate
-  -> creates the same default camera, IDs, units and mutable state
-  -> starts the same fixed-step and render loop
-
-campaign completion
-  -> writes one partial localStorage summary
-  -> { scene, souls, wave }
-
-reload or return to menu
-  -> no checkpoint admission, hydration result or resumed-frame receipt
+public host interaction
+  -> caller reads or mutates GameHost.state and GameHost.camera directly
+  -> caller invokes startWave, build or setZoom without a command envelope
+  -> getState samples mutable state and camera independently of render commit
+  -> no command receipt, run/phase fence or frame provenance is returned
 ```
 
 ## Source-backed defects
 
-### Presence is treated as resumability
+### Raw gameplay owner is public
 
-The menu calls `hasCampaignSave()` twice while constructing the menu. The result is only a Boolean from `localStorage.getItem(key) || sessionStorage.getItem(key)`. The candidate bytes are not parsed, classified or retained.
-
-### Candidate keys have no precedence or ownership rule
-
-Three keys can independently enable Continue:
+`window.GameHost.state` is the same object consumed by update, rendering, input callbacks and persistence. Public code can directly change:
 
 ```txt
-phantomCommand.save
-nexus.sceneSnapshot
-phantom.command.campaign
+souls
+core
+wave
+waveActive
+spawn
+units
+towers
+projectiles
+effects
+selected
+selectedPad
+towerType
+paused
+won
+lost
+message
 ```
 
-There is no rule for multiple candidates, storage-scope preference, newest revision, game identity, content identity or legacy migration.
+No validation, command ID, expected revision, phase check or journal row is involved.
 
-### Continue route intent is discarded
+### Raw camera owner is public
 
-The menu emits:
+`window.GameHost.camera` exposes:
 
 ```txt
-game.html?campaign=continue
+x
+z
+zoom
+targetZoom
+min
+max
+vx
+vz
 ```
 
-The campaign module does not parse `location.search` or `URLSearchParams`. It allocates IDs, camera, starting units and the default campaign state immediately.
+Public mutation can bypass zoom clamps, finite-number checks, camera bounds and input ordering. The camera is read by world/screen transforms and every render projection.
 
-### Current save is not a checkpoint
+### Public mutators are untyped
 
-The only write stores:
+The host exposes:
 
-```json
-{"scene":"grave-ring","souls":<number>,"wave":<number>}
+```txt
+startWave()
+build()
+setZoom(value)
 ```
 
-It does not include a schema version, campaign identity, content revision, checkpoint kind, state fingerprint, core health, towers, pad occupancy, player units, spawn queue, projectiles, camera, IDs, run epoch or terminal result.
+These return no result. They do not accept a command ID, expected run epoch, phase revision, frame revision or caller capability. `build()` depends on mutable ambient `selectedPad` and `towerType`, while `startWave()` uses ambient campaign state.
 
-### Session and local storage semantics diverge
+### Non-finite zoom is admitted
 
-A value found only in `sessionStorage` enables Continue, while the current writer writes only to `localStorage`. The runtime has no source receipt indicating which scope or key was selected.
+`setZoom(z)` assigns `clamp(z, min, max)`. The clamp is built from `Math.min` and `Math.max`, so `NaN` remains `NaN`. On the next RAF, `camera.zoom` becomes `NaN`, and world projection produces non-finite screen coordinates.
 
-### Invalid candidates are silently actionable
+### Public terminal mutation bypasses arbitration
 
-Malformed JSON, stale foreign data and legacy summaries all remain truthy. Continue can therefore be enabled even when no resumable state exists.
+A caller can execute:
+
+```js
+GameHost.state.won = true;
+```
+
+The fixed-step update then exits early because `state.won` is true. The next render displays the victory overlay, but no terminal predicate, persistence policy, terminal result or save receipt was committed.
+
+### Readback is not a committed frame
+
+`getState()` structured-clones a subset of live state and camera fields. It includes no:
+
+```txt
+runId
+runEpoch
+phaseRevision
+simulationTick
+frameId
+renderReceipt
+stateFingerprint
+commandSequence
+```
+
+A caller can mutate `state.souls`, immediately call `getState()`, and observe the new value while the canvas still represents the prior RAF.
+
+### Menu global also lacks lifecycle identity
+
+`window.PhantomMenu` exposes `getState()` and `activate(action)` without a menu session ID or disposal fence. Its state is less dangerous because `activateMain()` still checks item enablement, but the surface remains an unversioned global owned by a module-level RAF and listeners.
 
 ## Domains in use
 
@@ -126,12 +175,13 @@ campaign route intent and startup admission
 campaign rings, lanes, pads, archetypes, waves, economy and core health
 selection, construction, orders, pause, camera and fixed-step simulation
 unit, tower, projectile, combat, rewards and terminal mutation
-world, HUD, minimap, overlay and GameHost projection
-checkpoint schema, version, content identity and candidate precedence: missing
-checkpoint migration, semantic validation and quarantine: missing
-new-campaign versus resume admission and atomic hydration: missing
-resumed-state provenance and first resumed-frame acknowledgement: missing
-runtime session lifecycle, validation, static build, Pages deployment and central tracking
+world, HUD, minimap and terminal overlay rendering
+public menu and campaign host projection
+public host capability descriptors and owner quarantine: missing
+typed public command admission and result authority: missing
+committed host read model and frame provenance: missing
+checkpoint, command, phase, combat, terminal and lifecycle authority: planned
+validation, static build, Pages deployment and central tracking
 ```
 
 ## Implemented kits
@@ -172,99 +222,103 @@ campaign content and default-state construction
 selection, building, orders, wave start, pause and camera control
 fixed-step spawning, AI, movement, targeting, damage, rewards and terminal mutation
 world, HUD, minimap and terminal overlay rendering
-mutable GameHost observation and zoom control
+mutable GameHost owner exposure and untyped zoom/wave/build control
 source-pattern checks, static build and GitHub Pages deployment
 ```
 
 ## Required parent domain
 
 ```txt
-phantom-command-continue-checkpoint-admission-authority-domain
+phantom-command-public-host-capability-authority-domain
 ```
 
 Candidate kits:
 
 ```txt
-phantom-command-campaign-route-intent-kit
-phantom-command-save-key-registry-kit
-phantom-command-save-candidate-read-kit
-phantom-command-save-envelope-version-kit
-phantom-command-save-content-identity-kit
-phantom-command-save-candidate-classification-kit
-phantom-command-save-candidate-precedence-kit
-phantom-command-save-schema-validator-kit
-phantom-command-save-semantic-validator-kit
-phantom-command-save-migration-registry-kit
-phantom-command-corrupt-save-quarantine-kit
-phantom-command-continue-capability-result-kit
-phantom-command-new-campaign-admission-kit
-phantom-command-resume-admission-kit
-phantom-command-checkpoint-kind-policy-kit
-phantom-command-checkpoint-fingerprint-kit
-phantom-command-atomic-campaign-hydration-kit
-phantom-command-resume-result-kit
-phantom-command-first-resumed-frame-kit
-phantom-command-resume-observation-kit
-phantom-command-resume-journal-kit
-phantom-command-save-candidate-fixture-kit
-phantom-command-continue-route-fixture-kit
-phantom-command-resume-first-frame-fixture-kit
+phantom-command-host-surface-policy-kit
+phantom-command-host-session-identity-kit
+phantom-command-host-capability-descriptor-kit
+phantom-command-host-owner-handle-quarantine-kit
+phantom-command-host-read-capability-kit
+phantom-command-host-command-capability-kit
+phantom-command-host-command-envelope-kit
+phantom-command-host-command-id-kit
+phantom-command-host-command-admission-kit
+phantom-command-host-run-epoch-fence-kit
+phantom-command-host-phase-revision-fence-kit
+phantom-command-host-finite-value-policy-kit
+phantom-command-host-command-result-kit
+phantom-command-host-committed-read-model-kit
+phantom-command-host-frame-provenance-kit
+phantom-command-host-state-fingerprint-kit
+phantom-command-host-observation-journal-kit
+phantom-command-legacy-gamehost-adapter-kit
+phantom-command-host-mutation-isolation-fixture-kit
+phantom-command-host-read-model-coherence-fixture-kit
+phantom-command-host-stale-command-fixture-kit
+phantom-command-host-terminal-command-fixture-kit
 ```
 
-## Candidate classification
+## Required public surface
 
 ```txt
-RESUMABLE
-LEGACY_TERMINAL_SUMMARY
-REJECTED_MALFORMED
-REJECTED_UNSUPPORTED_VERSION
-REJECTED_WRONG_GAME
-REJECTED_WRONG_CONTENT
-REJECTED_SEMANTIC_STATE
-REJECTED_AMBIGUOUS
-UNAVAILABLE
+window.GameHost = {
+  version,
+  sessionId,
+  capabilities,
+  getCommittedState(),
+  getJournal(),
+  submit(command)
+}
 ```
 
-Only `RESUMABLE` may enable Continue. A legacy victory summary may be preserved or migrated into completion metadata, but it must not be presented as a resumable active campaign.
+The public object must not contain raw runtime owners, render objects, collections or direct mutation functions.
 
-## Required transaction
+## Required command transaction
 
 ```txt
-ResolveContinueCapability
-  -> read exact raw candidates without mutation
-  -> attach key and storage-scope provenance
-  -> parse detached envelopes
-  -> validate version, game and content identity
-  -> migrate known versions
-  -> structurally and semantically validate payloads
-  -> apply deterministic candidate precedence
-  -> publish ContinueCapabilityResult
+HostCommand
+  -> validate host session and capability
+  -> validate command ID and command schema
+  -> validate finite values and bounded payload
+  -> validate expected run epoch and phase revision
+  -> route to the existing authoritative owner
+  -> commit or reject through the fixed-step command path
+  -> publish a typed HostCommandResult
+  -> correlate any visible effect with a committed frame
+  -> append one bounded journal row
+```
 
-StartCampaign(routeIntent, expectedCandidateId)
-  -> admit NEW or RESUME
-  -> reject stale candidate selection
-  -> stage a complete candidate campaign graph
-  -> rebuild references and derived indexes
-  -> validate staged state
-  -> atomically commit a new run epoch
-  -> render one candidate frame
-  -> acknowledge the first visible frame
-  -> publish CampaignStartResult
+Required result classes:
+
+```txt
+REJECTED_INVALID_COMMAND
+REJECTED_UNSUPPORTED_CAPABILITY
+REJECTED_STALE_SESSION
+REJECTED_STALE_RUN
+REJECTED_STALE_PHASE
+REJECTED_TERMINAL
+ACCEPTED_PENDING
+COMMITTED
+FAILED
 ```
 
 ## Required invariants
 
 ```txt
-Continue is enabled only for one selected RESUMABLE candidate
-raw rejected bytes are never overwritten during discovery
-NEW never hydrates a checkpoint
-RESUME never falls back silently to a fresh campaign
-candidate key, storage scope, version and fingerprint remain observable
-atomic hydration publishes either a complete campaign or no campaign
-first resumed frame includes candidateId, checkpointFingerprint, runEpoch and frameId
-all resume consumers observe the same committed checkpoint revision
+public host exposes no mutable owner reference
+read results are detached and immutable
+read results describe one committed frame only
+all numeric command fields are finite and bounded
+all mutations require a declared capability
+all commands carry command ID, session and expected run/phase identity
+terminal state cannot be created through raw host mutation
+host command effects use the same authority as browser input
+stale commands perform zero mutation
+render and host observations cite the same frame provenance
+legacy compatibility cannot reintroduce owner handles
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, persistence, gameplay, rendering, package scripts and deployment were not changed.
+Documentation only. Runtime source, persistence, gameplay, rendering, package scripts and deployment were not changed. Host isolation, finite command admission and committed read-model coherence remain unproved until the documented fixtures exist and pass.
