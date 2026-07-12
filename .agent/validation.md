@@ -1,66 +1,113 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T13-59-50-04-00`
+**Timestamp:** `2026-07-12T16-00-03-04-00`
 
 ## Summary
 
-This run changed documentation only. Source inspection proves that the menu enables Continue from unvalidated storage presence, emits a `campaign=continue` query, and the campaign ignores that query, reads no save and always builds default state. The only campaign writer stores an incomplete unversioned victory payload.
+This documentation-only run verifies the current menu pointer projection, hit and dispatch paths. Source inspection proves that a failed main-menu or settings hit does not stop action execution, and that input projection does not invert the visible CRT curve. It does not prove a runtime correction or deployed pointer safety.
 
 ## Plan ledger
 
-**Goal:** distinguish a visible Continue option from executable, complete and frame-proven campaign resume behavior.
+**Goal:** separate source-backed pointer defects from unimplemented geometry, admission and browser proof.
 
-- [x] Inspect configured save keys and storage scopes.
-- [x] Confirm the menu does not parse or validate save bytes.
-- [x] Confirm the menu emits distinct New and Continue URLs.
-- [x] Confirm the campaign consumes neither query value.
-- [x] Confirm the campaign reads no save.
-- [x] Inspect default state, default units and ID construction.
-- [x] Inspect the victory save payload and silent failure handling.
-- [x] Review current menu/campaign static checks.
-- [x] Document bootstrap, hydration and fixture requirements.
-- [ ] Execute fixtures after implementation.
+- [x] Compare the Publish inventory with central tracking.
+- [x] Exclude `TheCavalryOfRome` and select only `PhantomCommand`.
+- [x] Verify required root `.agent` files and new timestamped audit family.
+- [x] Preserve all 20 implemented kits and offered services.
+- [x] Inspect menu hit geometry, pointer listeners, CRT projection and checks.
+- [x] Change documentation only.
+- [ ] Execute pointer fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-SAVE_KEYS contains three keys
-hasCampaignSave checks localStorage and sessionStorage
-hasCampaignSave returns true for any truthy bytes
-no JSON parse occurs during menu probing
-Begin navigates to game.html?campaign=new
-Continue navigates to game.html?campaign=continue
-campaign-scene.js does not read location.search or URLSearchParams
-campaign always initializes souls=145, core=24, wave=0
-campaign always creates six default allied units
-campaign never reads a save payload
-victory writes only scene, souls and wave
-storage write errors are swallowed
+source menu size: 480 × 270
+main menu items: 4
+settings rows: 4
+screenToSource reverses aspect containment
+screenToSource returns inside boolean
+CRT render path applies optional curveUv
+input path does not invert curveUv
+main pointerdown calls activateMain after hit test regardless of hit status
+panel pointerdown calls activatePanel after hit test regardless of hit status
+pointer button policy is absent
+isPrimary policy is absent
+pointer capture/cancel is absent
+menu static check dispatches no input events
 ```
 
-## Existing checks prove
+## Proven documentation state
 
 ```txt
-menu and campaign HTML/module references exist
-BEGIN CAMPAIGN and new-route source tokens exist
-campaign dimensions and core source tokens exist
-CRT source upload tokens exist
+START_HERE current: yes
+current-audit current: yes
+next-steps current: yes
+known-gaps current: yes
+validation current: yes
+kit-registry current: yes
+tracker and turn ledger present: yes
+architecture/render/gameplay/interaction/menu-input/deploy audits present: yes
+central ledger and internal change log required: yes
+```
+
+## Existing checks can establish, when run
+
+```txt
+menu and campaign entry files exist
+menu source includes expected route and public-host tokens
+procedural graveyard and CRT shader symbols exist
+campaign source includes expected runtime/render tokens
 static build includes source files
 ```
 
-## Existing checks do not prove
+## Existing checks cannot establish
 
 ```txt
-Continue is enabled only for valid saves
-Continue URL is checked by the menu smoke
-campaign launch query is consumed
-New and Continue produce distinct state
-valid saves hydrate complete campaign state
-invalid saves are rejected without mutation
-save writes succeed or return typed failures
-IDs and references remain valid after resume
-first HUD, GameHost and CRT frame cite the bootstrap revision
-local, built and Pages resume behavior matches
+pointer miss rejection
+letterbox rejection
+settings miss zero mutation
+primary pointer/button policy
+pointer sequence dedupe
+visible/logical CRT geometry parity
+stale transform/layout/panel rejection
+typed hit and action results
+keyboard/accessibility source identity
+first visible action-frame acknowledgement
+local/build/Pages pointer parity
+```
+
+## Required deterministic fixtures
+
+```txt
+fixture:menu-layout-descriptors
+fixture:pointer-containment-wide
+fixture:pointer-containment-tall
+fixture:crt-forward-inverse-roundtrip
+fixture:main-control-center-hits
+fixture:main-row-gap-misses
+fixture:settings-control-center-hits
+fixture:settings-row-gap-misses
+fixture:pointer-primary-policy
+fixture:pointer-secondary-rejection
+fixture:stale-transform-rejection
+fixture:duplicate-pointer-sequence
+fixture:transition-fence
+fixture:keyboard-accessibility-parity
+```
+
+## Required browser matrix
+
+```txt
+source route, built output and GitHub Pages
+CRT on and off
+wide and tall aspect ratios
+DPR 1 and 2
+mouse, touch and pen primary policy
+main and settings center hits
+row gaps, empty canvas and letterbox misses
+resize between sample and commit
+transition already active
+first visible action frame
 ```
 
 ## Change boundary
@@ -68,47 +115,26 @@ local, built and Pages resume behavior matches
 ```txt
 runtime source changed: no
 menu behavior changed: no
+pointer behavior changed: no
+keyboard/accessibility behavior changed: no
+settings behavior changed: no
+navigation behavior changed: no
+audio behavior changed: no
 campaign behavior changed: no
-save behavior changed: no
-input behavior changed: no
-camera behavior changed: no
-simulation changed: no
 rendering changed: no
-audio changed: no
-navigation changed: no
 package scripts changed: no
 dependencies changed: no
 deployment changed: no
 branch created: no
 pull request created: no
-npm run check: not run
-npm run build: not run
-browser bootstrap/resume smoke: not run
-Pages bootstrap/resume smoke: not run
+target branch: main
+npm run check executed: no
+npm run build executed: no
+browser pointer smoke executed: no
+Pages pointer smoke executed: no
+pointer-admission fixtures available: no
 ```
 
-## Required fixtures
+## Claim boundary
 
-```txt
-fixture:save-probe-missing
-fixture:save-probe-valid-current
-fixture:save-probe-malformed
-fixture:save-probe-foreign
-fixture:save-probe-unsupported-version
-fixture:new-bootstrap-default-state
-fixture:new-bootstrap-predecessor-save-policy
-fixture:continue-bootstrap-complete-state
-fixture:continue-bootstrap-migrated-state
-fixture:continue-invalid-save-no-mutation
-fixture:continue-storage-unavailable
-fixture:hydration-id-reference-integrity
-fixture:hydration-next-id-continuity
-fixture:bootstrap-stale-result-rejection
-fixture:first-visible-restored-frame
-fixture:gamehost-bootstrap-read-model
-smoke:bootstrap-resume-browser
-smoke:bootstrap-resume-built-output
-smoke:bootstrap-resume-pages
-```
-
-No functional Continue, hydration, migration or deployment-readiness claim is made.
+The audit proves that hit-test failure is not an action fence and that displayed CRT geometry is not the same declared transform used by input. It does not claim the defect is fixed, the menu is pointer-safe, or the deployed route has passed geometry fixtures.
