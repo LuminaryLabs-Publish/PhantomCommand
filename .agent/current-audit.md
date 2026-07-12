@@ -1,24 +1,23 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-11T19-48-09-04-00`
+**Timestamp:** `2026-07-11T21-31-19-04-00`
 
 ## Summary
 
-PhantomCommand allocates both menu and campaign runtimes at module scope. Each page starts an untracked recursive RAF, installs anonymous listeners, publishes mutable globals and creates CRT WebGL resources without a dispose service; the menu can also own an AudioContext and delayed close timer. Navigation, reload and Escape rely on document replacement rather than an admitted teardown transaction, and no pagehide/pageshow or bfcache policy fences retained callbacks.
+The menu and campaign disagree about what Continue means. The menu scans `phantomCommand.save`, `nexus.sceneSnapshot` and `phantom.command.campaign` in both `localStorage` and `sessionStorage`. Any non-empty value enables Continue. The selected action emits `game.html?campaign=continue`, but the campaign never parses the query, never reads storage and immediately constructs its default state. The visible result is a fresh campaign presented as a resume.
 
 ## Plan ledger
 
-**Goal:** define one authoritative runtime-session boundary across menu and campaign startup, callback ownership, teardown, navigation, restart, bfcache behavior and first replacement-frame proof.
+**Goal:** define one typed authority from raw save discovery through candidate selection, validation, migration, atomic hydration and first resumed-frame proof.
 
-- [x] Compare the full Publish inventory with central tracking.
+- [x] Compare the current Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Select only `PhantomCommand`.
-- [x] Read menu, campaign and CRT source.
-- [x] Identify the complete interaction loop.
-- [x] Identify all active and missing domains.
-- [x] Identify all implemented kits and services.
-- [x] Define lifecycle commands, leases, retirement results and fixture gates.
-- [ ] Implement and execute the lifecycle authority.
+- [x] Inspect menu save keys, presence checks and route targets.
+- [x] Inspect campaign default construction, persistence write and public host.
+- [x] Inventory domains, kits and offered services.
+- [x] Define Continue and checkpoint admission contracts.
+- [ ] Implement and execute the documented fixtures.
 
 ## Selection audit
 
@@ -26,98 +25,116 @@ PhantomCommand allocates both menu and campaign runtimes at module scope. Each p
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new or central-ledger-missing eligible repositories: 0
-root-undocumented eligible repositories: 0
+root-.agent-missing eligible repositories: 0
 
-PhantomCommand     2026-07-11T18-21-09-04-00 selected
-ZombieOrchard      2026-07-11T18-28-40-04-00
-TheUnmappedHouse   2026-07-11T18-38-45-04-00
-AetherVale         2026-07-11T18-48-21-04-00
-IntoTheMeadow      2026-07-11T19-01-08-04-00
-PrehistoricRush    2026-07-11T19-09-25-04-00
-MyCozyIsland       2026-07-11T19-20-22-04-00
-TheOpenAbove       2026-07-11T19-28-28-04-00
-HorrorCorridor     2026-07-11T19-38-14-04-00
+PhantomCommand     2026-07-11T19-48-09-04-00 selected oldest
+ZombieOrchard      2026-07-11T20-03-22-04-00
+TheUnmappedHouse   2026-07-11T20-11-26-04-00
+AetherVale         2026-07-11T20-30-33-04-00
+IntoTheMeadow      2026-07-11T20-38-07-04-00
+MyCozyIsland       2026-07-11T20-51-14-04-00
+PrehistoricRush    2026-07-11T21-00-00-04-00
+TheOpenAbove       2026-07-11T21-08-57-04-00
+HorrorCorridor     2026-07-11T21-21-12-04-00
 TheCavalryOfRome   excluded
 ```
 
 ## Complete interaction loop
 
 ```txt
-menu module evaluation
-  -> create source canvas, graveyard art and CRT WebGL resources
-  -> read settings and save presence
-  -> install canvas, document and hidden-button listeners
-  -> lazily create AudioContext, oscillators, buffer source and close timer
-  -> schedule an untracked recursive RAF
-  -> publish window.PhantomMenu
+menu startup
+  -> define three accepted save keys
+  -> read localStorage and sessionStorage
+  -> treat any truthy value as a campaign save
+  -> enable CONTINUE and display BOUND
 
-Begin or Continue
-  -> set a fade target
-  -> RAF repeatedly checks elapsed time
-  -> assign window.location.href
-  -> rely on browser navigation for cleanup
+Begin Campaign
+  -> navigate to game.html?campaign=new
 
-campaign module evaluation
-  -> create source canvas and CRT WebGL resources
-  -> construct map, camera, input and mutable state
-  -> install canvas and window listeners
-  -> schedule an untracked recursive RAF
-  -> publish mutable window.GameHost
+Continue
+  -> navigate to game.html?campaign=continue
 
-restart or exit
-  -> location.reload() or location.href
-  -> no typed stop, dispose, retirement receipt or generation fence
+campaign startup
+  -> does not parse the campaign query
+  -> does not read any save candidate
+  -> creates the same default camera, IDs, units and mutable state
+  -> starts the same fixed-step and render loop
+
+campaign completion
+  -> writes one partial localStorage summary
+  -> { scene, souls, wave }
+
+reload or return to menu
+  -> no checkpoint admission, hydration result or resumed-frame receipt
 ```
 
-## Concrete ownership defects
+## Source-backed defects
 
-### Recursive RAF ownership is discarded
+### Presence is treated as resumability
 
-Both entry modules call `requestAnimationFrame(frame)` and each frame schedules the next callback. No RAF ID is retained, no stop flag is checked and no generation is captured.
+The menu calls `hasCampaignSave()` twice while constructing the menu. The result is only a Boolean from `localStorage.getItem(key) || sessionStorage.getItem(key)`. The candidate bytes are not parsed, classified or retained.
 
-### Listener retirement is impossible to prove
+### Candidate keys have no precedence or ownership rule
 
-Menu and campaign listeners are installed at module scope. Most handlers are anonymous closures, so deterministic `removeEventListener` calls cannot be issued later. There is no listener ledger or teardown result.
+Three keys can independently enable Continue:
 
-### CRT resources have no disposal service
+```txt
+phantomCommand.save
+nexus.sceneSnapshot
+phantom.command.campaign
+```
 
-`createCrtRenderer()` allocates a WebGL program, compiled shaders, a buffer and a texture, then returns `{ render, resize, screenToSource, gl }`. It exposes no `dispose()` method, context-loss policy or resource retirement receipt.
+There is no rule for multiple candidates, storage-scope preference, newest revision, game identity, content identity or legacy migration.
 
-### Menu audio has split ownership
+### Continue route intent is discarded
 
-The menu can allocate an `AudioContext`, oscillator, looping buffer source, gains and filter. `stopAmbience()` schedules an anonymous 300 ms close timer, but navigation has no mandatory audio stop and the timer itself is not owned or cancelled.
+The menu emits:
 
-### Globals remain mutable capabilities
+```txt
+game.html?campaign=continue
+```
 
-`window.PhantomMenu` and `window.GameHost` are published without session or generation identity. They are not revoked before navigation, reload or a future restart.
+The campaign module does not parse `location.search` or `URLSearchParams`. It allocates IDs, camera, starting units and the default campaign state immediately.
 
-### Navigation bypasses lifecycle admission
+### Current save is not a checkpoint
 
-Menu transition assigns `window.location.href`; campaign restart uses `location.reload()` and Escape assigns `location.href="./"`. These paths publish no stop, dispose, navigation or restart result.
+The only write stores:
 
-### bfcache behavior is undefined
+```json
+{"scene":"grave-ring","souls":<number>,"wave":<number>}
+```
 
-Neither page listens for `pagehide` or `pageshow`. A persisted page can retain JavaScript, WebGL and audio ownership, but no resume, cold-restart or disposal policy exists.
+It does not include a schema version, campaign identity, content revision, checkpoint kind, state fingerprint, core health, towers, pad occupancy, player units, spawn queue, projectiles, camera, IDs, run epoch or terminal result.
+
+### Session and local storage semantics diverge
+
+A value found only in `sessionStorage` enables Continue, while the current writer writes only to `localStorage`. The runtime has no source receipt indicating which scope or key was selected.
+
+### Invalid candidates are silently actionable
+
+Malformed JSON, stale foreign data and legacy summaries all remain truthy. Continue can therefore be enabled even when no resumable state exists.
 
 ## Domains in use
 
 ```txt
 static route and page shell
-menu selection, panels, settings, save presence, audio and fade transition
+menu selection, panels, settings, audio and fade transition
+save-key discovery and Continue capability projection
 procedural graveyard art and source-canvas presentation
-CRT WebGL setup, shaders, buffer, texture, upload, resize and draw
+CRT WebGL setup, contain mapping, upload, resize and draw
+campaign route intent and startup admission
 campaign rings, lanes, pads, archetypes, waves, economy and core health
 selection, construction, orders, pause, camera and fixed-step simulation
 unit, tower, projectile, combat, rewards and terminal mutation
 world, HUD, minimap, overlay and GameHost projection
-runtime session identity and lifecycle phase: missing
-RAF, listener, timer, audio, WebGL and global capability ownership: missing
-navigation, restart, bfcache and stale-callback fencing: missing
-teardown ordering, retirement receipts and first replacement frame: missing
-validation, static build, Pages deployment and central tracking
+checkpoint schema, version, content identity and candidate precedence: missing
+checkpoint migration, semantic validation and quarantine: missing
+new-campaign versus resume admission and atomic hydration: missing
+resumed-state provenance and first resumed-frame acknowledgement: missing
+runtime session lifecycle, validation, static build, Pages deployment and central tracking
 ```
 
-## Implemented kits and services
+## Implemented kits
 
 ```txt
 crt-renderer-kit
@@ -142,86 +159,112 @@ construct-piece-state-kit
 construct-sequence-update-kit
 ```
 
-Services include menu routing and fade, settings persistence, save-presence scanning, procedural graveyard drawing, AudioContext ambience and tones, CRT WebGL setup/rendering, campaign content and state, selection/build/orders/waves/pause/camera input, fixed-step combat, world/HUD/minimap/overlay rendering, GameHost diagnostics, checks, build and Pages deployment.
+## Offered services
+
+```txt
+menu routing, fade and hidden-button activation
+settings persistence
+raw save-presence scanning across three keys and two storage scopes
+procedural graveyard source-canvas drawing
+AudioContext ambience and UI tones
+CRT WebGL creation, containment mapping, texture upload and rendering
+campaign content and default-state construction
+selection, building, orders, wave start, pause and camera control
+fixed-step spawning, AI, movement, targeting, damage, rewards and terminal mutation
+world, HUD, minimap and terminal overlay rendering
+mutable GameHost observation and zoom control
+source-pattern checks, static build and GitHub Pages deployment
+```
 
 ## Required parent domain
 
 ```txt
-phantom-command-runtime-session-lifecycle-authority-domain
+phantom-command-continue-checkpoint-admission-authority-domain
 ```
 
 Candidate kits:
 
 ```txt
-phantom-command-runtime-session-id-kit
-phantom-command-runtime-generation-kit
-phantom-command-lifecycle-phase-kit
-phantom-command-resource-lease-registry-kit
-phantom-command-raf-lease-kit
-phantom-command-listener-lease-kit
-phantom-command-timer-lease-kit
-phantom-command-audio-context-lease-kit
-phantom-command-crt-resource-lease-kit
-phantom-command-global-capability-lease-kit
-phantom-command-stale-callback-fence-kit
-phantom-command-navigation-exit-command-kit
-phantom-command-restart-command-kit
-phantom-command-teardown-plan-kit
-phantom-command-reverse-retirement-kit
-phantom-command-teardown-result-kit
-phantom-command-first-session-frame-kit
-phantom-command-lifecycle-journal-kit
-phantom-command-menu-campaign-teardown-fixture-kit
-phantom-command-bfcache-resume-fixture-kit
-phantom-command-restart-leak-fixture-kit
+phantom-command-campaign-route-intent-kit
+phantom-command-save-key-registry-kit
+phantom-command-save-candidate-read-kit
+phantom-command-save-envelope-version-kit
+phantom-command-save-content-identity-kit
+phantom-command-save-candidate-classification-kit
+phantom-command-save-candidate-precedence-kit
+phantom-command-save-schema-validator-kit
+phantom-command-save-semantic-validator-kit
+phantom-command-save-migration-registry-kit
+phantom-command-corrupt-save-quarantine-kit
+phantom-command-continue-capability-result-kit
+phantom-command-new-campaign-admission-kit
+phantom-command-resume-admission-kit
+phantom-command-checkpoint-kind-policy-kit
+phantom-command-checkpoint-fingerprint-kit
+phantom-command-atomic-campaign-hydration-kit
+phantom-command-resume-result-kit
+phantom-command-first-resumed-frame-kit
+phantom-command-resume-observation-kit
+phantom-command-resume-journal-kit
+phantom-command-save-candidate-fixture-kit
+phantom-command-continue-route-fixture-kit
+phantom-command-resume-first-frame-fixture-kit
 ```
+
+## Candidate classification
+
+```txt
+RESUMABLE
+LEGACY_TERMINAL_SUMMARY
+REJECTED_MALFORMED
+REJECTED_UNSUPPORTED_VERSION
+REJECTED_WRONG_GAME
+REJECTED_WRONG_CONTENT
+REJECTED_SEMANTIC_STATE
+REJECTED_AMBIGUOUS
+UNAVAILABLE
+```
+
+Only `RESUMABLE` may enable Continue. A legacy victory summary may be preserved or migrated into completion metadata, but it must not be presented as a resumable active campaign.
 
 ## Required transaction
 
 ```txt
-StartSessionCommand
-  -> allocate sessionId and runtimeGeneration
-  -> create a resource lease registry
-  -> construct menu or campaign under candidate ownership
-  -> install callbacks and globals through recorded leases
-  -> render and acknowledge the first session frame
-  -> publish ReadySessionResult
+ResolveContinueCapability
+  -> read exact raw candidates without mutation
+  -> attach key and storage-scope provenance
+  -> parse detached envelopes
+  -> validate version, game and content identity
+  -> migrate known versions
+  -> structurally and semantically validate payloads
+  -> apply deterministic candidate precedence
+  -> publish ContinueCapabilityResult
 
-StopSessionCommand
-  -> move lifecycle phase to STOPPING
-  -> reject new commands
-  -> cancel RAF and timers
-  -> fence stale callbacks
-  -> publish StopSessionResult
-
-DisposeSessionCommand
-  -> remove listeners
-  -> stop and close audio
-  -> delete CRT texture, buffer, program and shaders
-  -> revoke globals
-  -> retire resources in reverse dependency order
-  -> publish retirement receipts and DisposeSessionResult
-
-NavigateCommand or RestartCommand
-  -> require successful stop/dispose
-  -> perform navigation or construct a new generation
-  -> publish result only after first replacement frame
+StartCampaign(routeIntent, expectedCandidateId)
+  -> admit NEW or RESUME
+  -> reject stale candidate selection
+  -> stage a complete candidate campaign graph
+  -> rebuild references and derived indexes
+  -> validate staged state
+  -> atomically commit a new run epoch
+  -> render one candidate frame
+  -> acknowledge the first visible frame
+  -> publish CampaignStartResult
 ```
 
 ## Required invariants
 
 ```txt
-exactly one live RAF chain per page session
-every listener, timer, audio node, WebGL object and global has one owner
-teardown is idempotent
-stale callbacks reject after generation changes
-navigation begins only after required retirement succeeds
-bfcache resume follows an explicit resume-or-cold-restart policy
-restart advances session and runtime generation
-first replacement frame commits before readiness is exposed
-repeated menu/campaign/restart cycles do not grow owned resources
+Continue is enabled only for one selected RESUMABLE candidate
+raw rejected bytes are never overwritten during discovery
+NEW never hydrates a checkpoint
+RESUME never falls back silently to a fresh campaign
+candidate key, storage scope, version and fingerprint remain observable
+atomic hydration publishes either a complete campaign or no campaign
+first resumed frame includes candidateId, checkpointFingerprint, runEpoch and frameId
+all resume consumers observe the same committed checkpoint revision
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, rendering, audio, navigation and deployment behavior were not changed.
+Documentation only. Runtime, persistence, gameplay, rendering, package scripts and deployment were not changed.
