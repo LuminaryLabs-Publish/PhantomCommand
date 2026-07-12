@@ -1,23 +1,24 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T09-28-05-04-00`  
+**Timestamp:** `2026-07-12T11-40-50-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
 ## Summary
 
-The current audit isolates menu pointer-hit admission. `screenToSource()` correctly reports whether a pointer lies inside the contained 480x270 source frame, and the menu and settings hit-test functions correctly return `-1` for misses. The `pointerdown` handler then discards that miss result and activates the currently selected command anyway. A background click, letterbox-margin click or settings-panel miss can therefore execute an action that was only selected previously.
+The current audit isolates campaign world-pointer admission. `screenToSource()` returns source coordinates plus an `inside` flag, but campaign handlers ignore that flag before selection, orders, middle-button pan and wheel anchoring. The visible CRT shader additionally curves sampled coordinates, while CPU input projection performs containment only.
 
 ## Plan ledger
 
-**Goal:** make pointer activation require a current hit-test result bound to the active menu or panel generation, without changing runtime behavior in this documentation pass.
+**Goal:** make campaign pointer mutation require a current, display-correct, camera-bound projection and return one typed result without changing runtime behavior in this documentation pass.
 
-- [x] Compare the full Publish inventory with central ledgers.
+- [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Confirm nine eligible repositories have central ledger and root `.agent` coverage.
-- [x] Select only the oldest eligible repository.
-- [x] Inspect canvas containment, source projection, pointer movement, menu and panel hit testing and pointer activation.
-- [x] Identify the complete interaction loop, all domains, all 20 implemented kits and offered services.
-- [x] Define hit results, target generations, activation commands, typed misses, observations and fixtures.
+- [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
+- [x] Skip unsynchronized newer `IntoTheMeadow` documentation.
+- [x] Select only `PhantomCommand` as the next-oldest synchronized eligible repository.
+- [x] Inspect menu, CRT, campaign, checks, build and prior authority state.
+- [x] Identify the complete interaction loop, domains, all 20 implemented kits and offered services.
+- [x] Define display/camera generations, inverse projection, gesture leases, typed results, observations and fixtures.
 - [x] Change documentation only on `main`.
 - [ ] Implement and execute the authority.
 
@@ -27,8 +28,9 @@ The current audit isolates menu pointer-hit admission. `screenToSource()` correc
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new/ledger-missing/root-agent-missing eligible repositories: 0
-oldest eligible central timestamp: PhantomCommand at 2026-07-12T07-29-32-04-00
+IntoTheMeadow: skipped because repo-local 2026-07-12T11-29-40-04-00 work was newer than central tracking
 selected repository: LuminaryLabs-Publish/PhantomCommand
+prior synchronized timestamp: 2026-07-12T09-28-05-04-00
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
@@ -38,82 +40,76 @@ excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 menu startup
   -> create source canvas, graveyard art and CRT renderer
   -> read settings and save presence
-  -> initialize menu.selected = 0 and panel = null
-  -> install pointer and keyboard handlers
-  -> start recursive RAF
-  -> publish window.PhantomMenu
+  -> install input and start RAF
+  -> publish PhantomMenu
 
-pointer move
-  -> renderer.screenToSource(clientX, clientY)
-  -> retain source x/y plus inside flag
-  -> menuHitIndex or panelHitIndex returns row index or -1
-  -> selection changes only when a row is hit
+campaign startup
+  -> create 640x360 source canvas and CRT renderer
+  -> create rings, lanes, pads, units, towers, economy and camera
+  -> install pointer, keyboard, wheel and blur handlers
+  -> start fixed-step RAF
+  -> publish GameHost
 
-pointer down with no panel
-  -> ensureAudio()
-  -> project coordinates
-  -> menuHitIndex(point)
-  -> when hit, update menu.selected
-  -> activateMain(menu.items[menu.selected]) regardless of hit or miss
+campaign pointer
+  -> project client coordinates through screenToSource()
+  -> store x/y/inside
+  -> left: point or rectangle selection and build-pad selection
+  -> right: world order
+  -> middle: camera pan
+  -> wheel: zoom around projected world anchor
 
-pointer down with a settings panel
-  -> panelHitIndex(point)
-  -> when hit, update panel.selected
-  -> activatePanel() regardless of hit or miss
-
-keyboard
-  -> directional key explicitly changes selection
-  -> Enter or Space explicitly activates selected command
+campaign frame
+  -> update camera from keys and target zoom
+  -> drain 1/60 simulation steps
+  -> spawn, move, target, damage, reward and resolve terminal state
+  -> render world, HUD, minimap and overlays
+  -> present source through CRT WebGL shader
 ```
 
 ## Source-backed findings
 
 ```txt
-viewport-to-source containment: implemented
-letterbox inside=false result: implemented
-menu row hit testing: implemented
-settings row hit testing: implemented
-hover selection update on hit: implemented
-keyboard selection and activation: implemented
-
-pointer miss rejection: absent
-letterbox miss rejection: absent
-settings-panel miss rejection: absent
-hit target identity: absent
-menu or panel generation identity: absent
-selection revision fence: absent
-pointer command identity: absent
-typed hit/miss result: absent
-pointer action observation/journal: absent
-browser pointer-target fixtures: absent
+contain source projection: implemented
+inside/outside flag: implemented
+campaign command containment check: absent
+shader CRT curve: implemented
+CPU inverse CRT curve: absent
+camera revision identity: absent
+display generation identity: absent
+gesture lease: absent
+typed pointer command/result: absent
+pointer observation/journal: absent
+browser projection fixtures: absent
 ```
 
-### Background and letterbox clicks can launch the current selection
+### Letterbox pointers can mutate campaign state
 
-`menuHitIndex()` returns `-1` when the pointer is outside the menu rows, outside the source frame or while a panel is open. The no-panel `pointerdown` path only uses a non-negative index to update selection; it calls `activateMain(menu.items[menu.selected])` unconditionally afterward. The initial selection is Begin Campaign, so a first click anywhere on the canvas can start the campaign.
+The campaign copies `screenToSource()` results into `input.pointer`, but right-click always converts the point with `screenToWorld()` and calls `order()`. Left drag begins and completes without containment admission. Middle drag and wheel anchoring also mutate the camera from out-of-range source coordinates.
 
-### Settings misses can mutate the current setting
+### Visible and actionable coordinates are not the same transform
 
-When the settings panel is open, a miss leaves `state.panel.selected` unchanged and still calls `activatePanel()`. The default selected row is CRT. A click on panel background, outside the panel or in a letterbox margin can therefore toggle CRT.
+The fragment shader applies contain projection and optional `curveUv()` before sampling the source texture. The CPU projection applies contain conversion only. Under CRT mode, a pointer can be inside the source rectangle yet map to a different source/world point than the pixel shown beneath it.
 
-### Visual selection and pointer target are different authorities
+### Gestures have no stable ownership
 
-The highlighted selection is useful for keyboard navigation and hover projection. It is not proof that the current pointerdown targeted that row. Pointer activation needs a current `Hit` result, while keyboard activation may continue to use explicit selection.
+Drag and middle-pan state are mutable objects/booleans without gesture IDs, display generations, pointer capture leases or stale-result checks. Blur clears some state, but route, display or camera revision changes are not part of admission.
 
 ## Domains in use
 
 ```txt
 static menu and campaign route shells
 menu selection panels settings save presence and fade transition
-viewport-to-source contain projection and letterbox classification
-menu and settings-panel hit testing
-pointer keyboard hidden-button focus page navigation and RAF lifecycle
-procedural graveyard source rendering
-CRT WebGL context program buffer texture and display projection
-Web Audio activation ambience UI tones and lifecycle gaps
-campaign launch bootstrap persistence actions simulation combat and rendering
+viewport containment source-coordinate projection and CRT curved presentation
+pointer keyboard wheel drag focus navigation and RAF lifecycle
+campaign launch bootstrap resume and persistence gaps
+campaign rings lanes pads units towers projectiles economy and terminal state
+selection build orders wave pause camera restart and fixed-step simulation
+spawn movement targeting damage rewards and terminal mutation
+procedural graveyard rendering
+campaign world HUD minimap and overlay rendering
+WebGL context program buffer texture upload and display
+Web Audio activation ambience UI tones and teardown
 public menu and campaign host capabilities
-runtime session command phase terminal and checkpoint authority gaps
 source checks static build Pages deployment and audit tracking
 ```
 
@@ -146,19 +142,16 @@ construct-sequence-update-kit
 
 ```txt
 menu routing selection panels fade and hidden-button activation
-settings persistence and CRT grain ambience selection
-presence-only save scanning across legacy keys and scopes
-viewport-to-source contain projection with inside classification
-menu and settings-panel row hit testing
-pointer hover pointer activation and keyboard activation
-procedural graveyard source-canvas drawing
-AudioContext ambience and UI tone construction
-WebGL context program buffer texture source upload and CRT presentation
-default campaign state selection building orders wave pause camera and restart
-fixed-step spawning AI movement targeting damage rewards and terminal mutation
-minimal victory save writing
-world HUD minimap pause and terminal overlay rendering
-mutable public host read and direct mutation
+settings persistence and save-presence scanning
+viewport contain projection and inside classification
+pointer keyboard drag wheel and camera interactions
+procedural graveyard drawing
+AudioContext ambience and UI tones
+WebGL shader program buffer texture upload CRT curve and presentation
+campaign state selection building orders waves pause camera restart and navigation
+fixed-step spawning AI movement targeting projectiles damage rewards and terminal mutation
+world HUD minimap pause and terminal rendering
+public state reads and direct mutation
 construction intro sequencing
 source checks static build and GitHub Pages deployment
 ```
@@ -166,55 +159,56 @@ source checks static build and GitHub Pages deployment
 ## Required parent domain
 
 ```txt
-phantom-command-menu-pointer-hit-admission-authority-domain
+phantom-command-campaign-world-pointer-admission-authority-domain
 ```
 
 ## Candidate kits
 
 ```txt
-phantom-command-menu-input-session-kit
-phantom-command-menu-surface-generation-kit
-phantom-command-menu-panel-generation-kit
-phantom-command-menu-selection-revision-kit
-phantom-command-pointer-event-envelope-kit
-phantom-command-source-coordinate-projection-kit
-phantom-command-pointer-containment-result-kit
-phantom-command-menu-hit-target-kit
-phantom-command-menu-hit-test-result-kit
-phantom-command-pointer-activation-command-kit
-phantom-command-pointer-activation-admission-kit
-phantom-command-pointer-miss-result-kit
-phantom-command-menu-action-result-kit
-phantom-command-pointer-action-observation-kit
-phantom-command-pointer-action-journal-kit
-phantom-command-background-miss-fixture-kit
-phantom-command-letterbox-miss-fixture-kit
-phantom-command-settings-panel-miss-fixture-kit
-phantom-command-pointer-target-browser-smoke-kit
+campaign-input-session-kit
+campaign-display-generation-kit
+campaign-camera-revision-kit
+campaign-pointer-event-envelope-kit
+campaign-pointer-containment-kit
+campaign-crt-inverse-projection-kit
+campaign-source-coordinate-result-kit
+campaign-world-ray-result-kit
+campaign-pointer-gesture-kit
+campaign-drag-lease-kit
+campaign-pointer-command-kit
+campaign-pointer-command-admission-kit
+campaign-pointer-command-result-kit
+campaign-camera-command-result-kit
+campaign-stale-pointer-rejection-kit
+campaign-pointer-observation-kit
+campaign-pointer-journal-kit
+campaign-letterbox-noop-fixture-kit
+campaign-crt-projection-parity-fixture-kit
+campaign-drag-boundary-fixture-kit
+campaign-pointer-browser-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-pointer activation requires a Hit result from the current event
-Miss performs zero menu or settings mutation
-letterbox margins are non-interactive unless an explicit target is rendered there
-hit target belongs to the current menu or panel generation
-stale hit results and stale selection revisions perform zero mutation
-keyboard activation remains an explicit selection-based command
-hidden native buttons retain their own native click path
-one pointer command returns one typed terminal result
-pointer result and resulting route or setting revision are observable
+OutsideSurface performs zero gameplay or camera mutation.
+CRT-enabled input inverts the same curve used by the visible frame.
+World projection cites the camera revision used to derive it.
+Drag and pan updates require a current gesture lease.
+Stale display, camera and gesture generations are rejected.
+One event commits at most one terminal command result.
+Applied results correlate with state/camera revisions and a visible frame.
 ```
 
 ## Retained dependencies
 
 ```txt
 Campaign Bootstrap and Continue Resume Authority
+Menu Pointer-Hit Admission Authority
 Public Host Owner Quarantine and Typed Command Admission
 CRT Display/Input Projection Authority
 Campaign Phase Admission Authority
-Fixed-Step Command Scheduling and Committed Frame Authority
+Fixed-Step Scheduling Replay and Committed Frames
 Combat Resolution and Exclusive Terminal Outcome Authorities
 Runtime Session Lifecycle Authority
 Menu Audio Activation and Lifecycle Authority
@@ -223,4 +217,4 @@ Versioned Full Campaign Checkpoint Capture Authority
 
 ## Validation boundary
 
-Documentation only. Menu behavior, campaign behavior, persistence, rendering, audio, package scripts, dependencies and deployment were not changed.
+Documentation only. Campaign behavior, camera behavior, simulation, rendering, audio, persistence, package scripts, dependencies and deployment were not changed.
