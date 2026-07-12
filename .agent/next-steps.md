@@ -1,111 +1,114 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T09-28-05-04-00`
+**Timestamp:** `2026-07-12T11-40-50-04-00`
 
 ## Goal
 
-Implement one menu pointer-hit admission authority so only the row targeted by the current pointer event can execute, while keyboard activation remains explicitly selection-based.
+Implement one campaign world-pointer admission authority so selection, orders, pan and wheel zoom require a current visible-surface projection bound to the active CRT display and camera revisions.
 
 ## Plan ledger
 
-- [ ] Introduce menu input session, surface generation, panel generation and selection revision identities.
-- [ ] Normalize each pointer event into a bounded event envelope.
-- [ ] Preserve the existing contain projection and explicit `inside` result.
-- [ ] Replace integer-only hit tests with typed `Hit` and `Miss` results.
-- [ ] Bind every hit target to the current menu or panel generation.
-- [ ] Admit pointer activation only from the current event's `Hit` result.
-- [ ] Make pointer `Miss` return a typed no-op result.
-- [ ] Keep keyboard Enter and Space on a separate selection-based command path.
-- [ ] Reject stale hit results after panel, route or selection-generation changes.
-- [ ] Publish bounded pointer-action observations and a journal.
-- [ ] Add deterministic miss fixtures and real-browser pointer smokes.
+- [ ] Introduce input-session, display-generation, camera-revision, pointer-event and gesture identities.
+- [ ] Normalize DOM pointer and wheel events into immutable envelopes.
+- [ ] Preserve contain-letterbox classification as an explicit typed result.
+- [ ] Add inverse CRT curve projection matching the shader transform.
+- [ ] Return a typed source-coordinate result rather than mutable raw coordinates.
+- [ ] Bind source-to-world projection to a specific camera revision.
+- [ ] Make `OutsideSurface` a zero-mutation terminal result.
+- [ ] Convert point selection, rectangle selection, orders, pan and zoom into typed commands.
+- [ ] Add drag and pan leases with explicit begin, update, end and cancellation.
+- [ ] Reject stale display, camera and gesture generations.
+- [ ] Publish bounded observations, a journal and frame receipts.
+- [ ] Add deterministic projection fixtures and browser/Pages campaign-pointer smokes.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
-src/menu/graveyard-menu.js
 src/menu/crt-renderer.js
-menu-route-kit
+src/campaign/campaign-scene.js
 crt-renderer-kit
-window.PhantomMenu diagnostics
-scripts/check-menu.mjs
+pixel-campaign-runtime-kit
+pixel-campaign-render-kit
+window.GameHost diagnostics
+scripts/check-campaign.mjs
 package.json
+```
+
+## Projection contract
+
+```txt
+CampaignPointerProjectionResult
+  status: Projected | OutsideSurface | InvalidCurveInverse | StaleDisplay | StaleCamera
+  pointerEventId
+  displayGeneration
+  sourceFrameRevision
+  crtSettingsRevision
+  cameraRevision
+  clientX/clientY
+  sourceX/sourceY
+  worldX/worldZ
+  insideSurface
+  errorTolerancePx
+  reason
 ```
 
 ## Command contract
 
 ```txt
-MenuPointerActivationCommand
+CampaignPointerCommand
   commandId
+  commandKind
   inputSessionId
-  surfaceGeneration
-  panelGeneration
-  selectionRevision
   pointerEventId
-  clientX
-  clientY
-  sourceProjection
-  hitResult
+  gestureId
+  displayGeneration
+  cameraRevision
+  campaignStateRevision
+  projection
+  modifiers
   requestedAtMs
-```
-
-## Hit result contract
-
-```txt
-MenuHitTestResult
-  pointerEventId
-  surfaceGeneration
-  panelGeneration
-  status: Hit | Miss | OutsideSurface | Stale
-  targetKind: MenuItem | SettingsRow | CreditsPanel | None
-  targetId
-  targetIndex
-  sourceX
-  sourceY
-  insideSource
 ```
 
 ## Result contract
 
 ```txt
-MenuPointerActivationResult
+CampaignPointerCommandResult
+  status: Applied | OutsideSurface | RejectedStale | RejectedInvalidProjection | RejectedPhase | Cancelled
   commandId
+  commandKind
   pointerEventId
-  status: Applied | Miss | RejectedStale | RejectedDisabled | RejectedTransitioning
-  targetId
-  previousSelectionRevision
-  committedSelectionRevision
-  routeTarget
-  settingsRevision
+  gestureId
+  displayGeneration
+  cameraRevisionBefore/After
+  stateRevisionBefore/After
+  frameReceiptId
   reason
-  committedAtMs
 ```
 
 ## Fixture gate
 
 ```txt
-background click with Begin selected performs zero action
-left and right letterbox clicks perform zero action
-top and bottom letterbox clicks perform zero action
-click between menu rows performs zero action
-disabled Continue row returns RejectedDisabled
-settings panel background click performs zero mutation
-settings panel outside click performs zero mutation
-current row hit executes exactly that row
-stale hit from a prior panel generation performs zero mutation
-keyboard Enter still activates the selected row
-hidden native buttons still activate through native click semantics
-pointer result is correlated with route or settings revision
+letterbox point selection is inert
+letterbox rectangle drag is inert or explicitly cancelled
+letterbox right-click order is inert
+letterbox middle-pan is inert
+letterbox wheel zoom is inert
+CRT-disabled projection round-trips
+CRT-enabled curve/inverse-curve round-trips
+world projection rejects stale camera revision
+gesture cancels on blur, route exit and display-generation change
+one applied command correlates with one state/camera revision and frame receipt
 ```
 
 ## Dependency order
 
 ```txt
-Menu Pointer-Hit Admission Authority
+Campaign World-Pointer Admission Authority
   -> CRT Display/Input Projection Authority
+  -> Campaign Phase Admission Authority
   -> Runtime Session Lifecycle Authority
   -> Public Host and Committed Read Model Authorities
 ```
 
-Do not infer a pointer target from the previously highlighted selection. Require a hit result from the current pointer event.
+Do not call `screenToWorld()` for an event until visible-surface and display-transform admission succeeds.
