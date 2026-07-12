@@ -1,223 +1,135 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T03-00-46-04-00`
+**Timestamp:** `2026-07-12T04-18-44-04-00`  
+**Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
 ## Summary
 
-The campaign runtime uses `paused`, `waveActive`, `won`, and `lost` as independent mutable booleans rather than one authoritative phase. `update()` exits while paused or terminal, but browser callbacks and `GameHost` mutators continue to change gameplay state. Space can create a spawn queue while paused; selection, construction and orders remain active; and terminal states do not close mutation. No action cites a phase revision or returns a typed accepted/rejected result.
+The menu owns a Web Audio graph through one mutable `state.audio` reference. The graph can be created and closed, but it has no session identity, context generation, state observation, resume path, callback fencing, page-lifecycle policy, transition handoff, graph lease accounting or typed result. A suspended context remains non-null, so every later `ensureAudio()` call exits without attempting `context.resume()`.
 
 ## Plan ledger
 
-**Goal:** define one revisioned phase contract consumed by every campaign action, simulation transition, render observation and public host adapter.
+**Goal:** define one lifecycle authority for menu audio without changing runtime behavior in this documentation pass.
 
-- [x] Compare the current Publish inventory with central tracking.
+- [x] Compare the full Publish inventory with central ledgers.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Select only `PhantomCommand` as the oldest eligible repository.
-- [x] Inspect campaign state, `startWave`, `build`, `selectAt`, `order`, keyboard, pointer, wheel, RAF, renderer and `GameHost`.
-- [x] Identify the complete interaction loop, domains, kits and services.
-- [x] Confirm pause gates `update()` but not gameplay commands.
-- [x] Confirm `startWave()` does not reject paused state.
-- [x] Confirm construction and orders do not reject paused, won or lost state.
-- [x] Confirm public host calls bypass phase admission.
-- [x] Define phase schema, policy matrix, typed results, mutation fences and fixture gates.
-- [ ] Implement and execute the documented fixtures.
+- [x] Skip `IntoTheMeadow` and `HorrorCorridor` after detecting newer concurrent repo-local audits.
+- [x] Select only `PhantomCommand`.
+- [x] Inspect `src/menu/graveyard-menu.js`, menu HTML, static checks, current docs and registry.
+- [x] Identify the complete loop, domains, all 20 implemented kits and their services.
+- [x] Trace context creation, ambience nodes, tone voices, delayed close, transition and RAF.
+- [x] Define lifecycle commands, leases, results, observations and fixture gates.
+- [x] Change documentation only.
+- [ ] Implement and execute the authority.
 
-## Selection audit
+## Selection state
 
 ```txt
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
-new or central-ledger-missing eligible repositories: 0
-root-.agent-missing eligible repositories: 0
-
-PhantomCommand     2026-07-12T01-20-00-04-00 selected oldest
-ZombieOrchard      2026-07-12T01-30-07-04-00
-TheUnmappedHouse   2026-07-12T01-41-56-04-00
-AetherVale         2026-07-12T01-58-43-04-00
-MyCozyIsland       2026-07-12T02-10-14-04-00
-PrehistoricRush    2026-07-12T02-21-55-04-00
-TheOpenAbove       2026-07-12T02-29-50-04-00
-IntoTheMeadow      2026-07-12T02-38-23-04-00
-HorrorCorridor     2026-07-12T02-49-19-04-00
-TheCavalryOfRome   excluded
+new/ledger-missing/root-agent-missing eligible repositories: 0
+IntoTheMeadow: skipped because repo-local documentation advanced during this run
+HorrorCorridor: skipped because repo-local documentation advanced during this run
+PhantomCommand: selected as next oldest stable eligible repository
 ```
-
-Only `LuminaryLabs-Publish/PhantomCommand` is in scope for Publish changes.
 
 ## Complete interaction loop
 
 ```txt
 menu module evaluation
-  -> create 480x270 source canvas
-  -> create shared CRT renderer
-  -> load menu settings and save presence
+  -> create source canvas, CRT renderer and graveyard art
+  -> read settings and save presence
   -> attach pointer, keyboard and hidden-button listeners
-  -> start recursive menu RAF
+  -> start recursive RAF
   -> publish window.PhantomMenu
 
-campaign module evaluation
-  -> create 640x360 source canvas and shared CRT renderer
-  -> create camera, input, IDs, pads, units and mutable campaign state
-  -> state begins with paused=false, won=false, lost=false, waveActive=false
-  -> attach pointer, wheel, keyboard, keyup and blur listeners
-  -> start fixed-step campaign RAF
-  -> publish window.GameHost with raw owners and direct mutators
+audio startup
+  -> first pointerdown or keydown calls ensureAudio
+  -> if ambience false or state.audio non-null, return
+  -> create AudioContext, master gain, drone oscillator and looping wind buffer
+  -> start drone and wind
+  -> store context/master/drone/wind
 
-campaign frame
-  -> camera consumes held input independently of gameplay phase
-  -> accumulator calls update(1/60)
-  -> update returns immediately for paused, won or lost
-  -> render world, HUD, minimap and pause/terminal overlay
-  -> submit source through shared CRT renderer
+UI tone
+  -> ensureAudio
+  -> create oscillator and gain
+  -> connect to master
+  -> start/stop oscillator
+  -> no voice result or explicit disconnect receipt
 
-campaign actions
-  -> Space calls startWave directly
-  -> left pointer selects, drag-selects or double-click builds
-  -> right pointer orders selected units
-  -> number keys replace towerType
-  -> P toggles paused
-  -> wheel and middle-drag mutate camera
-  -> GameHost callers invoke startWave/build/setZoom or mutate state/camera directly
+ambience disable
+  -> state.audio = null
+  -> ramp old master to zero
+  -> schedule old context.close after 300 ms
+
+transition
+  -> fade for 0.95 s
+  -> assign window.location.href
+  -> RAF/listeners/audio have no explicit pre-navigation retirement
 ```
 
-## Source-backed defects
-
-### Pause stops simulation but not mutation
-
-`update(dt)` returns when `state.paused` is true. None of `startWave`, `build`, `selectAt`, or `order` consumes that pause state as an admission guard.
-
-A concrete sequence is:
+## Source-backed findings
 
 ```txt
-P
-  -> paused = true
-
-Space
-  -> startWave builds and sorts spawn[]
-  -> waveActive = true
-  -> message changes
-
-second click on selected pad
-  -> build spends Souls
-  -> pad/tower state mutates
-  -> effect is appended
-
-right click with selected units
-  -> target/move state mutates
-  -> effect is appended
+context creation is gesture-adjacent: yes
+context.state observation: no
+context.resume call: no
+context suspend policy: no
+context generation: no
+statechange listener: no
+visibilitychange listener: no
+pagehide listener: no
+pageshow/bfcache restore handler: no
+navigation handoff: no
+delayed-close timer identity/cancellation: no
+ambience graph lease: no
+UI-tone voice registry: no
+typed lifecycle result: no
+audio observation/journal: no
 ```
 
-Simulation time remains frozen while durable gameplay owners change.
-
-### Terminal state is not mutation-closed
-
-`startWave()` rejects `won` and `lost`, but construction, selection, orders, tower-type changes, camera changes and raw `GameHost` owner mutation do not. After terminal outcome:
+### Suspended-context trap
 
 ```txt
-build can spend Souls and create towers
-selectAt can replace selection and selectedPad
-order can replace target/move destinations
-order/build can append visible effects
-number keys can change towerType
-P can create paused + won or paused + lost combinations
-GameHost callers can mutate state and camera directly
+state.audio exists
+  -> AudioContext becomes suspended
+  -> later pointer/key action calls ensureAudio()
+  -> function returns because state.audio is non-null
+  -> context.resume() is never attempted
+  -> settings can still display ambience enabled
 ```
 
-The terminal overlay therefore does not represent an immutable terminal snapshot.
-
-### Phase is represented by overlapping booleans
-
-Representable combinations include:
+### Toggle churn
 
 ```txt
-paused + waveActive
-paused + won
-paused + lost
-won + lost
-waveActive + won
-waveActive + lost
+ambience off
+  -> old context scheduled to close in 300 ms
+  -> state.audio cleared immediately
+
+ambience on before timer fires
+  -> new context and graph created
+  -> old context remains live until timer
+  -> no generation or timer lease distinguishes the two graphs
 ```
 
-Some combinations may be unreachable through the intended UI today, but no schema rejects them and public owner exposure can create them directly.
+### Navigation and bfcache
 
-### Wave admission is incomplete
-
-`startWave()` rejects active wave, terminal state and exhausted wave count. It does not reject paused state and returns no result distinguishing:
-
-```txt
-accepted
-already active
-paused
-terminal
-campaign complete
-invalid phase
-```
-
-### Build-phase policy is undefined
-
-`build()` verifies selected pad, occupancy and Souls only. It does not declare whether building is allowed:
-
-```txt
-before first wave
-between waves
-during active wave
-while paused
-after terminal outcome
-```
-
-The UI message tells the player to build before the next procession, but the runtime does not encode a corresponding policy.
-
-### Command and phase timing are uncorrelated
-
-Browser callbacks mutate state outside the fixed-step accumulator. There is no:
-
-```txt
-campaignPhaseId
-phaseRevision
-actionId
-observedPhaseRevision
-admissionResultId
-committedTickId
-terminalRevision
-phaseFrameReceipt
-```
-
-An action cannot prove which phase admitted it or which rendered frame first displayed its result.
+The transition changes `window.location.href` after the fade. There is no explicit menu-session stop, audio graph retirement, listener removal or RAF cancellation before navigation. Browser unload may eventually reclaim resources, but the runtime has no result proving retirement and no bfcache policy.
 
 ## Domains in use
 
 ```txt
-static route and full-window canvas shell
-menu selection panels settings audio and fade transition
-save-key discovery and Continue capability projection
-procedural graveyard source-canvas rendering
-campaign rings lanes pads archetypes waves economy and core health
-selection construction orders pause camera and fixed-step simulation
-unit tower projectile combat reward and terminal mutation
-CPU world HUD minimap and terminal overlay rendering
-WebGL context shader program buffer texture and source projection lifecycle
-output-surface sizing DPR contain and CRT presentation
-client pointer keyboard wheel blur and input lifecycle
-campaign phase derivation action admission and result gap
-public menu and campaign host capability projection
-source checks static build Pages deployment and central tracking
-```
-
-Missing coordinating domains:
-
-```txt
-canonical campaign phase schema
-phase identity and revision
-legal phase-transition table
-action kind and policy matrix
-phase-snapshot command admission
-typed accepted/rejected results
-paused-state gameplay mutation fence
-terminal-state mutation fence
-stale phase-result rejection
-phase/tick/terminal/frame correlation
-phase observation and bounded journal
-pure and browser mutation fixtures
+static route and source-canvas shell
+menu selection, panels, settings, save presence and fade transition
+procedural graveyard source rendering
+CRT WebGL context/program/buffer/texture and projection
+Web Audio context, ambience, UI tone and settings adapter
+pointer, keyboard and hidden-button input
+recursive menu RAF and document lifecycle
+campaign content, state, actions, fixed-step simulation and rendering
+public menu/campaign host projection
+phase, command, terminal, lifecycle and checkpoint authority gaps
+source checks, static build, Pages and audit tracking
 ```
 
 ## Implemented kits
@@ -248,148 +160,67 @@ construct-sequence-update-kit
 ## Offered services
 
 ```txt
-menu routing fade and hidden-button activation
-settings persistence and CRT enablement
-raw save-presence scanning across three keys and two storage scopes
-procedural graveyard source drawing
-AudioContext ambience and UI tones
-WebGL context/program/buffer/texture creation
-source-canvas upload contain projection and CRT effects
-CSS-client to source-canvas mapping and menu hit testing
-campaign default-state and authored content construction
-selection drag selection building orders wave start pause and camera control
-fixed-step spawning AI movement targeting damage rewards and terminal mutation
-world HUD minimap pause and terminal overlay rendering
-mutable GameHost state/camera exposure and direct mutation
-source-pattern checks static build and GitHub Pages deployment
+menu routing, fade and hidden-button activation
+settings persistence and CRT/ambience selection
+save-presence scanning
+procedural graveyard drawing
+AudioContext creation, drone/wind ambience and UI tones
+CRT shader resources, source upload, contain/curve presentation
+campaign defaults, selection, construction, orders, waves, pause and camera
+fixed-step spawn, AI, movement, combat, reward and terminal mutation
+world, HUD, minimap and overlays
+mutable public host read/mutation
+construction intro sequencing
+source checks, build and Pages deployment
 ```
 
 ## Required parent domain
 
 ```txt
-phantom-command-campaign-phase-admission-authority-domain
+phantom-command-menu-audio-lifecycle-authority-domain
 ```
 
-Candidate kits:
+## Candidate kits
 
 ```txt
-phantom-command-campaign-phase-schema-kit
-phantom-command-campaign-phase-id-kit
-phantom-command-campaign-phase-revision-kit
-phantom-command-campaign-phase-derivation-kit
-phantom-command-campaign-phase-transition-table-kit
-phantom-command-campaign-action-kind-kit
-phantom-command-campaign-action-envelope-kit
-phantom-command-campaign-action-id-kit
-phantom-command-campaign-action-policy-matrix-kit
-phantom-command-campaign-phase-snapshot-kit
-phantom-command-campaign-action-admission-kit
-phantom-command-campaign-action-result-kit
-phantom-command-campaign-phase-transition-result-kit
-phantom-command-paused-mutation-fence-kit
-phantom-command-terminal-mutation-fence-kit
-phantom-command-wave-start-adapter-kit
-phantom-command-build-adapter-kit
-phantom-command-order-adapter-kit
-phantom-command-selection-adapter-kit
-phantom-command-camera-action-policy-kit
-phantom-command-legacy-gamehost-phase-adapter-kit
-phantom-command-stale-phase-result-rejection-kit
-phantom-command-phase-frame-receipt-kit
-phantom-command-phase-observation-kit
-phantom-command-phase-journal-kit
-phantom-command-paused-terminal-mutation-fixture-kit
-phantom-command-wave-admission-fixture-kit
-phantom-command-build-phase-policy-fixture-kit
-phantom-command-phase-frame-smoke-kit
-```
-
-## Required phase model
-
-Recommended canonical phases:
-
-```txt
-BOOT
-PLANNING
-RUNNING_WAVE
-PAUSED_PLANNING
-PAUSED_WAVE
-WON
-LOST
-DISPOSED
-```
-
-The exact build-during-wave policy is a product decision. It must be represented explicitly in the policy matrix rather than inferred from booleans.
-
-## Required action policy
-
-```txt
-START_WAVE
-  -> only admitted from PLANNING
-
-TOGGLE_PAUSE
-  -> admitted from PLANNING, RUNNING_WAVE, PAUSED_PLANNING, PAUSED_WAVE
-  -> rejected from WON, LOST, DISPOSED
-
-BUILD
-  -> admitted only from declared buildable phases
-  -> rejected from paused and terminal phases unless policy explicitly says otherwise
-
-ORDER_UNITS
-  -> admitted only from declared commandable phases
-  -> rejected from paused and terminal phases
-
-SELECT / SET_TOWER_TYPE / CAMERA
-  -> classified separately as gameplay, planning or presentation-only actions
-  -> each receives an explicit phase policy
-```
-
-## Required action transaction
-
-```txt
-CampaignAction
-  -> validate runtime session and actor/capability
-  -> snapshot campaignPhaseId and phaseRevision
-  -> validate command ID and finite payload
-  -> evaluate action-kind policy against phase
-  -> stage mutation without publishing owners
-  -> commit gameplay mutation and phase transition atomically
-  -> publish typed action result
-  -> correlate result with committed tick and terminal revision
-  -> acknowledge first visible phase/action frame
-  -> append bounded detached observation
-```
-
-## Required result classes
-
-```txt
-ACCEPTED
-REJECTED_PAUSED
-REJECTED_TERMINAL
-REJECTED_ACTIVE_WAVE
-REJECTED_NOT_BUILDABLE_PHASE
-REJECTED_NOT_COMMANDABLE_PHASE
-REJECTED_INSUFFICIENT_SOULS
-REJECTED_INVALID_TARGET
-REJECTED_STALE_PHASE
-REJECTED_DUPLICATE_ACTION
-REJECTED_DISPOSED_SESSION
+phantom-command-audio-session-id-kit
+phantom-command-audio-context-generation-kit
+phantom-command-audio-start-command-kit
+phantom-command-audio-gesture-admission-kit
+phantom-command-audio-context-state-observation-kit
+phantom-command-audio-context-resume-kit
+phantom-command-ambience-graph-lease-kit
+phantom-command-ui-tone-voice-lease-kit
+phantom-command-audio-settings-adapter-kit
+phantom-command-visibility-audio-policy-kit
+phantom-command-pagehide-audio-retirement-kit
+phantom-command-transition-audio-handoff-kit
+phantom-command-audio-stop-command-kit
+phantom-command-audio-retirement-result-kit
+phantom-command-delayed-close-timer-lease-kit
+phantom-command-stale-audio-callback-rejection-kit
+phantom-command-audio-observation-kit
+phantom-command-audio-journal-kit
+phantom-command-suspended-context-resume-fixture-kit
+phantom-command-audio-toggle-churn-fixture-kit
+phantom-command-audio-bfcache-fixture-kit
+phantom-command-transition-audio-teardown-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-paused gameplay actions perform zero durable mutation unless explicitly policy-admitted
-terminal state is mutation-closed
-one action consumes one immutable phase snapshot
-one accepted action returns one typed result
-one rejected action performs zero mutation
-phase transitions are legal-table checked
-public host adapters cannot bypass phase admission
-render overlays cite the committed phase revision
-first visible action frame cites actionResultId and phaseRevision
+one active audio generation per menu session
+non-null graph does not imply running context
+every audible start/resume requires an accepted result
+every graph node and delayed timer has a lease
+predecessor-generation timers cannot affect the active graph
+pagehide/navigation retires or explicitly transfers audio
+bfcache restore revalidates document and context state
+settings UI cites actual admitted audio state
+static checks do not substitute for browser audio proof
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime source, gameplay behavior, input behavior, rendering, persistence, package scripts, dependencies and deployment were not changed. Phase admission, paused mutation fencing, terminal immutability, stale rejection and frame correlation remain unproved until the documented fixtures exist and pass.
+Documentation only. Audio output, Web Audio nodes, menu behavior, navigation, shaders, package scripts, dependencies and deployment were not changed.
