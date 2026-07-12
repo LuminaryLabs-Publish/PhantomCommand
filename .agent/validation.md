@@ -1,85 +1,97 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T04-18-44-04-00`
+**Timestamp:** `2026-07-12T05-49-04-04-00`
 
 ## Summary
 
-This run changed documentation only. Source inspection found one lazily created menu AudioContext, one ambience graph, transient UI-tone voices and a delayed close timer, but no context-state admission, resume path, lifecycle generation, page-event ownership, retirement receipt or browser fixture.
+This run changed documentation only. Source inspection proves that the menu emits distinct Begin and Continue URLs and scans three save keys, but the campaign module reads neither the query nor storage. Every launch builds the same default state, while the terminal save is minimal and unconsumed.
 
 ## Plan ledger
 
-**Goal:** distinguish source-level audio presence from lifecycle correctness.
+**Goal:** distinguish visible save affordances from executable resume correctness.
 
-- [x] Inspect menu settings and audio creation.
-- [x] Inspect ambience graph and UI-tone creation.
-- [x] Inspect disable, transition and RAF paths.
-- [x] Inspect current static menu check.
-- [x] Document lifecycle/result/fixture requirements.
+- [x] Inspect menu save-presence scanning.
+- [x] Inspect Begin and Continue transition URLs.
+- [x] Inspect campaign startup and default state construction.
+- [x] Inspect all campaign storage reads and writes.
+- [x] Inspect restart and public host paths.
+- [x] Inspect current static menu and campaign checks.
+- [x] Document bootstrap, envelope, hydration, result and fixture requirements.
 - [ ] Execute fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-AudioContext created lazily from user input path
-master, drone and looping wind nodes created and started
-state.audio used as the only readiness guard
-context.state never inspected
-context.resume never called
-stop clears state.audio and schedules context.close after 300 ms
-transition changes location without explicit audio teardown
-visibilitychange/pagehide/pageshow listeners absent
-static menu check reads source text only
+SAVE_KEYS contains three legacy keys
+hasCampaignSave accepts any truthy string from localStorage or sessionStorage
+Begin emits game.html?campaign=new
+Continue emits game.html?campaign=continue
+campaign-scene.js never reads location.search
+campaign-scene.js performs no storage read
+campaign startup always constructs default camera, state and six units
+victory writes phantomCommand.save with scene, souls and wave only
+victory write returns no typed result
+R reloads the current page without an explicit restart transaction
 ```
 
 ## Existing checks prove
 
 ```txt
-menu canvas and module references exist
-menu labels and campaign URL exist
-PhantomMenu global exists
-graveyard/CRT source tokens exist
-static build copies src
+menu and campaign HTML/module references exist
+menu labels and campaign URLs exist
+PhantomMenu and GameHost globals exist
+campaign source contains expected gameplay tokens
+static build copies source files
 ```
 
 ## Existing checks do not prove
 
 ```txt
-audio starts or resumes
-suspended contexts recover
-node/timer leases retire
-rapid toggle generations remain isolated
-navigation stops audio
-bfcache restoration is safe
-settings match audible state
+Continue candidate JSON is parseable
+candidate schema and producer are compatible
+Begin and Continue produce different bootstrap modes
+saved state is hydrated
+entity references and counters remain valid
+save writes are durable
+new-run save policy is correct
+resumed state reaches the first visible frame
+menu capability matches campaign capability
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
-audio behavior changed: no
+campaign behavior changed: no
+persistence behavior changed: no
 navigation changed: no
 rendering changed: no
+audio changed: no
 package scripts changed: no
 dependencies changed: no
 deployment changed: no
 branch created: no
 pull request created: no
 npm run check: not run
-browser audio smoke: unavailable
+npm run build: not run
+browser resume smoke: not run
 ```
 
 ## Required fixtures
 
 ```txt
-fixture:audio-start-idempotence
-fixture:suspended-context-resume
-fixture:audio-toggle-generation
-fixture:audio-voice-lease-retirement
-fixture:audio-delayed-close-fencing
-smoke:audio-pagehide-bfcache
-smoke:audio-transition-teardown
-smoke:audio-pages
+fixture:launch-intent-parse
+fixture:malformed-save-rejection
+fixture:unrelated-key-rejection
+fixture:legacy-save-migration
+fixture:new-run-save-policy
+fixture:hydration-reference-validation
+fixture:entity-counter-reseed
+fixture:save-roundtrip-parity
+fixture:first-resumed-frame
+smoke:menu-begin-route
+smoke:menu-continue-route
+smoke:pages-campaign-resume
 ```
 
-No audio lifecycle, audible-state, teardown or bfcache correctness claim is made.
+No campaign-resume, save-compatibility, hydration, durability or first-frame correctness claim is made.
