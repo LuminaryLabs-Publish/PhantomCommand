@@ -2,42 +2,42 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T11-48-43-04-00`
+**Last aligned:** `2026-07-12T13-59-50-04-00`
 
 ## Summary
 
 PhantomCommand is a static pixel-isometric campaign game with a procedural graveyard menu, CRT WebGL presentation, browser audio, direct controls, fixed-step combat, persistence and public diagnostics.
 
-The current audit isolates **runtime-session and resource lifecycle ownership**. Menu and campaign routes allocate recursive RAF loops, anonymous listeners, WebGL resources, optional Web Audio resources and public hosts without a session generation, aggregate resource ledger, context-loss recovery or idempotent retirement result.
+The current audit isolates **Campaign Bootstrap and Continue Resume Authority**. The menu enables Continue when any configured storage key contains any truthy string and navigates with `campaign=continue`, but the campaign never reads the query or any save. Both New and Continue build the same default campaign, while the only save writer stores an incomplete unversioned victory payload.
 
 ## Plan ledger
 
-**Goal:** make startup, active callbacks, route transitions, WebGL context recovery and teardown part of one explicit runtime-session transaction.
+**Goal:** make New and Continue distinct, validated and observable bootstrap transactions with complete state hydration and first-visible-frame proof.
 
 - [x] Compare the complete Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Select only `PhantomCommand` because repo-local audit state was newer than central tracking.
-- [x] Identify the full interaction loop, all active domains, all 20 implemented kits and their services.
-- [x] Trace menu/campaign RAF, listeners, timers, WebGL, audio, navigation and public-host ownership.
-- [x] Define lifecycle phases, resource leases, retirement results, context generations and browser proof.
+- [x] Select only `PhantomCommand` as the oldest eligible central-ledger entry.
+- [x] Identify the full interaction loop, all active domains, all 20 implemented kits and services.
+- [x] Trace menu save probing, launch URLs, campaign construction, victory writes and static checks.
+- [x] Define typed launch, probe, validation, migration, hydration, bootstrap and frame results.
 - [x] Update documentation on `main`; create no branch or pull request.
-- [ ] Runtime implementation and executable lifecycle fixtures remain future work.
+- [ ] Implement and execute the bootstrap/resume authority.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T11-48-43-04-00/project-breakdown.md
+.agent/trackers/2026-07-12T13-59-50-04-00/project-breakdown.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
 .agent/validation.md
-.agent/architecture-audit/2026-07-12T11-48-43-04-00-runtime-session-resource-lifecycle-dsk-map.md
-.agent/render-audit/2026-07-12T11-48-43-04-00-webgl-resource-retirement-context-gap.md
-.agent/gameplay-audit/2026-07-12T11-48-43-04-00-menu-campaign-raf-lifecycle-loop.md
-.agent/interaction-audit/2026-07-12T11-48-43-04-00-session-retirement-admission-map.md
-.agent/runtime-lifecycle-audit/2026-07-12T11-48-43-04-00-raf-listener-webgl-audio-resource-contract.md
-.agent/deploy-audit/2026-07-12T11-48-43-04-00-runtime-lifecycle-browser-fixture-gate.md
-.agent/turn-ledger/2026-07-12T11-48-43-04-00.md
+.agent/architecture-audit/2026-07-12T13-59-50-04-00-campaign-bootstrap-continue-resume-authority-dsk-map.md
+.agent/render-audit/2026-07-12T13-59-50-04-00-continue-save-visible-frame-truth-gap.md
+.agent/gameplay-audit/2026-07-12T13-59-50-04-00-menu-continue-default-campaign-loop.md
+.agent/interaction-audit/2026-07-12T13-59-50-04-00-launch-intent-save-hydration-result-map.md
+.agent/persistence-audit/2026-07-12T13-59-50-04-00-save-key-schema-hydration-contract.md
+.agent/deploy-audit/2026-07-12T13-59-50-04-00-continue-resume-browser-fixture-gate.md
+.agent/turn-ledger/2026-07-12T13-59-50-04-00.md
 .agent/kit-registry.json
 ```
 
@@ -45,58 +45,61 @@ The current audit isolates **runtime-session and resource lifecycle ownership**.
 
 ```txt
 menu boot
-  -> source canvas and graveyard art
-  -> CRT WebGL allocation
-  -> settings/save reads and listeners
-  -> optional AudioContext graph
-  -> recursive RAF
-  -> PhantomMenu publication
+  -> read settings
+  -> probe three keys in localStorage/sessionStorage
+  -> enable Continue for any truthy value
+  -> perform no parse or campaign validation
 
-menu transition
-  -> fade while RAF/audio continue
-  -> location navigation
-  -> browser destruction is implicit teardown
+menu activation
+  -> Begin navigates with campaign=new
+  -> Continue navigates with campaign=continue
 
 campaign boot
-  -> source canvas and CRT WebGL allocation
-  -> campaign, camera and input state
-  -> global/canvas listeners
-  -> recursive fixed-step RAF
-  -> GameHost publication
+  -> ignore location.search
+  -> build default rings, pads, economy, units, IDs and camera
+  -> publish GameHost
+  -> start fixed-step RAF
 
-campaign frame
-  -> input and camera
-  -> fixed-step simulation
-  -> world/HUD/minimap source draw
-  -> CRT upload and presentation
-  -> successor RAF
+victory
+  -> write only scene, souls and wave
+  -> swallow storage failure
+
+Continue or reload
+  -> read no save
+  -> hydrate no state
+  -> render the default campaign
 ```
 
 ## Main findings
 
 ```txt
-runtime session identity: absent
-lifecycle phase/generation: absent
-RAF cancellation lease: absent
-listener and timer registries: absent
-WebGL resource inventory/dispose: absent
-context loss/restoration handling: absent
-AudioContext retirement receipt: absent
-public host revocation: absent
-stale callback rejection: absent
-repeated-session browser fixtures: absent
+save presence validation: absent
+save key/scope identity: absent
+campaign query consumption: absent
+new/continue behavioral distinction: absent
+complete save capture: absent
+schema/version/fingerprint: absent
+migration: absent
+atomic candidate hydration: absent
+save read/write result: absent
+bootstrap revision: absent
+first restored-frame acknowledgement: absent
+browser resume fixtures: absent
 ```
 
 ## Domains and kit groups
 
 ```txt
 menu and campaign route shells
-runtime-session startup active failure transition and retirement
-RAF timer listener pointer keyboard wheel focus and page lifecycle
-CRT source/display projection and WebGL resources
-Web Audio resource ownership
-campaign state commands simulation and rendering
-public hosts diagnostics validation build Pages and audit tracking
+menu settings, save presence, selection, fade and navigation
+campaign launch intent and route admission
+storage capability, key ownership, schema, migration and fingerprints
+new-session bootstrap and continue-session hydration
+campaign state, commands, fixed-step simulation and terminal mutation
+procedural graveyard, campaign world, HUD, minimap and CRT presentation
+public hosts and diagnostics
+runtime-session and browser-resource lifecycle
+source checks, static build, Pages and audit tracking
 ```
 
 Implemented kit count: `20`. The current audit, tracker and machine registry contain the complete per-kit service inventory.
@@ -104,10 +107,10 @@ Implemented kit count: `20`. The current audit, tracker and machine registry con
 ## Required parent domain
 
 ```txt
-phantom-command-runtime-session-resource-lifecycle-authority-domain
+phantom-command-campaign-bootstrap-continue-resume-authority-domain
 ```
 
-It coordinates session identity, phases, RAF/listener/timer leases, WebGL context generations and inventories, audio ownership, route retirement, host revocation, typed results, observations, journals and browser proof.
+It coordinates launch intent, save ownership, typed probing, schema/version/fingerprint validation, migration, detached candidate construction, atomic New/Continue commit, stale-result rejection, journals and first-visible-frame acknowledgement.
 
 ## Ordered architecture queue
 
@@ -127,4 +130,6 @@ It coordinates session identity, phases, RAF/listener/timer leases, WebGL contex
 4. Versioned Full Campaign Checkpoint Capture Authority
 ```
 
-Do not treat browser navigation as a sufficient lifecycle contract. Completion requires explicit callback, WebGL, audio and public-host retirement with real-browser evidence.
+Campaign Bootstrap now has a complete audit specification but remains unimplemented. It depends on Versioned Full Campaign Checkpoint Capture for complete payloads and Runtime Session Resource Lifecycle for route-generation fencing.
+
+Do not treat a truthy storage value, Continue label or query string as proof of resume support. Completion requires complete versioned capture, validated hydration and a visible-frame receipt.
