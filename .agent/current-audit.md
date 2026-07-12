@@ -1,23 +1,23 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T11-48-43-04-00`  
+**Timestamp:** `2026-07-12T13-59-50-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
 ## Summary
 
-The current audit isolates runtime-session and resource lifecycle ownership. `graveyard-menu.js` and `campaign-scene.js` each install route-scoped listeners and start an unconditional recursive RAF. `createCrtRenderer()` allocates shaders, a program, a buffer and a texture but exposes no inventory, context generation or disposal service. Menu audio also owns a delayed close timer without aggregate retirement.
+The current audit isolates Campaign Bootstrap and Continue Resume Authority. `graveyard-menu.js` enables Continue when any configured local or session storage key contains any truthy string and navigates to `game.html?campaign=continue`. `campaign-scene.js` never consumes the query, never reads a save and always constructs the same default campaign. The only campaign writer runs after victory and stores an incomplete unversioned payload.
 
 ## Plan ledger
 
-**Goal:** make route startup and teardown explicit, generation-bound and observable without changing runtime behavior in this documentation pass.
+**Goal:** make menu save admission, New/Continue launch, complete campaign construction and the first visible frame one typed, revisioned transaction.
 
 - [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central and root `.agent` coverage.
-- [x] Select only `PhantomCommand` because repo-local `11-40-50` state was newer than its central `09-28-05` ledger state.
-- [x] Inspect menu, campaign, CRT, audio, route navigation, public hosts, checks and build scripts.
-- [x] Identify the complete interaction loop, domains, all 20 implemented kits and offered services.
-- [x] Define session phases, resource leases, context generations, typed start/retire results, observations and fixtures.
+- [x] Select only `PhantomCommand` as the oldest eligible central-ledger entry.
+- [x] Inspect save keys, storage scopes, launch URLs, default construction, victory persistence and checks.
+- [x] Identify the complete interaction loop, domains, 20 implemented kits and offered services.
+- [x] Define save probing, schema/versioning, migration, candidate hydration, bootstrap results and frame receipts.
 - [x] Change documentation only on `main`.
 - [ ] Implement and execute the authority.
 
@@ -28,9 +28,8 @@ accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new/ledger-missing/root-agent-missing eligible repositories: 0
 selected repository: LuminaryLabs-Publish/PhantomCommand
-selection reason: repo-local audit state newer than central ledger
-prior central timestamp: 2026-07-12T09-28-05-04-00
-prior repo-local timestamp: 2026-07-12T11-40-50-04-00
+selection reason: oldest eligible central ledger and highest queued unimplemented authority
+prior central timestamp: 2026-07-12T11-48-43-04-00
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
@@ -38,91 +37,91 @@ excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 
 ```txt
 menu startup
-  -> create 480x270 source canvas
-  -> create graveyard-art owner
-  -> acquire WebGL and allocate CRT shaders/program/buffer/texture
-  -> read settings and save presence
-  -> install canvas/document/hidden-button listeners
-  -> optionally allocate AudioContext graph
-  -> start recursive menu RAF
-  -> publish PhantomMenu
+  -> read menu settings
+  -> probe phantomCommand.save, nexus.sceneSnapshot and phantom.command.campaign
+  -> check both localStorage and sessionStorage
+  -> enable Continue for any truthy bytes
+  -> retain no matched key, scope, version or fingerprint
 
-menu transition
-  -> start fade timestamp
-  -> continue RAF and audio
-  -> assign location.href
-  -> rely on page destruction for cleanup
+menu launch
+  -> Begin emits game.html?campaign=new
+  -> Continue emits game.html?campaign=continue
+  -> transition fades and navigates
 
 campaign startup
-  -> create 640x360 source canvas
-  -> acquire a second route-local CRT resource set
-  -> create campaign, camera and input state
-  -> install canvas/window listeners
-  -> start recursive campaign RAF
-  -> publish GameHost
+  -> ignore URL query
+  -> allocate rings, lanes, pads, camera, input and default state
+  -> initialize souls=145, core=24, wave=0
+  -> create six default allied units and fresh ID counters
+  -> publish GameHost and start RAF
 
-campaign frame
-  -> sample input and update camera
-  -> drain 1/60 fixed steps
-  -> render world, HUD, minimap and overlays
-  -> upload source canvas and draw CRT
-  -> schedule successor RAF
+campaign victory
+  -> set won and terminal message
+  -> write phantomCommand.save with scene, souls and wave only
+  -> swallow storage failure
 
-failure or exit
-  -> Escape navigates and R reloads
-  -> blur clears only held interaction state
-  -> no explicit runtime retirement result
-  -> no WebGL context-loss/restoration transaction
+resume attempt
+  -> read no save
+  -> perform no migration or hydration
+  -> render default source canvas and CRT frame
 ```
 
 ## Source-backed findings
 
 ```txt
-menu RAF ID retained: no
-campaign RAF ID retained: no
-successor scheduling phase check: no
-anonymous listener lease registry: no
-menu transition retirement barrier: no
-campaign route retirement barrier: no
-CRT resource inventory: no
-CRT dispose service: no
-successful shader deletion: no
-WebGL context loss/restoration handling: no
-WebGL context generation: no
-AudioContext aggregate lease: no
-delayed close timer lease: no
-PhantomMenu/GameHost revocation: no
-stale callback rejection: no
-browser lifecycle fixtures: no
+save keys probed: 3
+storage scopes probed: 2
+matched key/scope retained: no
+payload parsed by menu: no
+campaign compatibility validated: no
+launch query emitted: yes
+launch query consumed: no
+save read by campaign: no
+save payload complete: no
+schema/version/fingerprint: no
+migration policy: no
+candidate graph: no
+atomic hydration: no
+save write receipt: no
+bootstrap revision: no
+visible restored-frame acknowledgement: no
+resume fixtures: no
 ```
 
-### WebGL ownership is incomplete
+### Save presence is not save admissibility
 
-`createCrtRenderer()` compiles and attaches two shaders, links a program, allocates one buffer and one texture, then returns `render`, `resize`, `screenToSource` and raw `gl`. Successful shader objects are not retained for explicit deletion. Link-failure cleanup, resource inventory, context-loss handling and route disposal are absent.
+`hasCampaignSave()` returns true for any truthy value under any configured key in either storage scope. Malformed JSON, unrelated legacy state or an incomplete payload can mark Continue as `BOUND`.
 
-### RAF and listener ownership is implicit
+### New and Continue are the same runtime path
 
-Both route frames call `requestAnimationFrame(frame)` unconditionally. Listener callbacks are mostly anonymous closures, so no route-owned list can remove them. Browser navigation or reload is expected to destroy the page and resources.
+The campaign module never reads `location.search`, `URLSearchParams` or a launch command. Both menu choices create the same default state, entities, camera and counters.
 
-### Audio retirement is detached
+### The victory payload cannot reconstruct the campaign
 
-Menu ambience can schedule `AudioContext.close()` through an untracked 300 ms timeout. No runtime retirement result proves that the timer ran, the context closed or a successor session did not inherit stale audio work.
+The write omits core health, active-wave state, spawn queue, units, towers, pad occupancy, projectiles, selection, camera, simulation time, phases and next-ID counters.
+
+### Storage success is not reported
+
+The victory write is wrapped in a silent `try/catch`. The UI and future menu receive no typed result indicating whether bytes were committed or which save is valid.
 
 ## Domains in use
 
 ```txt
 static menu and campaign route shells
-menu selection panels settings save presence fade and navigation
-browser runtime-session startup readiness transition failure and retirement
-RAF timer DOM listener pointer keyboard wheel focus and page lifecycle
-viewport containment source-coordinate projection and CRT curved presentation
-WebGL context shader program buffer texture upload draw loss restore and disposal
-Web Audio activation graph UI tones delayed close and retirement
-campaign launch bootstrap persistence selection build orders wave pause camera and restart
-fixed-step spawning movement targeting projectiles damage rewards and terminal state
-procedural graveyard and campaign world HUD minimap overlay rendering
-public menu and campaign host capabilities
-source checks static build Pages deployment and audit tracking
+menu settings, save presence, selection, panels, fade and navigation
+campaign launch intent and route admission
+browser storage capability, key ownership and scope selection
+save schema, version, fingerprint, validation and migration
+new-session default candidate construction
+continue-session candidate hydration and atomic commit
+campaign rings, lanes, pads, units, towers, economy and camera
+selection, build, orders, waves, pause and restart
+fixed-step spawning, movement, targeting, projectiles, damage, rewards and terminal state
+procedural graveyard and campaign world/HUD/minimap rendering
+CRT WebGL presentation and visible-frame acknowledgement
+public PhantomMenu and GameHost capabilities
+runtime-session and browser-resource lifecycle
+source checks, static build, Pages deployment and audit tracking
 ```
 
 ## Implemented kits
@@ -153,84 +152,78 @@ construct-sequence-update-kit
 ## Offered services
 
 ```txt
-menu routing selection panels settings save presence fade and hidden-button activation
-pointer keyboard wheel drag focus and route interactions
+menu routing, selection, panels, settings persistence, save-presence scanning, fade and hidden-button activation
+pointer, keyboard, wheel, drag, focus and route interactions
 procedural graveyard and campaign source rendering
-WebGL compile link buffer texture upload contain curve grain fade and draw
-AudioContext ambience graph UI tones and delayed close
-campaign state selection building orders waves pause camera restart and navigation
-fixed-step spawning movement targeting projectiles damage rewards and terminal mutation
-public state reads and direct mutation
+WebGL compile/link, buffer/texture upload, containment, curve, grain, fade and draw
+AudioContext ambience, UI tones and delayed close
+campaign state, selection, building, orders, waves, pause, camera, restart and navigation
+fixed-step spawning, movement, targeting, projectiles, damage, rewards and terminal mutation
+public state snapshots and direct mutation capabilities
 construction intro sequencing
-source checks static build and GitHub Pages deployment
+source checks, static build and GitHub Pages deployment
 ```
 
 ## Required parent domain
 
 ```txt
-phantom-command-runtime-session-resource-lifecycle-authority-domain
+phantom-command-campaign-bootstrap-continue-resume-authority-domain
 ```
 
 ## Candidate kits
 
 ```txt
-runtime-session-id-kit
-runtime-session-phase-kit
-runtime-session-generation-kit
-runtime-start-command-kit
-runtime-start-result-kit
-runtime-resource-ledger-kit
-raf-lease-kit
-dom-listener-lease-kit
-timer-lease-kit
-webgl-context-generation-kit
-webgl-resource-inventory-kit
-webgl-context-loss-result-kit
-webgl-context-restore-result-kit
-audio-resource-lease-kit
-route-transition-retirement-kit
-runtime-retire-command-kit
-runtime-retire-result-kit
-runtime-idempotent-disposal-kit
-stale-runtime-callback-rejection-kit
-public-host-revocation-kit
-runtime-lifecycle-observation-kit
-runtime-lifecycle-journal-kit
-repeated-menu-session-fixture-kit
-repeated-campaign-session-fixture-kit
-webgl-context-loss-browser-fixture-kit
-route-retirement-browser-smoke-kit
-pages-runtime-lifecycle-smoke-kit
+campaign-launch-intent-kit
+campaign-launch-intent-id-kit
+campaign-launch-intent-admission-kit
+campaign-save-key-registry-kit
+campaign-save-probe-result-kit
+campaign-save-schema-kit
+campaign-save-version-kit
+campaign-save-fingerprint-kit
+campaign-save-read-result-kit
+campaign-save-validation-kit
+campaign-save-migration-kit
+campaign-save-candidate-kit
+campaign-hydration-plan-kit
+campaign-hydration-result-kit
+campaign-new-session-bootstrap-kit
+campaign-continue-session-bootstrap-kit
+campaign-bootstrap-command-kit
+campaign-bootstrap-result-kit
+campaign-bootstrap-revision-kit
+stale-campaign-bootstrap-rejection-kit
+campaign-bootstrap-journal-kit
+campaign-visible-frame-ack-kit
+campaign-save-browser-fixture-kit
+campaign-continue-browser-fixture-kit
+campaign-invalid-save-fixture-kit
+campaign-pages-resume-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-Every callback and resource belongs to one session and generation.
-Only READY sessions admit input, simulation and draw work.
-Every RAF, listener and timer has an explicit cancellable lease.
-Every WebGL resource is inventoried and retired or replaced under a new context generation.
-Context restoration cannot revive a RETIRED session.
-Retirement revokes public hosts and rejects stale callbacks before completion.
-Duplicate retirement is idempotent and cannot affect a successor session.
-A start, loss, restore or retire result is observable in a bounded journal.
+Storage presence never equals save validity.
+New and Continue return distinct typed results.
+Every admitted save identifies one key, scope, schema, version and fingerprint.
+Hydration constructs and validates a detached candidate before live mutation.
+Failed hydration leaves the live/default graph untouched.
+IDs and references remain valid after resume and subsequent ticks.
+The first canvas, HUD and GameHost read model acknowledge one bootstrap revision.
 ```
 
 ## Retained dependencies
 
 ```txt
-Campaign Bootstrap and Continue Resume Authority
-Menu Pointer-Hit Admission Authority
-Campaign World-Pointer Admission Authority
-Public Host Owner Quarantine and Typed Command Admission
-CRT Display/Input Projection Authority
-Campaign Phase Admission Authority
-Fixed-Step Scheduling Replay and Committed Frames
-Combat Resolution and Exclusive Terminal Outcome Authorities
-Menu Audio Activation and Lifecycle Authority
 Versioned Full Campaign Checkpoint Capture Authority
+Runtime Session Resource Lifecycle Authority
+Fixed-Step Scheduling Replay and Committed Frames
+CRT Display/Input Projection Authority
+Public Host Committed Read Model
+Campaign Phase and Action Result Authorities
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, menu, campaign, input, camera, simulation, rendering, audio, persistence, package scripts, dependencies and deployment were not changed.
+Documentation only. Runtime, menu, campaign, persistence, input, camera, simulation, rendering, audio, package scripts, dependencies and deployment were not changed.
