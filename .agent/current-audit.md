@@ -1,23 +1,23 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T07-29-32-04-00`  
+**Timestamp:** `2026-07-12T09-28-05-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`
 
 ## Summary
 
-The current audit isolates the menu Web Audio lifecycle. `ensureAudio()` creates a context and graph after pointer or keyboard interaction, but it treats any non-null `state.audio` as current without observing `AudioContext.state`. No path resumes a suspended or interrupted context. Ambience shutdown clears the current reference before an untracked delayed close, allowing rapid toggles to overlap graph generations. Visibility loss, pagehide, navigation and module disposal have no ordered audio retirement transaction.
+The current audit isolates menu pointer-hit admission. `screenToSource()` correctly reports whether a pointer lies inside the contained 480x270 source frame, and the menu and settings hit-test functions correctly return `-1` for misses. The `pointerdown` handler then discards that miss result and activates the currently selected command anyway. A background click, letterbox-margin click or settings-panel miss can therefore execute an action that was only selected previously.
 
 ## Plan ledger
 
-**Goal:** define one authoritative audio lifecycle transaction without changing runtime behavior in this documentation pass.
+**Goal:** make pointer activation require a current hit-test result bound to the active menu or panel generation, without changing runtime behavior in this documentation pass.
 
 - [x] Compare the full Publish inventory with central ledgers.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm nine eligible repositories have central ledger and root `.agent` coverage.
-- [x] Reconcile repo-local timestamps and select only the oldest stable eligible repo.
-- [x] Inspect audio settings, context construction, node graph, UI tones, toggle behavior, browser input and navigation.
+- [x] Select only the oldest eligible repository.
+- [x] Inspect canvas containment, source projection, pointer movement, menu and panel hit testing and pointer activation.
 - [x] Identify the complete interaction loop, all domains, all 20 implemented kits and offered services.
-- [x] Define activation, context-state, generation, resume, replacement, stop, disposal, observation and fixture boundaries.
+- [x] Define hit results, target generations, activation commands, typed misses, observations and fixtures.
 - [x] Change documentation only on `main`.
 - [ ] Implement and execute the authority.
 
@@ -27,7 +27,7 @@ The current audit isolates the menu Web Audio lifecycle. `ensureAudio()` creates
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
 new/ledger-missing/root-agent-missing eligible repositories: 0
-oldest stable eligible timestamp: PhantomCommand at 2026-07-12T05-49-04-04-00
+oldest eligible central timestamp: PhantomCommand at 2026-07-12T07-29-32-04-00
 selected repository: LuminaryLabs-Publish/PhantomCommand
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
@@ -37,108 +37,83 @@ excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```txt
 menu startup
   -> create source canvas, graveyard art and CRT renderer
-  -> read persisted CRT, grain and ambience settings
-  -> scan three save keys
-  -> initialize menu state with audio = null
+  -> read settings and save presence
+  -> initialize menu.selected = 0 and panel = null
   -> install pointer and keyboard handlers
   -> start recursive RAF
   -> publish window.PhantomMenu
 
-first pointerdown or document keydown
-  -> call ensureAudio()
-  -> when ambience=true and state.audio=null:
-       create AudioContext
-       create master gain
-       create/start drone oscillator
-       create/start looping wind source
-       store context/master/drone/wind
-  -> classify and execute menu action
+pointer move
+  -> renderer.screenToSource(clientX, clientY)
+  -> retain source x/y plus inside flag
+  -> menuHitIndex or panelHitIndex returns row index or -1
+  -> selection changes only when a row is hit
 
-UI tone
-  -> call ensureAudio()
-  -> create transient oscillator and gain
-  -> start and schedule stop
+pointer down with no panel
+  -> ensureAudio()
+  -> project coordinates
+  -> menuHitIndex(point)
+  -> when hit, update menu.selected
+  -> activateMain(menu.items[menu.selected]) regardless of hit or miss
 
-ambience off
-  -> clear state.audio immediately
-  -> fade predecessor master
-  -> schedule predecessor context.close() after 300 ms
+pointer down with a settings panel
+  -> panelHitIndex(point)
+  -> when hit, update panel.selected
+  -> activatePanel() regardless of hit or miss
 
-ambience on before close
-  -> create a new context and graph
-  -> predecessor close timer remains untracked
-
-Begin or Continue
-  -> start transition and long tone
-  -> continue menu RAF and ambience during fade
-  -> navigate after 0.95 seconds
-  -> perform no explicit audio or RAF disposal
+keyboard
+  -> directional key explicitly changes selection
+  -> Enter or Space explicitly activates selected command
 ```
 
 ## Source-backed findings
 
 ```txt
-AudioContext creation: implemented
-master gain: implemented
-drone oscillator: implemented
-looping wind source: implemented
-transient UI tones: implemented
-ambience preference persistence: implemented
-delayed context close: implemented ad hoc
+viewport-to-source containment: implemented
+letterbox inside=false result: implemented
+menu row hit testing: implemented
+settings row hit testing: implemented
+hover selection update on hit: implemented
+keyboard selection and activation: implemented
 
-AudioContext state observation: absent
-context.statechange handling: absent
-context.resume(): absent
-context.suspend(): absent
-trusted user-activation receipt: absent
-context generation: absent
-graph generation: absent
-complete node registry: absent
-delayed close timer identity: absent
-delayed close cancellation: absent
-rapid-toggle overlap prevention: absent
-visibilitychange handling: absent
-pagehide handling: absent
-navigation teardown result: absent
-module dispose API: absent
-typed lifecycle results: absent
-audio observation/journal: absent
-browser lifecycle fixtures: absent
+pointer miss rejection: absent
+letterbox miss rejection: absent
+settings-panel miss rejection: absent
+hit target identity: absent
+menu or panel generation identity: absent
+selection revision fence: absent
+pointer command identity: absent
+typed hit/miss result: absent
+pointer action observation/journal: absent
+browser pointer-target fixtures: absent
 ```
 
-### Non-null state can conceal a non-running context
+### Background and letterbox clicks can launch the current selection
 
-`ensureAudio()` exits whenever `state.audio` exists. It never distinguishes `running`, `suspended`, `interrupted` or `closed`. If the browser suspends the context, later valid gestures cannot trigger `resume()` because the existence check short-circuits first.
+`menuHitIndex()` returns `-1` when the pointer is outside the menu rows, outside the source frame or while a panel is open. The no-panel `pointerdown` path only uses a non-negative index to update selection; it calls `activateMain(menu.items[menu.selected])` unconditionally afterward. The initial selection is Begin Campaign, so a first click anywhere on the canvas can start the campaign.
 
-### Rapid toggles can overlap contexts
+### Settings misses can mutate the current setting
 
-`stopAmbience()` sets `state.audio = null` before the old context closes. Re-enabling ambience during the 300 ms fade creates a new graph while the predecessor remains alive. The delayed callback is not bound to an audio generation and cannot be cancelled.
+When the settings panel is open, a miss leaves `state.panel.selected` unchanged and still calls `activatePanel()`. The default selected row is CRT. A click on panel background, outside the panel or in a letterbox margin can therefore toggle CRT.
 
-### Navigation does not retire audio ownership
+### Visual selection and pointer target are different authorities
 
-The transition path continues the ambience graph and recursive RAF until location assignment. No terminal result proves that oscillators, buffer sources, transient tones, timers or context were retired before the page transfers ownership.
-
-### Audio activation is attempted before command classification
-
-The document key handler invokes `ensureAudio()` before checking whether the key maps to a menu action. The runtime records neither event trust nor browser user-activation evidence.
+The highlighted selection is useful for keyboard navigation and hover projection. It is not proof that the current pointerdown targeted that row. Pointer activation needs a current `Hit` result, while keyboard activation may continue to use explicit selection.
 
 ## Domains in use
 
 ```txt
 static menu and campaign route shells
 menu selection panels settings save presence and fade transition
-campaign launch intent bootstrap and resume admission gaps
-save key ownership envelope validation migration quarantine and commit gaps
+viewport-to-source contain projection and letterbox classification
+menu and settings-panel hit testing
+pointer keyboard hidden-button focus page navigation and RAF lifecycle
 procedural graveyard source rendering
-CRT WebGL context program buffer texture and projection
-Web Audio activation context graph ambience UI tones and teardown
-pointer keyboard wheel focus visibility page navigation and RAF lifecycle
-campaign rings lanes pads waves economy core and terminal state
-selection building orders pause camera and fixed-step simulation
-unit tower projectile combat reward and terminal mutation
-CPU world HUD minimap and overlay rendering
+CRT WebGL context program buffer texture and display projection
+Web Audio activation ambience UI tones and lifecycle gaps
+campaign launch bootstrap persistence actions simulation combat and rendering
 public menu and campaign host capabilities
-runtime session frame-loop and disposal authority gaps
+runtime session command phase terminal and checkpoint authority gaps
 source checks static build Pages deployment and audit tracking
 ```
 
@@ -173,11 +148,13 @@ construct-sequence-update-kit
 menu routing selection panels fade and hidden-button activation
 settings persistence and CRT grain ambience selection
 presence-only save scanning across legacy keys and scopes
-procedural graveyard drawing
-AudioContext creation master gain drone oscillator looping wind buffer UI tones delayed close
+viewport-to-source contain projection with inside classification
+menu and settings-panel row hit testing
+pointer hover pointer activation and keyboard activation
+procedural graveyard source-canvas drawing
+AudioContext ambience and UI tone construction
 WebGL context program buffer texture source upload and CRT presentation
-default campaign content and mutable state construction
-selection building orders wave start pause camera restart and navigation
+default campaign state selection building orders wave pause camera and restart
 fixed-step spawning AI movement targeting damage rewards and terminal mutation
 minimal victory save writing
 world HUD minimap pause and terminal overlay rendering
@@ -189,52 +166,45 @@ source checks static build and GitHub Pages deployment
 ## Required parent domain
 
 ```txt
-phantom-command-menu-audio-activation-lifecycle-authority-domain
+phantom-command-menu-pointer-hit-admission-authority-domain
 ```
 
 ## Candidate kits
 
 ```txt
-phantom-command-audio-session-id-kit
-phantom-command-audio-context-generation-kit
-phantom-command-audio-graph-generation-kit
-phantom-command-audio-user-activation-evidence-kit
-phantom-command-audio-activation-command-kit
-phantom-command-audio-activation-admission-kit
-phantom-command-audio-context-state-kit
-phantom-command-audio-context-statechange-adapter-kit
-phantom-command-audio-node-registry-kit
-phantom-command-audio-resume-transaction-kit
-phantom-command-audio-suspend-transaction-kit
-phantom-command-audio-stop-transaction-kit
-phantom-command-audio-delayed-close-kit
-phantom-command-audio-delayed-work-cancellation-kit
-phantom-command-audio-visibility-adapter-kit
-phantom-command-audio-pagehide-adapter-kit
-phantom-command-audio-navigation-retirement-kit
-phantom-command-audio-disposal-kit
-phantom-command-audio-command-result-kit
-phantom-command-audio-observation-kit
-phantom-command-audio-journal-kit
-phantom-command-audio-activation-fixture-kit
-phantom-command-audio-background-resume-fixture-kit
-phantom-command-audio-rapid-toggle-fixture-kit
-phantom-command-audio-navigation-teardown-smoke-kit
+phantom-command-menu-input-session-kit
+phantom-command-menu-surface-generation-kit
+phantom-command-menu-panel-generation-kit
+phantom-command-menu-selection-revision-kit
+phantom-command-pointer-event-envelope-kit
+phantom-command-source-coordinate-projection-kit
+phantom-command-pointer-containment-result-kit
+phantom-command-menu-hit-target-kit
+phantom-command-menu-hit-test-result-kit
+phantom-command-pointer-activation-command-kit
+phantom-command-pointer-activation-admission-kit
+phantom-command-pointer-miss-result-kit
+phantom-command-menu-action-result-kit
+phantom-command-pointer-action-observation-kit
+phantom-command-pointer-action-journal-kit
+phantom-command-background-miss-fixture-kit
+phantom-command-letterbox-miss-fixture-kit
+phantom-command-settings-panel-miss-fixture-kit
+phantom-command-pointer-target-browser-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-one current audio graph generation per menu session
-state.audio never implies running without an observed context state
-suspended or interrupted contexts can be resumed by an admitted gesture
-closed or failed contexts cannot block a replacement transaction
-rapid off/on cannot leave overlapping current generations
-every node and delayed task belongs to one graph generation
-stale callbacks and commands perform zero mutation
-pagehide navigation and disposal retire audio exactly once
-settings and diagnostics distinguish preference from runtime lifecycle state
-static token checks do not substitute for real-browser audio proof
+pointer activation requires a Hit result from the current event
+Miss performs zero menu or settings mutation
+letterbox margins are non-interactive unless an explicit target is rendered there
+hit target belongs to the current menu or panel generation
+stale hit results and stale selection revisions perform zero mutation
+keyboard activation remains an explicit selection-based command
+hidden native buttons retain their own native click path
+one pointer command returns one typed terminal result
+pointer result and resulting route or setting revision are observable
 ```
 
 ## Retained dependencies
@@ -247,6 +217,7 @@ Campaign Phase Admission Authority
 Fixed-Step Command Scheduling and Committed Frame Authority
 Combat Resolution and Exclusive Terminal Outcome Authorities
 Runtime Session Lifecycle Authority
+Menu Audio Activation and Lifecycle Authority
 Versioned Full Campaign Checkpoint Capture Authority
 ```
 
