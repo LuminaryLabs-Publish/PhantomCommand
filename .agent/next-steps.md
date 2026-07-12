@@ -1,167 +1,157 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T16-00-03-04-00`
+**Timestamp:** `2026-07-12T18-11-53-04-00`
 
 ## Summary
 
-The next implementation boundary is Menu Pointer-Hit Admission Authority. Refactor the existing menu and CRT owners so pointer-sourced actions require a current visible-control hit and every miss or stale result performs zero mutation.
+The next implementation boundary is Campaign Action Result Authority. Replace void campaign helpers and direct public mutations with one command path that validates expected revisions, returns one terminal result and correlates committed actions with the first visible campaign frame.
 
 ## Plan ledger
 
-**Goal:** implement one deterministic pointer pipeline from event sampling through visible geometry, typed hit admission, action commit and first-frame acknowledgement.
+**Goal:** implement one deterministic campaign action transaction from intent through admission, detached planning, atomic commit, terminal result and visible proof.
 
-- [ ] Extract immutable main-menu and settings control descriptors.
-- [ ] Add surface, transform, layout and panel generations.
-- [ ] Version viewport bounds, source size, DPR, CRT state and curve coefficient.
-- [ ] Implement inverse CRT projection or shared display-space hit geometry.
-- [ ] Replace integer-only hit functions with typed `MenuHitTestResult`.
-- [ ] Make `inside=false` terminal `RejectedOutsideSurface`.
-- [ ] Make no-control hits terminal `RejectedMiss`.
-- [ ] Require primary pointer and admitted button.
-- [ ] Add pointer sequence, capture and cancel policy.
-- [ ] Construct pointer-sourced actions only from `status=Hit` evidence.
-- [ ] Keep keyboard and hidden controls as explicit input sources.
-- [ ] Add `MenuActionCommand` and terminal `MenuActionResult`.
-- [ ] Fence stale surface, transform, layout and panel results.
-- [ ] Deduplicate repeated pointer sequences.
-- [ ] Fence actions after route transition commit.
-- [ ] Return zero mutation for every rejected path.
-- [ ] Publish detached input/action observations and bounded journal.
-- [ ] Correlate accepted results with the first visible menu frame.
-- [ ] Add Node geometry and policy fixtures.
-- [ ] Add browser source-route, built-output and Pages fixtures.
+- [ ] Introduce campaign session identity and generation.
+- [ ] Add one monotonic campaign revision.
+- [ ] Add phase, selection, economy, pad, target and camera revisions where required.
+- [ ] Define `CampaignActionCommand` and action-kind payload schemas.
+- [ ] Give browser, accessibility, public host, replay and fixture paths explicit source identities.
+- [ ] Allocate stable action IDs and sequences.
+- [ ] Reject duplicate action IDs without repeating mutation.
+- [ ] Reject stale expected revisions.
+- [ ] Replace direct `startWave()` mutation with a planned action transaction.
+- [ ] Replace direct `build()` mutation with an atomic pad/economy/tower/effect/message transaction.
+- [ ] Replace `selectAt()` with typed selection and build results.
+- [ ] Replace `order()` with typed selection/target admission and per-unit change sets.
+- [ ] Route tower-type, pause, restart and camera actions through the command path.
+- [ ] Replace raw `GameHost` mutators with typed public command admission.
+- [ ] Return one terminal `CampaignActionResult` for every action.
+- [ ] Guarantee zero mutation for every rejected path.
+- [ ] Add commit rollback for participant failure.
+- [ ] Publish detached action observations and a bounded journal.
+- [ ] Project HUD feedback and public readback from committed results.
+- [ ] Add first-visible-action-frame acknowledgement.
+- [ ] Add headless action, rejection, stale, duplicate and rollback fixtures.
+- [ ] Add browser source, built-output and Pages parity fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
-src/menu/graveyard-menu.js
-src/menu/crt-renderer.js
-src/menu/graveyard-art.js
-index.html
-menu-route-kit
-crt-renderer-kit
-graveyard-art-kit
-menu-settings-persistence-kit
-menu-audio-kit
-menu-static-check-kit
-window.PhantomMenu
-scripts/check-menu.mjs
+src/campaign/campaign-scene.js
+pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
+pixel-campaign-render-kit
+legacy-gamehost-diagnostics-kit
+campaign-static-check-kit
+scripts/check-campaign.mjs
 package.json
+game.html
 ```
 
-## Control descriptor
+## Command shape
 
 ```txt
-MenuControlDescriptor {
-  controlId
+CampaignActionCommand {
   actionId
-  panelKind
-  enabled
-  sourceShape
-  visibleShape
-  layoutRevision
-  panelGeneration
+  sequence
+  sourceKind
+  capabilityId?
+  sessionId
+  sessionGeneration
+  actionKind
+  payload
+  expectedCampaignRevision
+  expectedPhaseRevision
+  expectedSelectionRevision?
+  expectedEconomyRevision?
+  expectedPadRevision?
+  expectedTargetRevision?
 }
 ```
 
-## Geometry descriptor
+## Result shape
 
 ```txt
-MenuRenderGeometry {
-  surfaceGeneration
-  transformRevision
-  sourceSize
-  displayRect
-  devicePixelRatio
-  crtEnabled
-  curveCoefficient
-  layoutRevision
-  panelGeneration
-  controls[]
-}
-```
-
-## Pointer command
-
-```txt
-MenuPointerSample {
-  sampleId
-  sequenceId
-  pointerId
-  pointerType
-  isPrimary
-  button
-  buttons
-  viewportPoint
-  surfaceGeneration
-  transformRevision
-}
-
-MenuActionCommand {
-  commandId
-  inputSource
-  pointerSampleId
-  hitResultId
-  controlId
+CampaignActionResult {
   actionId
-  expectedMenuRevision
-  expectedPanelGeneration
-  expectedTransitionRevision
+  status
+  reason?
+  predecessorRevision
+  successorRevision
+  changedResources[]
+  selectedIdsAdded[]
+  selectedIdsRemoved[]
+  economyDelta?
+  createdEntityIds[]
+  removedEntityIds[]
+  phaseDelta?
+  messageDelta?
+  committedAtStep?
 }
 ```
 
-## Terminal results
+## Required terminal statuses
 
 ```txt
 Committed
-RejectedOutsideSurface
-RejectedMiss
-RejectedPointerPolicy
-RejectedUnsupportedTransform
+RejectedInvalidSchema
+RejectedUnsupportedAction
+RejectedSource
+RejectedPhase
+RejectedSelection
+RejectedTarget
+RejectedOccupied
+RejectedInsufficientResources
+RejectedTerminal
+RejectedPaused
 RejectedStale
 RejectedDuplicate
-RejectedTransition
-RejectedDisabled
-RejectedCapability
+RejectedNoEffect
+FailedPrepare
+FailedCommit
+RolledBack
 ```
 
 ## Minimal correction sequence
 
 ```txt
-1. Calculate pointer policy result.
-2. Project against current geometry.
-3. Return typed containment and hit results.
-4. On any rejection, return without calling activateMain/activatePanel.
-5. On Hit, build one command for the named control.
-6. Commit selection/panel/settings/transition mutation once.
-7. Publish terminal result and first-frame acknowledgement.
+1. Wrap current action helpers behind one dispatcher.
+2. Allocate action IDs and source identities at every ingress.
+3. Capture expected campaign and resource revisions.
+4. Validate without mutation.
+5. Build a detached change set.
+6. Commit all changes once or none.
+7. Return one terminal result.
+8. Derive feedback and public readback from that result.
+9. Acknowledge the first visible successor frame.
 ```
 
 ## Fixture gate
 
 ```txt
-main control centers commit expected actions
-main row gaps reject with zero mutation
-empty graveyard and letterbox reject with zero mutation
-settings row centers commit expected mutations
-settings row gaps reject with zero mutation
-secondary mouse and secondary touch reject
-CRT-on/off visible geometry matches hit geometry
-resize/DPR stale results reject
-keyboard and accessibility controls retain parity
-one physical sequence produces one result
-source, build and Pages results match
+wave start success and all rejection reasons
+build success, missing pad, occupied pad and insufficient souls
+selection add, remove, clear and rectangle selection
+order success, empty selection and stale entity reference
+valid and invalid tower type
+pause and restart phase policy
+duplicate action ID idempotency
+stale campaign/resource revisions
+prepare failure and rollback
+public GameHost source identity
+source/build/Pages parity
+first visible frame correlation
 ```
 
 ## Dependency order
 
 ```txt
 Runtime Session Resource Lifecycle Authority
-  -> CRT Display/Input Projection Authority
-  -> Menu Pointer-Hit Admission Authority
-  -> Campaign Bootstrap and Continue Resume Authority
+  -> Campaign Action Result Authority
+  -> Campaign World-Pointer Admission Authority
+  -> Campaign Phase Admission Authority
+  -> Fixed-Step Command Scheduling Replay Authority
   -> Public Host Committed Read Model
 ```
 
-Do not fix the defect by merely checking `index >= 0` in one listener and leaving geometry, stale-result, pointer-policy and proof gaps unowned. Update the existing owners under one explicit authority.
+Do not patch only the silent `return` statements with booleans. The correction requires stable command identity, revision admission, one terminal result, zero-mutation rejection and visible-frame proof.
