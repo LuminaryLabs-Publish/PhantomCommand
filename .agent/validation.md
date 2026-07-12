@@ -1,109 +1,85 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T03-00-46-04-00`
+**Timestamp:** `2026-07-12T04-18-44-04-00`
 
 ## Summary
 
-This run changed internal documentation only. It source-inspected campaign phase booleans, fixed-step gating, wave start, construction, selection, orders, keyboard, pointer, camera, rendering, and `GameHost`; confirmed pause and terminal states stop simulation but not all command mutation; and documented the missing phase identity, action policy, typed result, mutation fence, and visible-frame contracts.
+This run changed documentation only. Source inspection found one lazily created menu AudioContext, one ambience graph, transient UI-tone voices and a delayed close timer, but no context-state admission, resume path, lifecycle generation, page-event ownership, retirement receipt or browser fixture.
 
 ## Plan ledger
 
-**Goal:** record exactly what was observed and what remains unproved.
+**Goal:** distinguish source-level audio presence from lifecycle correctness.
 
-- [x] Confirm `update()` exits for paused, won, and lost.
-- [x] Confirm `startWave()` rejects active/terminal/exhausted states but not paused.
-- [x] Confirm `build()` has no pause, wave, or terminal phase guard.
-- [x] Confirm `selectAt()` can call `build()` without phase admission.
-- [x] Confirm `order()` has no pause or terminal guard.
-- [x] Confirm keyboard and pointer handlers mutate live state directly.
-- [x] Confirm `GameHost` exposes raw state/camera and direct mutators.
-- [x] Confirm render overlay has no phase/action/frame provenance.
-- [x] Document pure and browser fixture gates.
+- [x] Inspect menu settings and audio creation.
+- [x] Inspect ambience graph and UI-tone creation.
+- [x] Inspect disable, transition and RAF paths.
+- [x] Inspect current static menu check.
+- [x] Document lifecycle/result/fixture requirements.
 - [ ] Execute fixtures after implementation.
 
-## Static observations
+## Proven from source
 
 ```txt
-campaign booleans: paused, waveActive, won, lost
-canonical phase enum: absent
-phase ID/revision: absent
-legal transition table: absent
-action policy matrix: absent
-fixed-step simulation pause fence: present
-wave-start paused fence: absent
-build paused fence: absent
-build terminal fence: absent
-order paused fence: absent
-order terminal fence: absent
-selection phase fence: absent
-public-host phase fence: absent
-typed action result: absent
-stale phase rejection: absent
-phase/action/tick/frame receipt: absent
+AudioContext created lazily from user input path
+master, drone and looping wind nodes created and started
+state.audio used as the only readiness guard
+context.state never inspected
+context.resume never called
+stop clears state.audio and schedules context.close after 300 ms
+transition changes location without explicit audio teardown
+visibilitychange/pagehide/pageshow listeners absent
+static menu check reads source text only
 ```
 
-## Source examples
+## Existing checks prove
 
 ```txt
-update:
-  if paused || won || lost -> return
+menu canvas and module references exist
+menu labels and campaign URL exist
+PhantomMenu global exists
+graveyard/CRT source tokens exist
+static build copies src
+```
 
-startWave:
-  reject waveActive || won || lost || wave >= waves.length
-  paused is not checked
-  accepted path replaces spawn[], sets waveActive, changes message
+## Existing checks do not prove
 
-build:
-  checks selected pad, occupancy and Souls
-  no phase check
-  accepted path spends Souls, creates tower, appends effect
-
-order:
-  checks only selected length and live unit lookup
-  no phase check
-  accepted path replaces target/move and appends effect
-
-render:
-  overlays when paused || won || lost
-  visible label precedence is won, then lost, then paused
-  no phase revision or action result is projected
+```txt
+audio starts or resumes
+suspended contexts recover
+node/timer leases retire
+rapid toggle generations remain isolated
+navigation stops audio
+bfcache restoration is safe
+settings match audible state
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
-campaign action behavior changed: no
-pause behavior changed: no
-terminal behavior changed: no
-pointer or keyboard behavior changed: no
-rendering changed: no
-persistence behavior changed: no
-audio changed: no
+audio behavior changed: no
 navigation changed: no
+rendering changed: no
 package scripts changed: no
 dependencies changed: no
-deployment workflow changed: no
+deployment changed: no
 branch created: no
 pull request created: no
+npm run check: not run
+browser audio smoke: unavailable
 ```
 
-## Commands and fixtures
+## Required fixtures
 
 ```txt
-npm run check: not run
-npm run build: not run
-browser smoke: not run
-phase derivation fixture: unavailable
-transition table fixture: unavailable
-paused mutation fixture: unavailable
-terminal mutation fixture: unavailable
-wave admission fixture: unavailable
-build policy fixture: unavailable
-public-host phase parity fixture: unavailable
-stale phase-revision fixture: unavailable
-phase/action/frame receipt fixture: unavailable
-Pages smoke: not run
+fixture:audio-start-idempotence
+fixture:suspended-context-resume
+fixture:audio-toggle-generation
+fixture:audio-voice-lease-retirement
+fixture:audio-delayed-close-fencing
+smoke:audio-pagehide-bfcache
+smoke:audio-transition-teardown
+smoke:audio-pages
 ```
 
-No campaign-phase correctness, pause safety, terminal immutability, legal transition, action-admission, public-host parity, or phase/frame-correlation claim is made.
+No audio lifecycle, audible-state, teardown or bfcache correctness claim is made.
