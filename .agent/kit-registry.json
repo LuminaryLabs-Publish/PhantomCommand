@@ -1,21 +1,21 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-11T19-48-09-04-00",
-  "status": "runtime-session-lifecycle-teardown-authority-audited",
-  "sourceTracker": ".agent/trackers/2026-07-11T19-48-09-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T19-48-09-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T19-48-09-04-00-runtime-session-lifecycle-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-11T19-48-09-04-00-crt-webgl-retirement-frame-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T19-48-09-04-00-menu-campaign-navigation-restart-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T19-48-09-04-00-stop-dispose-navigate-restart-admission-map.md",
-  "latestSystemAudit": ".agent/runtime-lifecycle-audit/2026-07-11T19-48-09-04-00-resource-lease-retirement-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T19-48-09-04-00-lifecycle-teardown-fixture-gate.md",
-  "previousTracker": ".agent/trackers/2026-07-11T18-21-09-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-11T21-31-19-04-00",
+  "status": "continue-checkpoint-admission-authority-audited",
+  "sourceTracker": ".agent/trackers/2026-07-11T21-31-19-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-11T21-31-19-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-11T21-31-19-04-00-continue-checkpoint-admission-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-11T21-31-19-04-00-continue-first-frame-provenance-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-11T21-31-19-04-00-false-continue-fresh-campaign-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-11T21-31-19-04-00-save-presence-route-resume-admission-map.md",
+  "latestSystemAudit": ".agent/checkpoint-audit/2026-07-11T21-31-19-04-00-versioned-candidate-precedence-hydration-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-11T21-31-19-04-00-continue-checkpoint-fixture-gate.md",
+  "previousTracker": ".agent/trackers/2026-07-11T19-48-09-04-00/project-breakdown.md",
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
     "reason": "all nine eligible non-Cavalry repositories were tracked and documented; PhantomCommand was the oldest current central-ledger entry",
-    "priorCentralTimestamp": "2026-07-11T18-21-09-04-00",
+    "priorCentralTimestamp": "2026-07-11T19-48-09-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "centralLedgerCount": 9,
@@ -24,47 +24,108 @@
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome"
   },
   "implementationQueue": [
-    "PhantomCommand Continue Capability Resolver + Save Candidate Precedence Fixture Gate",
+    "PhantomCommand Continue Capability and Checkpoint Admission Authority + Candidate Precedence, Legacy Summary and First Resumed Frame Fixtures",
     "PhantomCommand CRT Display/Input Projection Authority + CPU/GLSL Parity Fixture Gate",
     "PhantomCommand Campaign Phase Admission + Paused/Terminal Mutation Fixture Gate",
     "PhantomCommand Fixed-Step Command Scheduling, Replay and Committed Frame Authority + Cadence/Stall/Replay/Frame Fixture Gate",
     "PhantomCommand Combat Resolution and Entity Liveness Authority + Dead-Entity/Order/Checkpoint Parity Fixture Gate",
     "PhantomCommand Exclusive Terminal Outcome Transaction + Simultaneous Win/Loss, Persistence and Terminal-Frame Fixture Gate",
     "PhantomCommand Runtime Session Lifecycle Authority + Menu/Campaign Teardown, bfcache and Restart Leak Fixture Gate",
-    "PhantomCommand Versioned Campaign Checkpoint Authority + Atomic Resume/First-Frame Fixture Gate"
+    "PhantomCommand Versioned Campaign Checkpoint Capture Authority + Stable Boundary Capture, Atomic Resume and Migration Fixtures"
   ],
   "runtime": {
     "type": "static-pixel-isometric-campaign-game",
-    "entrypoints": ["index.html", "game.html"],
+    "entrypoints": [
+      "index.html",
+      "game.html"
+    ],
     "menuModule": "src/menu/graveyard-menu.js",
     "campaignModule": "src/campaign/campaign-scene.js",
     "crtModule": "src/menu/crt-renderer.js",
-    "menuRecursiveRaf": true,
-    "campaignRecursiveRaf": true,
-    "retainedRafIds": false,
-    "listenerRegistry": false,
-    "timerRegistry": false,
-    "menuAudioContextPossible": true,
-    "crtDisposeService": false,
-    "globalCapabilities": ["window.PhantomMenu", "window.GameHost"],
-    "globalRevocation": false,
-    "pagehidePageshowPolicy": false,
-    "typedNavigationResult": false,
-    "typedRestartResult": false,
-    "sessionId": null,
-    "runtimeGeneration": null,
-    "resourceLeaseRegistry": false,
-    "firstReplacementFrameReceipt": false
+    "saveKeys": [
+      "phantomCommand.save",
+      "nexus.sceneSnapshot",
+      "phantom.command.campaign"
+    ],
+    "storageScopesScanned": [
+      "localStorage",
+      "sessionStorage"
+    ],
+    "continueEnablement": "truthy-presence",
+    "continueRoute": "./game.html?campaign=continue",
+    "campaignRouteParser": false,
+    "campaignSaveReader": false,
+    "currentSaveFields": [
+      "scene",
+      "souls",
+      "wave"
+    ],
+    "currentSaveClassification": "legacy-terminal-summary",
+    "selectedCandidateResult": false,
+    "checkpointSchemaVersion": null,
+    "checkpointFingerprint": null,
+    "atomicHydration": false,
+    "firstResumedFrameReceipt": false,
+    "globalCapabilities": [
+      "window.PhantomMenu",
+      "window.GameHost"
+    ]
   },
   "kits": {
-    "implemented": ["crt-renderer-kit", "graveyard-art-kit", "menu-route-kit", "menu-settings-persistence-kit", "menu-save-presence-kit", "menu-audio-kit", "campaign-route-shell-kit", "pixel-campaign-runtime-kit", "fixed-step-campaign-simulation-kit", "pixel-campaign-render-kit", "legacy-gamehost-diagnostics-kit", "menu-static-check-kit", "campaign-static-check-kit", "static-build-copy-kit", "pages-deploy-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"],
-    "runtimeLifecycleAuthority": ["phantom-command-runtime-session-id-kit", "phantom-command-runtime-generation-kit", "phantom-command-lifecycle-phase-kit", "phantom-command-resource-lease-registry-kit", "phantom-command-raf-lease-kit", "phantom-command-listener-lease-kit", "phantom-command-timer-lease-kit", "phantom-command-audio-context-lease-kit", "phantom-command-crt-resource-lease-kit", "phantom-command-global-capability-lease-kit", "phantom-command-stale-callback-fence-kit", "phantom-command-navigation-exit-command-kit", "phantom-command-restart-command-kit", "phantom-command-teardown-plan-kit", "phantom-command-reverse-retirement-kit", "phantom-command-teardown-result-kit", "phantom-command-first-session-frame-kit", "phantom-command-lifecycle-journal-kit", "phantom-command-menu-campaign-teardown-fixture-kit", "phantom-command-bfcache-resume-fixture-kit", "phantom-command-restart-leak-fixture-kit"]
+    "implemented": [
+      "crt-renderer-kit",
+      "graveyard-art-kit",
+      "menu-route-kit",
+      "menu-settings-persistence-kit",
+      "menu-save-presence-kit",
+      "menu-audio-kit",
+      "campaign-route-shell-kit",
+      "pixel-campaign-runtime-kit",
+      "fixed-step-campaign-simulation-kit",
+      "pixel-campaign-render-kit",
+      "legacy-gamehost-diagnostics-kit",
+      "menu-static-check-kit",
+      "campaign-static-check-kit",
+      "static-build-copy-kit",
+      "pages-deploy-kit",
+      "construct-spiral-intro-kit",
+      "construct-spiral-schedule-kit",
+      "construct-piece-id-kit",
+      "construct-piece-state-kit",
+      "construct-sequence-update-kit"
+    ],
+    "continueCheckpointAuthority": [
+      "phantom-command-campaign-route-intent-kit",
+      "phantom-command-save-key-registry-kit",
+      "phantom-command-save-candidate-read-kit",
+      "phantom-command-save-envelope-version-kit",
+      "phantom-command-save-content-identity-kit",
+      "phantom-command-save-candidate-classification-kit",
+      "phantom-command-save-candidate-precedence-kit",
+      "phantom-command-save-schema-validator-kit",
+      "phantom-command-save-semantic-validator-kit",
+      "phantom-command-save-migration-registry-kit",
+      "phantom-command-corrupt-save-quarantine-kit",
+      "phantom-command-continue-capability-result-kit",
+      "phantom-command-new-campaign-admission-kit",
+      "phantom-command-resume-admission-kit",
+      "phantom-command-checkpoint-kind-policy-kit",
+      "phantom-command-checkpoint-fingerprint-kit",
+      "phantom-command-atomic-campaign-hydration-kit",
+      "phantom-command-resume-result-kit",
+      "phantom-command-first-resumed-frame-kit",
+      "phantom-command-resume-observation-kit",
+      "phantom-command-resume-journal-kit",
+      "phantom-command-save-candidate-fixture-kit",
+      "phantom-command-continue-route-fixture-kit",
+      "phantom-command-resume-first-frame-fixture-kit"
+    ]
   },
   "validation": {
     "runtimeSourceChanged": false,
+    "persistenceBehaviorChanged": false,
     "gameplayChanged": false,
     "renderingChanged": false,
-    "audioChanged": false,
     "navigationChanged": false,
     "packageScriptsChanged": false,
     "dependenciesChanged": false,
@@ -74,6 +135,6 @@
     "npmCheckRun": false,
     "npmBuildRun": false,
     "browserSmokeRun": false,
-    "lifecycleFixturesAvailable": false
+    "checkpointFixturesAvailable": false
   }
 }
