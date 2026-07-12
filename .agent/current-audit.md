@@ -1,24 +1,22 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T16-00-03-04-00`  
+**Timestamp:** `2026-07-12T18-11-53-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `menu-pointer-hit-admission-authority-audited`
+**Status:** `campaign-action-result-authority-audited`
 
 ## Summary
 
-The current audit isolates Menu Pointer-Hit Admission Authority. `pointerdown` calculates a main-menu or settings hit, updates selection only when the hit succeeds, and then unconditionally executes the current selection. A failed hit therefore uses stale selection as action evidence.
-
-The CRT renderer visibly curves the source image when enabled. Pointer projection reverses aspect containment only and does not invert the curve, so the visible and logical control geometries are not governed by one transform revision.
+The current audit isolates Campaign Action Result Authority. Campaign actions are void helpers or direct field mutations over one shared mutable aggregate. Success, rejection and no effect all look identical to callers because no command identity, expected revision, terminal result or visible-frame receipt exists.
 
 ## Plan ledger
 
-**Goal:** make pointer-sourced menu actions require current visible-control hit evidence and produce one typed terminal result with first-visible-frame proof.
+**Goal:** make each campaign action produce one typed terminal result and either atomically commit one successor revision or perform zero mutation.
 
 - [x] Compare all eligible Publish repositories and select only `PhantomCommand`.
-- [x] Inspect menu geometry, CRT projection, pointer listeners, panels, keyboard/accessibility activation and checks.
-- [x] Identify the complete interaction loop and active domains.
+- [x] Inspect wave, build, selection, order, tower-type, pause, restart, camera and public-host action paths.
+- [x] Identify the complete interaction loop and all active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Define pointer, geometry, hit, command, result and frame-proof boundaries.
+- [x] Define command, admission, revision, plan, commit, rollback, result and frame-proof boundaries.
 - [x] Add timestamped tracker and system audits.
 - [x] Refresh root `.agent` state and central tracking.
 - [x] Push only to `main`; create no branch or pull request.
@@ -29,7 +27,7 @@ The CRT renderer visibly curves the source image when enabled. Pointer projectio
 ```txt
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
-new/ledger-missing/root-agent-missing eligible repositories: 0
+new/ledger-missing/root-agent-missing/unsynchronized eligible repositories: 0
 selected repository: LuminaryLabs-Publish/PhantomCommand
 selection reason: oldest eligible synchronized central-ledger entry
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
@@ -38,101 +36,96 @@ excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ## Complete interaction loop
 
 ```txt
-menu boot
-  -> create 480 × 270 source canvas, graveyard art and CRT renderer
-  -> read settings and save presence
-  -> create main-menu state and optional panels
-  -> attach pointer, keyboard and hidden-button listeners
-  -> publish PhantomMenu and start RAF
+menu route
+  -> navigate to campaign
 
-pointer hover
-  -> screenToSource reverses aspect containment
-  -> main/panel hit test runs against uncurved source rectangles
-  -> selection changes only for a successful hit
+campaign boot
+  -> create canvas, CRT, authored content and mutable state
+  -> attach pointer, keyboard, wheel and blur listeners
+  -> expose window.GameHost
+  -> start RAF
 
-main pointer down
-  -> compute hit index
-  -> optionally replace menu.selected
-  -> activateMain(menu.items[menu.selected]) regardless of hit status
+input and public calls
+  -> Space invokes startWave
+  -> second pad click or GameHost invokes build
+  -> pointer selection invokes selectAt
+  -> right click invokes order
+  -> number keys replace towerType
+  -> P toggles paused
+  -> R reloads
+  -> wheel or GameHost mutates camera target
 
-panel pointer down
-  -> compute settings-row hit index
-  -> optionally replace state.panel.selected
-  -> activatePanel() regardless of hit status
+campaign action
+  -> helper reads live mutable state
+  -> helper mutates or returns undefined
+  -> no command, admission or result is published
 
-keyboard/accessibility
-  -> Enter/Space or hidden button activates a selected/named item directly
-  -> input source and terminal result are not recorded
-
-frame
-  -> draw source controls
-  -> contain and optionally curve through CRT shader
-  -> render fade/grain/aberration
-  -> schedule successor RAF
+simulation and presentation
+  -> accumulator advances update(1/60)
+  -> world/HUD/minimap read current state
+  -> CRT presents the source canvas
+  -> no terminal result is correlated with the frame
 ```
 
 ## Source-backed findings
 
 ```txt
-main-menu item count: 4
-settings row count: 4
-main menu x bounds: 55..245
-main row top: 119 + index*22
-main row height: 18
-settings x bounds: 102..378
-settings row top: 110 + index*23
-settings row height: 18
-
-main miss terminal rejection: absent
-settings miss terminal rejection: absent
-letterbox rejection before dispatch: absent
-primary button policy: absent
-isPrimary policy: absent
-pointer capture/cancel: absent
-pointer down/up sequence: absent
-CRT inverse projection: absent
-surface/layout/panel revisions: absent
-typed hit result: absent
-typed action result: absent
-first visible action-frame acknowledgement: absent
-pointer behavior fixtures: absent
+startWave: silent rejection for active, terminal or exhausted campaign
+build: silent rejection for missing pad, occupied pad or insufficient souls
+order: silent rejection for empty selection; missing selected IDs skipped
+selectAt: combines selection, deselection, pad choice and second-click build
+keyboard: tower type and pause mutate directly
+restart: reloads the document
+GameHost: exposes startWave, build and setZoom raw mutators
+all action paths: no action ID, source, expected revision, result or journal
 ```
 
-### Main-menu miss executes predecessor selection
+### Multi-resource mutations
 
-The pointer listener calls `activateMain(menu.items[menu.selected])` after the hit test whether or not `menuHitIndex` returned a control. Empty canvas, row gaps and contained-source misses can execute the previously hovered or keyboard-selected item.
+```txt
+build
+  -> pad occupancy
+  -> souls balance
+  -> tower registry
+  -> effect list
+  -> message
 
-### Settings miss mutates predecessor row
+wave start
+  -> spawn queue
+  -> waveActive
+  -> message
 
-When a panel is open, pointer-down always calls `activatePanel()`. A miss in the settings panel can toggle the previously selected setting or close the panel.
+selection
+  -> selected IDs
+  -> selectedPad
 
-### Containment is informative, not authoritative
+order
+  -> target/move fields for multiple units
+  -> effect list
+```
 
-`screenToSource()` returns `inside=false` for letterbox pixels. Hit testing returns `-1`, but dispatch still occurs. The containment result is not an action-admission fence.
-
-### Visible CRT geometry is not input geometry
-
-The shader uses `curveUv()` when CRT is enabled. The input transform reverses only aspect containment. No shared immutable geometry or inverse curve links the displayed control to the hit test.
-
-### Existing checks do not execute input
-
-`scripts/check-menu.mjs` verifies source tokens. It does not create a browser, dispatch pointer events, compare visible/logical geometry or assert zero mutation after rejected input.
+No prepare, commit, rollback or change-set boundary binds these resources.
 
 ## Domains in use
 
 ```txt
-static menu and campaign route shells
-menu settings, save presence, selection, panels, fade and navigation
-viewport-to-source projection and containment
-CRT curved visual presentation
-pointer, keyboard and hidden accessible control input
-menu and settings control layout/hit testing
-route and panel action dispatch
-Web Audio activation, ambience and UI tones
-campaign bootstrap, state, fixed-step combat and persistence
-campaign rendering, pointer/camera control and public host
-procedural graveyard, HUD, minimap and CRT rendering
-WebGL resource lifecycle
+menu and campaign route shells
+menu settings, save presence, panels, fade, navigation and audio
+viewport/source projection and CRT presentation
+browser pointer, keyboard, wheel, focus and context-menu input
+campaign session and mutable aggregate state
+campaign action identity, source, admission and results
+selection and selected-pad state
+world-pointer projection and rectangle selection
+economy, tower type, pad occupancy and building
+wave phase, spawn queue and progression
+unit orders, targeting and movement
+fixed-step spawning, combat, projectiles, damage and rewards
+pause, restart and terminal outcomes
+camera pan, focus and zoom
+world, HUD, minimap and terminal rendering
+public GameHost commands and readback
+browser persistence
 source checks, static build, Pages deployment and audit tracking
 ```
 
@@ -165,99 +158,103 @@ construct-sequence-update-kit
 
 ```txt
 menu drawing, selection, settings, save-presence scanning, panels, fade and routing
-viewport containment, source-coordinate projection and CRT curved presentation
-pointer move/down/leave, keyboard and hidden-button activation
+viewport containment, source projection and CRT presentation
+pointer, keyboard, wheel and hidden-control activation
 AudioContext ambience, UI tones and delayed close
 campaign state, selection, building, orders, waves, pause, camera and restart
 fixed-step spawning, movement, targeting, projectiles, damage, rewards and terminal mutation
 world, HUD, minimap and overlay rendering
-public state snapshots and direct mutation capabilities
+public snapshots and direct mutation capabilities
 construction intro scheduling and piece-state updates
 source checks, static build and GitHub Pages deployment
 ```
 
-The exact per-kit service map is retained in the current tracker and machine registry.
-
 ## Required authority
 
 ```txt
-phantom-command-menu-pointer-hit-admission-authority-domain
+phantom-command-campaign-action-result-authority-domain
 ```
 
 ### Required transaction
 
 ```txt
-physical input
-  -> identify source and pointer sequence
-  -> enforce primary-pointer/button policy
-  -> cite current surface, transform, layout and panel revisions
-  -> project through visible geometry
-  -> produce typed containment and hit results
-  -> reject miss/stale/outside/unsupported paths with zero mutation
-  -> create one MenuActionCommand only from admitted evidence
-  -> commit one MenuActionResult
-  -> acknowledge the first visible menu frame
+intent
+  -> identify action, source, session and sequence
+  -> validate schema and capability
+  -> cite expected campaign, phase and resource revisions
+  -> reject duplicate or stale evidence
+  -> build detached action plan
+  -> atomically commit or roll back
+  -> publish one CampaignActionResult
+  -> project feedback/readback
+  -> acknowledge first visible successor frame
 ```
 
 ## Candidate kits
 
 ```txt
-menu-input-source-kind-kit
-menu-pointer-sample-id-kit
-menu-pointer-sequence-kit
-menu-pointer-button-policy-kit
-menu-pointer-primary-policy-kit
-menu-surface-generation-kit
-menu-viewport-transform-revision-kit
-menu-crt-inverse-projection-kit
-menu-containment-result-kit
-menu-control-layout-revision-kit
-menu-control-id-kit
-menu-hit-test-result-kit
-menu-panel-generation-kit
-menu-action-command-kit
-menu-action-admission-kit
-menu-action-result-kit
-menu-pointer-capture-kit
-stale-menu-pointer-rejection-kit
-duplicate-menu-action-rejection-kit
-menu-visible-frame-ack-kit
-menu-input-observation-kit
-menu-input-journal-kit
-menu-pointer-miss-fixture-kit
-menu-panel-miss-fixture-kit
-menu-crt-projection-fixture-kit
-menu-accessibility-parity-fixture-kit
-menu-pages-input-smoke-kit
+campaign-session-id-kit
+campaign-session-generation-kit
+campaign-state-revision-kit
+campaign-action-id-kit
+campaign-action-sequence-kit
+campaign-action-source-kind-kit
+campaign-action-kind-kit
+campaign-action-command-kit
+campaign-action-payload-schema-kit
+campaign-action-capability-kit
+campaign-action-admission-kit
+campaign-phase-revision-kit
+campaign-selection-revision-kit
+campaign-economy-revision-kit
+campaign-pad-revision-kit
+campaign-target-revision-kit
+campaign-action-plan-kit
+campaign-action-prepare-kit
+campaign-action-commit-kit
+campaign-action-rollback-kit
+campaign-action-result-kit
+campaign-action-change-set-kit
+stale-campaign-action-rejection-kit
+duplicate-campaign-action-rejection-kit
+campaign-action-observation-kit
+campaign-action-journal-kit
+campaign-action-visible-frame-ack-kit
+campaign-action-source-fixture-kit
+campaign-action-rejection-fixture-kit
+campaign-action-idempotency-fixture-kit
+public-gamehost-action-fixture-kit
+browser-campaign-action-smoke-kit
+pages-campaign-action-smoke-kit
 ```
 
 ## Required invariants
 
 ```txt
-pointer miss performs zero menu/settings/navigation mutation
-letterbox click is rejected
-settings miss never toggles stale selection
-non-primary input is rejected
-stale transform/layout/panel evidence is rejected
-one physical sequence produces at most one action result
-CRT-on and CRT-off hit geometry matches visible controls
-keyboard/accessibility activation has explicit source identity
-first visible frame cites the accepted result
+one action ID produces at most one terminal result
+all rejection paths perform zero mutation
+build and wave mutations commit atomically
+stale phase, selection, economy, pad and target evidence rejects
+public and browser sources are distinguishable
+results carry predecessor and successor revisions
+feedback and readback derive from committed results
+first visible frame cites the terminal result
+source, built output and Pages fixtures agree
 ```
 
 ## Repo-local output
 
 ```txt
-.agent/trackers/2026-07-12T16-00-03-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-12T16-00-03-04-00.md
-.agent/architecture-audit/2026-07-12T16-00-03-04-00-menu-pointer-hit-admission-authority-dsk-map.md
-.agent/render-audit/2026-07-12T16-00-03-04-00-crt-visible-control-hit-geometry-gap.md
-.agent/gameplay-audit/2026-07-12T16-00-03-04-00-menu-miss-stale-action-loop.md
-.agent/interaction-audit/2026-07-12T16-00-03-04-00-pointer-sample-hit-action-result-map.md
-.agent/menu-input-audit/2026-07-12T16-00-03-04-00-miss-containment-curve-contract.md
-.agent/deploy-audit/2026-07-12T16-00-03-04-00-menu-pointer-browser-fixture-gate.md
+.agent/trackers/2026-07-12T18-11-53-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T18-11-53-04-00.md
+.agent/architecture-audit/2026-07-12T18-11-53-04-00-campaign-action-result-authority-dsk-map.md
+.agent/render-audit/2026-07-12T18-11-53-04-00-action-result-visible-feedback-gap.md
+.agent/gameplay-audit/2026-07-12T18-11-53-04-00-silent-action-noop-mutation-loop.md
+.agent/interaction-audit/2026-07-12T18-11-53-04-00-action-command-admission-result-map.md
+.agent/campaign-action-audit/2026-07-12T18-11-53-04-00-command-revision-commit-result-contract.md
+.agent/deploy-audit/2026-07-12T18-11-53-04-00-campaign-action-fixture-gate.md
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, pointer, keyboard, menu, settings, navigation, audio, campaign, rendering, package scripts, dependencies and deployment were not changed. No executable pointer fixture was run.
+Documentation only. Runtime, campaign actions, simulation, rendering, package scripts, dependencies and deployment were not changed. No executable action fixture was run.
