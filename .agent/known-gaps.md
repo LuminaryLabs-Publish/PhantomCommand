@@ -1,77 +1,79 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T05-49-04-04-00`
+**Timestamp:** `2026-07-12T07-29-32-04-00`
 
 ## Summary
 
-The newest documented gap is campaign bootstrap and resume authority. The menu can display Continue and emit a continue URL, but it only checks raw key presence. The campaign ignores launch intent and storage, always constructs the default state, and writes a minimal terminal payload that it never reloads.
+The newest documented gap is menu audio activation and lifecycle authority. The menu can construct ambience and UI-tone nodes, but it has no context-state recovery, graph generation, delayed-work ownership or ordered retirement.
 
 ## Plan ledger
 
-**Goal:** keep campaign launch, persistence and first-frame ownership explicit while preserving the existing dependency queue.
+**Goal:** keep audio activation, runtime state and teardown explicit while preserving campaign, command, render, combat and persistence gates.
 
-- [ ] Route launch-intent parsing.
-- [ ] Canonical save-key and storage-scope policy.
-- [ ] Versioned save envelope and compatibility fingerprint.
-- [ ] Parse, validation, migration and quarantine results.
-- [ ] Explicit new-run predecessor-save handling.
-- [ ] Detached runtime hydration and reference validation.
-- [ ] Atomic bootstrap commit and typed result.
-- [ ] Typed save commit result.
-- [ ] First resumed-frame acknowledgement.
-- [ ] Route/storage/browser fixtures.
-- [ ] Retain command, render, phase, combat, lifecycle, audio and full-checkpoint gates.
+- [ ] Trusted user-activation evidence.
+- [ ] Context and graph generation identity.
+- [ ] AudioContext state observation and `statechange` handling.
+- [ ] Suspended/interrupted context resume transaction.
+- [ ] Closed/failed context replacement policy.
+- [ ] Complete node and transient-tone registry.
+- [ ] Delayed close timer identity and cancellation.
+- [ ] Rapid-toggle overlap prevention.
+- [ ] Visibility, pagehide and navigation retirement.
+- [ ] Typed create/resume/suspend/stop/dispose results.
+- [ ] Audio diagnostics and bounded journal.
+- [ ] Real-browser activation, interruption and teardown fixtures.
+- [ ] Retain campaign bootstrap/resume and all downstream authority gates.
 
-## Bootstrap and resume gaps
+## Audio lifecycle gaps
 
 ```txt
-launch intent: URL only, not consumed
-Continue capability: raw presence only
-canonical save key: absent
-key precedence: absent
-save schema/version: absent
-content fingerprint: absent
-parse result: absent
-migration result: absent
-quarantine: absent
-new-run save policy: absent
-runtime hydration: absent
-reference validation: absent
-ID counter reseeding: absent
-atomic bootstrap commit: absent
-typed bootstrap result: absent
-typed save commit result: absent
-bootstrap observation/journal: absent
-first resumed frame receipt: absent
-browser resume fixtures: absent
+context state observation: absent
+context statechange subscription: absent
+resume path: absent
+suspend policy: absent
+trusted activation receipt: absent
+context generation: absent
+graph generation: absent
+complete node registry: absent
+transient tone ownership: absent
+delayed close task identity: absent
+delayed close cancellation: absent
+rapid replacement fence: absent
+visibilitychange adapter: absent
+pagehide adapter: absent
+navigation retirement: absent
+module disposal API: absent
+typed lifecycle results: absent
+audio observation/journal: absent
+browser lifecycle fixtures: absent
 ```
 
 ## Concrete risks
 
 ```txt
-malformed JSON can enable Continue
-unrelated nexus.sceneSnapshot data can enable Continue
-Begin and Continue both start wave zero with default resources
-winning save cannot resume the won or pre-win runtime
-old save remains visible after choosing Begin
-future hydration could collide entity IDs without reseeding
-future partial hydration could leave cross-object references invalid
-menu resume state can disagree with campaign capability
+browser-suspended audio can remain permanently silent because ensureAudio() returns on non-null state.audio
+closed or interrupted contexts can remain represented as current
+rapid ambience off/on can overlap old and new graph generations
+stale delayed close callbacks have no generation fence
+transient tones and intermediate nodes are not registered for disposal
+navigation can transfer page ownership without an explicit audio terminal result
+settings can display ambience enabled while no running context is proven
+unrelated keydown events can attempt audio activation before command classification
 ```
 
 ## Retained gaps
 
 ```txt
+Campaign Begin and Continue still lack validated bootstrap and hydration
 GameHost exposes live mutable owners
 CPU and GLSL CRT projection differ
 campaign phase does not fence commands
 commands are not fixed-step scheduled
 combat liveness and exclusive terminal result remain unimplemented
 runtime RAF/listener/WebGL lifecycle remains unowned
-menu AudioContext lifecycle remains unowned
 full checkpoint capture and replay remain incomplete
 ```
 
 ## Completion boundary
 
-Do not claim Continue works because the menu route exists or because a save string is present. Completion requires validated launch admission, deterministic hydration, a typed bootstrap result and a visible resumed frame tied to the committed campaign generation.
+Do not claim audio activation or lifecycle correctness because nodes were constructed or `state.audio` is non-null. Completion requires observed context state, generation-safe transactions, ordered teardown and real-browser evidence.
