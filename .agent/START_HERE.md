@@ -2,41 +2,41 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-13T02-49-07-04-00`  
-**Status:** `accessible-command-focus-projection-authority-central-reconciled`
+**Last aligned:** `2026-07-13T05-59-03-04-00`  
+**Status:** `webgl-context-lifecycle-recovery-authority-central-reconciled`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign with a procedural canvas menu, hidden native menu buttons, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current boundary is Accessible Command and Focus Projection Authority: visual selection, DOM focus and native button activation are separate, so Enter or Space can activate the visually selected action instead of the focused control. Panel focus, native disabled-state projection and dynamic campaign status announcements are also unowned.
+PhantomCommand is a static pixel-isometric campaign with a procedural canvas menu, fixed-step combat, CRT WebGL presentation, browser persistence and public diagnostics. The current boundary is WebGL Context Lifecycle and Recovery Authority: both routes allocate one context, program, buffer and source texture at module boot, but neither route handles context loss, restoration, resource reconstruction, disposal, typed presentation failure or first recovered-frame proof.
 
 ## Plan ledger
 
-**Goal:** make every visual, keyboard, assistive-technology and public command resolve to one exact action identity, focus generation, availability result and accessible acknowledgement.
+**Goal:** make the menu and campaign CRT surface survive or clearly report context loss through one revisioned resource lifecycle and one visible-frame result.
 
 - [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
 - [x] Select only PhantomCommand as the oldest eligible central entry.
-- [x] Trace visual selection, hidden controls, Enter/Space activation, panels, focus, Continue availability and campaign status.
+- [x] Trace CRT construction, shader/program creation, buffer and texture allocation, resize, upload, draw, RAF scheduling and public raw-GL exposure.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Define the parent authority and candidate kit family.
+- [x] Define the parent WebGL lifecycle authority and candidate kit family.
 - [x] Add the timestamped tracker and audit family.
 - [x] Refresh root `.agent` state and central tracking.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Runtime accessibility implementation and executable fixtures remain future work.
+- [ ] Runtime recovery and executable context-loss fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-13T02-49-07-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-13T02-49-07-04-00.md
-.agent/architecture-audit/2026-07-13T02-49-07-04-00-accessible-command-focus-dsk-map.md
-.agent/render-audit/2026-07-13T02-49-07-04-00-visual-native-accessible-projection-gap.md
-.agent/gameplay-audit/2026-07-13T02-49-07-04-00-menu-campaign-accessible-command-loop.md
-.agent/interaction-audit/2026-07-13T02-49-07-04-00-focus-keyboard-native-activation-map.md
-.agent/accessibility-audit/2026-07-13T02-49-07-04-00-command-identity-focus-status-contract.md
-.agent/deploy-audit/2026-07-13T02-49-07-04-00-accessibility-fixture-gate.md
-.agent/central-sync-audit/2026-07-13T02-49-07-04-00-repo-ledger-accessibility-reconciliation.md
+.agent/trackers/2026-07-13T05-59-03-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-13T05-59-03-04-00.md
+.agent/architecture-audit/2026-07-13T05-59-03-04-00-webgl-context-lifecycle-recovery-dsk-map.md
+.agent/render-audit/2026-07-13T05-59-03-04-00-crt-context-loss-visible-frame-gap.md
+.agent/gameplay-audit/2026-07-13T05-59-03-04-00-menu-campaign-presentation-liveness-loop.md
+.agent/interaction-audit/2026-07-13T05-59-03-04-00-context-event-resource-result-map.md
+.agent/webgl-lifecycle-audit/2026-07-13T05-59-03-04-00-context-generation-resource-rebuild-contract.md
+.agent/deploy-audit/2026-07-13T05-59-03-04-00-webgl-context-loss-fixture-gate.md
+.agent/central-sync-audit/2026-07-13T05-59-03-04-00-repo-ledger-webgl-lifecycle-reconciliation.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
@@ -44,25 +44,27 @@ PhantomCommand is a static pixel-isometric campaign with a procedural canvas men
 .agent/kit-registry.json
 ```
 
-The Combat Modifier Application audit at `2026-07-13T00-40-00-04-00` remains retained.
+The Accessible Command and Focus Projection audit at `2026-07-13T02-49-07-04-00` remains retained.
 
 ## Current mismatch
 
 ```txt
-visual menu selection
-  != browser DOM focus
-  != native button activation identity
+module boot
+  -> allocate one WebGL context and one resource set
+  -> expose raw gl
 
-focused hidden button + Enter/Space
-  -> document keydown activates menu.selected or panel.selected
-  -> browser may also dispatch the focused button click
-  -> two sources can identify different actions
+context loss
+  -> no context event owner
+  -> no generation retirement
+  -> no resource rebuild
+  -> no typed degraded/fatal result
+  -> no first recovered-frame acknowledgement
 ```
 
 ## Required authority
 
 ```txt
-phantom-command-accessible-command-focus-projection-authority-domain
+phantom-command-webgl-context-lifecycle-recovery-authority-domain
 ```
 
-Hidden buttons and static instructions are not parity proof. Completion requires exact command identity, disabled-state parity, focus transfer/restoration, panel isolation, dynamic campaign status, duplicate suppression and source/build/Pages fixtures.
+Completion requires typed context state, deterministic resource retirement/reconstruction, presentation-failure isolation, bounded fallback UI, public readback and source/build/Pages context-loss proof.
