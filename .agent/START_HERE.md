@@ -2,39 +2,40 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T22-00-46-04-00`  
-**Status:** `campaign-keyboard-command-admission-authority-audited`
+**Last aligned:** `2026-07-12T22-05-12-04-00`  
+**Status:** `campaign-bootstrap-resume-authority-audited`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign game with procedural menu art, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Campaign Keyboard Command Admission Authority: the campaign installs global keyboard listeners, accepts shortcuts without route/focus/editable-target admission, applies no `event.repeat` policy, has no keyboard generation, and mutates campaign, camera and navigation state without typed command results or visible-frame proof.
+PhantomCommand is a static pixel-isometric campaign game with procedural menu art, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Campaign Bootstrap and Continue Resume Authority: Continue is enabled from raw storage presence and routes to `game.html?campaign=continue`, but campaign boot ignores both the route intent and all save keys, always constructing the same fresh state.
 
 ## Plan ledger
 
-**Goal:** require current route, surface, focus, lifecycle generation and command identity before held movement or one-shot keyboard actions can affect the campaign.
+**Goal:** make New and Continue explicit, revisioned bootstrap transactions that install one validated campaign generation atomically or return a typed zero-mutation failure before gameplay starts.
 
 - [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
 - [x] Select only `PhantomCommand`, the oldest eligible central entry.
-- [x] Inspect keyboard, blur, held-state, phase, camera, navigation, render and check paths.
+- [x] Inspect menu save presence, route intent, campaign construction, victory save, reload, rendering and checks.
 - [x] Identify the complete interaction loop, all domains, 20 implemented kits and offered services.
-- [x] Add the timestamped keyboard-admission audit family.
+- [x] Add the timestamped bootstrap/resume audit family.
+- [x] Preserve the concurrent keyboard-admission audit as an immediate predecessor.
 - [x] Refresh required root `.agent` state and machine registry.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Runtime corrections and executable keyboard fixtures remain future work.
+- [ ] Runtime bootstrap, checkpoint and executable resume fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T22-00-46-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-12T22-00-46-04-00.md
-.agent/architecture-audit/2026-07-12T22-00-46-04-00-campaign-keyboard-command-admission-authority-dsk-map.md
-.agent/render-audit/2026-07-12T22-00-46-04-00-keyboard-result-visible-frame-gap.md
-.agent/gameplay-audit/2026-07-12T22-00-46-04-00-global-key-repeat-campaign-loop.md
-.agent/interaction-audit/2026-07-12T22-00-46-04-00-key-event-command-consumption-result-map.md
-.agent/keyboard-input-audit/2026-07-12T22-00-46-04-00-focus-repeat-generation-contract.md
-.agent/deploy-audit/2026-07-12T22-00-46-04-00-campaign-keyboard-browser-fixture-gate.md
+.agent/trackers/2026-07-12T22-05-12-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T22-05-12-04-00.md
+.agent/architecture-audit/2026-07-12T22-05-12-04-00-campaign-bootstrap-resume-authority-dsk-map.md
+.agent/render-audit/2026-07-12T22-05-12-04-00-continue-visible-frame-provenance-gap.md
+.agent/gameplay-audit/2026-07-12T22-05-12-04-00-continue-starts-fresh-campaign-loop.md
+.agent/interaction-audit/2026-07-12T22-05-12-04-00-new-continue-bootstrap-admission-map.md
+.agent/campaign-resume-audit/2026-07-12T22-05-12-04-00-checkpoint-schema-hydration-commit-contract.md
+.agent/deploy-audit/2026-07-12T22-05-12-04-00-campaign-resume-fixture-gate.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
@@ -42,76 +43,89 @@ PhantomCommand is a static pixel-isometric campaign game with procedural menu ar
 .agent/kit-registry.json
 ```
 
-The Campaign Spatial Input Admission audit at `2026-07-12T19-58-07-04-00` remains the immediate pointer-input predecessor. Campaign Action Result Authority remains the downstream command-consumption dependency.
+The Campaign Keyboard Command Admission audit at `2026-07-12T22-00-46-04-00` remains the immediate input/lifecycle predecessor. Campaign Action Result, Spatial Input Admission and Runtime Session Resource Lifecycle remain downstream or upstream dependencies.
 
-## Current keyboard loop
+## Current bootstrap loop
 
 ```txt
-global keydown
-  -> lowercase key and add to held Set
-  -> no route, focus or editable-target admission
-  -> no event.repeat policy
-  -> Space, 1/2/3, P, R, Escape and F mutate immediately
+menu boot
+  -> scan three storage keys
+  -> any truthy string enables Continue
 
-global keyup
-  -> remove normalized key from held Set
+New
+  -> game.html?campaign=new
 
-RAF
-  -> consume held WASD/Arrow keys for camera movement
-  -> advance fixed-step campaign simulation
-  -> render world, HUD and minimap through CRT
-  -> publish no keyboard result or frame acknowledgement
+Continue
+  -> game.html?campaign=continue
 
-blur
-  -> clear held keys and pointer flags
-  -> retire no input generation
+campaign boot
+  -> parse no route intent
+  -> read no save key
+  -> create wave 0, souls 145, core 24 and six starting allies
+  -> attach listeners, expose GameHost and start RAF
+
+final victory
+  -> write only { scene, souls, wave }
+  -> record is not a resumable checkpoint
 ```
 
 ## Main findings
 
 ```txt
-global keyboard ownership: yes
-canvas/route focus admission: no
-editable-target exclusion: no
-one-shot repeat policy: no
-P can toggle repeatedly during one physical hold: yes
-keyboard session/focus generation: no
-visibility/page lifecycle fence: no
-listener teardown: no
-command ID, sequence or duplicate rejection: no
-typed keyboard/consumer result: no
-first visible keyboard-result frame acknowledgement: no
+Continue availability validates storage contents: no
+campaign parses campaign=new/continue: no
+campaign reads persisted checkpoint: no
+New and Continue have different runtime behavior: no
+checkpoint schema/version/checksum: no
+complete participant capture/hydration: no
+migration registry: no
+atomic bootstrap commit/rollback: no
+run/checkpoint generation: no
+first visible bootstrap-frame acknowledgement: no
+```
+
+## Required parent domain
+
+```txt
+phantom-command-campaign-bootstrap-resume-authority-domain
+```
+
+## Required flow
+
+```txt
+CampaignEntryIntent(new | continue)
+  -> route/session/command admission
+  -> fresh preset construction or typed checkpoint read
+  -> schema, version, checksum and source compatibility validation
+  -> migration when explicitly supported
+  -> detached participant hydration
+  -> cross-participant invariant validation
+  -> atomic successor-generation commit or verified rollback
+  -> terminal CampaignBootstrapResult
+  -> first visible world/HUD/minimap/CRT frame acknowledgement
 ```
 
 ## Kit census
 
 ```txt
 implemented source-backed kits: 20
-planned keyboard-admission authority kits: 28
+planned bootstrap/resume authority kits: 36
+retained keyboard-admission authority kits: 28
 ```
 
 The complete kit-by-kit service inventory is in the current tracker and `.agent/kit-registry.json`.
 
-## Required parent domain
-
-```txt
-phantom-command-campaign-keyboard-command-admission-authority-domain
-```
-
-## Required flow
-
-```txt
-KeyboardEvent
-  -> route, surface, focus and editable-target admission
-  -> keyboard session/generation and monotonic sequence admission
-  -> held-state or one-shot classification
-  -> repeat, duplicate and stale rejection
-  -> typed CampaignKeyboardCommand
-  -> Campaign Action / Camera / Navigation consumer result
-  -> terminal CampaignKeyboardResult
-  -> first visible successor-frame acknowledgement
-```
-
 ## Validation boundary
 
-Documentation only. Runtime, keyboard, campaign, camera, navigation, rendering, package scripts, dependencies and deployment are unchanged. No keyboard event, browser or Pages fixture was executed.
+```txt
+runtime/menu/campaign/storage/render behavior changed: no
+package scripts/dependencies/deployment changed: no
+npm run check: not run
+npm run build: not run
+browser/Pages resume smoke: not run
+resume fixtures: unavailable
+branch created: no
+pull request created: no
+```
+
+Do not treat an enabled Continue label, successful navigation or a rendered campaign as resume proof. Completion requires a validated compatible checkpoint, one committed run generation, typed failure behavior and a first visible frame citing the bootstrap result.
