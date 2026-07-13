@@ -1,126 +1,108 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-13T00-40-00-04-00`
+**Timestamp:** `2026-07-13T02-49-07-04-00`
 
 ## Summary
 
-The leading combat gap is Combat Modifier Application Authority. Grave Ward projectiles carry `slow: 0.34`, but impact discards it. There is no target modifier state, duration, stacking, movement derivation, expiry, typed result or visible-frame proof.
+The leading interface gap is Accessible Command and Focus Projection Authority. Visual selection, DOM focus, native activation and panel state are separate, while campaign status remains canvas-only.
 
 ## Plan ledger
 
-**Goal:** close effect-specification, impact-admission, target-state, movement, expiry and proof gaps while preserving existing persistence, input and action boundaries.
+**Goal:** close command identity, availability, focus lifecycle, accessible status and proof gaps without weakening existing input, campaign or render ownership.
 
-- [x] Record the unused Ward payload.
-- [x] Record effect semantic and target-state gaps.
-- [x] Record movement, expiry and retirement gaps.
-- [x] Record result, diagnostics and visible-frame gaps.
+- [x] Record visual/native command identity divergence.
+- [x] Record duplicate Enter/Space activation risk.
+- [x] Record Continue availability mismatch.
+- [x] Record panel focus and background-isolation gaps.
+- [x] Record campaign status projection gaps.
 - [x] Record deterministic and deployed proof gaps.
-- [x] Reconcile repo-local findings with central tracking.
 - [ ] Implement in dependency order.
 
-## Effect specification gaps
+## Command identity gaps
 
 ```txt
-stable effect spec ID and version
-unambiguous magnitude interpretation
-authored duration
-stacking policy
-refresh policy
-maximum stack/cap policy
-resistance and immunity policy
-source/content fingerprint
+stable accessible command ID
+activation source identity
+event sequence and deduplication key
+focused-control ID
+visual-selection revision
+focus generation
+typed conflict result
+typed duplicate result
+public-host command admission
 ```
 
-## Impact admission gaps
+## Availability gaps
 
 ```txt
-projectile impact command ID
-runtime session and run generation
-source, projectile and target generations
-expected combat revision
-source and target liveness validation
-phase admission
-stale and duplicate rejection
-atomic damage-plus-modifier commit
-one terminal impact result
+native disabled projection
+aria-disabled projection
+availability reason
+availability revision
+transition-in-progress state
+command result projection
+focusability parity
 ```
 
-## Target-state and movement gaps
+## Focus lifecycle gaps
 
 ```txt
-active modifier instance ID
-target modifier revision
-applied and expiry fixed steps
-immutable base-speed boundary
-derived current movement speed
-modifier set snapshot and fingerprint
-restart/death/replacement policy
+menu focus owner
+panel focus scope
+focus transfer on open
+background inertness
+focus restoration on close
+lost-focus result
+stale focus-generation rejection
 ```
 
-## Expiry and retirement gaps
+## Campaign accessibility gaps
 
 ```txt
-deterministic expiry boundary
-exactly-once modifier retirement
-target-death cleanup
-run-restart cleanup
-stale predecessor quarantine
-duplicate retirement idempotency
-retirement result and journal evidence
+focus admission for role=application canvas
+native command alternatives
+dynamic souls/core/wave status
+build/order/selection result announcements
+pause/win/loss announcements
+bounded live-region policy
+campaign status revision
+first accessible result acknowledgement
 ```
 
 ## Concrete current risks
 
 ```txt
-Grave Ward does not slow enemies
-55-soul control tower behaves as damage-only
-special projectile visuals can imply a nonexistent effect
-future direct speed mutation could make restoration unsafe
-multiple Ward hits have undefined stacking behavior
-no duration means no deterministic replay boundary
-no target generation permits stale impact ambiguity
-no retirement policy permits leaked modifier state after future implementation
-```
-
-## Result and render gaps
-
-```txt
-ProjectileImpactCommand
-ProjectileImpactAdmissionResult
-DamageApplicationResult
-CombatModifierResult
-TargetMovementDerivationResult
-CombatModifierRetirementResult
-bounded combat observations and journal
-modifier revision in world/HUD/minimap snapshots
-persistent slow-state indicator
-first visible modifier-frame acknowledgement
+focused Continue plus visual New can begin New
+focused Settings plus visual New can begin a route transition before panel activation
+Enter/Space can generate document and native click attempts
+Continue is focusable when visual state says EMPTY
+menu buttons remain active while a visual panel is open
+settings and credits panels have no native control projection
+screen readers receive static campaign instructions but no game progress
+public PhantomMenu activation has no focus or source evidence
 ```
 
 ## Test gaps
 
 ```txt
-single Ward slow application
-slowed versus unslowed distance comparison
-exact fixed-step duration and expiry
-refresh behavior
-stacking and cap behavior
-resistance and immunity
-stale projectile generation
-duplicate impact
-missing/dead target
-target retirement
-run restart with active modifier
-first visible slow-state frame
-source/build/Pages parity
+native Enter activation identity
+native Space activation identity
+focused-versus-selected disagreement
+duplicate event suppression
+disabled Continue focus and activation
+panel focus transfer and restoration
+panel background inertness
+settings native/visual parity
+campaign status ordering and throttling
+source/build/Pages accessibility parity
 ```
 
 ## Retained authority gaps
 
 ```txt
+Combat Modifier Application Authority
 Runtime Session Resource Lifecycle Authority
 Campaign Bootstrap and Continue Resume Authority
-Versioned Full Campaign Checkpoint Capture Authority
 Campaign Keyboard Command Admission Authority
 Campaign Action Result Authority
 Campaign Spatial Input Admission Authority
@@ -140,4 +122,4 @@ source/build/Pages production proof
 
 ## Completion boundary
 
-A Ward projectile containing `slow`, a distinct cyan color or an impact ring is not slow-effect proof. Completion requires explicit effect semantics, accepted target modifier state, deterministic movement difference, duration and retirement results, and the first presented frame citing the matching modifier revision.
+Hidden buttons and a static `aria-live` description are not accessible-command proof. Completion requires one command identity, one accepted result, availability parity, deterministic focus ownership, dynamic status projection and matching visual/accessibility acknowledgements.
