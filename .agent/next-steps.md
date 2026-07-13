@@ -1,124 +1,91 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T00-40-00-04-00`
+**Timestamp:** `2026-07-13T02-49-07-04-00`
 
 ## Summary
 
-Implement Combat Modifier Application Authority before claiming the Grave Ward slows enemies. The Ward payload must become one admitted target modifier with explicit magnitude, duration, stacking, expiry, movement derivation and visible-frame proof.
+Implement Accessible Command and Focus Projection Authority before claiming parity between the visual canvas menu, hidden native controls, keyboard input and assistive technology. Start with one command identity pipeline, then add availability parity, panel focus ownership and dynamic campaign status projection.
 
 ## Plan ledger
 
-**Goal:** replace the unused `slow` payload with a deterministic, target-bound and testable combat-effect transaction.
+**Goal:** replace independent visual, DOM and global-keyboard activation paths with one typed, deduplicated and accessibility-aware command/result surface.
 
-### Effect specification
+### Command identity and admission
 
-- [ ] Give every combat effect a stable spec ID and version.
-- [ ] Define whether `0.34` means a 34 percent reduction or a final 0.34 multiplier.
-- [ ] Add an authored duration in fixed-step terms.
-- [ ] Define stacking, refresh, cap, resistance and immunity policy.
-- [ ] Fingerprint the effect spec with authored combat content.
+- [ ] Give every menu and campaign action a stable command ID.
+- [ ] Identify activation source and event sequence.
+- [ ] Bind visual selection, focused control and focus generation.
+- [ ] Reject focused-control and visual-command disagreement.
+- [ ] Suppress the second half of native Enter/Space activation.
+- [ ] Return typed accepted, unavailable, duplicate, stale and conflict results.
+- [ ] Gate `window.PhantomMenu.activate()` through the same authority.
 
-### Impact admission
+### Native control projection
 
-- [ ] Add `ProjectileImpactCommand` identity and expected combat revision.
-- [ ] Bind runtime session, run, source, projectile and target generations.
-- [ ] Reject missing, stale, duplicate and terminal-phase impacts.
-- [ ] Resolve damage and modifiers from one immutable effect spec.
-- [ ] Commit damage and accepted modifier state atomically.
-- [ ] Publish one terminal impact/modifier result.
+- [ ] Reflect Continue availability with native `disabled` and `aria-disabled`.
+- [ ] Synchronize visual selection and native focus without forcing pointer-hover focus.
+- [ ] Expose selected/current state through native semantics.
+- [ ] Project transition-in-progress and command results.
+- [ ] Keep visual and native command IDs revision-aligned.
 
-### Target modifier state
+### Panel focus lifecycle
 
-- [ ] Add a revisioned active-modifier set per target generation.
-- [ ] Preserve immutable archetype/base speed.
-- [ ] Derive current movement speed from active modifiers.
-- [ ] Apply one explicit stacking and refresh policy.
-- [ ] Expire modifiers at deterministic fixed-step boundaries.
-- [ ] Retire all target modifiers exactly once on death, replacement or restart.
+- [ ] Create native Settings and Credits panel structures.
+- [ ] Transfer focus to the first panel control on open.
+- [ ] Make background menu controls inert while a panel is active.
+- [ ] Constrain keyboard activation to the current focus scope.
+- [ ] Restore focus to the invoking control on close.
+- [ ] Persist settings only after an accepted control result.
 
-### Rendering and diagnostics
+### Campaign accessibility
 
-- [ ] Add modifier identity, kind, magnitude and remaining duration to target read models.
-- [ ] Project a persistent slow indicator from committed state.
-- [ ] Bind world, HUD, minimap and CRT frames to combat/modifier revisions.
-- [ ] Publish immutable results and bounded observations.
-- [ ] Acknowledge the first visible frame citing the accepted modifier result.
-- [ ] Remove mutable modifier internals from public `GameHost` access.
+- [ ] Give the campaign canvas an explicit focus/admission policy.
+- [ ] Add native commands for start wave, tower choice, pause and restart.
+- [ ] Publish a bounded accessible status read model.
+- [ ] Update live output for souls, sanctum health, wave, messages and terminal state.
+- [ ] Announce selection, order and build results without per-frame flooding.
+- [ ] Correlate accessible output with committed game/frame revisions.
 
 ### Proof
 
-- [ ] Add deterministic single-Ward slow and unslowed-control fixtures.
-- [ ] Compare distance traveled over equal fixed steps.
-- [ ] Add exact duration, expiry, refresh, stacking and cap fixtures.
-- [ ] Add resistance, immunity, stale projectile, duplicate impact and dead-target fixtures.
-- [ ] Add target-death and run-restart retirement fixtures.
-- [ ] Add first visible modifier-frame fixture.
-- [ ] Run source, built-output and GitHub Pages parity checks.
+- [ ] Focus each native menu control and press Enter and Space.
+- [ ] Prove exactly one matching command result.
+- [ ] Prove disabled Continue cannot receive focus or activation.
+- [ ] Prove panel open isolates background controls and restores focus.
+- [ ] Prove settings values match visual and native states.
+- [ ] Prove campaign status changes are announced once and in order.
+- [ ] Run source, built-output and Pages parity fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
+index.html
+game.html
+src/menu/graveyard-menu.js
+src/menu/graveyard-art.js
 src/campaign/campaign-scene.js
-fixed-step-campaign-simulation-kit
+menu-route-kit
+campaign-route-shell-kit
 pixel-campaign-runtime-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
+menu-static-check-kit
 campaign-static-check-kit
+scripts/check-menu.mjs
 scripts/check-campaign.mjs
 package.json
-game.html
-```
-
-## Required command
-
-```txt
-ProjectileImpactCommand {
-  commandId
-  runtimeSessionId
-  runGeneration
-  projectileId
-  projectileGeneration
-  sourceEntityId
-  sourceGeneration
-  targetEntityId
-  targetGeneration
-  effectSpecId
-  effectSpecVersion
-  expectedCombatRevision
-}
-```
-
-## Required result
-
-```txt
-CombatModifierResult {
-  commandId
-  impactResultId
-  kind
-  targetEntityId
-  targetGeneration
-  modifierId?
-  modifierKind?
-  magnitude?
-  appliedStep?
-  expiresStep?
-  targetModifierRevision?
-  combatRevision
-  rejectionReason?
-  firstVisibleFrameAckId?
-}
 ```
 
 ## Dependency order
 
 ```txt
-Runtime Session Resource Lifecycle Authority
-  -> Campaign Bootstrap and Continue Resume Authority
-  -> Campaign Phase and Entity Liveness Authority
-  -> Combat Modifier Application Authority
-  -> Fixed-Step Replay and Committed Frame Authority
-  -> visible combat-effect proof
+Accessible Command Identity
+  -> Native Availability Projection
+  -> Focus Scope and Panel Lifecycle
+  -> Campaign Accessible Status Read Model
+  -> Visual/Accessible Result Acknowledgement
+  -> source/build/Pages parity proof
 ```
 
-Do not patch only `moveToward()` with a mutable speed multiplier. The correction requires explicit effect semantics, generation-fenced admission, durable target modifier state, deterministic expiry and typed visible proof.
+Do not fix this only by stopping propagation on one event. Native keyboard activation, assistive activation, programmatic click, global keyboard ingress and public host commands must converge on one exact command/result authority.
