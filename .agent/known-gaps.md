@@ -1,124 +1,129 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T22-00-46-04-00`
+**Timestamp:** `2026-07-12T22-05-12-04-00`
 
 ## Summary
 
-The leading keyboard gap is Campaign Keyboard Command Admission Authority. Global listeners accept held and one-shot keys without current route/focus evidence, editable-target exclusion, repeat policy, lifecycle generations, command identity, consumer receipts or visible-frame proof.
+The leading persistence gap is Campaign Bootstrap and Continue Resume Authority. Continue is enabled from unvalidated string presence, but campaign boot ignores route intent and storage, always starts fresh, and has no complete checkpoint, migration, atomic installation, typed result or visible-generation proof.
 
 ## Plan ledger
 
-**Goal:** close keyboard ownership, repeat, generation, result and proof gaps while preserving spatial-input, campaign-action, lifecycle and persistence boundaries.
+**Goal:** close entry-intent, checkpoint, participant, commit and proof gaps while preserving the keyboard, spatial-input, campaign-action and runtime-lifecycle boundaries.
 
-- [x] Record global route/focus ownership gaps.
-- [x] Record editable-target and repeat-policy gaps.
-- [x] Record keyboard generation and lifecycle gaps.
-- [x] Record command identity, result and receipt gaps.
+- [x] Record New/Continue route and storage-admission gaps.
+- [x] Record checkpoint schema and participant-coverage gaps.
+- [x] Record hydration, validation and atomic-commit gaps.
+- [x] Record result, diagnostics and visible-frame gaps.
 - [x] Record browser, build and Pages proof gaps.
-- [x] Preserve prior authority queues.
+- [x] Preserve the concurrent keyboard-admission audit.
 - [ ] Implement in dependency order.
 
-## Route and focus gaps
+## Entry and availability gaps
 
 ```txt
-campaign keyboard surface ID
-active route capability
-keyboard session generation
-focus generation
-canvas/document focus policy
-editable-target exclusion
-surface retirement
-listener lease and teardown
+CampaignEntryIntent parser
+bootstrap command ID and route revision
+canonical save slot
+legacy-key import policy
+validated ContinueAvailabilityResult
+typed missing/malformed/unsupported/incompatible feedback
+zero-mutation failure route
 ```
 
-## Event and repeat gaps
+## Checkpoint identity and compatibility gaps
 
 ```txt
-keyboard event envelope
-source event ID
-monotonic sequence
-physical code versus logical key policy
-held versus one-shot classification
-event.repeat policy
-one-shot command ID
-duplicate command rejection
-stale generation rejection
+checkpoint schema and version
+checkpoint/run ID and generation
+checkpoint revision
+checksum
+state fingerprint
+source and authored-content fingerprint
+migration registry
+typed storage read/write receipt
 ```
 
-## Held-state lifecycle gaps
+## Participant gaps
 
 ```txt
-generation-bound held-state revision
-typed key-down and key-up results
-typed clear result
-blur generation retirement
-visibilitychange generation retirement
-pagehide teardown
-pageshow successor generation
-stale keyup rejection
-exactly-once listener retirement
+campaign time and fixed-step boundary
+souls and core
+wave, waveActive and spawn queue
+units and all runtime fields
+towers and cooldowns
+pad occupancy
+projectiles and effects policy
+uid, pid and tid counters
+selection and selected pad
+tower type
+camera state
+pause, win, loss and message
+participant manifest and reset policy
 ```
 
-## One-shot command gaps
+## Candidate and commit gaps
 
 ```txt
-Space wave command result
-1/2/3 tower-selection command result
-P pause command result
-F camera-focus command result
-R reload navigation result
-Escape menu navigation result
-Campaign Action Result correlation
-camera/phase/navigation consumption receipts
-zero-mutation rejection proof
+detached fresh candidate
+detached restored candidate
+per-participant validation
+cross-reference validation
+atomic multi-participant install
+verified rollback
+predecessor retirement
+stale and duplicate command rejection
+one terminal CampaignBootstrapResult
 ```
 
 ## Concrete current risks
 
 ```txt
-holding P can toggle pause repeatedly
-future focused form/editor controls can trigger campaign shortcuts
-inactive or transitioning route can still receive global keys
-blur clears held state but retires no event generation
-late keyup can be interpreted without lifecycle identity
-reload and navigation have no exactly-once terminal result
-accepted effects cannot be correlated with the visible CRT frame
+Continue always starts a fresh campaign
+malformed JSON can enable Continue
+foreign nexus.sceneSnapshot data can enable Continue
+unsupported versions cannot be classified
+partial three-field victory records look resumable to the menu
+checkpoint load failure silently impersonates New
+ID and cross-reference corruption would have no admission gate
+rendered fresh state can be mistaken for successful restoration
 ```
 
 ## Result and render gaps
 
 ```txt
-CampaignKeyboardCommand
-CampaignKeyboardResult
-typed rejection reasons
-bounded keyboard observation
-bounded keyboard journal
-campaign/camera/navigation consumption receipts
-source-frame and CRT-presented-frame correlation
-first visible keyboard-result frame acknowledgement
+CampaignBootstrapCommand
+CampaignBootstrapResult
+ContinueAvailabilityResult
+participant install receipts
+bounded bootstrap observations and journal
+run/checkpoint generation in render snapshots
+world/HUD/minimap/CRT generation parity
+first visible bootstrap-result frame acknowledgement
 stale result/frame rejection
 ```
 
 ## Test gaps
 
 ```txt
-pause auto-repeat exactly-once
-wave/tower/focus/navigation repeat rejection
-editable-target zero mutation
-inactive route zero mutation
-blur and visibility generation retirement
-pagehide/pageshow lifecycle
-stale keyup zero mutation
-held movement release
-duplicate command ID
-listener teardown
+fresh preset fingerprint
+full checkpoint roundtrip
+non-default economy/wave/entity/camera restore
+missing slot
+malformed JSON
+wrong schema and unsupported version
+checksum/source fingerprint mismatch
+missing participant and broken reference
+ID counter collision
+commit failure and rollback
+stale/duplicate bootstrap
+first visible restored frame
 source/build/Pages parity
-first visible keyboard-result frame
 ```
 
-## Retained campaign gaps
+## Retained input and action gaps
 
 ```txt
+Campaign Keyboard Command Admission Authority
 Campaign Action Result Authority
 Campaign Spatial Input Admission Authority
 Menu Pointer-Hit Admission Authority
@@ -129,20 +134,19 @@ Fixed-Step Command Scheduling Replay and Committed Frame Authority
 Public Host Committed Read Model
 Combat Resolution and Entity Liveness Authority
 Exclusive Terminal Outcome Transaction
-Versioned Full Campaign Checkpoint Capture Authority
-Campaign Bootstrap and Continue Resume Authority
 ```
 
 ## Retained lifecycle/product gaps
 
 ```txt
 Runtime Session Resource Lifecycle Authority
+Versioned Full Campaign Checkpoint Capture Authority
 Menu Audio Activation and Lifecycle Authority
 WebGL context loss/restore and disposal
-save schema, migration and atomic hydration
-complete campaign replay and restored-frame proof
+complete campaign replay
+source/build/Pages production proof
 ```
 
 ## Completion boundary
 
-A held-key Set, blur clear, changed pause flag or moved camera is not keyboard admission proof. Completion requires current route/focus and generation evidence, repeat/duplicate/stale classification, one terminal result, consumer receipts, zero mutation for rejection and a first-visible-frame acknowledgement.
+An enabled Continue item, parsed JSON, changed HUD values or a successfully drawn campaign is not resume proof. Completion requires compatible checkpoint admission, complete participant hydration, atomic successor commit or verified failure, one terminal result and the first visible frame citing the committed run generation.
