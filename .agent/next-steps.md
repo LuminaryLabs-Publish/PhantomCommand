@@ -1,6 +1,6 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T00-31-09-04-00`
+**Timestamp:** `2026-07-13T00-40-00-04-00`
 
 ## Summary
 
@@ -21,8 +21,8 @@ Implement Combat Modifier Application Authority before claiming the Grave Ward s
 ### Impact admission
 
 - [ ] Add `ProjectileImpactCommand` identity and expected combat revision.
-- [ ] Bind source, projectile and target generations.
-- [ ] Reject missing, stale, duplicate and terminal-phase impact.
+- [ ] Bind runtime session, run, source, projectile and target generations.
+- [ ] Reject missing, stale, duplicate and terminal-phase impacts.
 - [ ] Resolve damage and modifiers from one immutable effect spec.
 - [ ] Commit damage and accepted modifier state atomically.
 - [ ] Publish one terminal impact/modifier result.
@@ -40,19 +40,17 @@ Implement Combat Modifier Application Authority before claiming the Grave Ward s
 
 - [ ] Add modifier identity, kind, magnitude and remaining duration to target read models.
 - [ ] Project a persistent slow indicator from committed state.
-- [ ] Bind HUD, world, minimap and CRT frame data to combat/modifier revisions.
-- [ ] Publish immutable combat results and bounded observations.
+- [ ] Bind world, HUD, minimap and CRT frames to combat/modifier revisions.
+- [ ] Publish immutable results and bounded observations.
 - [ ] Acknowledge the first visible frame citing the accepted modifier result.
-- [ ] Keep `GameHost` from exposing mutable modifier internals.
+- [ ] Remove mutable modifier internals from public `GameHost` access.
 
 ### Proof
 
-- [ ] Add a deterministic single-Ward slow fixture.
-- [ ] Compare distance traveled by slowed and unslowed enemies over equal fixed steps.
-- [ ] Add exact duration and expiry fixtures.
-- [ ] Add refresh, stacking and cap fixtures.
-- [ ] Add resistance and immunity fixtures.
-- [ ] Add stale projectile, duplicate impact and dead-target fixtures.
+- [ ] Add deterministic single-Ward slow and unslowed-control fixtures.
+- [ ] Compare distance traveled over equal fixed steps.
+- [ ] Add exact duration, expiry, refresh, stacking and cap fixtures.
+- [ ] Add resistance, immunity, stale projectile, duplicate impact and dead-target fixtures.
 - [ ] Add target-death and run-restart retirement fixtures.
 - [ ] Add first visible modifier-frame fixture.
 - [ ] Run source, built-output and GitHub Pages parity checks.
@@ -82,6 +80,7 @@ ProjectileImpactCommand {
   projectileId
   projectileGeneration
   sourceEntityId
+  sourceGeneration
   targetEntityId
   targetGeneration
   effectSpecId
@@ -109,21 +108,6 @@ CombatModifierResult {
   rejectionReason?
   firstVisibleFrameAckId?
 }
-```
-
-## Minimal correction sequence
-
-```txt
-1. Define one unambiguous Grave Ward effect spec.
-2. Add target and projectile generations.
-3. Admit impact through one command/result boundary.
-4. Commit damage plus modifier state atomically.
-5. Preserve base speed and derive current speed.
-6. Implement duration, refresh, stacking and expiry.
-7. Retire modifiers on target/run lifecycle boundaries.
-8. Publish immutable results and observations.
-9. Bind visible indicators to modifier revisions.
-10. Prove source/build/Pages parity.
 ```
 
 ## Dependency order
