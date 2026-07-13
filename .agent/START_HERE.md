@@ -109,7 +109,7 @@ CampaignEntryIntent(new | continue)
 
 ```txt
 implemented source-backed kits: 20
-planned bootstrap/resume authority kits: 36
+planned bootstrap/resume authority kits: 37
 retained keyboard-admission authority kits: 28
 ```
 
