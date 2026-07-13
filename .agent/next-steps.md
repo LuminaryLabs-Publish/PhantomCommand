@@ -1,45 +1,46 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T18-11-53-04-00`
+**Timestamp:** `2026-07-12T19-58-07-04-00`
 
 ## Summary
 
-The next implementation boundary is Campaign Action Result Authority. Replace void campaign helpers and direct public mutations with one command path that validates expected revisions, returns one terminal result and correlates committed actions with the first visible campaign frame.
+The next campaign-input boundary is Campaign Spatial Input Admission Authority, but it should consume the typed Campaign Action Result path rather than introduce another direct mutation route. Implement surface ownership, pointer identity, visible CRT projection and correct selection geometry before enabling browser or public replay fixtures.
 
 ## Plan ledger
 
-**Goal:** implement one deterministic campaign action transaction from intent through admission, detached planning, atomic commit, terminal result and visible proof.
+**Goal:** create one deterministic pointer transaction from DOM evidence through visible/source/world projection, typed spatial result, campaign action result and first-visible-frame proof.
 
-- [ ] Introduce campaign session identity and generation.
-- [ ] Add one monotonic campaign revision.
-- [ ] Add phase, selection, economy, pad, target and camera revisions where required.
-- [ ] Define `CampaignActionCommand` and action-kind payload schemas.
-- [ ] Give browser, accessibility, public host, replay and fixture paths explicit source identities.
-- [ ] Allocate stable action IDs and sequences.
-- [ ] Reject duplicate action IDs without repeating mutation.
-- [ ] Reject stale expected revisions.
-- [ ] Replace direct `startWave()` mutation with a planned action transaction.
-- [ ] Replace direct `build()` mutation with an atomic pad/economy/tower/effect/message transaction.
-- [ ] Replace `selectAt()` with typed selection and build results.
-- [ ] Replace `order()` with typed selection/target admission and per-unit change sets.
-- [ ] Route tower-type, pause, restart and camera actions through the command path.
-- [ ] Replace raw `GameHost` mutators with typed public command admission.
-- [ ] Return one terminal `CampaignActionResult` for every action.
-- [ ] Guarantee zero mutation for every rejected path.
-- [ ] Add commit rollback for participant failure.
-- [ ] Publish detached action observations and a bounded journal.
-- [ ] Project HUD feedback and public readback from committed results.
-- [ ] Add first-visible-action-frame acknowledgement.
-- [ ] Add headless action, rejection, stale, duplicate and rollback fixtures.
-- [ ] Add browser source, built-output and Pages parity fixtures.
+- [ ] Complete Campaign Action Result Authority first.
+- [ ] Introduce campaign input-surface identity and generation.
+- [ ] Introduce focus generation and surface-retirement rules.
+- [ ] Add pointer sample IDs and monotonic sequences.
+- [ ] Enforce primary pointer and supported button policies.
+- [ ] Bind pointerdown, move, up, cancel and capture loss to one pointer identity.
+- [ ] Add `setPointerCapture`, `lostpointercapture` and `pointercancel` handling.
+- [ ] Add viewport and CRT transform revisions.
+- [ ] Implement inverse visible CRT projection or disable curvature for interactive geometry.
+- [ ] Return a typed `SourceContainmentResult`.
+- [ ] Reject outside-source input with zero selection, order, camera or feedback mutation.
+- [ ] Return a revisioned `WorldProjectionResult`.
+- [ ] Replace two-corner rectangle selection with source-space membership or a complete four-corner polygon.
+- [ ] Add typed point-selection and selected-pad hit results.
+- [ ] Add typed order-target admission results.
+- [ ] Add typed pan and wheel-anchor results.
+- [ ] Reject stale transform, camera, entity-set and selection revisions.
+- [ ] Publish bounded spatial-input observations and a journal.
+- [ ] Route accepted spatial results into typed campaign actions.
+- [ ] Add first-visible-spatial-result frame acknowledgement.
+- [ ] Add deterministic geometry, cancellation and zero-mutation fixtures.
+- [ ] Add source, built-output and GitHub Pages browser parity fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
+src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
+crt-renderer-kit
 pixel-campaign-runtime-kit
-fixed-step-campaign-simulation-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
 campaign-static-check-kit
@@ -48,99 +49,83 @@ package.json
 game.html
 ```
 
-## Command shape
+## Required command shape
 
 ```txt
-CampaignActionCommand {
-  actionId
+CampaignSpatialInputCommand {
+  commandId
   sequence
   sourceKind
-  capabilityId?
-  sessionId
-  sessionGeneration
+  surfaceId
+  surfaceGeneration
+  focusGeneration
+  pointerId
+  pointerType
+  button
+  gestureId?
+  viewportTransformRevision
+  crtTransformRevision
+  cameraRevision
+  entityRevision?
+  selectionRevision?
+  sourcePoint
   actionKind
-  payload
-  expectedCampaignRevision
-  expectedPhaseRevision
-  expectedSelectionRevision?
-  expectedEconomyRevision?
-  expectedPadRevision?
-  expectedTargetRevision?
 }
 ```
 
-## Result shape
+## Required result shape
 
 ```txt
-CampaignActionResult {
-  actionId
+CampaignSpatialInputResult {
+  commandId
   status
   reason?
-  predecessorRevision
-  successorRevision
-  changedResources[]
-  selectedIdsAdded[]
-  selectedIdsRemoved[]
-  economyDelta?
-  createdEntityIds[]
-  removedEntityIds[]
-  phaseDelta?
-  messageDelta?
-  committedAtStep?
+  containmentResult
+  sourcePoint?
+  worldPoint?
+  selectionPolygon?
+  selectedEntityIds[]
+  targetEntityId?
+  cameraDelta?
+  predecessorSelectionRevision?
+  expectedSuccessorSelectionRevision?
+  predecessorCameraRevision?
+  expectedSuccessorCameraRevision?
 }
-```
-
-## Required terminal statuses
-
-```txt
-Committed
-RejectedInvalidSchema
-RejectedUnsupportedAction
-RejectedSource
-RejectedPhase
-RejectedSelection
-RejectedTarget
-RejectedOccupied
-RejectedInsufficientResources
-RejectedTerminal
-RejectedPaused
-RejectedStale
-RejectedDuplicate
-RejectedNoEffect
-FailedPrepare
-FailedCommit
-RolledBack
 ```
 
 ## Minimal correction sequence
 
 ```txt
-1. Wrap current action helpers behind one dispatcher.
-2. Allocate action IDs and source identities at every ingress.
-3. Capture expected campaign and resource revisions.
-4. Validate without mutation.
-5. Build a detached change set.
-6. Commit all changes once or none.
-7. Return one terminal result.
-8. Derive feedback and public readback from that result.
-9. Acknowledge the first visible successor frame.
+1. Fence current browser ingress behind one spatial dispatcher.
+2. Add surface, focus, pointer and gesture identity.
+3. Enforce source containment before any world projection.
+4. Unify visible CRT and logical input transforms.
+5. Add camera and entity revisions to projection results.
+6. Evaluate rectangle membership in source space or a full polygon.
+7. Return one terminal spatial result.
+8. Feed accepted results into Campaign Action Result Authority.
+9. Prove zero mutation for rejected evidence.
+10. Acknowledge the first visible successor frame.
 ```
 
 ## Fixture gate
 
 ```txt
-wave start success and all rejection reasons
-build success, missing pad, occupied pad and insufficient souls
-selection add, remove, clear and rectangle selection
-order success, empty selection and stale entity reference
-valid and invalid tower type
-pause and restart phase policy
-duplicate action ID idempotency
-stale campaign/resource revisions
-prepare failure and rollback
-public GameHost source identity
+letterbox/pillarbox outside-source rejection
+CRT on/off projection probes
+pointer identity mismatch
+pointercancel and lost capture
+point selection hit/miss
+additive selection
+four drag directions
+40 x 20 cancellation-ratio regression
+camera translation and min/default/max zoom
+order target hit/miss/stale
+pan and wheel-anchor results
+zero mutation after every rejection
 source/build/Pages parity
-first visible frame correlation
+first visible spatial-result frame
 ```
 
 ## Dependency order
@@ -148,10 +133,11 @@ first visible frame correlation
 ```txt
 Runtime Session Resource Lifecycle Authority
   -> Campaign Action Result Authority
-  -> Campaign World-Pointer Admission Authority
+  -> Campaign Spatial Input Admission Authority
+  -> CRT Display/Input Projection Authority
   -> Campaign Phase Admission Authority
   -> Fixed-Step Command Scheduling Replay Authority
   -> Public Host Committed Read Model
 ```
 
-Do not patch only the silent `return` statements with booleans. The correction requires stable command identity, revision admission, one terminal result, zero-mutation rejection and visible-frame proof.
+Do not patch only the rectangle math. The correction requires source containment, visible-transform parity, pointer ownership, revisioned projection, typed terminal results and visible-frame proof.
