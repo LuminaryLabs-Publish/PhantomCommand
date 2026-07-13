@@ -1,46 +1,77 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T19-58-07-04-00`
+**Timestamp:** `2026-07-12T22-00-46-04-00`
 
 ## Summary
 
-The next campaign-input boundary is Campaign Spatial Input Admission Authority, but it should consume the typed Campaign Action Result path rather than introduce another direct mutation route. Implement surface ownership, pointer identity, visible CRT projection and correct selection geometry before enabling browser or public replay fixtures.
+Implement campaign keyboard admission before treating global shortcuts as reliable commands. Keep continuous movement state separate from one-shot actions, bind both to current route/focus/lifecycle generations, and route accepted one-shot commands through Campaign Action Result Authority.
 
 ## Plan ledger
 
-**Goal:** create one deterministic pointer transaction from DOM evidence through visible/source/world projection, typed spatial result, campaign action result and first-visible-frame proof.
+**Goal:** create one deterministic keyboard transaction from DOM evidence through held-state or one-shot admission, consumer results and first-visible-frame proof.
 
-- [ ] Complete Campaign Action Result Authority first.
-- [ ] Introduce campaign input-surface identity and generation.
-- [ ] Introduce focus generation and surface-retirement rules.
-- [ ] Add pointer sample IDs and monotonic sequences.
-- [ ] Enforce primary pointer and supported button policies.
-- [ ] Bind pointerdown, move, up, cancel and capture loss to one pointer identity.
-- [ ] Add `setPointerCapture`, `lostpointercapture` and `pointercancel` handling.
-- [ ] Add viewport and CRT transform revisions.
-- [ ] Implement inverse visible CRT projection or disable curvature for interactive geometry.
-- [ ] Return a typed `SourceContainmentResult`.
-- [ ] Reject outside-source input with zero selection, order, camera or feedback mutation.
-- [ ] Return a revisioned `WorldProjectionResult`.
-- [ ] Replace two-corner rectangle selection with source-space membership or a complete four-corner polygon.
-- [ ] Add typed point-selection and selected-pad hit results.
-- [ ] Add typed order-target admission results.
-- [ ] Add typed pan and wheel-anchor results.
-- [ ] Reject stale transform, camera, entity-set and selection revisions.
-- [ ] Publish bounded spatial-input observations and a journal.
-- [ ] Route accepted spatial results into typed campaign actions.
-- [ ] Add first-visible-spatial-result frame acknowledgement.
-- [ ] Add deterministic geometry, cancellation and zero-mutation fixtures.
-- [ ] Add source, built-output and GitHub Pages browser parity fixtures.
+### Route, surface and focus
+
+- [ ] Add campaign keyboard surface identity.
+- [ ] Add keyboard-session and focus generations.
+- [ ] Require the active campaign route and current input-surface capability.
+- [ ] Define canvas/document focus policy.
+- [ ] Reject text inputs, textareas, selects, contenteditable regions and non-delegating controls.
+- [ ] Remove listeners during route retirement.
+
+### Event and repeat admission
+
+- [ ] Wrap events in a typed envelope with source ID and monotonic sequence.
+- [ ] Define physical-code versus logical-key mapping.
+- [ ] Classify held-state and one-shot keys before mutation.
+- [ ] Reject `event.repeat` for Space, 1, 2, 3, P, F, R and Escape.
+- [ ] Normalize repeated held movement to an idempotent held-state result.
+- [ ] Add command IDs and duplicate rejection.
+- [ ] Reject stale keyboard and focus generations.
+
+### Held movement lifecycle
+
+- [ ] Store held state under the current keyboard generation.
+- [ ] Publish typed key-down, key-up and clear results.
+- [ ] Retire the current generation on blur and visibility loss.
+- [ ] Add pagehide teardown and pageshow successor-generation behavior.
+- [ ] Reject predecessor-generation keyup events.
+- [ ] Publish camera-input consumption receipts.
+
+### One-shot commands
+
+- [ ] Convert Space, tower selection, pause, focus, reload and menu exit into typed commands.
+- [ ] Route gameplay/phase commands through Campaign Action Result Authority.
+- [ ] Route camera focus through a typed camera command result.
+- [ ] Route reload and menu exit through typed navigation results.
+- [ ] Require exactly one terminal result per command ID.
+- [ ] Prove zero mutation for rejected evidence.
+
+### Diagnostics and presentation
+
+- [ ] Add bounded keyboard observations and a journal.
+- [ ] Add accepted/repeat/stale/editable-target counters.
+- [ ] Remove raw event and mutable Set exposure from diagnostics.
+- [ ] Bind render snapshots to keyboard and consumer results.
+- [ ] Add first-visible-keyboard-result frame acknowledgement.
+
+### Proof
+
+- [ ] Add pause auto-repeat fixture.
+- [ ] Add repeat rejection for wave/tower/focus/navigation commands.
+- [ ] Add editable-target and inactive-route zero-mutation fixtures.
+- [ ] Add blur, visibility, pagehide and pageshow generation fixtures.
+- [ ] Add stale keyup and duplicate command fixtures.
+- [ ] Add held movement release and listener-retirement fixtures.
+- [ ] Add source, built-output and GitHub Pages keyboard parity fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
-src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
-crt-renderer-kit
 pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
 campaign-static-check-kit
@@ -52,92 +83,65 @@ game.html
 ## Required command shape
 
 ```txt
-CampaignSpatialInputCommand {
+CampaignKeyboardCommand {
   commandId
   sequence
-  sourceKind
+  routeId
   surfaceId
-  surfaceGeneration
+  keyboardSessionGeneration
   focusGeneration
-  pointerId
-  pointerType
-  button
-  gestureId?
-  viewportTransformRevision
-  crtTransformRevision
-  cameraRevision
-  entityRevision?
-  selectionRevision?
-  sourcePoint
-  actionKind
+  sourceEventId
+  physicalCode
+  logicalKey
+  commandKind
+  repeat
+  expectedCampaignRevision?
+  expectedCameraRevision?
+  issuedAt
 }
 ```
 
 ## Required result shape
 
 ```txt
-CampaignSpatialInputResult {
+CampaignKeyboardResult {
   commandId
   status
   reason?
-  containmentResult
-  sourcePoint?
-  worldPoint?
-  selectionPolygon?
-  selectedEntityIds[]
-  targetEntityId?
-  cameraDelta?
-  predecessorSelectionRevision?
-  expectedSuccessorSelectionRevision?
-  predecessorCameraRevision?
-  expectedSuccessorCameraRevision?
+  commandKind
+  predecessorKeyboardGeneration
+  successorHeldStateRevision?
+  campaignActionResultId?
+  cameraConsumptionReceiptId?
+  navigationResultId?
+  firstVisibleFrameAckId?
 }
 ```
 
 ## Minimal correction sequence
 
 ```txt
-1. Fence current browser ingress behind one spatial dispatcher.
-2. Add surface, focus, pointer and gesture identity.
-3. Enforce source containment before any world projection.
-4. Unify visible CRT and logical input transforms.
-5. Add camera and entity revisions to projection results.
-6. Evaluate rectangle membership in source space or a full polygon.
-7. Return one terminal spatial result.
-8. Feed accepted results into Campaign Action Result Authority.
-9. Prove zero mutation for rejected evidence.
+1. Fence global keyboard ingress behind one route-owned dispatcher.
+2. Add surface, focus and keyboard-session generations.
+3. Exclude editable targets.
+4. Separate held transitions from one-shot commands.
+5. Add repeat, duplicate and stale rejection.
+6. Add lifecycle generation retirement and typed clear.
+7. Route one-shot commands through existing action/camera/navigation owners.
+8. Publish one terminal keyboard result and consumer receipts.
+9. Prove zero mutation for every rejection.
 10. Acknowledge the first visible successor frame.
-```
-
-## Fixture gate
-
-```txt
-letterbox/pillarbox outside-source rejection
-CRT on/off projection probes
-pointer identity mismatch
-pointercancel and lost capture
-point selection hit/miss
-additive selection
-four drag directions
-40 x 20 cancellation-ratio regression
-camera translation and min/default/max zoom
-order target hit/miss/stale
-pan and wheel-anchor results
-zero mutation after every rejection
-source/build/Pages parity
-first visible spatial-result frame
 ```
 
 ## Dependency order
 
 ```txt
 Runtime Session Resource Lifecycle Authority
+  -> Campaign Keyboard Command Admission Authority
   -> Campaign Action Result Authority
-  -> Campaign Spatial Input Admission Authority
-  -> CRT Display/Input Projection Authority
-  -> Campaign Phase Admission Authority
-  -> Fixed-Step Command Scheduling Replay Authority
+  -> Campaign Phase / Camera / Navigation owners
   -> Public Host Committed Read Model
+  -> visible frame proof
 ```
 
-Do not patch only the rectangle math. The correction requires source containment, visible-transform parity, pointer ownership, revisioned projection, typed terminal results and visible-frame proof.
+Do not patch only `event.repeat`. The correction requires route/focus ownership, editable-target exclusion, lifecycle generations, typed commands/results, consumer receipts and visible-frame proof.
