@@ -1,21 +1,21 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-13T00-31-09-04-00`
+**Timestamp:** `2026-07-13T00-40-00-04-00`
 
 ## Summary
 
-The leading combat gap is Combat Modifier Application Authority. Grave Ward projectiles carry `slow: .34`, but impact discards it. There is no target modifier state, duration, stacking, movement derivation, expiry, typed result or visible-frame proof.
+The leading combat gap is Combat Modifier Application Authority. Grave Ward projectiles carry `slow: 0.34`, but impact discards it. There is no target modifier state, duration, stacking, movement derivation, expiry, typed result or visible-frame proof.
 
 ## Plan ledger
 
-**Goal:** close effect-specification, impact-admission, target-state, movement, expiry and proof gaps while preserving bootstrap, keyboard, spatial-input and action-result boundaries.
+**Goal:** close effect-specification, impact-admission, target-state, movement, expiry and proof gaps while preserving existing persistence, input and action boundaries.
 
 - [x] Record the unused Ward payload.
 - [x] Record effect semantic and target-state gaps.
 - [x] Record movement, expiry and retirement gaps.
 - [x] Record result, diagnostics and visible-frame gaps.
 - [x] Record deterministic and deployed proof gaps.
-- [x] Preserve predecessor audits.
+- [x] Reconcile repo-local findings with central tracking.
 - [ ] Implement in dependency order.
 
 ## Effect specification gaps
@@ -35,8 +35,8 @@ source/content fingerprint
 
 ```txt
 projectile impact command ID
-projectile generation
-target entity generation
+runtime session and run generation
+source, projectile and target generations
 expected combat revision
 source and target liveness validation
 phase admission
@@ -53,9 +53,8 @@ target modifier revision
 applied and expiry fixed steps
 immutable base-speed boundary
 derived current movement speed
-modifier set snapshot
-modifier fingerprint
-restart/death replacement policy
+modifier set snapshot and fingerprint
+restart/death/replacement policy
 ```
 
 ## Expiry and retirement gaps
@@ -116,9 +115,10 @@ first visible slow-state frame
 source/build/Pages parity
 ```
 
-## Retained input, persistence and action gaps
+## Retained authority gaps
 
 ```txt
+Runtime Session Resource Lifecycle Authority
 Campaign Bootstrap and Continue Resume Authority
 Versioned Full Campaign Checkpoint Capture Authority
 Campaign Keyboard Command Admission Authority
@@ -132,12 +132,6 @@ Fixed-Step Command Scheduling Replay and Committed Frame Authority
 Public Host Committed Read Model
 Combat Resolution and Entity Liveness Authority
 Exclusive Terminal Outcome Transaction
-```
-
-## Retained lifecycle/product gaps
-
-```txt
-Runtime Session Resource Lifecycle Authority
 Menu Audio Activation and Lifecycle Authority
 WebGL context loss/restore and disposal
 complete campaign replay
