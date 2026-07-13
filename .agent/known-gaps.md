@@ -1,107 +1,120 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-13T05-59-03-04-00`
+**Timestamp:** `2026-07-13T11-41-10-04-00`
 
 ## Summary
 
-The leading presentation gap is WebGL Context Lifecycle and Recovery Authority. Menu and campaign CRT rendering assume one context and one resource set remain valid forever; context loss, restoration, partial allocation, disposal and recovered-frame proof are unowned.
+The leading temporal gap is Fixed-Step Frame Scheduler Authority. The campaign bounds work by clamping RAF elapsed time to 50 ms and draining 60 Hz updates, but it does not identify scheduler generations, report dropped time or step counts, interpolate presentation state, own visibility transitions or prove which temporal frame became visible.
 
 ## Plan ledger
 
-**Goal:** close context identity, resource lifetime, failure isolation, recovery, fallback and proof gaps without weakening existing menu, campaign or fixed-step ownership.
+**Goal:** close temporal admission, deterministic drain, interpolation, visibility, diagnostics and proof gaps without moving gameplay or rendering semantics into the scheduler.
 
-- [x] Record one-shot context and resource allocation.
-- [x] Record missing context-loss and restoration handling.
-- [x] Record missing resource retirement and rebuild.
-- [x] Record RAF liveness and source/display divergence risks.
-- [x] Record raw GL capability escape.
-- [x] Record deterministic and deployed proof gaps.
+- [x] Record the current dt clamp and accumulator loop.
+- [x] Record camera/simulation/CRT clock separation.
+- [x] Record high-refresh and hitch presentation gaps.
+- [x] Record missing visibility generations and public receipts.
+- [x] Preserve prior authority gaps.
 - [ ] Implement in dependency order.
 
-## Context lifecycle gaps
+## Scheduler identity gaps
 
 ```txt
-stable CRT surface ID
-WebGL context ID and generation
-context state machine
-loss reason and event sequence
-restore admission policy
-stale event rejection
-route lifecycle binding
-context disposal result
+scheduler ID
+scheduler generation
+route/session binding
+scheduler lifecycle state
+stale RAF rejection
+restart and route-exit retirement
+terminal scheduler result
 ```
 
-## Resource ownership gaps
+## Wall-time gaps
 
 ```txt
-resource-generation ID
-owned shader/program records
-owned buffer and texture records
-uniform/attribute location generation
-partial-allocation cleanup
-idempotent disposal
-resource rebuild candidate
-atomic restored-resource adoption
-raw GL capability quarantine
+wall-time sample ID
+elapsed duration
+admitted duration
+dropped duration
+clamp policy revision
+debt retention/drop policy
+first-frame elapsed policy
+first-resume elapsed policy
+```
+
+## Fixed-step drain gaps
+
+```txt
+explicit step budget
+step command ID
+steps executed
+accumulator before/after
+previous/current simulation revision
+budget-exhausted result
+pause and terminal drain result
+deterministic replay receipt
 ```
 
 ## Presentation gaps
 
 ```txt
-source-frame revision
-presentation command ID
-context/resource predecessor revisions
-typed upload and draw results
-last successfully presented frame
-source/display divergence classification
-render exception isolation
-first recovered-frame acknowledgement
+previous/current immutable state pair
+camera frame revision
+interpolation alpha
+presentation frame ID
+presentation fingerprint
+shared Canvas2D/CRT frame identity
+partial-frame classification
+first matching visible-frame acknowledgement
 ```
 
-## Recovery and fallback gaps
+## Visibility and lifecycle gaps
 
 ```txt
-approved preventDefault policy
-submission pause while lost
-provider-independent DOM failure status
-bounded retry or route exit
-restore timeout
-rebuild rejection reason
-probe-frame validation
-last-good-frame or degraded presentation policy
+visibility transition owner
+hidden/suspended state
+resume generation
+stale callback rejection after resume
+first-resume discontinuity marker
+page exit scheduler retirement
+bounded fatal scheduler result
 ```
 
 ## Concrete current risks
 
 ```txt
-context loss can leave the display blank with no game-owned explanation
-restoration cannot recreate captured program/buffer/texture handles
-source canvas and simulation can advance while the visible CRT surface is unavailable
-synchronous rendering failure can stop successor RAF scheduling
-partial shader/program allocation has no complete cleanup transaction
-raw gl exposure allows untracked external mutation
-menu and campaign have no common presentation health readback
-boot-time WebGL failure can abort before route-owned recovery UI exists
+wall time above 50 ms disappears without evidence
+camera can advance on a different temporal path than gameplay
+high-refresh displays repeat a pose then expose full-step jumps
+multiple fixed steps can collapse into one visible update
+CRT effects use a second untracked performance.now sample
+background/resume behavior cannot be replayed or diagnosed
+GameHost cannot explain cadence or visible temporal provenance
 ```
 
 ## Test gaps
 
 ```txt
-menu context-loss fixture
-campaign context-loss fixture
-successful context restore and resource rebuild
-failed shader rebuild
-failed texture allocation
-stale restored-event rejection
-partial resource cleanup
-RAF continuation under degraded presentation
-first recovered-frame correlation
-source/build/Pages lifecycle parity
+60 Hz exact cadence
+90 Hz cadence
+120 Hz cadence
+144 Hz cadence
+zero-step interpolation
+multi-step interpolation
+50 ms clamp boundary
+250 ms hitch and dropped-time result
+pause behavior
+visibility hidden/resumed behavior
+restart generation retirement
+Canvas2D/CRT frame fingerprint parity
+first visible-frame acknowledgement
+source/build/Pages parity
 ```
 
 ## Retained authority gaps
 
 ```txt
+WebGL Context Lifecycle and Recovery Authority
 Accessible Command and Focus Projection Authority
 Combat Modifier Application Authority
 Runtime Session Resource Lifecycle Authority
@@ -113,7 +126,6 @@ Menu Pointer-Hit Admission Authority
 Public Host Owner Quarantine and Typed Command Admission
 CRT Display/Input Projection Authority
 Campaign Phase Admission Authority
-Fixed-Step Command Scheduling Replay and Committed Frame Authority
 Public Host Committed Read Model
 Combat Resolution and Entity Liveness Authority
 Exclusive Terminal Outcome Transaction
@@ -124,4 +136,4 @@ source/build/Pages production proof
 
 ## Completion boundary
 
-A successful initial draw is not lifecycle proof. Completion requires identified context/resource generations, deterministic loss and restore results, complete rebuild/disposal, bounded fallback, public health readback and a matching first recovered visible frame.
+A bounded accumulator is not scheduler proof. Completion requires identified wall-time and scheduler generations, explicit dropped-time and step-drain results, immutable interpolated presentation frames, visibility transition handling, matching Canvas2D/CRT results and deployed visible-frame evidence.
