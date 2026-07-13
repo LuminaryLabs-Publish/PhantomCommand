@@ -1,119 +1,126 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T22-00-46-04-00`
+**Timestamp:** `2026-07-12T22-05-12-04-00`
 
 ## Summary
 
-Implement campaign keyboard admission before treating global shortcuts as reliable commands. Keep continuous movement state separate from one-shot actions, bind both to current route/focus/lifecycle generations, and route accepted one-shot commands through Campaign Action Result Authority.
+Implement Campaign Bootstrap and Continue Resume Authority before claiming browser persistence. Continue must be enabled from a validated compatible checkpoint, hydrate every declared participant into detached state, commit one run generation atomically and prove the first matching frame.
 
 ## Plan ledger
 
-**Goal:** create one deterministic keyboard transaction from DOM evidence through held-state or one-shot admission, consumer results and first-visible-frame proof.
+**Goal:** replace route-label continuation with a complete, versioned and rollback-safe New/Continue transaction.
 
-### Route, surface and focus
+### Entry intent and availability
 
-- [ ] Add campaign keyboard surface identity.
-- [ ] Add keyboard-session and focus generations.
-- [ ] Require the active campaign route and current input-surface capability.
-- [ ] Define canvas/document focus policy.
-- [ ] Reject text inputs, textareas, selects, contenteditable regions and non-delegating controls.
-- [ ] Remove listeners during route retirement.
+- [ ] Add typed `CampaignEntryIntent` parsing for `new` and `continue`.
+- [ ] Reject missing, unknown, stale and duplicate bootstrap intent.
+- [ ] Replace raw three-key truthiness with `ContinueAvailabilityResult`.
+- [ ] Select one canonical campaign save slot and explicit legacy-import policy.
+- [ ] Keep unavailable or invalid Continue outside gameplay with typed feedback.
 
-### Event and repeat admission
+### Checkpoint envelope
 
-- [ ] Wrap events in a typed envelope with source ID and monotonic sequence.
-- [ ] Define physical-code versus logical-key mapping.
-- [ ] Classify held-state and one-shot keys before mutation.
-- [ ] Reject `event.repeat` for Space, 1, 2, 3, P, F, R and Escape.
-- [ ] Normalize repeated held movement to an idempotent held-state result.
-- [ ] Add command IDs and duplicate rejection.
-- [ ] Reject stale keyboard and focus generations.
+- [ ] Add schema name and version.
+- [ ] Add checkpoint ID/revision and run ID/generation.
+- [ ] Add checksum, state fingerprint and source/content fingerprints.
+- [ ] Add a migration registry with explicit supported paths.
+- [ ] Add typed Missing, ReadFailed, Malformed, Unsupported and Incompatible results.
 
-### Held movement lifecycle
+### Participant coverage
 
-- [ ] Store held state under the current keyboard generation.
-- [ ] Publish typed key-down, key-up and clear results.
-- [ ] Retire the current generation on blur and visibility loss.
-- [ ] Add pagehide teardown and pageshow successor-generation behavior.
-- [ ] Reject predecessor-generation keyup events.
-- [ ] Publish camera-input consumption receipts.
+- [ ] Register campaign, economy, wave, entity, pad, identity, selection, camera and simulation participants.
+- [ ] Capture complete unit, tower, spawn and pad-reference state.
+- [ ] Define explicit persist-or-reset policy for projectiles and effects.
+- [ ] Preserve or safely regenerate uid, pid and tid without collisions.
+- [ ] Capture deterministic fixed-step boundary and scheduler linkage.
 
-### One-shot commands
+### Candidate hydration and validation
 
-- [ ] Convert Space, tower selection, pause, focus, reload and menu exit into typed commands.
-- [ ] Route gameplay/phase commands through Campaign Action Result Authority.
-- [ ] Route camera focus through a typed camera command result.
-- [ ] Route reload and menu exit through typed navigation results.
-- [ ] Require exactly one terminal result per command ID.
-- [ ] Prove zero mutation for rejected evidence.
+- [ ] Parse and migrate outside live state.
+- [ ] Build fresh and restored candidates in detached structures.
+- [ ] Validate finite values, unique IDs and authored references.
+- [ ] Validate reciprocal pad/tower occupancy.
+- [ ] Validate selection, targets, projectiles and spawn references.
+- [ ] Validate wave/outcome coherence and state fingerprint.
 
-### Diagnostics and presentation
+### Atomic commit lifecycle
 
-- [ ] Add bounded keyboard observations and a journal.
-- [ ] Add accepted/repeat/stale/editable-target counters.
-- [ ] Remove raw event and mutable Set exposure from diagnostics.
-- [ ] Bind render snapshots to keyboard and consumer results.
-- [ ] Add first-visible-keyboard-result frame acknowledgement.
+- [ ] Add bootstrap command ID and expected predecessor generation.
+- [ ] Install all participants under one successor generation.
+- [ ] Preserve predecessor state until candidate validation succeeds.
+- [ ] Add verified rollback and actual rollback result.
+- [ ] Retire predecessor exactly once after successful commit.
+- [ ] Reject stale and duplicate command/results with zero mutation.
+
+### Rendering and diagnostics
+
+- [ ] Stop simulation and rendering until bootstrap is terminal.
+- [ ] Publish immutable `CampaignBootstrapResult` readback.
+- [ ] Bind world, HUD, minimap and CRT snapshots to run generation.
+- [ ] Acknowledge the first visible frame citing the bootstrap result.
+- [ ] Expose no raw mutable candidate or checkpoint handles through GameHost.
 
 ### Proof
 
-- [ ] Add pause auto-repeat fixture.
-- [ ] Add repeat rejection for wave/tower/focus/navigation commands.
-- [ ] Add editable-target and inactive-route zero-mutation fixtures.
-- [ ] Add blur, visibility, pagehide and pageshow generation fixtures.
-- [ ] Add stale keyup and duplicate command fixtures.
-- [ ] Add held movement release and listener-retirement fixtures.
-- [ ] Add source, built-output and GitHub Pages keyboard parity fixtures.
+- [ ] Add fresh-run preset fingerprint fixture.
+- [ ] Add full non-default checkpoint roundtrip fixture.
+- [ ] Add missing, malformed, unsupported and incompatible fixtures.
+- [ ] Add missing-participant and broken-reference fixtures.
+- [ ] Add commit-failure and verified-rollback fixture.
+- [ ] Add stale and duplicate bootstrap fixtures.
+- [ ] Add first-visible-restored-frame fixture.
+- [ ] Run the matrix against source, built output and GitHub Pages.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
+src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
+menu-route-kit
+menu-save-presence-kit
+campaign-route-shell-kit
 pixel-campaign-runtime-kit
 fixed-step-campaign-simulation-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
+menu-static-check-kit
 campaign-static-check-kit
+scripts/check-menu.mjs
 scripts/check-campaign.mjs
 package.json
+index.html
 game.html
 ```
 
-## Required command shape
+## Required command
 
 ```txt
-CampaignKeyboardCommand {
+CampaignBootstrapCommand {
   commandId
-  sequence
-  routeId
-  surfaceId
-  keyboardSessionGeneration
-  focusGeneration
-  sourceEventId
-  physicalCode
-  logicalKey
-  commandKind
-  repeat
-  expectedCampaignRevision?
-  expectedCameraRevision?
-  issuedAt
+  runtimeSessionId
+  routeRevision
+  entryIntent
+  expectedRunGeneration?
+  expectedCheckpointId?
+  expectedCheckpointRevision?
+  expectedSourceFingerprint
 }
 ```
 
-## Required result shape
+## Required result
 
 ```txt
-CampaignKeyboardResult {
+CampaignBootstrapResult {
   commandId
-  status
-  reason?
-  commandKind
-  predecessorKeyboardGeneration
-  successorHeldStateRevision?
-  campaignActionResultId?
-  cameraConsumptionReceiptId?
-  navigationResultId?
+  kind
+  predecessorRunGeneration?
+  successorRunGeneration?
+  checkpointId?
+  checkpointRevision?
+  stateFingerprint?
+  rejectionReason?
+  rolledBack
   firstVisibleFrameAckId?
 }
 ```
@@ -121,27 +128,27 @@ CampaignKeyboardResult {
 ## Minimal correction sequence
 
 ```txt
-1. Fence global keyboard ingress behind one route-owned dispatcher.
-2. Add surface, focus and keyboard-session generations.
-3. Exclude editable targets.
-4. Separate held transitions from one-shot commands.
-5. Add repeat, duplicate and stale rejection.
-6. Add lifecycle generation retirement and typed clear.
-7. Route one-shot commands through existing action/camera/navigation owners.
-8. Publish one terminal keyboard result and consumer receipts.
-9. Prove zero mutation for every rejection.
-10. Acknowledge the first visible successor frame.
+1. Parse one typed entry intent.
+2. Replace storage truthiness with compatibility admission.
+3. Define a complete checkpoint envelope and participant registry.
+4. Construct fresh/restored candidates outside live state.
+5. Validate every participant and cross-reference.
+6. Commit one successor generation atomically or preserve predecessor.
+7. Publish one terminal bootstrap result.
+8. Start simulation only after committed success.
+9. Bind rendering and GameHost readback to the committed generation.
+10. Prove source/build/Pages parity and first visible frame.
 ```
 
 ## Dependency order
 
 ```txt
 Runtime Session Resource Lifecycle Authority
+  -> Campaign Bootstrap and Continue Resume Authority
+  -> Versioned Full Campaign Checkpoint Capture Authority
   -> Campaign Keyboard Command Admission Authority
-  -> Campaign Action Result Authority
-  -> Campaign Phase / Camera / Navigation owners
-  -> Public Host Committed Read Model
-  -> visible frame proof
+  -> Campaign Action Result and Spatial Input Admission
+  -> committed frame proof
 ```
 
-Do not patch only `event.repeat`. The correction requires route/focus ownership, editable-target exclusion, lifecycle generations, typed commands/results, consumer receipts and visible-frame proof.
+Do not patch only the query string or load three saved fields into live state. The correction requires complete participant coverage, compatibility admission, detached validation, atomic installation and visible-generation proof.
