@@ -1,105 +1,108 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-13T02-49-07-04-00`
+**Timestamp:** `2026-07-13T05-59-03-04-00`
 
 ## Summary
 
-The leading interface gap is Accessible Command and Focus Projection Authority. Visual selection, DOM focus, native activation and panel state are separate, while campaign status remains canvas-only.
+The leading presentation gap is WebGL Context Lifecycle and Recovery Authority. Menu and campaign CRT rendering assume one context and one resource set remain valid forever; context loss, restoration, partial allocation, disposal and recovered-frame proof are unowned.
 
 ## Plan ledger
 
-**Goal:** close command identity, availability, focus lifecycle, accessible status and proof gaps without weakening existing input, campaign or render ownership.
+**Goal:** close context identity, resource lifetime, failure isolation, recovery, fallback and proof gaps without weakening existing menu, campaign or fixed-step ownership.
 
-- [x] Record visual/native command identity divergence.
-- [x] Record duplicate Enter/Space activation risk.
-- [x] Record Continue availability mismatch.
-- [x] Record panel focus and background-isolation gaps.
-- [x] Record campaign status projection gaps.
+- [x] Record one-shot context and resource allocation.
+- [x] Record missing context-loss and restoration handling.
+- [x] Record missing resource retirement and rebuild.
+- [x] Record RAF liveness and source/display divergence risks.
+- [x] Record raw GL capability escape.
 - [x] Record deterministic and deployed proof gaps.
 - [ ] Implement in dependency order.
 
-## Command identity gaps
+## Context lifecycle gaps
 
 ```txt
-stable accessible command ID
-activation source identity
-event sequence and deduplication key
-focused-control ID
-visual-selection revision
-focus generation
-typed conflict result
-typed duplicate result
-public-host command admission
+stable CRT surface ID
+WebGL context ID and generation
+context state machine
+loss reason and event sequence
+restore admission policy
+stale event rejection
+route lifecycle binding
+context disposal result
 ```
 
-## Availability gaps
+## Resource ownership gaps
 
 ```txt
-native disabled projection
-aria-disabled projection
-availability reason
-availability revision
-transition-in-progress state
-command result projection
-focusability parity
+resource-generation ID
+owned shader/program records
+owned buffer and texture records
+uniform/attribute location generation
+partial-allocation cleanup
+idempotent disposal
+resource rebuild candidate
+atomic restored-resource adoption
+raw GL capability quarantine
 ```
 
-## Focus lifecycle gaps
+## Presentation gaps
 
 ```txt
-menu focus owner
-panel focus scope
-focus transfer on open
-background inertness
-focus restoration on close
-lost-focus result
-stale focus-generation rejection
+source-frame revision
+presentation command ID
+context/resource predecessor revisions
+typed upload and draw results
+last successfully presented frame
+source/display divergence classification
+render exception isolation
+first recovered-frame acknowledgement
 ```
 
-## Campaign accessibility gaps
+## Recovery and fallback gaps
 
 ```txt
-focus admission for role=application canvas
-native command alternatives
-dynamic souls/core/wave status
-build/order/selection result announcements
-pause/win/loss announcements
-bounded live-region policy
-campaign status revision
-first accessible result acknowledgement
+approved preventDefault policy
+submission pause while lost
+provider-independent DOM failure status
+bounded retry or route exit
+restore timeout
+rebuild rejection reason
+probe-frame validation
+last-good-frame or degraded presentation policy
 ```
 
 ## Concrete current risks
 
 ```txt
-focused Continue plus visual New can begin New
-focused Settings plus visual New can begin a route transition before panel activation
-Enter/Space can generate document and native click attempts
-Continue is focusable when visual state says EMPTY
-menu buttons remain active while a visual panel is open
-settings and credits panels have no native control projection
-screen readers receive static campaign instructions but no game progress
-public PhantomMenu activation has no focus or source evidence
+context loss can leave the display blank with no game-owned explanation
+restoration cannot recreate captured program/buffer/texture handles
+source canvas and simulation can advance while the visible CRT surface is unavailable
+synchronous rendering failure can stop successor RAF scheduling
+partial shader/program allocation has no complete cleanup transaction
+raw gl exposure allows untracked external mutation
+menu and campaign have no common presentation health readback
+boot-time WebGL failure can abort before route-owned recovery UI exists
 ```
 
 ## Test gaps
 
 ```txt
-native Enter activation identity
-native Space activation identity
-focused-versus-selected disagreement
-duplicate event suppression
-disabled Continue focus and activation
-panel focus transfer and restoration
-panel background inertness
-settings native/visual parity
-campaign status ordering and throttling
-source/build/Pages accessibility parity
+menu context-loss fixture
+campaign context-loss fixture
+successful context restore and resource rebuild
+failed shader rebuild
+failed texture allocation
+stale restored-event rejection
+partial resource cleanup
+RAF continuation under degraded presentation
+first recovered-frame correlation
+source/build/Pages lifecycle parity
 ```
 
 ## Retained authority gaps
 
 ```txt
+Accessible Command and Focus Projection Authority
 Combat Modifier Application Authority
 Runtime Session Resource Lifecycle Authority
 Campaign Bootstrap and Continue Resume Authority
@@ -115,11 +118,10 @@ Public Host Committed Read Model
 Combat Resolution and Entity Liveness Authority
 Exclusive Terminal Outcome Transaction
 Menu Audio Activation and Lifecycle Authority
-WebGL context loss/restore and disposal
 complete campaign replay
 source/build/Pages production proof
 ```
 
 ## Completion boundary
 
-Hidden buttons and a static `aria-live` description are not accessible-command proof. Completion requires one command identity, one accepted result, availability parity, deterministic focus ownership, dynamic status projection and matching visual/accessibility acknowledgements.
+A successful initial draw is not lifecycle proof. Completion requires identified context/resource generations, deterministic loss and restore results, complete rebuild/disposal, bounded fallback, public health readback and a matching first recovered visible frame.
