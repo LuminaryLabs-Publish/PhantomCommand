@@ -1,126 +1,112 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-12T22-05-12-04-00`
+**Timestamp:** `2026-07-13T00-31-09-04-00`
 
 ## Summary
 
-Implement Campaign Bootstrap and Continue Resume Authority before claiming browser persistence. Continue must be enabled from a validated compatible checkpoint, hydrate every declared participant into detached state, commit one run generation atomically and prove the first matching frame.
+Implement Combat Modifier Application Authority before claiming the Grave Ward slows enemies. The Ward payload must become one admitted target modifier with explicit magnitude, duration, stacking, expiry, movement derivation and visible-frame proof.
 
 ## Plan ledger
 
-**Goal:** replace route-label continuation with a complete, versioned and rollback-safe New/Continue transaction.
+**Goal:** replace the unused `slow` payload with a deterministic, target-bound and testable combat-effect transaction.
 
-### Entry intent and availability
+### Effect specification
 
-- [ ] Add typed `CampaignEntryIntent` parsing for `new` and `continue`.
-- [ ] Reject missing, unknown, stale and duplicate bootstrap intent.
-- [ ] Replace raw three-key truthiness with `ContinueAvailabilityResult`.
-- [ ] Select one canonical campaign save slot and explicit legacy-import policy.
-- [ ] Keep unavailable or invalid Continue outside gameplay with typed feedback.
+- [ ] Give every combat effect a stable spec ID and version.
+- [ ] Define whether `0.34` means a 34 percent reduction or a final 0.34 multiplier.
+- [ ] Add an authored duration in fixed-step terms.
+- [ ] Define stacking, refresh, cap, resistance and immunity policy.
+- [ ] Fingerprint the effect spec with authored combat content.
 
-### Checkpoint envelope
+### Impact admission
 
-- [ ] Add schema name and version.
-- [ ] Add checkpoint ID/revision and run ID/generation.
-- [ ] Add checksum, state fingerprint and source/content fingerprints.
-- [ ] Add a migration registry with explicit supported paths.
-- [ ] Add typed Missing, ReadFailed, Malformed, Unsupported and Incompatible results.
+- [ ] Add `ProjectileImpactCommand` identity and expected combat revision.
+- [ ] Bind source, projectile and target generations.
+- [ ] Reject missing, stale, duplicate and terminal-phase impact.
+- [ ] Resolve damage and modifiers from one immutable effect spec.
+- [ ] Commit damage and accepted modifier state atomically.
+- [ ] Publish one terminal impact/modifier result.
 
-### Participant coverage
+### Target modifier state
 
-- [ ] Register campaign, economy, wave, entity, pad, identity, selection, camera and simulation participants.
-- [ ] Capture complete unit, tower, spawn and pad-reference state.
-- [ ] Define explicit persist-or-reset policy for projectiles and effects.
-- [ ] Preserve or safely regenerate uid, pid and tid without collisions.
-- [ ] Capture deterministic fixed-step boundary and scheduler linkage.
-
-### Candidate hydration and validation
-
-- [ ] Parse and migrate outside live state.
-- [ ] Build fresh and restored candidates in detached structures.
-- [ ] Validate finite values, unique IDs and authored references.
-- [ ] Validate reciprocal pad/tower occupancy.
-- [ ] Validate selection, targets, projectiles and spawn references.
-- [ ] Validate wave/outcome coherence and state fingerprint.
-
-### Atomic commit lifecycle
-
-- [ ] Add bootstrap command ID and expected predecessor generation.
-- [ ] Install all participants under one successor generation.
-- [ ] Preserve predecessor state until candidate validation succeeds.
-- [ ] Add verified rollback and actual rollback result.
-- [ ] Retire predecessor exactly once after successful commit.
-- [ ] Reject stale and duplicate command/results with zero mutation.
+- [ ] Add a revisioned active-modifier set per target generation.
+- [ ] Preserve immutable archetype/base speed.
+- [ ] Derive current movement speed from active modifiers.
+- [ ] Apply one explicit stacking and refresh policy.
+- [ ] Expire modifiers at deterministic fixed-step boundaries.
+- [ ] Retire all target modifiers exactly once on death, replacement or restart.
 
 ### Rendering and diagnostics
 
-- [ ] Stop simulation and rendering until bootstrap is terminal.
-- [ ] Publish immutable `CampaignBootstrapResult` readback.
-- [ ] Bind world, HUD, minimap and CRT snapshots to run generation.
-- [ ] Acknowledge the first visible frame citing the bootstrap result.
-- [ ] Expose no raw mutable candidate or checkpoint handles through GameHost.
+- [ ] Add modifier identity, kind, magnitude and remaining duration to target read models.
+- [ ] Project a persistent slow indicator from committed state.
+- [ ] Bind HUD, world, minimap and CRT frame data to combat/modifier revisions.
+- [ ] Publish immutable combat results and bounded observations.
+- [ ] Acknowledge the first visible frame citing the accepted modifier result.
+- [ ] Keep `GameHost` from exposing mutable modifier internals.
 
 ### Proof
 
-- [ ] Add fresh-run preset fingerprint fixture.
-- [ ] Add full non-default checkpoint roundtrip fixture.
-- [ ] Add missing, malformed, unsupported and incompatible fixtures.
-- [ ] Add missing-participant and broken-reference fixtures.
-- [ ] Add commit-failure and verified-rollback fixture.
-- [ ] Add stale and duplicate bootstrap fixtures.
-- [ ] Add first-visible-restored-frame fixture.
-- [ ] Run the matrix against source, built output and GitHub Pages.
+- [ ] Add a deterministic single-Ward slow fixture.
+- [ ] Compare distance traveled by slowed and unslowed enemies over equal fixed steps.
+- [ ] Add exact duration and expiry fixtures.
+- [ ] Add refresh, stacking and cap fixtures.
+- [ ] Add resistance and immunity fixtures.
+- [ ] Add stale projectile, duplicate impact and dead-target fixtures.
+- [ ] Add target-death and run-restart retirement fixtures.
+- [ ] Add first visible modifier-frame fixture.
+- [ ] Run source, built-output and GitHub Pages parity checks.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
 
 ```txt
-src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-menu-route-kit
-menu-save-presence-kit
-campaign-route-shell-kit
-pixel-campaign-runtime-kit
 fixed-step-campaign-simulation-kit
+pixel-campaign-runtime-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
-menu-static-check-kit
 campaign-static-check-kit
-scripts/check-menu.mjs
 scripts/check-campaign.mjs
 package.json
-index.html
 game.html
 ```
 
 ## Required command
 
 ```txt
-CampaignBootstrapCommand {
+ProjectileImpactCommand {
   commandId
   runtimeSessionId
-  routeRevision
-  entryIntent
-  expectedRunGeneration?
-  expectedCheckpointId?
-  expectedCheckpointRevision?
-  expectedSourceFingerprint
+  runGeneration
+  projectileId
+  projectileGeneration
+  sourceEntityId
+  targetEntityId
+  targetGeneration
+  effectSpecId
+  effectSpecVersion
+  expectedCombatRevision
 }
 ```
 
 ## Required result
 
 ```txt
-CampaignBootstrapResult {
+CombatModifierResult {
   commandId
+  impactResultId
   kind
-  predecessorRunGeneration?
-  successorRunGeneration?
-  checkpointId?
-  checkpointRevision?
-  stateFingerprint?
+  targetEntityId
+  targetGeneration
+  modifierId?
+  modifierKind?
+  magnitude?
+  appliedStep?
+  expiresStep?
+  targetModifierRevision?
+  combatRevision
   rejectionReason?
-  rolledBack
   firstVisibleFrameAckId?
 }
 ```
@@ -128,16 +114,16 @@ CampaignBootstrapResult {
 ## Minimal correction sequence
 
 ```txt
-1. Parse one typed entry intent.
-2. Replace storage truthiness with compatibility admission.
-3. Define a complete checkpoint envelope and participant registry.
-4. Construct fresh/restored candidates outside live state.
-5. Validate every participant and cross-reference.
-6. Commit one successor generation atomically or preserve predecessor.
-7. Publish one terminal bootstrap result.
-8. Start simulation only after committed success.
-9. Bind rendering and GameHost readback to the committed generation.
-10. Prove source/build/Pages parity and first visible frame.
+1. Define one unambiguous Grave Ward effect spec.
+2. Add target and projectile generations.
+3. Admit impact through one command/result boundary.
+4. Commit damage plus modifier state atomically.
+5. Preserve base speed and derive current speed.
+6. Implement duration, refresh, stacking and expiry.
+7. Retire modifiers on target/run lifecycle boundaries.
+8. Publish immutable results and observations.
+9. Bind visible indicators to modifier revisions.
+10. Prove source/build/Pages parity.
 ```
 
 ## Dependency order
@@ -145,10 +131,10 @@ CampaignBootstrapResult {
 ```txt
 Runtime Session Resource Lifecycle Authority
   -> Campaign Bootstrap and Continue Resume Authority
-  -> Versioned Full Campaign Checkpoint Capture Authority
-  -> Campaign Keyboard Command Admission Authority
-  -> Campaign Action Result and Spatial Input Admission
-  -> committed frame proof
+  -> Campaign Phase and Entity Liveness Authority
+  -> Combat Modifier Application Authority
+  -> Fixed-Step Replay and Committed Frame Authority
+  -> visible combat-effect proof
 ```
 
-Do not patch only the query string or load three saved fields into live state. The correction requires complete participant coverage, compatibility admission, detached validation, atomic installation and visible-generation proof.
+Do not patch only `moveToward()` with a mutable speed multiplier. The correction requires explicit effect semantics, generation-fenced admission, durable target modifier state, deterministic expiry and typed visible proof.
