@@ -1,125 +1,126 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-12T19-58-07-04-00`
+**Timestamp:** `2026-07-12T22-00-46-04-00`
 
 ## Summary
 
-The leading documented campaign-input gap is Campaign Spatial Input Admission Authority. Pointer evidence is not bound to a current surface, pointer identity or visible transform, and rectangle selection does not match the visible marquee.
+The leading keyboard gap is Campaign Keyboard Command Admission Authority. Global listeners accept held and one-shot keys without current route/focus evidence, editable-target exclusion, repeat policy, lifecycle generations, command identity, consumer receipts or visible-frame proof.
 
 ## Plan ledger
 
-**Goal:** close containment, pointer ownership, visible/logical transform, polygon membership, revision admission, terminal-result and frame-proof gaps while preserving existing action, lifecycle, replay and persistence queues.
+**Goal:** close keyboard ownership, repeat, generation, result and proof gaps while preserving spatial-input, campaign-action, lifecycle and persistence boundaries.
 
-- [x] Record outside-source mutation reachability.
-- [x] Record CRT visible/input transform divergence.
-- [x] Record pointer identity and cancellation gaps.
-- [x] Record the two-corner rectangle-selection defect.
-- [x] Record revision, result, observation and fixture gaps.
-- [x] Preserve previous authority queues.
+- [x] Record global route/focus ownership gaps.
+- [x] Record editable-target and repeat-policy gaps.
+- [x] Record keyboard generation and lifecycle gaps.
+- [x] Record command identity, result and receipt gaps.
+- [x] Record browser, build and Pages proof gaps.
+- [x] Preserve prior authority queues.
 - [ ] Implement in dependency order.
 
-## Surface and focus gaps
+## Route and focus gaps
 
 ```txt
-campaign input surface ID
-surface generation
+campaign keyboard surface ID
+active route capability
+keyboard session generation
 focus generation
+canvas/document focus policy
+editable-target exclusion
 surface retirement
-current canvas capability
-outside-source terminal rejection
+listener lease and teardown
 ```
 
-## Pointer lifecycle gaps
+## Event and repeat gaps
 
 ```txt
-pointer sample ID
-pointer sequence
-primary pointer policy
-supported button policy
-pointer identity binding
-pointer capture
-lost-pointer-capture handling
-pointer cancellation
-exactly-once gesture terminal result
+keyboard event envelope
+source event ID
+monotonic sequence
+physical code versus logical key policy
+held versus one-shot classification
+event.repeat policy
+one-shot command ID
+duplicate command rejection
+stale generation rejection
 ```
 
-## Projection gaps
+## Held-state lifecycle gaps
 
 ```txt
-viewport transform revision
-CRT transform revision
-inverse visible CRT curve
-source containment result
-source point result
-camera revision
-source-to-world projection result
-stale transform/camera rejection
+generation-bound held-state revision
+typed key-down and key-up results
+typed clear result
+blur generation retirement
+visibilitychange generation retirement
+pagehide teardown
+pageshow successor generation
+stale keyup rejection
+exactly-once listener retirement
 ```
 
-## Selection and order gaps
+## One-shot command gaps
 
 ```txt
-selection gesture ID
-complete source rectangle or world polygon
-source-space entity membership
-entity-set revision
-selection revision
-point hit result
-selected-pad hit result
-order target admission result
-zero-mutation miss proof
+Space wave command result
+1/2/3 tower-selection command result
+P pause command result
+F camera-focus command result
+R reload navigation result
+Escape menu navigation result
+Campaign Action Result correlation
+camera/phase/navigation consumption receipts
+zero-mutation rejection proof
 ```
 
 ## Concrete current risks
 
 ```txt
-letterboxed or pillarboxed pointer positions can select, order, pan or zoom
-visible CRT-distorted point can resolve to another logical world point
-one pointer can move or terminate another pointer's gesture
-pointer cancellation can leave implicit state without a terminal result
-40 x 20 drag can collapse tested world-z width to approximately zero
-visibly enclosed units can be omitted from selection
-point/order results can be applied after camera, entity or selection changes
-second pad click can build without spatial/action correlation
+holding P can toggle pause repeatedly
+future focused form/editor controls can trigger campaign shortcuts
+inactive or transitioning route can still receive global keys
+blur clears held state but retires no event generation
+late keyup can be interpreted without lifecycle identity
+reload and navigation have no exactly-once terminal result
+accepted effects cannot be correlated with the visible CRT frame
 ```
 
 ## Result and render gaps
 
 ```txt
-CampaignSpatialInputCommand
-CampaignSpatialInputResult
+CampaignKeyboardCommand
+CampaignKeyboardResult
 typed rejection reasons
-bounded spatial-input observation
-bounded spatial-input journal
-CampaignActionResult correlation
-first visible spatial-result frame acknowledgement
+bounded keyboard observation
+bounded keyboard journal
+campaign/camera/navigation consumption receipts
+source-frame and CRT-presented-frame correlation
+first visible keyboard-result frame acknowledgement
 stale result/frame rejection
 ```
 
 ## Test gaps
 
 ```txt
-outside-source zero mutation
-CRT on/off projection parity
-aspect-ratio containment matrix
-pointer identity mismatch
-pointercancel and lost capture
-point selection hit/miss
-additive selection
-four drag directions
-cancellation-ratio rectangle rows
-camera and zoom revisions
-entity and selection revisions
-order target hit/miss/stale
-pan and wheel anchor
+pause auto-repeat exactly-once
+wave/tower/focus/navigation repeat rejection
+editable-target zero mutation
+inactive route zero mutation
+blur and visibility generation retirement
+pagehide/pageshow lifecycle
+stale keyup zero mutation
+held movement release
+duplicate command ID
+listener teardown
 source/build/Pages parity
-first visible frame correlation
+first visible keyboard-result frame
 ```
 
 ## Retained campaign gaps
 
 ```txt
 Campaign Action Result Authority
+Campaign Spatial Input Admission Authority
 Menu Pointer-Hit Admission Authority
 Public Host Owner Quarantine and Typed Command Admission
 CRT Display/Input Projection Authority
@@ -144,4 +145,4 @@ complete campaign replay and restored-frame proof
 
 ## Completion boundary
 
-Do not count an `inside` field, a visible drag rectangle, a changed selection or an order effect as spatial-input proof. Completion requires current surface and pointer identity, visible/logical transform parity, correct selection membership, one terminal spatial result, zero mutation for rejection and a first-visible-frame acknowledgement.
+A held-key Set, blur clear, changed pause flag or moved camera is not keyboard admission proof. Completion requires current route/focus and generation evidence, repeat/duplicate/stale classification, one terminal result, consumer receipts, zero mutation for rejection and a first-visible-frame acknowledgement.
