@@ -2,24 +2,24 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-13T00-31-09-04-00`  
-**Status:** `combat-modifier-application-authority-audited`
+**Last aligned:** `2026-07-13T00-40-00-04-00`  
+**Status:** `combat-modifier-application-central-reconciled`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign with a procedural graveyard menu, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Combat Modifier Application Authority: Grave Ward projectiles retain `slow: .34`, but impact resolution applies only damage and a transient visual effect. No slow state changes unit movement or reaches a visible frame.
+PhantomCommand is a static pixel-isometric campaign with a procedural graveyard menu, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current source-backed boundary is Combat Modifier Application Authority: Grave Ward projectiles retain `slow: 0.34`, but impact applies only damage and a transient visual effect. No accepted modifier changes target movement or reaches a revision-matched visible frame.
 
 ## Plan ledger
 
-**Goal:** make authored combat modifiers produce typed, target-bound, deterministic simulation and visible-frame results.
+**Goal:** keep repo-local and central documentation aligned while defining the authority required to make authored combat modifiers deterministic, target-bound and visibly provable.
 
 - [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
-- [x] Select only `PhantomCommand`, the oldest eligible central entry.
-- [x] Inspect tower specs, projectile payloads, impact, movement, rendering and checks.
-- [x] Identify the complete interaction loop, all domains, 20 implemented kits and offered services.
-- [x] Add the timestamped combat-modifier audit family.
+- [x] Select only PhantomCommand because its repo-local combat audit was newer than central tracking.
+- [x] Verify the complete interaction loop, domains, 20 implemented kits and offered services.
+- [x] Re-read tower specs, projectile construction, impact, movement and rendering.
+- [x] Add the timestamped reconciliation tracker and system audits.
 - [x] Refresh required root `.agent` state and machine registry.
 - [x] Push only to `main`; create no branch or pull request.
 - [ ] Runtime modifier application and executable fixtures remain future work.
@@ -27,14 +27,15 @@ PhantomCommand is a static pixel-isometric campaign with a procedural graveyard 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-13T00-31-09-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-13T00-31-09-04-00.md
-.agent/architecture-audit/2026-07-13T00-31-09-04-00-combat-modifier-application-dsk-map.md
-.agent/render-audit/2026-07-13T00-31-09-04-00-unrepresented-slow-state-visible-frame-gap.md
-.agent/gameplay-audit/2026-07-13T00-31-09-04-00-grave-ward-projectile-without-slow-loop.md
-.agent/interaction-audit/2026-07-13T00-31-09-04-00-projectile-impact-modifier-admission-map.md
-.agent/combat-effect-audit/2026-07-13T00-31-09-04-00-slow-duration-stacking-expiry-contract.md
-.agent/deploy-audit/2026-07-13T00-31-09-04-00-combat-modifier-fixture-gate.md
+.agent/trackers/2026-07-13T00-40-00-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-13T00-40-00-04-00.md
+.agent/architecture-audit/2026-07-13T00-40-00-04-00-combat-modifier-central-reconciliation-dsk-map.md
+.agent/render-audit/2026-07-13T00-40-00-04-00-modifier-visible-frame-central-reconciliation-gap.md
+.agent/gameplay-audit/2026-07-13T00-40-00-04-00-grave-ward-slow-central-reconciliation.md
+.agent/interaction-audit/2026-07-13T00-40-00-04-00-projectile-impact-admission-central-reconciliation.md
+.agent/combat-effect-audit/2026-07-13T00-40-00-04-00-effect-state-central-reconciliation-contract.md
+.agent/deploy-audit/2026-07-13T00-40-00-04-00-combat-modifier-central-fixture-gate.md
+.agent/central-sync-audit/2026-07-13T00-40-00-04-00-repo-ledger-combat-modifier-reconciliation.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
@@ -42,14 +43,13 @@ PhantomCommand is a static pixel-isometric campaign with a procedural graveyard 
 .agent/kit-registry.json
 ```
 
-Campaign Bootstrap and Continue Resume Authority at `2026-07-12T22-05-12-04-00` remains the immediate persistence predecessor. Campaign Keyboard Command Admission, Campaign Spatial Input Admission and Campaign Action Result audits remain retained.
+The original Combat Modifier Application audit at `2026-07-13T00-31-09-04-00` remains the immediate source-analysis predecessor. Campaign Bootstrap/Continue Resume, keyboard admission, spatial input and action-result audits remain retained.
 
 ## Current combat loop
 
 ```txt
 build Grave Ward for 55 souls
   -> tower spec includes slow = 0.34
-  -> tower fires projectile
   -> projectile retains slow = 0.34
   -> impact applies damage
   -> impact draws transient effect
@@ -78,4 +78,4 @@ first visible modifier-frame acknowledgement: no
 phantom-command-combat-modifier-application-authority-domain
 ```
 
-Do not claim the Grave Ward slows enemies from its color, cost or projectile payload. Completion requires accepted modifier state, deterministic movement difference, expiry/retirement proof and a matching visible-frame acknowledgement.
+Do not claim the Grave Ward slows enemies from its cost, color or projectile payload. Completion requires accepted modifier state, deterministic movement difference, duration and retirement proof, plus a matching visible-frame acknowledgement.
