@@ -1,44 +1,41 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T22-00-46-04-00`
+**Timestamp:** `2026-07-12T22-05-12-04-00`
 
 ## Summary
 
-This documentation-only run verifies the current campaign keyboard path. Source inspection proves that global listeners accept shortcuts without route/focus/editable-target admission, one-shot actions have no repeat policy, blur clears state without generation retirement, and no typed keyboard result or visible-frame acknowledgement exists.
+This documentation-only run verifies the current New/Continue path. Source inspection proves that Continue is enabled from raw storage presence, the campaign ignores route intent and saved values, every campaign boot creates fresh defaults, and the final-victory record is not a complete checkpoint.
 
 ## Plan ledger
 
-**Goal:** separate source-backed keyboard-admission defects from unimplemented focus, repeat, lifecycle, command, result and browser proof.
+**Goal:** separate source-backed bootstrap/resume defects from unimplemented schema, hydration, commit, rollback and browser proof.
 
 - [x] Compare the Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome` and select only `PhantomCommand`.
 - [x] Verify required root `.agent` files and the new timestamped audit family.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Inspect campaign keyboard ingress, blur, camera, phase, navigation, rendering and static checks.
+- [x] Inspect menu save presence, navigation, campaign initialization, victory save, rendering and static checks.
+- [x] Preserve the concurrent keyboard-admission audit family.
 - [x] Change documentation only.
-- [ ] Execute campaign keyboard fixtures after implementation.
+- [ ] Execute campaign bootstrap/resume fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-global keydown, keyup and blur listeners exist
-keydown lowercases event.key and adds it to a held Set
-WASD and Arrow keys drive camera movement in RAF
-Space calls startWave directly
-1/2/3 mutate towerType directly
-P toggles paused directly
-F mutates camera focus and targetZoom directly
-R reloads directly
-Escape navigates directly
-event.repeat is not checked
-canvas/route focus is not checked
-editable targets are not excluded
-blur clears held keys and pointer state
-visibilitychange/pagehide/pageshow are not handled
-keyboard/focus generations do not exist
-listeners are not removed during route teardown
-keyboard command IDs and terminal results do not exist
-first visible keyboard-result frame acknowledgement does not exist
+menu scans phantomCommand.save, nexus.sceneSnapshot and phantom.command.campaign
+any non-empty localStorage/sessionStorage value enables Continue
+New routes to game.html?campaign=new
+Continue routes to game.html?campaign=continue
+campaign source does not parse location.search or URLSearchParams
+campaign source does not read any save key
+campaign always initializes souls=145, core=24, wave=0
+campaign always creates six starting allied units
+victory writes only scene, souls and wave
+R reloads the campaign document
+no checkpoint schema/version/checksum exists
+no participant hydration or migration exists
+no atomic bootstrap commit/rollback exists
+no first visible bootstrap-result frame acknowledgement exists
 ```
 
 ## Proven documentation state
@@ -51,14 +48,15 @@ known-gaps current: yes
 validation current: yes
 kit-registry current after final update: yes
 tracker and turn ledger present: yes
-architecture/render/gameplay/interaction/keyboard-input/deploy audits present: yes
+architecture/render/gameplay/interaction/campaign-resume/deploy audits present: yes
+keyboard-admission predecessor retained: yes
 central ledger and internal change log required: yes
 ```
 
 ## Existing checks can establish, when run
 
 ```txt
-campaign entry files exist
+menu and campaign entry files exist
 campaign source includes expected authored/runtime/render tokens
 CRT renderer symbols exist
 window.GameHost token exists
@@ -68,59 +66,58 @@ static build includes source files
 ## Existing checks cannot establish
 
 ```txt
-active route and focus ownership
-editable-target exclusion
-one-shot repeat rejection
-exactly-once pause/wave/navigation commands
-keyboard session and focus generations
-blur/visibility/page lifecycle retirement
-stale keyup and duplicate command rejection
-held movement release correctness
-typed CampaignKeyboardResult
-campaign/camera/navigation consumer receipts
-first visible keyboard-result frame acknowledgement
-source/build/Pages keyboard parity
+New versus Continue intent admission
+validated checkpoint availability
+storage parse/schema/version/checksum behavior
+migration compatibility
+complete participant capture and hydration
+cross-reference and ID validation
+atomic install and verified rollback
+stale/duplicate bootstrap rejection
+one terminal CampaignBootstrapResult
+first visible run-generation frame acknowledgement
+source/build/Pages resume parity
 ```
 
 ## Required deterministic fixtures
 
 ```txt
-fixture:keyboard-pause-repeat-once
-fixture:keyboard-wave-repeat-rejection
-fixture:keyboard-tower-repeat-rejection
-fixture:keyboard-editable-target
-fixture:keyboard-inactive-route
-fixture:keyboard-blur-generation
-fixture:keyboard-visibility-generation
-fixture:keyboard-pagehide-pageshow
-fixture:keyboard-stale-keyup
-fixture:keyboard-held-movement-release
-fixture:keyboard-duplicate-command
-fixture:keyboard-listener-retirement
-fixture:keyboard-visible-result-frame
+fixture:campaign-fresh-run-preset
+fixture:campaign-continue-roundtrip
+fixture:campaign-missing-slot
+fixture:campaign-malformed-save
+fixture:campaign-unsupported-version
+fixture:campaign-checksum-mismatch
+fixture:campaign-source-incompatible
+fixture:campaign-missing-participant
+fixture:campaign-broken-reference
+fixture:campaign-id-counter-collision
+fixture:campaign-bootstrap-rollback
+fixture:campaign-bootstrap-stale-duplicate
+fixture:campaign-visible-restored-frame
 ```
 
 ## Required browser matrix
 
 ```txt
 source route, built output and GitHub Pages
-canvas focused and unfocused
-editable and non-editable targets
-single press and auto-repeat
-WASD/Arrow held movement
-Space, 1, 2, 3, P, F, R and Escape
-blur, visibility hidden/restored and pagehide/pageshow
-stale and duplicate events
-first visible keyboard-result frame
+New with no checkpoint
+New with an existing checkpoint
+Continue with a valid non-default checkpoint
+Continue with missing, malformed and unsupported checkpoints
+non-default economy, wave, entities, pads, selection and camera
+commit failure and rollback
+first visible world/HUD/minimap/CRT generation receipt
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
-keyboard behavior changed: no
+menu behavior changed: no
 campaign behavior changed: no
-camera/navigation behavior changed: no
+save schema or storage behavior changed: no
+checkpoint hydration changed: no
 rendering changed: no
 package scripts changed: no
 dependencies changed: no
@@ -130,11 +127,11 @@ pull request created: no
 target branch: main
 npm run check executed: no
 npm run build executed: no
-browser keyboard smoke executed: no
-Pages keyboard smoke executed: no
-keyboard fixtures available: no
+browser resume smoke executed: no
+Pages resume smoke executed: no
+resume fixtures available: no
 ```
 
 ## Claim boundary
 
-The audit proves that current campaign keyboard input is globally admitted, repeat-sensitive and lifecycle-unversioned. It does not claim focus safety, exactly-once one-shot commands, stale-event rejection, listener retirement or deployed keyboard parity is implemented.
+The audit proves that current Continue availability is unvalidated and campaign boot is always fresh. It does not claim checkpoint compatibility, migration, hydration, rollback, restored-state correctness, visible-generation parity or deployed Continue behavior is implemented.
