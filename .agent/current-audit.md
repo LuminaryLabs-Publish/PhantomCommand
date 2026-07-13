@@ -1,27 +1,25 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-13T00-40-00-04-00`  
+**Timestamp:** `2026-07-13T02-49-07-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `combat-modifier-application-central-reconciled`
+**Status:** `accessible-command-focus-projection-authority-central-reconciled`
 
 ## Summary
 
-The Grave Ward declares `slow: 0.34`. Projectile construction copies that value into live projectile state, but impact never reads it. Impact applies damage, emits a transient visual effect and deletes the projectile. Units have no active modifier state, movement uses unchanged authored speed, and rendering cannot cite a modifier result or remaining duration. This run reconciles that completed repo-local audit with central tracking.
+The visual canvas menu, hidden DOM controls and global keyboard handler do not share one command/focus authority. `index.html` exposes four focusable hidden buttons. `graveyard-menu.js` separately tracks `menu.selected`, intercepts Enter/Space at `document`, and also installs native click handlers on those buttons. A focused button can therefore generate a document command for the visual selection and a native click command for the focused control. Panel state changes the document command target without moving or constraining DOM focus. The campaign route then exposes only static instructions, so souls, sanctum health, wave, pause, win and loss state never reach an accessible read model.
 
 ## Plan ledger
 
-**Goal:** preserve one complete source-backed breakdown while requiring every authored combat modifier to pass a deterministic damage-plus-effect transaction and reach a correlated visible frame.
+**Goal:** require all visual, native, keyboard, assistive and public activation paths to resolve one exact command against one current focus and availability revision.
 
-- [x] Compare all accessible Publish repositories and central ledger entries.
+- [x] Compare the full Publish repository list with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Select only PhantomCommand because repo-local combat documentation was newer than central state.
-- [x] Inspect tower specs, projectiles, impact, movement, rendering and static checks.
-- [x] Identify the complete interaction loop and active/missing domains.
-- [x] Preserve all 20 implemented kits and offered services.
-- [x] Define modifier identity, duration, stacking, application, expiry and frame-proof boundaries.
-- [x] Add the timestamped reconciliation tracker and system audits.
-- [x] Refresh root `.agent` state and machine registry.
-- [x] Push only to `main`; create no branch or pull request.
+- [x] Select only PhantomCommand by the oldest eligible central timestamp.
+- [x] Read `index.html`, `game.html`, menu, campaign, CRT, checks and agent state.
+- [x] Identify the interaction loop and all domains.
+- [x] Preserve all 20 implemented kits and services.
+- [x] Define command identity, focus scope, availability, status and acknowledgement boundaries.
+- [x] Add the timestamped audit family and central reconciliation.
 - [ ] Implement and execute the authority later.
 
 ## Selection
@@ -32,208 +30,183 @@ eligible non-Cavalry repositories: 9
 new eligible repositories: 0
 central-ledger-missing eligible repositories: 0
 root-.agent-missing eligible repositories: 0
-unsynchronized eligible repositories: 1
-selected repository: LuminaryLabs-Publish/PhantomCommand
-selection reason: repo-local combat modifier audit newer than central tracking
-excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
+unsynchronized eligible repositories: 0
+
+PhantomCommand     2026-07-13T00-40-00-04-00 selected
+PrehistoricRush    2026-07-13T00-58-50-04-00
+HorrorCorridor     2026-07-13T01-08-28-04-00
+ZombieOrchard      2026-07-13T01-18-20-04-00
+MyCozyIsland       2026-07-13T01-40-00-04-00
+TheUnmappedHouse   2026-07-13T01-49-49-04-00
+AetherVale         2026-07-13T02-15-51-04-00
+TheOpenAbove       2026-07-13T02-18-03-04-00
+IntoTheMeadow      2026-07-13T02-28-51-04-00
+TheCavalryOfRome   excluded
 ```
 
 ## Complete interaction loop
 
 ```txt
 menu boot
+  -> create canvas visual menu
+  -> expose four hidden native buttons
   -> read settings and save presence
-  -> select New, Continue, Settings or Credits
-  -> fade and navigate
+  -> initialize visual selection independently from DOM focus
 
-campaign bootstrap
-  -> create rings, pads, archetypes, tower specs and waves
-  -> create mutable state and six allied units
-  -> attach input and expose GameHost
-  -> start recursive RAF
+visual keyboard path
+  -> document keydown receives Arrow/WASD/Enter/Space/Escape
+  -> Arrow/WASD changes visual menu.selected or panel.selected
+  -> Enter/Space activates visual menu.selected or panel.selected
 
-player loop
-  -> pan/zoom camera
-  -> select units or empty pad
-  -> build tower or issue order
-  -> start wave
+native control path
+  -> Tab changes DOM focus among hidden buttons
+  -> Enter/Space bubbles through document keydown
+  -> browser may then dispatch native click for the focused button
+  -> button click resolves data-menu-action independently
 
-fixed-step combat
-  -> spawn enemies
-  -> acquire targets
-  -> move units
-  -> update tower cooldowns
-  -> create and move projectiles
-  -> apply damage and rewards
-  -> resolve wave and terminal outcomes
+panel path
+  -> Settings or Credits opens only in canvas state
+  -> DOM focus stays on the prior hidden control
+  -> hidden nav remains active
+  -> document Enter/Space now targets panel.selected
+  -> native click still targets the focused nav button
 
-Grave Ward path
-  -> spend 55 souls
-  -> build tower with range 52, damage 7, rate 1.45, projectile speed 138 and slow 0.34
-  -> create projectile retaining slow 0.34
-  -> impact applies damage only
-  -> impact effect is drawn
-  -> projectile is deleted
-  -> target movement still uses archetype speed
-
-render loop
-  -> draw world, units, towers, projectiles, effects, HUD and minimap
-  -> upload source canvas to WebGL texture
-  -> present CRT frame
+campaign path
+  -> role=application canvas and static assistive instructions
+  -> global keyboard/pointer commands mutate campaign
+  -> fixed-step simulation and CRT render
+  -> dynamic status remains canvas-only
 ```
 
 ## Source-backed findings
 
-```txt
-Ward slow declaration: 0.34
-projectile carries spec.slow: yes
-impact branch reads p.slow: no
-unit active modifier collection: no
-slow magnitude interpretation: undefined
-slow duration: undefined
-stacking policy: undefined
-refresh policy: undefined
-resistance/immunity policy: undefined
-movement derives current speed from modifiers: no
-expiry and exactly-once retirement: no
-modifier application result: no
-modifier observation/journal: no
-visible modifier frame acknowledgement: no
-```
+### Focused and selected identities can diverge
 
-### Authored control value is discarded
+The native buttons identify `new`, `continue`, `settings` and `credits`. The document keydown handler does not inspect the focused element; it activates `menu.items[menu.selected]` or the active panel row. The native button click handler separately activates the button's `data-menu-action`.
 
-The payload reaches the exact impact boundary where damage is resolved and is ignored. The missing owner is not tower selection or projectile transport; it is target-bound modifier admission and state.
+### Native Enter/Space can produce two attempts
 
-### Movement has no effect-consumption surface
+A focused button keyboard activation can pass through the document handler and then produce a native click. No event-sequence identity or deduplication result exists.
 
-`moveToward()` reads `u.speed` directly. There is no immutable base-speed versus derived-current-speed boundary. Directly mutating `u.speed` would make stacking, expiry, restoration, replay and restart semantics unsafe.
+### Transition ownership hides disagreement
 
-### Visual feedback is not simulation proof
+`beginTransition()` ignores later transitions after `transitionStartedAt` is set. If document and native commands disagree, the first route wins rather than publishing a conflict result.
 
-Ward projectiles and impact rings have distinct colors, but entities, HUD and minimap carry no modifier identity, revision or duration. A special-looking shot can imply a control effect that never occurs.
+### Continue availability is visual-only
 
-### Static proof gap
+The visual Continue item uses `enabled: hasCampaignSave()`. The hidden Continue button is never assigned `disabled` or `aria-disabled`, so it stays focusable and announced as available when the visual state says `EMPTY`.
 
-The campaign checker verifies source markers. It does not execute impact, speed comparison, duration, stacking, expiry, target retirement or visible-frame correlation.
+### Panel focus is unowned
+
+Opening Settings or Credits does not transfer focus, make background controls inert or restore an invoking control on close. Hidden navigation remains live while panel state changes the meaning of Enter/Space.
+
+### Campaign status is inaccessible
+
+`game.html` contains static instructional text inside `aria-live="polite"`, but it is never updated. Souls, sanctum health, wave, selected tower, action messages, pause, victory and defeat remain pixel-only.
+
+### Public activation bypasses evidence
+
+`window.PhantomMenu.activate(action)` has no focus generation, source identity, availability revision or typed result.
 
 ## Domains in use
 
 ```txt
 menu and campaign route shells
+browser document, canvas, hidden controls and accessibility tree
+visual menu selection and panel state
+DOM focus, native button activation and keyboard dispatch
 menu settings, save presence, panels, fade, navigation and audio
-browser document, canvas and hidden accessibility surfaces
-CRT containment, source projection, curvature, aberration, grain, vignette and fade
-browser keyboard, pointer, wheel, blur and context-menu input
-campaign bootstrap, run state and public host readback
-campaign phase, pause, restart and terminal outcomes
-camera pan, focus and zoom
-selection, pad selection, tower construction and orders
-economy, build costs, tower types and pad occupancy
-wave phase, spawn queue and progression
-unit identity, liveness, targeting, cooldowns and movement
-projectile identity, target binding, travel, impact and retirement
-combat damage, splash, rewards and sanctum damage
-combat modifier specification, admission, target state, duration, stacking, expiry and retirement
-world, HUD, minimap, projectile/effect and terminal rendering
+accessible command identity, source, deduplication and availability
+focus scope, panel transfer, inertness and restoration
+CRT containment, curvature, aberration, grain, vignette and fade
+campaign keyboard, pointer, wheel, blur and context-menu input
+campaign state, camera, selection, building, waves, combat and outcomes
+campaign accessible command and dynamic status projection
+world, HUD, minimap and terminal rendering
+public menu and campaign diagnostics
 source checks, static build, Pages deployment and audit tracking
 ```
 
 ## Implemented kits and offered services
 
 ```txt
-crt-renderer-kit: WebGL context, CRT program, source texture, containment and screen-to-source projection
-graveyard-art-kit: procedural graveyard menu drawing
-menu-route-kit: selection, panels, fade and navigation
-menu-settings-persistence-kit: settings read and write
-menu-save-presence-kit: localStorage and sessionStorage presence scan
-menu-audio-kit: AudioContext ambience, wind, drone, UI tones and delayed close
-campaign-route-shell-kit: campaign document and canvas route
-pixel-campaign-runtime-kit: mutable state, input, selection, building, orders, pause and camera
-fixed-step-campaign-simulation-kit: wave spawning, movement, targeting, towers, projectiles, damage, rewards and outcomes
-pixel-campaign-render-kit: world, entities, projectiles, effects, HUD, minimap and terminal overlays
-legacy-gamehost-diagnostics-kit: public state and zoom access
+crt-renderer-kit: WebGL context, source texture, containment, effects and screen-to-source projection
+graveyard-art-kit: procedural visual menu and panels
+menu-route-kit: visual selection, panel state, activation, fade and navigation
+menu-settings-persistence-kit: settings read/write
+menu-save-presence-kit: save-key presence scan
+menu-audio-kit: ambience, UI tones and delayed close
+campaign-route-shell-kit: campaign document, canvas and static assistive description
+pixel-campaign-runtime-kit: state, input, selection, building, orders, pause and camera
+fixed-step-campaign-simulation-kit: waves, movement, targeting, projectiles, damage and outcomes
+pixel-campaign-render-kit: world, HUD, minimap and terminal overlays
+legacy-gamehost-diagnostics-kit: public state and direct capabilities
 menu-static-check-kit: menu source-marker checks
 campaign-static-check-kit: campaign source-marker checks
-static-build-copy-kit: static deployable copy into dist
-pages-deploy-kit: GitHub Pages build and deployment
-construct-spiral-intro-kit: concentric construct intro choreography
-construct-spiral-schedule-kit: ring and piece timing schedule
-construct-piece-id-kit: stable construct piece identity
-construct-piece-state-kit: construct piece state projection
-construct-sequence-update-kit: construct sequence advancement
+static-build-copy-kit: deployable static copy
+pages-deploy-kit: GitHub Pages deployment
+construct-spiral-intro-kit: construction intro choreography
+construct-spiral-schedule-kit: ring and piece timing
+construct-piece-id-kit: stable construction identity
+construct-piece-state-kit: construction state projection
+construct-sequence-update-kit: sequence advancement
 ```
 
 ## Required authority
 
 ```txt
-phantom-command-combat-modifier-application-authority-domain
+phantom-command-accessible-command-focus-projection-authority-domain
 ```
 
-### Required transaction
+## Required transaction
 
 ```txt
-ProjectileImpactCommand
-  -> bind runtime session, run generation, projectile generation and target generation
-  -> validate projectile, source, target and phase liveness
-  -> resolve one immutable damage/effect specification
-  -> interpret modifier magnitude explicitly
-  -> evaluate duration, stacking, refresh, resistance and immunity policy
-  -> atomically commit damage plus accepted target modifier state
-  -> return Applied, Refreshed, Stacked, Resisted, Immune, Rejected, Stale or Duplicate
-  -> derive movement speed from immutable base speed and active modifiers
-  -> expire or retire modifiers exactly once
-  -> publish bounded observations and journal evidence
-  -> acknowledge the first visible frame citing the modifier revision
+ActivationEvidence
+  -> identify source: visual pointer, global keyboard, native control, assistive technology or public host
+  -> bind surface, focus generation and visual-selection revision
+  -> resolve exactly one stable command ID
+  -> verify focused-control and visual-command agreement
+  -> verify enabled/disabled availability
+  -> reject stale, duplicate, conflicting or unavailable evidence
+  -> commit one MenuCommandResult or CampaignCommandResult
+  -> apply panel focus transfer/inertness/restoration policy
+  -> project native control state and dynamic campaign status
+  -> acknowledge the first matching visual and accessible result
 ```
 
 ## Candidate kits
 
 ```txt
-combat-effect-spec-id-kit
-combat-effect-spec-version-kit
-projectile-impact-command-id-kit
-projectile-impact-envelope-kit
-projectile-generation-kit
-combat-target-generation-kit
-combat-modifier-kind-kit
-combat-modifier-magnitude-kit
-combat-modifier-duration-kit
-combat-modifier-stacking-policy-kit
-combat-modifier-refresh-policy-kit
-combat-modifier-resistance-policy-kit
-combat-modifier-application-kit
-combat-modifier-result-kit
-unit-active-modifier-set-kit
-unit-derived-movement-speed-kit
-combat-modifier-expiry-kit
-combat-modifier-retirement-kit
-stale-impact-rejection-kit
-duplicate-impact-rejection-kit
-combat-effect-observation-kit
-combat-effect-journal-kit
-combat-modifier-visible-frame-ack-kit
-grave-ward-slow-application-fixture-kit
-grave-ward-slow-duration-fixture-kit
-grave-ward-refresh-stacking-fixture-kit
-modifier-target-retirement-fixture-kit
-combat-effect-build-pages-parity-fixture-kit
-```
-
-## Current output
-
-```txt
-.agent/trackers/2026-07-13T00-40-00-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-13T00-40-00-04-00.md
-.agent/architecture-audit/2026-07-13T00-40-00-04-00-combat-modifier-central-reconciliation-dsk-map.md
-.agent/render-audit/2026-07-13T00-40-00-04-00-modifier-visible-frame-central-reconciliation-gap.md
-.agent/gameplay-audit/2026-07-13T00-40-00-04-00-grave-ward-slow-central-reconciliation.md
-.agent/interaction-audit/2026-07-13T00-40-00-04-00-projectile-impact-admission-central-reconciliation.md
-.agent/combat-effect-audit/2026-07-13T00-40-00-04-00-effect-state-central-reconciliation-contract.md
-.agent/deploy-audit/2026-07-13T00-40-00-04-00-combat-modifier-central-fixture-gate.md
-.agent/central-sync-audit/2026-07-13T00-40-00-04-00-repo-ledger-combat-modifier-reconciliation.md
+accessible-surface-id-kit
+accessible-focus-generation-kit
+accessible-control-id-kit
+visual-command-id-kit
+native-control-command-id-kit
+command-source-identity-kit
+focused-control-binding-kit
+visual-selection-binding-kit
+accessible-command-envelope-kit
+accessible-command-deduplication-kit
+accessible-availability-projection-kit
+panel-focus-scope-kit
+panel-background-inertness-kit
+panel-focus-transfer-kit
+panel-focus-restore-kit
+settings-control-projection-kit
+credits-content-projection-kit
+campaign-focus-admission-kit
+campaign-accessible-command-kit
+campaign-status-read-model-kit
+campaign-live-region-projection-kit
+accessible-command-result-kit
+first-accessible-result-ack-kit
+native-enter-space-activation-fixture-kit
+disabled-continue-projection-fixture-kit
+panel-focus-isolation-fixture-kit
+campaign-live-status-fixture-kit
+accessibility-source-build-pages-parity-fixture-kit
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, combat, economy, rendering, input, package scripts, dependencies and deployment were not changed. Existing source checks were inspected but not executed. No combat-modifier fixture currently exists.
+This is documentation-only. No HTML, JavaScript, gameplay, focus behavior, accessibility tree, build script or deployment workflow changed.
