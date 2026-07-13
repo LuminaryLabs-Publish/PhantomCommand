@@ -1,18 +1,18 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-13T00-31-09-04-00`
+**Timestamp:** `2026-07-13T00-40-00-04-00`
 
 ## Summary
 
-This documentation-only run verifies the current Grave Ward path. Source inspection proves that the tower declares `slow: .34`, projectile construction carries it, projectile impact ignores it, unit movement consumes only base speed, and no visible frame carries modifier state.
+This documentation-only run verifies the current Grave Ward path and reconciles the repo-local audit with central tracking. Source inspection proves that the tower declares `slow: 0.34`, projectile construction carries it, projectile impact ignores it, unit movement consumes only base speed, and no visible frame carries modifier state.
 
 ## Plan ledger
 
 **Goal:** separate source-backed combat-effect defects from unimplemented effect semantics, target state, expiry and executable proof.
 
 - [x] Compare the Publish inventory with central tracking.
-- [x] Exclude `TheCavalryOfRome` and select only `PhantomCommand`.
-- [x] Verify required root `.agent` files and the new timestamped audit family.
+- [x] Exclude `TheCavalryOfRome` and select only PhantomCommand.
+- [x] Verify required root `.agent` files and the new timestamped reconciliation family.
 - [x] Preserve all 20 implemented kits and offered services.
 - [x] Inspect tower specs, projectiles, impact, unit movement, rendering and static checks.
 - [x] Preserve predecessor audit families.
@@ -42,9 +42,10 @@ current-audit current: yes
 next-steps current: yes
 known-gaps current: yes
 validation current: yes
-kit-registry current after final update: yes
+kit-registry current: yes
 tracker and turn ledger present: yes
 architecture/render/gameplay/interaction/combat-effect/deploy audits present: yes
+central-sync audit present: yes
 bootstrap/resume and input/action predecessors retained: yes
 central ledger and internal change log required: yes
 ```
