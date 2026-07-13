@@ -1,41 +1,37 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-12T22-05-12-04-00`
+**Timestamp:** `2026-07-13T00-31-09-04-00`
 
 ## Summary
 
-This documentation-only run verifies the current New/Continue path. Source inspection proves that Continue is enabled from raw storage presence, the campaign ignores route intent and saved values, every campaign boot creates fresh defaults, and the final-victory record is not a complete checkpoint.
+This documentation-only run verifies the current Grave Ward path. Source inspection proves that the tower declares `slow: .34`, projectile construction carries it, projectile impact ignores it, unit movement consumes only base speed, and no visible frame carries modifier state.
 
 ## Plan ledger
 
-**Goal:** separate source-backed bootstrap/resume defects from unimplemented schema, hydration, commit, rollback and browser proof.
+**Goal:** separate source-backed combat-effect defects from unimplemented effect semantics, target state, expiry and executable proof.
 
 - [x] Compare the Publish inventory with central tracking.
 - [x] Exclude `TheCavalryOfRome` and select only `PhantomCommand`.
 - [x] Verify required root `.agent` files and the new timestamped audit family.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Inspect menu save presence, navigation, campaign initialization, victory save, rendering and static checks.
-- [x] Preserve the concurrent keyboard-admission audit family.
+- [x] Inspect tower specs, projectiles, impact, unit movement, rendering and static checks.
+- [x] Preserve predecessor audit families.
 - [x] Change documentation only.
-- [ ] Execute campaign bootstrap/resume fixtures after implementation.
+- [ ] Execute combat-modifier fixtures after implementation.
 
 ## Proven from source
 
 ```txt
-menu scans phantomCommand.save, nexus.sceneSnapshot and phantom.command.campaign
-any non-empty localStorage/sessionStorage value enables Continue
-New routes to game.html?campaign=new
-Continue routes to game.html?campaign=continue
-campaign source does not parse location.search or URLSearchParams
-campaign source does not read any save key
-campaign always initializes souls=145, core=24, wave=0
-campaign always creates six starting allied units
-victory writes only scene, souls and wave
-R reloads the campaign document
-no checkpoint schema/version/checksum exists
-no participant hydration or migration exists
-no atomic bootstrap commit/rollback exists
-no first visible bootstrap-result frame acknowledgement exists
+Grave Ward spec contains slow: 0.34
+projectile() copies spec.slow into projectile state
+updateProjectiles() reads damage, speed, splash, target and color
+updateProjectiles() does not read p.slow
+units have no active modifier collection
+moveToward() uses u.speed directly
+no modifier duration, stacking or refresh policy exists
+no modifier expiry or retirement function exists
+rendering draws projectiles and transient effects only
+campaign checker does not execute combat behavior
 ```
 
 ## Proven documentation state
@@ -48,17 +44,18 @@ known-gaps current: yes
 validation current: yes
 kit-registry current after final update: yes
 tracker and turn ledger present: yes
-architecture/render/gameplay/interaction/campaign-resume/deploy audits present: yes
-keyboard-admission predecessor retained: yes
+architecture/render/gameplay/interaction/combat-effect/deploy audits present: yes
+bootstrap/resume and input/action predecessors retained: yes
 central ledger and internal change log required: yes
 ```
 
 ## Existing checks can establish, when run
 
 ```txt
-menu and campaign entry files exist
-campaign source includes expected authored/runtime/render tokens
-CRT renderer symbols exist
+game and campaign entry files exist
+campaign source includes towerTypes, waves and authored runtime tokens
+unit animation and camera target zoom tokens exist
+CRT texture upload and source resolution tokens exist
 window.GameHost token exists
 static build includes source files
 ```
@@ -66,59 +63,57 @@ static build includes source files
 ## Existing checks cannot establish
 
 ```txt
-New versus Continue intent admission
-validated checkpoint availability
-storage parse/schema/version/checksum behavior
-migration compatibility
-complete participant capture and hydration
-cross-reference and ID validation
-atomic install and verified rollback
-stale/duplicate bootstrap rejection
-one terminal CampaignBootstrapResult
-first visible run-generation frame acknowledgement
-source/build/Pages resume parity
+Ward slow application
+magnitude interpretation
+duration and exact expiry
+stacking, refresh, cap or resistance policy
+target and projectile generation admission
+atomic damage-plus-modifier commit
+stale or duplicate impact rejection
+derived movement speed
+target death/restart retirement
+one terminal CombatModifierResult
+first visible modifier-frame acknowledgement
+source/build/Pages modifier parity
 ```
 
 ## Required deterministic fixtures
 
 ```txt
-fixture:campaign-fresh-run-preset
-fixture:campaign-continue-roundtrip
-fixture:campaign-missing-slot
-fixture:campaign-malformed-save
-fixture:campaign-unsupported-version
-fixture:campaign-checksum-mismatch
-fixture:campaign-source-incompatible
-fixture:campaign-missing-participant
-fixture:campaign-broken-reference
-fixture:campaign-id-counter-collision
-fixture:campaign-bootstrap-rollback
-fixture:campaign-bootstrap-stale-duplicate
-fixture:campaign-visible-restored-frame
+fixture:grave-ward-single-slow
+fixture:grave-ward-distance-comparison
+fixture:grave-ward-duration-expiry
+fixture:grave-ward-refresh
+fixture:grave-ward-stacking-cap
+fixture:grave-ward-resistance
+fixture:grave-ward-stale-projectile
+fixture:grave-ward-duplicate-impact
+fixture:grave-ward-target-retirement
+fixture:grave-ward-run-restart
+fixture:grave-ward-visible-frame
 ```
 
 ## Required browser matrix
 
 ```txt
 source route, built output and GitHub Pages
-New with no checkpoint
-New with an existing checkpoint
-Continue with a valid non-default checkpoint
-Continue with missing, malformed and unsupported checkpoints
-non-default economy, wave, entities, pads, selection and camera
-commit failure and rollback
-first visible world/HUD/minimap/CRT generation receipt
+single Ward versus one moving enemy
+unslowed control enemy over the same fixed steps
+multiple Ward hits before and after expiry
+target death before expiry
+restart with active modifier
+first visible world/HUD/minimap/CRT modifier receipt
 ```
 
 ## Change boundary
 
 ```txt
 runtime source changed: no
-menu behavior changed: no
-campaign behavior changed: no
-save schema or storage behavior changed: no
-checkpoint hydration changed: no
+combat behavior changed: no
+tower balance changed: no
+movement behavior changed: no
 rendering changed: no
+input behavior changed: no
 package scripts changed: no
 dependencies changed: no
 deployment changed: no
@@ -127,11 +122,11 @@ pull request created: no
 target branch: main
 npm run check executed: no
 npm run build executed: no
-browser resume smoke executed: no
-Pages resume smoke executed: no
-resume fixtures available: no
+browser combat smoke executed: no
+Pages combat smoke executed: no
+modifier fixtures available: no
 ```
 
 ## Claim boundary
 
-The audit proves that current Continue availability is unvalidated and campaign boot is always fresh. It does not claim checkpoint compatibility, migration, hydration, rollback, restored-state correctness, visible-generation parity or deployed Continue behavior is implemented.
+The audit proves that the current slow payload is transported but unused. It does not claim slow application, balance correctness, duration, stacking, expiry, replay determinism, visible modifier parity or deployed behavior is implemented.
