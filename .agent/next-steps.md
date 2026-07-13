@@ -1,60 +1,62 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T02-49-07-04-00`
+**Timestamp:** `2026-07-13T05-59-03-04-00`
 
 ## Summary
 
-Implement Accessible Command and Focus Projection Authority before claiming parity between the visual canvas menu, hidden native controls, keyboard input and assistive technology. Start with one command identity pipeline, then add availability parity, panel focus ownership and dynamic campaign status projection.
+Implement WebGL Context Lifecycle and Recovery Authority before claiming that the CRT presentation surface survives GPU resets, tab pressure, driver faults or context restoration. Start with typed context/resource generations, then add deterministic rebuild, fallback projection, public readback and executable browser proof.
 
 ## Plan ledger
 
-**Goal:** replace independent visual, DOM and global-keyboard activation paths with one typed, deduplicated and accessibility-aware command/result surface.
+**Goal:** replace one-shot WebGL allocation with an explicit context state machine whose resources can be retired, rebuilt, adopted and proven visible.
 
-### Command identity and admission
+### Context identity and events
 
-- [ ] Give every menu and campaign action a stable command ID.
-- [ ] Identify activation source and event sequence.
-- [ ] Bind visual selection, focused control and focus generation.
-- [ ] Reject focused-control and visual-command disagreement.
-- [ ] Suppress the second half of native Enter/Space activation.
-- [ ] Return typed accepted, unavailable, duplicate, stale and conflict results.
-- [ ] Gate `window.PhantomMenu.activate()` through the same authority.
+- [ ] Give every display canvas a stable CRT surface ID.
+- [ ] Allocate a WebGL context ID and monotonic context generation.
+- [ ] Register `webglcontextlost` and `webglcontextrestored` before starting RAF.
+- [ ] Publish typed loss, restore-pending, restored, rejected and disposed states.
+- [ ] Bind every context event to route, surface and lifecycle generation.
+- [ ] Reject stale context events from retired route generations.
 
-### Native control projection
+### Resource ownership
 
-- [ ] Reflect Continue availability with native `disabled` and `aria-disabled`.
-- [ ] Synchronize visual selection and native focus without forcing pointer-hover focus.
-- [ ] Expose selected/current state through native semantics.
-- [ ] Project transition-in-progress and command results.
-- [ ] Keep visual and native command IDs revision-aligned.
+- [ ] Move program, shaders, buffer, texture, uniforms and attribute locations into a resource-generation object.
+- [ ] Delete shaders after successful linking.
+- [ ] Delete partial shader/program allocations on compilation or link failure.
+- [ ] Add idempotent resource disposal.
+- [ ] Recreate all WebGL resources after restoration.
+- [ ] Validate texture dimensions, uniform locations and attribute locations before adoption.
+- [ ] Stop exposing raw mutable `gl`; expose bounded readback instead.
 
-### Panel focus lifecycle
+### Presentation transaction
 
-- [ ] Create native Settings and Credits panel structures.
-- [ ] Transfer focus to the first panel control on open.
-- [ ] Make background menu controls inert while a panel is active.
-- [ ] Constrain keyboard activation to the current focus scope.
-- [ ] Restore focus to the invoking control on close.
-- [ ] Persist settings only after an accepted control result.
+- [ ] Give each source-canvas result a source-frame revision.
+- [ ] Bind each CRT draw to a live context and resource generation.
+- [ ] Return typed Presented, ContextLost, RestorePending, ResourceRejected, DrawFailed, Disposed and Stale results.
+- [ ] Keep simulation/source ownership independent from display failure.
+- [ ] Prevent a display exception from silently terminating RAF ownership.
+- [ ] Track the last successfully presented frame and reason for degradation.
 
-### Campaign accessibility
+### Recovery and fallback
 
-- [ ] Give the campaign canvas an explicit focus/admission policy.
-- [ ] Add native commands for start wave, tower choice, pause and restart.
-- [ ] Publish a bounded accessible status read model.
-- [ ] Update live output for souls, sanctum health, wave, messages and terminal state.
-- [ ] Announce selection, order and build results without per-frame flooding.
-- [ ] Correlate accessible output with committed game/frame revisions.
+- [ ] Define when context-loss recovery is approved and call `preventDefault()` only through that policy.
+- [ ] Pause GPU submission while retaining bounded source-state updates.
+- [ ] Project a DOM fallback status that does not depend on WebGL.
+- [ ] Add a retry or route-exit control for unrecoverable failure.
+- [ ] Rebuild resources into a detached candidate generation.
+- [ ] Submit a probe frame before adopting restored resources.
+- [ ] Publish the first recovered visible-frame acknowledgement.
 
 ### Proof
 
-- [ ] Focus each native menu control and press Enter and Space.
-- [ ] Prove exactly one matching command result.
-- [ ] Prove disabled Continue cannot receive focus or activation.
-- [ ] Prove panel open isolates background controls and restores focus.
-- [ ] Prove settings values match visual and native states.
-- [ ] Prove campaign status changes are announced once and in order.
-- [ ] Run source, built-output and Pages parity fixtures.
+- [ ] Use `WEBGL_lose_context` in browser fixtures when available.
+- [ ] Prove loss retires the active generation and produces bounded fallback status.
+- [ ] Prove restore recreates program, buffer, texture and locations.
+- [ ] Prove the first recovered frame cites the successor generation.
+- [ ] Prove failed rebuild leaves no partially adopted resources.
+- [ ] Prove menu and campaign follow the same lifecycle contract.
+- [ ] Run source, built-output and Pages lifecycle fixtures.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
 
 ## Existing owners to update
@@ -62,12 +64,12 @@ Implement Accessible Command and Focus Projection Authority before claiming pari
 ```txt
 index.html
 game.html
+src/menu/crt-renderer.js
 src/menu/graveyard-menu.js
-src/menu/graveyard-art.js
 src/campaign/campaign-scene.js
+crt-renderer-kit
 menu-route-kit
 campaign-route-shell-kit
-pixel-campaign-runtime-kit
 pixel-campaign-render-kit
 legacy-gamehost-diagnostics-kit
 menu-static-check-kit
@@ -80,12 +82,13 @@ package.json
 ## Dependency order
 
 ```txt
-Accessible Command Identity
-  -> Native Availability Projection
-  -> Focus Scope and Panel Lifecycle
-  -> Campaign Accessible Status Read Model
-  -> Visual/Accessible Result Acknowledgement
-  -> source/build/Pages parity proof
+Context Identity and State
+  -> Resource Generation Ownership
+  -> Typed Presentation Results
+  -> Context-Loss Fallback
+  -> Resource Rebuild and Adoption
+  -> First Recovered Frame Ack
+  -> source/build/Pages lifecycle proof
 ```
 
-Do not fix this only by stopping propagation on one event. Native keyboard activation, assistive activation, programmatic click, global keyboard ingress and public host commands must converge on one exact command/result authority.
+Do not implement this as only two event listeners around the existing closure. The resource handles, frame identity, public diagnostics, fallback UI and route lifecycle must all participate in one authority.
