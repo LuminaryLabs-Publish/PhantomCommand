@@ -2,40 +2,39 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T19-58-07-04-00`  
-**Status:** `campaign-spatial-input-admission-authority-audited`
+**Last aligned:** `2026-07-12T22-00-46-04-00`  
+**Status:** `campaign-keyboard-command-admission-authority-audited`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign game with procedural menu art, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Campaign Spatial Input Admission Authority: campaign pointer handlers ignore source containment, do not invert the visible CRT curve, do not own pointer gestures, and map drag rectangles into an incorrect world selection region.
+PhantomCommand is a static pixel-isometric campaign game with procedural menu art, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Campaign Keyboard Command Admission Authority: the campaign installs global keyboard listeners, accepts shortcuts without route/focus/editable-target admission, applies no `event.repeat` policy, has no keyboard generation, and mutates campaign, camera and navigation state without typed command results or visible-frame proof.
 
 ## Plan ledger
 
-**Goal:** require current surface, pointer, transform and geometric evidence before any campaign pointer gesture mutates selection, orders or camera state.
+**Goal:** require current route, surface, focus, lifecycle generation and command identity before held movement or one-shot keyboard actions can affect the campaign.
 
-- [x] Compare all ten Publish repositories and nine eligible central ledgers.
+- [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
-- [x] Confirm no new, ledger-missing or root-agent-missing repository takes priority.
-- [x] Select only `PhantomCommand` as the oldest eligible central entry.
+- [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
+- [x] Select only `PhantomCommand`, the oldest eligible central entry.
+- [x] Inspect keyboard, blur, held-state, phase, camera, navigation, render and check paths.
 - [x] Identify the complete interaction loop, all domains, 20 implemented kits and offered services.
-- [x] Trace containment, CRT projection, pointer lifecycle, selection, orders, camera pan and zoom.
-- [x] Prove the two-corner drag-selection geometry defect with a concrete coordinate row.
-- [x] Add timestamped tracker and architecture/system audits.
-- [x] Refresh required root `.agent` state.
+- [x] Add the timestamped keyboard-admission audit family.
+- [x] Refresh required root `.agent` state and machine registry.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Runtime fixes and executable spatial-input fixtures remain future work.
+- [ ] Runtime corrections and executable keyboard fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T19-58-07-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-12T19-58-07-04-00.md
-.agent/architecture-audit/2026-07-12T19-58-07-04-00-campaign-spatial-input-admission-authority-dsk-map.md
-.agent/render-audit/2026-07-12T19-58-07-04-00-crt-visible-world-selection-geometry-gap.md
-.agent/gameplay-audit/2026-07-12T19-58-07-04-00-campaign-pointer-selection-order-loop.md
-.agent/interaction-audit/2026-07-12T19-58-07-04-00-pointer-sample-projection-selection-result-map.md
-.agent/campaign-input-audit/2026-07-12T19-58-07-04-00-containment-crt-drag-polygon-contract.md
-.agent/deploy-audit/2026-07-12T19-58-07-04-00-campaign-spatial-input-fixture-gate.md
+.agent/trackers/2026-07-12T22-00-46-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T22-00-46-04-00.md
+.agent/architecture-audit/2026-07-12T22-00-46-04-00-campaign-keyboard-command-admission-authority-dsk-map.md
+.agent/render-audit/2026-07-12T22-00-46-04-00-keyboard-result-visible-frame-gap.md
+.agent/gameplay-audit/2026-07-12T22-00-46-04-00-global-key-repeat-campaign-loop.md
+.agent/interaction-audit/2026-07-12T22-00-46-04-00-key-event-command-consumption-result-map.md
+.agent/keyboard-input-audit/2026-07-12T22-00-46-04-00-focus-repeat-generation-contract.md
+.agent/deploy-audit/2026-07-12T22-00-46-04-00-campaign-keyboard-browser-fixture-gate.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
@@ -43,74 +42,76 @@ PhantomCommand is a static pixel-isometric campaign game with procedural menu ar
 .agent/kit-registry.json
 ```
 
-## Current interaction loop
+The Campaign Spatial Input Admission audit at `2026-07-12T19-58-07-04-00` remains the immediate pointer-input predecessor. Campaign Action Result Authority remains the downstream command-consumption dependency.
+
+## Current keyboard loop
 
 ```txt
-PointerEvent
-  -> screenToSource returns x, y and inside
-  -> campaign stores inside but does not enforce it
-  -> visible CRT curvature is not inverted
-  -> pointer identity and capture are not tracked
-  -> point/drag/order/camera logic consumes raw projected coordinates
-  -> drag selection transforms only two rectangle corners
-  -> mutable campaign or camera state changes
-  -> no terminal spatial-input result or visible-frame acknowledgement
+global keydown
+  -> lowercase key and add to held Set
+  -> no route, focus or editable-target admission
+  -> no event.repeat policy
+  -> Space, 1/2/3, P, R, Escape and F mutate immediately
+
+global keyup
+  -> remove normalized key from held Set
+
+RAF
+  -> consume held WASD/Arrow keys for camera movement
+  -> advance fixed-step campaign simulation
+  -> render world, HUD and minimap through CRT
+  -> publish no keyboard result or frame acknowledgement
+
+blur
+  -> clear held keys and pointer flags
+  -> retire no input generation
 ```
 
 ## Main findings
 
 ```txt
-outside visible source can select, order, pan and zoom
-logical pointer geometry does not match visible CRT curvature
-pointer down/move/up are not bound by pointer identity
-pointercancel and lost capture are not handled
-drag selection maps a source rectangle with only two inverse points
-40 x 20 source rectangle can collapse the tested world-z interval to zero
-projection results cite no surface, transform, camera, entity or selection revision
-no typed miss, stale, cancellation or first-visible-frame result exists
-```
-
-## Required parent domain
-
-```txt
-phantom-command-campaign-spatial-input-admission-authority-domain
-```
-
-Required flow:
-
-```txt
-pointer evidence
-  -> surface and focus admission
-  -> pointer/button/capture admission
-  -> viewport and CRT inverse projection
-  -> typed source containment
-  -> revisioned world projection
-  -> point, polygon, order or camera result
-  -> terminal SpatialInputResult
-  -> Campaign Action Result Authority
-  -> first visible successor frame acknowledgement
+global keyboard ownership: yes
+canvas/route focus admission: no
+editable-target exclusion: no
+one-shot repeat policy: no
+P can toggle repeatedly during one physical hold: yes
+keyboard session/focus generation: no
+visibility/page lifecycle fence: no
+listener teardown: no
+command ID, sequence or duplicate rejection: no
+typed keyboard/consumer result: no
+first visible keyboard-result frame acknowledgement: no
 ```
 
 ## Kit census
 
 ```txt
 implemented source-backed kits: 20
-planned spatial-input authority kits: 33
+planned keyboard-admission authority kits: 28
 ```
 
-The complete per-kit service map is in the current tracker and machine registry.
+The complete kit-by-kit service inventory is in the current tracker and `.agent/kit-registry.json`.
+
+## Required parent domain
+
+```txt
+phantom-command-campaign-keyboard-command-admission-authority-domain
+```
+
+## Required flow
+
+```txt
+KeyboardEvent
+  -> route, surface, focus and editable-target admission
+  -> keyboard session/generation and monotonic sequence admission
+  -> held-state or one-shot classification
+  -> repeat, duplicate and stale rejection
+  -> typed CampaignKeyboardCommand
+  -> Campaign Action / Camera / Navigation consumer result
+  -> terminal CampaignKeyboardResult
+  -> first visible successor-frame acknowledgement
+```
 
 ## Validation boundary
 
-```txt
-runtime/pointer/selection/order/camera/render behavior changed: no
-package scripts/dependencies/deployment changed: no
-npm run check: not run
-npm run build: not run
-browser/Pages spatial-input smoke: not run
-spatial-input fixtures: unavailable
-branch created: no
-pull request created: no
-```
-
-Do not treat the `inside` field, visible marquee or changed selection as spatial-input proof. Completion requires typed containment, transform revision, pointer ownership, correct polygon membership, one terminal result and first-visible-frame acknowledgement.
+Documentation only. Runtime, keyboard, campaign, camera, navigation, rendering, package scripts, dependencies and deployment are unchanged. No keyboard event, browser or Pages fixture was executed.
