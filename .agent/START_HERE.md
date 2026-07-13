@@ -2,40 +2,39 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Last aligned:** `2026-07-12T22-05-12-04-00`  
-**Status:** `campaign-bootstrap-resume-authority-audited`
+**Last aligned:** `2026-07-13T00-31-09-04-00`  
+**Status:** `combat-modifier-application-authority-audited`
 
 ## Summary
 
-PhantomCommand is a static pixel-isometric campaign game with procedural menu art, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Campaign Bootstrap and Continue Resume Authority: Continue is enabled from raw storage presence and routes to `game.html?campaign=continue`, but campaign boot ignores both the route intent and all save keys, always constructing the same fresh state.
+PhantomCommand is a static pixel-isometric campaign with a procedural graveyard menu, CRT presentation, fixed-step combat, browser persistence and public diagnostics. The current audit isolates Combat Modifier Application Authority: Grave Ward projectiles retain `slow: .34`, but impact resolution applies only damage and a transient visual effect. No slow state changes unit movement or reaches a visible frame.
 
 ## Plan ledger
 
-**Goal:** make New and Continue explicit, revisioned bootstrap transactions that install one validated campaign generation atomically or return a typed zero-mutation failure before gameplay starts.
+**Goal:** make authored combat modifiers produce typed, target-bound, deterministic simulation and visible-frame results.
 
 - [x] Compare all ten accessible Publish repositories.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Confirm all nine eligible repositories have central-ledger and root `.agent` coverage.
 - [x] Select only `PhantomCommand`, the oldest eligible central entry.
-- [x] Inspect menu save presence, route intent, campaign construction, victory save, reload, rendering and checks.
+- [x] Inspect tower specs, projectile payloads, impact, movement, rendering and checks.
 - [x] Identify the complete interaction loop, all domains, 20 implemented kits and offered services.
-- [x] Add the timestamped bootstrap/resume audit family.
-- [x] Preserve the concurrent keyboard-admission audit as an immediate predecessor.
+- [x] Add the timestamped combat-modifier audit family.
 - [x] Refresh required root `.agent` state and machine registry.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Runtime bootstrap, checkpoint and executable resume fixtures remain future work.
+- [ ] Runtime modifier application and executable fixtures remain future work.
 
 ## Read this first
 
 ```txt
-.agent/trackers/2026-07-12T22-05-12-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-12T22-05-12-04-00.md
-.agent/architecture-audit/2026-07-12T22-05-12-04-00-campaign-bootstrap-resume-authority-dsk-map.md
-.agent/render-audit/2026-07-12T22-05-12-04-00-continue-visible-frame-provenance-gap.md
-.agent/gameplay-audit/2026-07-12T22-05-12-04-00-continue-starts-fresh-campaign-loop.md
-.agent/interaction-audit/2026-07-12T22-05-12-04-00-new-continue-bootstrap-admission-map.md
-.agent/campaign-resume-audit/2026-07-12T22-05-12-04-00-checkpoint-schema-hydration-commit-contract.md
-.agent/deploy-audit/2026-07-12T22-05-12-04-00-campaign-resume-fixture-gate.md
+.agent/trackers/2026-07-13T00-31-09-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-13T00-31-09-04-00.md
+.agent/architecture-audit/2026-07-13T00-31-09-04-00-combat-modifier-application-dsk-map.md
+.agent/render-audit/2026-07-13T00-31-09-04-00-unrepresented-slow-state-visible-frame-gap.md
+.agent/gameplay-audit/2026-07-13T00-31-09-04-00-grave-ward-projectile-without-slow-loop.md
+.agent/interaction-audit/2026-07-13T00-31-09-04-00-projectile-impact-modifier-admission-map.md
+.agent/combat-effect-audit/2026-07-13T00-31-09-04-00-slow-duration-stacking-expiry-contract.md
+.agent/deploy-audit/2026-07-13T00-31-09-04-00-combat-modifier-fixture-gate.md
 .agent/current-audit.md
 .agent/next-steps.md
 .agent/known-gaps.md
@@ -43,89 +42,40 @@ PhantomCommand is a static pixel-isometric campaign game with procedural menu ar
 .agent/kit-registry.json
 ```
 
-The Campaign Keyboard Command Admission audit at `2026-07-12T22-00-46-04-00` remains the immediate input/lifecycle predecessor. Campaign Action Result, Spatial Input Admission and Runtime Session Resource Lifecycle remain downstream or upstream dependencies.
+Campaign Bootstrap and Continue Resume Authority at `2026-07-12T22-05-12-04-00` remains the immediate persistence predecessor. Campaign Keyboard Command Admission, Campaign Spatial Input Admission and Campaign Action Result audits remain retained.
 
-## Current bootstrap loop
+## Current combat loop
 
 ```txt
-menu boot
-  -> scan three storage keys
-  -> any truthy string enables Continue
-
-New
-  -> game.html?campaign=new
-
-Continue
-  -> game.html?campaign=continue
-
-campaign boot
-  -> parse no route intent
-  -> read no save key
-  -> create wave 0, souls 145, core 24 and six starting allies
-  -> attach listeners, expose GameHost and start RAF
-
-final victory
-  -> write only { scene, souls, wave }
-  -> record is not a resumable checkpoint
+build Grave Ward for 55 souls
+  -> tower spec includes slow = 0.34
+  -> tower fires projectile
+  -> projectile retains slow = 0.34
+  -> impact applies damage
+  -> impact draws transient effect
+  -> projectile is deleted
+  -> target retains authored base speed
 ```
 
 ## Main findings
 
 ```txt
-Continue availability validates storage contents: no
-campaign parses campaign=new/continue: no
-campaign reads persisted checkpoint: no
-New and Continue have different runtime behavior: no
-checkpoint schema/version/checksum: no
-complete participant capture/hydration: no
-migration registry: no
-atomic bootstrap commit/rollback: no
-run/checkpoint generation: no
-first visible bootstrap-frame acknowledgement: no
+modifier payload declared: yes
+modifier payload transported: yes
+modifier applied to target: no
+modifier duration: no
+stacking/refresh policy: no
+active modifier state: no
+derived movement speed: no
+expiry and retirement: no
+typed modifier result: no
+first visible modifier-frame acknowledgement: no
 ```
 
-## Required parent domain
+## Required authority
 
 ```txt
-phantom-command-campaign-bootstrap-resume-authority-domain
+phantom-command-combat-modifier-application-authority-domain
 ```
 
-## Required flow
-
-```txt
-CampaignEntryIntent(new | continue)
-  -> route/session/command admission
-  -> fresh preset construction or typed checkpoint read
-  -> schema, version, checksum and source compatibility validation
-  -> migration when explicitly supported
-  -> detached participant hydration
-  -> cross-participant invariant validation
-  -> atomic successor-generation commit or verified rollback
-  -> terminal CampaignBootstrapResult
-  -> first visible world/HUD/minimap/CRT frame acknowledgement
-```
-
-## Kit census
-
-```txt
-implemented source-backed kits: 20
-planned bootstrap/resume authority kits: 37
-retained keyboard-admission authority kits: 28
-```
-
-The complete kit-by-kit service inventory is in the current tracker and `.agent/kit-registry.json`.
-
-## Validation boundary
-
-```txt
-runtime/menu/campaign/storage/render behavior changed: no
-package scripts/dependencies/deployment changed: no
-npm run check: not run
-npm run build: not run
-browser/Pages resume smoke: not run
-resume fixtures: unavailable
-branch created: no
-pull request created: no
-```
-
-Do not treat an enabled Continue label, successful navigation or a rendered campaign as resume proof. Completion requires a validated compatible checkpoint, one committed run generation, typed failure behavior and a first visible frame citing the bootstrap result.
+Do not claim the Grave Ward slows enemies from its color, cost or projectile payload. Completion requires accepted modifier state, deterministic movement difference, expiry/retirement proof and a matching visible-frame acknowledgement.
