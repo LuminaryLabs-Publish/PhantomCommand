@@ -1,22 +1,22 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-12T18-11-53-04-00`  
+**Timestamp:** `2026-07-12T19-58-07-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `campaign-action-result-authority-audited`
+**Status:** `campaign-spatial-input-admission-authority-audited`
 
 ## Summary
 
-The current audit isolates Campaign Action Result Authority. Campaign actions are void helpers or direct field mutations over one shared mutable aggregate. Success, rejection and no effect all look identical to callers because no command identity, expected revision, terminal result or visible-frame receipt exists.
+The current audit isolates Campaign Spatial Input Admission Authority. Campaign pointer paths use raw projected coordinates without enforcing visible-source containment, inverse CRT geometry, pointer identity or transform revisions. Rectangle selection also inverse-projects only two corners of the visible marquee, producing incorrect world membership.
 
 ## Plan ledger
 
-**Goal:** make each campaign action produce one typed terminal result and either atomically commit one successor revision or perform zero mutation.
+**Goal:** admit only current, contained and revision-correct pointer evidence, then produce one typed spatial result before campaign mutation.
 
 - [x] Compare all eligible Publish repositories and select only `PhantomCommand`.
-- [x] Inspect wave, build, selection, order, tower-type, pause, restart, camera and public-host action paths.
+- [x] Inspect campaign pointer, selection, order, camera and CRT projection paths.
 - [x] Identify the complete interaction loop and all active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Define command, admission, revision, plan, commit, rollback, result and frame-proof boundaries.
+- [x] Define surface, pointer, projection, polygon, result and frame-proof boundaries.
 - [x] Add timestamped tracker and system audits.
 - [x] Refresh root `.agent` state and central tracking.
 - [x] Push only to `main`; create no branch or pull request.
@@ -27,106 +27,98 @@ The current audit isolates Campaign Action Result Authority. Campaign actions ar
 ```txt
 accessible Publish repositories: 10
 eligible non-Cavalry repositories: 9
-new/ledger-missing/root-agent-missing/unsynchronized eligible repositories: 0
+new/ledger-missing/root-agent-missing eligible repositories: 0
 selected repository: LuminaryLabs-Publish/PhantomCommand
-selection reason: oldest eligible synchronized central-ledger entry
+selection reason: oldest eligible central-ledger entry
 excluded repository: LuminaryLabs-Publish/TheCavalryOfRome
 ```
 
 ## Complete interaction loop
 
 ```txt
-menu route
-  -> navigate to campaign
-
 campaign boot
-  -> create canvas, CRT, authored content and mutable state
-  -> attach pointer, keyboard, wheel and blur listeners
+  -> create source canvas, CRT renderer, authored content and mutable state
+  -> attach pointer, wheel, keyboard and blur listeners
   -> expose window.GameHost
   -> start RAF
 
-input and public calls
-  -> Space invokes startWave
-  -> second pad click or GameHost invokes build
-  -> pointer selection invokes selectAt
-  -> right click invokes order
-  -> number keys replace towerType
-  -> P toggles paused
-  -> R reloads
-  -> wheel or GameHost mutates camera target
+pointer ingress
+  -> screenToSource calculates x, y and inside
+  -> inside is retained but never used as an admission gate
+  -> visible CRT curve is not inverted
+  -> pointer identity and capture are not tracked
 
-campaign action
-  -> helper reads live mutable state
-  -> helper mutates or returns undefined
-  -> no command, admission or result is published
+campaign input
+  -> left click selects ally or pad
+  -> second pad click may build
+  -> drag rectangle replaces selection
+  -> right click orders selected units
+  -> middle drag pans camera
+  -> wheel zooms around projected pointer
 
 simulation and presentation
   -> accumulator advances update(1/60)
-  -> world/HUD/minimap read current state
-  -> CRT presents the source canvas
-  -> no terminal result is correlated with the frame
+  -> world, HUD and minimap consume current state
+  -> CRT presents contained and curved source canvas
+  -> no spatial-input result is correlated with the frame
 ```
 
 ## Source-backed findings
 
 ```txt
-startWave: silent rejection for active, terminal or exhausted campaign
-build: silent rejection for missing pad, occupied pad or insufficient souls
-order: silent rejection for empty selection; missing selected IDs skipped
-selectAt: combines selection, deselection, pad choice and second-click build
-keyboard: tower type and pause mutate directly
-restart: reloads the document
-GameHost: exposes startWave, build and setZoom raw mutators
-all action paths: no action ID, source, expected revision, result or journal
+screenToSource returns inside: yes
+campaign enforces inside: no
+CRT shader curvature enabled: yes
+input inverse CRT curvature: no
+pointer ID tracking: no
+pointer capture/cancel lifecycle: no
+surface/focus generation: no
+viewport/CRT/camera/entity revisions: no
+drag selection transforms all four corners: no
+typed projection/selection/order/camera result: no
+first visible spatial-result frame acknowledgement: no
 ```
 
-### Multi-resource mutations
+### Exact drag-selection failure
 
 ```txt
-build
-  -> pad occupancy
-  -> souls balance
-  -> tower registry
-  -> effect list
-  -> message
+camera: (0,0)
+zoom: 1
+source rectangle: (300,160) to (340,180)
 
-wave start
-  -> spawn queue
-  -> waveActive
-  -> message
+top-left world:     (-83.33,-55.56)
+bottom-right world: (-27.78,-55.56)
+runtime z interval: approximately zero
 
-selection
-  -> selected IDs
-  -> selectedPad
-
-order
-  -> target/move fields for multiple units
-  -> effect list
+top-right world:    (-55.56,-83.33)
+bottom-left world:  (-55.56,-27.78)
+actual visible z span: approximately 55.55 units
 ```
 
-No prepare, commit, rollback or change-set boundary binds these resources.
+The visible rectangle is a world parallelogram. Using two inverse-projected corners as a world-axis rectangle can omit nearly the entire visible footprint.
 
 ## Domains in use
 
 ```txt
 menu and campaign route shells
 menu settings, save presence, panels, fade, navigation and audio
-viewport/source projection and CRT presentation
-browser pointer, keyboard, wheel, focus and context-menu input
-campaign session and mutable aggregate state
-campaign action identity, source, admission and results
-selection and selected-pad state
-world-pointer projection and rectangle selection
+viewport containment and source projection
+CRT visual presentation and transform
+browser pointer, keyboard, wheel, blur and context-menu input
+campaign input surface and gesture lifecycle
+screen, source, world and isometric coordinate spaces
+camera pan, focus and zoom
+point/additive/pad selection
+rectangle selection and entity membership
+order targeting and unit orders
 economy, tower type, pad occupancy and building
 wave phase, spawn queue and progression
-unit orders, targeting and movement
-fixed-step spawning, combat, projectiles, damage and rewards
+fixed-step combat, projectiles, damage and rewards
 pause, restart and terminal outcomes
-camera pan, focus and zoom
 world, HUD, minimap and terminal rendering
 public GameHost commands and readback
 browser persistence
-source checks, static build, Pages deployment and audit tracking
+validation, static build, Pages deployment and audit tracking
 ```
 
 ## Implemented kits
@@ -158,7 +150,7 @@ construct-sequence-update-kit
 
 ```txt
 menu drawing, selection, settings, save-presence scanning, panels, fade and routing
-viewport containment, source projection and CRT presentation
+viewport containment, screen-to-source projection and CRT presentation
 pointer, keyboard, wheel and hidden-control activation
 AudioContext ambience, UI tones and delayed close
 campaign state, selection, building, orders, waves, pause, camera and restart
@@ -172,89 +164,76 @@ source checks, static build and GitHub Pages deployment
 ## Required authority
 
 ```txt
-phantom-command-campaign-action-result-authority-domain
+phantom-command-campaign-spatial-input-admission-authority-domain
 ```
 
 ### Required transaction
 
 ```txt
-intent
-  -> identify action, source, session and sequence
-  -> validate schema and capability
-  -> cite expected campaign, phase and resource revisions
-  -> reject duplicate or stale evidence
-  -> build detached action plan
-  -> atomically commit or roll back
-  -> publish one CampaignActionResult
-  -> project feedback/readback
+PointerEvent
+  -> surface/focus generation admission
+  -> pointer/button/capture admission
+  -> viewport and CRT inverse projection
+  -> typed source containment
+  -> revisioned source-to-world projection
+  -> selection polygon, order target or camera gesture result
+  -> reject stale/outside/mismatched evidence with zero mutation
+  -> publish terminal SpatialInputResult
+  -> feed accepted result into Campaign Action Result Authority
   -> acknowledge first visible successor frame
 ```
 
 ## Candidate kits
 
 ```txt
-campaign-session-id-kit
-campaign-session-generation-kit
-campaign-state-revision-kit
-campaign-action-id-kit
-campaign-action-sequence-kit
-campaign-action-source-kind-kit
-campaign-action-kind-kit
-campaign-action-command-kit
-campaign-action-payload-schema-kit
-campaign-action-capability-kit
-campaign-action-admission-kit
-campaign-phase-revision-kit
-campaign-selection-revision-kit
-campaign-economy-revision-kit
-campaign-pad-revision-kit
-campaign-target-revision-kit
-campaign-action-plan-kit
-campaign-action-prepare-kit
-campaign-action-commit-kit
-campaign-action-rollback-kit
-campaign-action-result-kit
-campaign-action-change-set-kit
-stale-campaign-action-rejection-kit
-duplicate-campaign-action-rejection-kit
-campaign-action-observation-kit
-campaign-action-journal-kit
-campaign-action-visible-frame-ack-kit
-campaign-action-source-fixture-kit
-campaign-action-rejection-fixture-kit
-campaign-action-idempotency-fixture-kit
-public-gamehost-action-fixture-kit
-browser-campaign-action-smoke-kit
-pages-campaign-action-smoke-kit
-```
-
-## Required invariants
-
-```txt
-one action ID produces at most one terminal result
-all rejection paths perform zero mutation
-build and wave mutations commit atomically
-stale phase, selection, economy, pad and target evidence rejects
-public and browser sources are distinguishable
-results carry predecessor and successor revisions
-feedback and readback derive from committed results
-first visible frame cites the terminal result
-source, built output and Pages fixtures agree
+campaign-input-surface-id-kit
+campaign-input-surface-generation-kit
+campaign-pointer-sample-id-kit
+campaign-pointer-sequence-kit
+campaign-primary-pointer-policy-kit
+campaign-pointer-button-policy-kit
+campaign-pointer-capture-kit
+campaign-pointer-cancel-kit
+campaign-viewport-transform-revision-kit
+campaign-crt-transform-revision-kit
+campaign-crt-inverse-projection-kit
+campaign-source-containment-result-kit
+campaign-screen-point-kit
+campaign-source-point-kit
+campaign-world-point-kit
+campaign-world-projection-result-kit
+campaign-selection-gesture-kit
+campaign-selection-polygon-kit
+campaign-selection-membership-result-kit
+campaign-order-target-admission-kit
+campaign-camera-gesture-result-kit
+campaign-spatial-input-command-kit
+campaign-spatial-input-result-kit
+stale-campaign-input-rejection-kit
+duplicate-campaign-input-rejection-kit
+campaign-spatial-input-observation-kit
+campaign-spatial-input-journal-kit
+campaign-spatial-visible-frame-ack-kit
+campaign-containment-fixture-kit
+campaign-crt-projection-fixture-kit
+campaign-drag-selection-geometry-fixture-kit
+campaign-pointer-identity-fixture-kit
+campaign-pages-spatial-input-smoke-kit
 ```
 
 ## Repo-local output
 
 ```txt
-.agent/trackers/2026-07-12T18-11-53-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-12T18-11-53-04-00.md
-.agent/architecture-audit/2026-07-12T18-11-53-04-00-campaign-action-result-authority-dsk-map.md
-.agent/render-audit/2026-07-12T18-11-53-04-00-action-result-visible-feedback-gap.md
-.agent/gameplay-audit/2026-07-12T18-11-53-04-00-silent-action-noop-mutation-loop.md
-.agent/interaction-audit/2026-07-12T18-11-53-04-00-action-command-admission-result-map.md
-.agent/campaign-action-audit/2026-07-12T18-11-53-04-00-command-revision-commit-result-contract.md
-.agent/deploy-audit/2026-07-12T18-11-53-04-00-campaign-action-fixture-gate.md
+.agent/trackers/2026-07-12T19-58-07-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-12T19-58-07-04-00.md
+.agent/architecture-audit/2026-07-12T19-58-07-04-00-campaign-spatial-input-admission-authority-dsk-map.md
+.agent/render-audit/2026-07-12T19-58-07-04-00-crt-visible-world-selection-geometry-gap.md
+.agent/gameplay-audit/2026-07-12T19-58-07-04-00-campaign-pointer-selection-order-loop.md
+.agent/interaction-audit/2026-07-12T19-58-07-04-00-pointer-sample-projection-selection-result-map.md
+.agent/campaign-input-audit/2026-07-12T19-58-07-04-00-containment-crt-drag-polygon-contract.md
+.agent/deploy-audit/2026-07-12T19-58-07-04-00-campaign-spatial-input-fixture-gate.md
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, campaign actions, simulation, rendering, package scripts, dependencies and deployment were not changed. No executable action fixture was run.
+Documentation only. Runtime, campaign input, selection, orders, camera, rendering, package scripts, dependencies and deployment were not changed. No executable spatial-input fixture was run.
