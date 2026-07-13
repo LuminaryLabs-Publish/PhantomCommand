@@ -1,80 +1,85 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T05-59-03-04-00`
+**Timestamp:** `2026-07-13T11-41-10-04-00`
 
 ## Summary
 
-Implement WebGL Context Lifecycle and Recovery Authority before claiming that the CRT presentation surface survives GPU resets, tab pressure, driver faults or context restoration. Start with typed context/resource generations, then add deterministic rebuild, fallback projection, public readback and executable browser proof.
+Implement Fixed-Step Frame Scheduler Authority before claiming deterministic cadence, smooth high-refresh presentation, explainable hitch handling or visible-frame provenance. Start with scheduler identity and typed wall-time/drain results, then add immutable presentation frames, interpolation, visibility generations and executable browser proof.
 
 ## Plan ledger
 
-**Goal:** replace one-shot WebGL allocation with an explicit context state machine whose resources can be retired, rebuilt, adopted and proven visible.
+**Goal:** preserve the existing 60 Hz gameplay model while making every admitted step, discarded duration and visible frame explicit and reproducible.
 
-### Context identity and events
+### Scheduler identity
 
-- [ ] Give every display canvas a stable CRT surface ID.
-- [ ] Allocate a WebGL context ID and monotonic context generation.
-- [ ] Register `webglcontextlost` and `webglcontextrestored` before starting RAF.
-- [ ] Publish typed loss, restore-pending, restored, rejected and disposed states.
-- [ ] Bind every context event to route, surface and lifecycle generation.
-- [ ] Reject stale context events from retired route generations.
+- [ ] Add a stable scheduler ID and monotonic scheduler generation.
+- [ ] Bind scheduler state to route, campaign session and lifecycle generation.
+- [ ] Publish Running, Paused, Suspended, Retired and Failed states.
+- [ ] Reject callbacks and commands from predecessor generations.
 
-### Resource ownership
+### Wall-time admission
 
-- [ ] Move program, shaders, buffer, texture, uniforms and attribute locations into a resource-generation object.
-- [ ] Delete shaders after successful linking.
-- [ ] Delete partial shader/program allocations on compilation or link failure.
-- [ ] Add idempotent resource disposal.
-- [ ] Recreate all WebGL resources after restoration.
-- [ ] Validate texture dimensions, uniform locations and attribute locations before adoption.
-- [ ] Stop exposing raw mutable `gl`; expose bounded readback instead.
+- [ ] Give each RAF timestamp a `WallTimeSampleId`.
+- [ ] Replace implicit `Math.min(.05, elapsed)` with a versioned clamp policy.
+- [ ] Publish elapsed, admitted and dropped wall time.
+- [ ] Decide whether excess debt is retained or dropped under each policy.
+- [ ] Record first-frame and first-resume elapsed handling.
 
-### Presentation transaction
+### Fixed-step drain
 
-- [ ] Give each source-canvas result a source-frame revision.
-- [ ] Bind each CRT draw to a live context and resource generation.
-- [ ] Return typed Presented, ContextLost, RestorePending, ResourceRejected, DrawFailed, Disposed and Stale results.
-- [ ] Keep simulation/source ownership independent from display failure.
-- [ ] Prevent a display exception from silently terminating RAF ownership.
-- [ ] Track the last successfully presented frame and reason for degradation.
+- [ ] Keep the fixed step at exactly `1/60` under a versioned policy.
+- [ ] Set an explicit maximum step budget per frame.
+- [ ] Return step count, accumulator before/after and simulation revisions.
+- [ ] Distinguish NoStep, Advanced, Paused, Terminal, BudgetExhausted, Stale and Failed.
+- [ ] Make restart and route exit retire predecessor drain work.
 
-### Recovery and fallback
+### Camera and presentation
 
-- [ ] Define when context-loss recovery is approved and call `preventDefault()` only through that policy.
-- [ ] Pause GPU submission while retaining bounded source-state updates.
-- [ ] Project a DOM fallback status that does not depend on WebGL.
-- [ ] Add a retry or route-exit control for unrecoverable failure.
-- [ ] Rebuild resources into a detached candidate generation.
-- [ ] Submit a probe frame before adopting restored resources.
-- [ ] Publish the first recovered visible-frame acknowledgement.
+- [ ] Publish a `CameraFrameState` from the same admitted wall-time sample.
+- [ ] Retain previous and current immutable simulation snapshots.
+- [ ] Calculate a bounded interpolation alpha from accumulator remainder.
+- [ ] Build one `CampaignPresentationFrame` with temporal fingerprint.
+- [ ] Make Canvas2D and CRT projection cite the exact frame ID.
+- [ ] Use the admitted frame time for CRT effects instead of a second untracked sample.
+
+### Visibility and lifecycle
+
+- [ ] Add `visibilitychange` handling before RAF starts.
+- [ ] Suspend the active scheduler generation while hidden.
+- [ ] Allocate a successor generation or explicit resume transition when visible.
+- [ ] Reset or classify elapsed time before admitting the first resumed frame.
+- [ ] Reject stale RAF callbacks after suspension, restart or route exit.
+
+### Public diagnostics
+
+- [ ] Replace unversioned GameHost completion claims with typed command results.
+- [ ] Expose detached scheduler, drain and presentation receipts.
+- [ ] Expose dropped-time totals and last temporal discontinuity.
+- [ ] Expose last complete visible frame ID and fingerprint.
 
 ### Proof
 
-- [ ] Use `WEBGL_lose_context` in browser fixtures when available.
-- [ ] Prove loss retires the active generation and produces bounded fallback status.
-- [ ] Prove restore recreates program, buffer, texture and locations.
-- [ ] Prove the first recovered frame cites the successor generation.
-- [ ] Prove failed rebuild leaves no partially adopted resources.
-- [ ] Prove menu and campaign follow the same lifecycle contract.
-- [ ] Run source, built-output and Pages lifecycle fixtures.
+- [ ] Add deterministic 60, 90, 120 and 144 Hz cadence fixtures.
+- [ ] Add 50 ms boundary and 250 ms hitch fixtures.
+- [ ] Add pause, hidden/resumed, restart and terminal-state fixtures.
+- [ ] Prove zero-step and multi-step frames produce bounded interpolation.
+- [ ] Prove Canvas2D and CRT receive the same frame fingerprint.
+- [ ] Prove the first visible frame acknowledges the matching scheduler generation.
 - [ ] Run `npm run check` and `npm run build` after fixture wiring.
+- [ ] Run source, built-output and Pages scheduler fixtures.
 
 ## Existing owners to update
 
 ```txt
-index.html
 game.html
-src/menu/crt-renderer.js
-src/menu/graveyard-menu.js
 src/campaign/campaign-scene.js
-crt-renderer-kit
-menu-route-kit
-campaign-route-shell-kit
+src/menu/crt-renderer.js
+pixel-campaign-runtime-kit
+fixed-step-campaign-simulation-kit
 pixel-campaign-render-kit
+crt-renderer-kit
 legacy-gamehost-diagnostics-kit
-menu-static-check-kit
 campaign-static-check-kit
-scripts/check-menu.mjs
 scripts/check-campaign.mjs
 package.json
 ```
@@ -82,13 +87,15 @@ package.json
 ## Dependency order
 
 ```txt
-Context Identity and State
-  -> Resource Generation Ownership
-  -> Typed Presentation Results
-  -> Context-Loss Fallback
-  -> Resource Rebuild and Adoption
-  -> First Recovered Frame Ack
-  -> source/build/Pages lifecycle proof
+Scheduler Identity
+  -> Wall-Time Admission
+  -> Fixed-Step Drain Results
+  -> Temporal State Pair
+  -> Interpolated Presentation Frame
+  -> Canvas2D/CRT Projection Results
+  -> Visibility and Resume Generations
+  -> Public Readback
+  -> source/build/Pages proof
 ```
 
-Do not implement this as only two event listeners around the existing closure. The resource handles, frame identity, public diagnostics, fallback UI and route lifecycle must all participate in one authority.
+The retained WebGL Context Lifecycle work remains required, but it must consume the presentation frame and scheduler identities rather than defining a second independent frame clock.
