@@ -1,33 +1,32 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-13T17-00-59-04-00",
-  "status": "route-session-resource-retirement-authority-audited",
-  "sourceTracker": ".agent/trackers/2026-07-13T17-00-59-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-13T17-00-59-04-00.md",
-  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-13T17-00-59-04-00-route-session-resource-retirement-dsk-map.md",
-  "latestRenderAudit": ".agent/render-audit/2026-07-13T17-00-59-04-00-route-transition-visible-frame-gap.md",
-  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-13T17-00-59-04-00-menu-campaign-route-liveness-loop.md",
-  "latestInteractionAudit": ".agent/interaction-audit/2026-07-13T17-00-59-04-00-route-command-resource-result-map.md",
-  "latestSystemAudit": ".agent/route-lifecycle-audit/2026-07-13T17-00-59-04-00-route-generation-resource-retirement-contract.md",
-  "latestDeployAudit": ".agent/deploy-audit/2026-07-13T17-00-59-04-00-route-lifecycle-fixture-gate.md",
-  "latestCentralSyncAudit": ".agent/central-sync-audit/2026-07-13T17-00-59-04-00-repo-ledger-route-lifecycle-reconciliation.md",
-  "previousTracker": ".agent/trackers/2026-07-13T11-41-10-04-00/project-breakdown.md",
+  "updatedAt": "2026-07-13T21-02-54-04-00",
+  "status": "victory-save-durable-commit-resume-authority-audited",
+  "sourceTracker": ".agent/trackers/2026-07-13T21-02-54-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-13T21-02-54-04-00.md",
+  "latestArchitectureAudit": ".agent/architecture-audit/2026-07-13T21-02-54-04-00-victory-save-durable-commit-resume-dsk-map.md",
+  "latestRenderAudit": ".agent/render-audit/2026-07-13T21-02-54-04-00-durable-outcome-resumed-frame-gap.md",
+  "latestGameplayAudit": ".agent/gameplay-audit/2026-07-13T21-02-54-04-00-victory-save-continue-resume-loop.md",
+  "latestInteractionAudit": ".agent/interaction-audit/2026-07-13T21-02-54-04-00-outcome-save-resume-result-map.md",
+  "latestSystemAudit": ".agent/persistence-audit/2026-07-13T21-02-54-04-00-save-schema-staging-resume-contract.md",
+  "latestDeployAudit": ".agent/deploy-audit/2026-07-13T21-02-54-04-00-durable-save-resume-fixture-gate.md",
+  "latestCentralSyncAudit": ".agent/central-sync-audit/2026-07-13T21-02-54-04-00-repo-ledger-durable-save-reconciliation.md",
+  "previousTracker": ".agent/trackers/2026-07-13T17-00-59-04-00/project-breakdown.md",
   "retainedAudits": {
+    "routeLifecycle": ".agent/trackers/2026-07-13T17-00-59-04-00/project-breakdown.md",
     "fixedStepScheduler": ".agent/trackers/2026-07-13T11-41-10-04-00/project-breakdown.md",
     "webglContextLifecycle": ".agent/trackers/2026-07-13T05-59-03-04-00/project-breakdown.md",
     "accessibleCommandFocusProjection": ".agent/trackers/2026-07-13T02-49-07-04-00/project-breakdown.md",
     "combatModifierApplication": ".agent/trackers/2026-07-13T00-40-00-04-00/project-breakdown.md",
     "campaignBootstrapResume": ".agent/trackers/2026-07-12T22-05-12-04-00/project-breakdown.md",
     "campaignKeyboardCommandAdmission": ".agent/trackers/2026-07-12T22-00-46-04-00/project-breakdown.md",
-    "campaignSpatialInput": ".agent/trackers/2026-07-12T19-58-07-04-00/project-breakdown.md",
-    "campaignActionResult": ".agent/trackers/2026-07-12T18-11-53-04-00/project-breakdown.md",
-    "menuPointerHit": ".agent/trackers/2026-07-12T16-00-03-04-00/project-breakdown.md"
+    "campaignSpatialInput": ".agent/trackers/2026-07-12T19-58-07-04-00/project-breakdown.md"
   },
   "selection": {
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "reason": "No new or ledger-missing eligible repository existed. PhantomCommand had the oldest eligible central timestamp.",
-    "priorCentralTimestamp": "2026-07-13T11-41-10-04-00",
+    "reason": "No new, missing or undocumented eligible repository existed. PhantomCommand had the oldest eligible synchronized central timestamp.",
+    "priorCentralTimestamp": "2026-07-13T17-00-59-04-00",
     "accessibleRepoCount": 10,
     "eligibleRepoCount": 9,
     "centralLedgerCount": 9,
@@ -40,77 +39,65 @@
     "entrypoints": ["index.html", "game.html"],
     "menuModule": "src/menu/graveyard-menu.js",
     "campaignModule": "src/campaign/campaign-scene.js",
-    "crtModule": "src/menu/crt-renderer.js",
-    "globalCapabilities": ["window.PhantomMenu", "window.GameHost"],
-    "routeGeneration": false,
-    "resourceManifest": false,
-    "rafCancellationReceipt": false,
-    "listenerRetirementReceipt": false,
-    "routeDrivenAudioRetirement": false,
-    "crtDisposeMethod": false,
-    "typedNavigationResult": false,
-    "firstRouteFrameAck": false
+    "saveKeys": ["phantomCommand.save", "nexus.sceneSnapshot", "phantom.command.campaign"],
+    "saveSchemaVersion": false,
+    "verifiedSavePromotion": false,
+    "campaignSaveRead": false,
+    "resumeReconstruction": false,
+    "firstDurableOutcomeFrameAck": false,
+    "firstResumedFrameAck": false
   },
   "interactionLoop": [
-    "menu allocates Canvas2D, CRT, listeners, optional audio, public host and recursive RAF",
-    "menu transition fades while predecessor resources remain active and then assigns location.href",
-    "campaign allocates CRT, listeners, public host and recursive RAF",
-    "campaign Escape and R call location navigation or reload directly",
-    "browser teardown is expected to retire every predecessor resource without a receipt",
-    "no successor visible-frame acknowledgement closes the transition"
+    "menu enables Continue from raw storage-key presence",
+    "campaign always initializes fresh hard-coded state",
+    "victory becomes visible before a swallowed localStorage marker write",
+    "continue navigation does not reconstruct the marker record",
+    "no durable commit, resume admission or matching frame acknowledgement exists"
   ],
   "domainsInUse": [
     "menu and campaign route shells",
-    "browser navigation reload pagehide and document lifecycle",
-    "route identity transition admission retirement failure and restoration",
-    "RAF callback ownership and stale work rejection",
-    "pointer keyboard wheel drag and native-button input",
-    "AudioContext ambience tones activation and closure",
+    "browser URL query and storage",
+    "settings and save candidate admission",
+    "campaign simulation combat economy and outcomes",
+    "victory settlement and durable commit",
+    "resume reconstruction and compatibility",
     "Canvas2D and WebGL CRT presentation",
-    "campaign simulation combat rewards and outcomes",
-    "settings save presence and victory persistence",
-    "public host capabilities",
-    "construction choreography",
-    "validation build Pages deployment and audit tracking"
+    "input audio public hosts and construction choreography",
+    "validation build Pages deployment and central tracking"
   ],
   "kits": {
     "implemented": [
       "crt-renderer-kit", "graveyard-art-kit", "menu-route-kit", "menu-settings-persistence-kit", "menu-save-presence-kit", "menu-audio-kit", "campaign-route-shell-kit", "pixel-campaign-runtime-kit", "fixed-step-campaign-simulation-kit", "pixel-campaign-render-kit", "legacy-gamehost-diagnostics-kit", "menu-static-check-kit", "campaign-static-check-kit", "static-build-copy-kit", "pages-deploy-kit", "construct-spiral-intro-kit", "construct-spiral-schedule-kit", "construct-piece-id-kit", "construct-piece-state-kit", "construct-sequence-update-kit"
     ],
-    "routeSessionResourceRetirementAuthority": [
-      "route-transition-id-kit", "route-generation-kit", "route-transition-command-kit", "route-transition-policy-kit", "route-transition-result-kit", "route-resource-manifest-kit", "raf-loop-lease-kit", "event-listener-lease-kit", "webgl-resource-lease-kit", "audio-context-lease-kit", "public-host-generation-kit", "navigation-admission-kit", "pagehide-retirement-kit", "beforeunload-retirement-kit", "stale-callback-rejection-kit", "candidate-retirement-kit", "resource-disposal-receipt-kit", "route-failure-fallback-kit", "first-route-frame-ack-kit", "menu-to-campaign-transition-fixture-kit", "campaign-to-menu-transition-fixture-kit", "reload-retirement-fixture-kit", "failed-navigation-fixture-kit", "source-build-pages-route-lifecycle-fixture-kit"
+    "victorySaveDurableCommitResumeAuthority": [
+      "campaign-session-id-kit", "campaign-state-revision-kit", "campaign-outcome-command-kit", "campaign-outcome-result-kit", "campaign-save-schema-kit", "campaign-save-version-kit", "campaign-save-candidate-kit", "campaign-save-validation-kit", "campaign-save-fingerprint-kit", "campaign-save-staging-kit", "campaign-save-readback-kit", "campaign-save-promotion-kit", "campaign-save-commit-result-kit", "storage-failure-classification-kit", "save-candidate-quarantine-kit", "continue-capability-projection-kit", "resume-command-kit", "resume-admission-result-kit", "resume-state-reconstruction-kit", "first-durable-outcome-frame-ack-kit", "first-resumed-frame-ack-kit", "storage-failure-fixture-kit", "source-build-pages-persistence-fixture-kit"
     ]
   },
   "services": {
-    "menu": ["procedural drawing", "selection", "settings", "save presence", "panel state", "fade transition", "location navigation", "hidden-button activation"],
-    "input": ["global keyboard ingress", "native button click", "pointer", "wheel", "drag selection", "orders", "camera control"],
-    "audio": ["AudioContext creation", "ambient oscillator and wind", "UI tones", "setting-driven delayed close"],
-    "campaign": ["mutable state", "selection", "building", "orders", "wave start", "pause", "fixed-step simulation", "combat", "rewards", "terminal rendering", "minimal victory persistence"],
-    "render": ["Canvas2D menu", "campaign world HUD and minimap", "WebGL CRT presentation", "screen-to-source mapping"],
-    "construction": ["intro choreography", "piece scheduling", "piece identity", "piece state", "sequence advancement"],
-    "delivery": ["source checks", "static build", "GitHub Pages deployment", "central audit tracking"]
+    "menu": ["procedural drawing", "selection", "settings", "save presence", "panels", "fade", "navigation"],
+    "campaign": ["state", "selection", "building", "orders", "waves", "fixed-step simulation", "combat", "rewards", "outcomes", "marker persistence"],
+    "render": ["Canvas2D menu", "campaign world HUD and minimap", "WebGL CRT presentation", "screen mapping"],
+    "audio": ["AudioContext ambience", "wind", "UI tones"],
+    "construction": ["intro choreography", "piece scheduling", "identity", "state", "sequence advancement"],
+    "delivery": ["source checks", "static build", "GitHub Pages", "central audit tracking"]
   },
-  "routeSessionResourceRetirementAuthority": {
-    "parentDomain": "phantom-command-route-session-resource-retirement-authority-domain",
-    "mainFinding": "Both routes depend on implicit browser teardown for RAF, listeners, audio, CRT resources and public capabilities, with no typed navigation result or successor visible-frame proof.",
-    "existingOwnersToUpdate": ["index.html", "game.html", "src/menu/graveyard-menu.js", "src/menu/crt-renderer.js", "src/campaign/campaign-scene.js", "menu-route-kit", "menu-audio-kit", "crt-renderer-kit", "pixel-campaign-runtime-kit", "legacy-gamehost-diagnostics-kit", "menu-static-check-kit", "campaign-static-check-kit", "scripts/check-menu.mjs", "scripts/check-campaign.mjs", "package.json"],
+  "authority": {
+    "parentDomain": "phantom-command-victory-save-durable-commit-resume-authority-domain",
+    "mainFinding": "Visible victory, browser persistence, Continue availability and resumed presentation do not share a versioned durable generation or typed result.",
     "requiredProof": [
-      "one resource manifest per route generation",
-      "idempotent RAF listener audio CRT and public-host retirement receipts",
-      "typed navigation outcomes and failure fallback",
-      "stale callback and retired capability rejection",
-      "first successor visible-frame acknowledgement",
-      "source built-output and Pages route-lifecycle parity"
+      "versioned canonical save candidate",
+      "staged write, verified readback and promotion",
+      "typed storage failure and quarantine results",
+      "compatible Continue admission",
+      "deterministic resume reconstruction",
+      "first durable outcome and resumed frame acknowledgements",
+      "source, built-output and Pages parity"
     ]
   },
   "validation": {
     "runtimeSourceChanged": false,
-    "htmlCssChanged": false,
-    "menuBehaviorChanged": false,
-    "campaignBehaviorChanged": false,
-    "inputChanged": false,
-    "audioChanged": false,
-    "rafChanged": false,
+    "gameplayChanged": false,
+    "persistenceChanged": false,
     "renderingChanged": false,
     "packageScriptsChanged": false,
     "dependenciesChanged": false,
@@ -119,8 +106,6 @@
     "pullRequestCreated": false,
     "npmCheckRun": false,
     "npmBuildRun": false,
-    "browserRouteLifecycleSmokeRun": false,
-    "pagesRouteLifecycleSmokeRun": false,
-    "routeLifecycleFixturesAvailable": false
+    "persistenceFixturesAvailable": false
   }
 }
