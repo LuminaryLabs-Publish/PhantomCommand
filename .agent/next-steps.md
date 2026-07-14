@@ -1,35 +1,40 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T21-02-54-04-00`
+**Timestamp:** `2026-07-14T02-58-28-04-00`
 
 ## Summary
 
-Implement Victory Save Durable Commit and Resume Authority before presenting Continue as a reliable campaign capability.
+Implement Settings Route Adoption and Visible-Frame Authority before treating Ritual Settings as a game-wide capability.
 
 ## Plan ledger
 
-**Goal:** move from marker-only persistence to a verified, compatible and visibly correlated save generation.
+**Goal:** move from menu-local mutable preferences to one versioned settings document applied predictably across menu and campaign routes.
 
-- [ ] Define `phantom-command.campaign-save.v1` and a campaign-definition version.
-- [ ] Choose checkpoint reconstruction or complete deterministic snapshot policy.
-- [ ] Add campaign session, state revision and save-generation identities.
-- [ ] Prepare and validate detached save candidates.
-- [ ] Stage, read back, fingerprint and atomically promote saves.
-- [ ] Return typed storage failure and degraded-durability results.
-- [ ] Replace raw key scanning with parsed Continue capability admission.
-- [ ] Implement resume reconstruction for `campaign=continue`.
-- [ ] Quarantine malformed, incompatible and legacy marker-only records.
-- [ ] Add first durable-outcome and first resumed-frame acknowledgements.
-- [ ] Add source, build and Pages persistence fixtures.
+- [ ] Define `phantom-command.settings.v1` with `crt`, `grain` and `ambience`.
+- [ ] Add settings revision, fingerprint and compatibility policy.
+- [ ] Normalize and migrate legacy unversioned documents.
+- [ ] Return typed read, write, unavailable and malformed storage results.
+- [ ] Verify writeback before claiming durable persistence.
+- [ ] Declare menu and campaign settings capability manifests.
+- [ ] Replace campaign hard-coded CRT/grain values with admitted settings.
+- [ ] Explicitly classify campaign ambience as supported or unsupported.
+- [ ] Add atomic participant adoption and rollback.
+- [ ] Expose immutable settings revision and result through `PhantomMenu` and `GameHost`.
+- [ ] Publish `FirstSettingsRevisionFrameAck` after menu and campaign application.
+- [ ] Add source, browser, build and Pages settings-parity fixtures.
 
 ## Do not claim complete until
 
 ```txt
-successful victory persistence is verified
-storage failure is visible and typed
-Continue is disabled for invalid candidates
-Continue resumes the admitted generation
-new campaign behavior is explicit
+menu and campaign consume the same accepted settings revision
+supported user choices are not silently overwritten
+unsupported route capabilities are explicit
+storage failure is observable
+public readback reports route adoption
 first matching visible frames are acknowledged
 production output matches source behavior
 ```
+
+## Retained work
+
+The prior durable save/resume, route lifecycle, fixed-step scheduler and WebGL recovery plans remain active and are not superseded by this settings audit.
