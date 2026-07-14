@@ -1,66 +1,35 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-13T17-00-59-04-00`
+**Timestamp:** `2026-07-13T21-02-54-04-00`
 
 ## Summary
 
-Implement Route Session Resource Retirement Authority before claiming safe navigation, reload, cleanup or successor readiness. Start with route generations and resource manifests, then add cancellable leases, typed retirement, navigation results, fallback and first-frame proof.
+Implement Victory Save Durable Commit and Resume Authority before presenting Continue as a reliable campaign capability.
 
 ## Plan ledger
 
-**Goal:** preserve current menu and campaign behavior while making browser resource ownership explicit and bounded.
+**Goal:** move from marker-only persistence to a verified, compatible and visibly correlated save generation.
 
-### Identity and manifest
+- [ ] Define `phantom-command.campaign-save.v1` and a campaign-definition version.
+- [ ] Choose checkpoint reconstruction or complete deterministic snapshot policy.
+- [ ] Add campaign session, state revision and save-generation identities.
+- [ ] Prepare and validate detached save candidates.
+- [ ] Stage, read back, fingerprint and atomically promote saves.
+- [ ] Return typed storage failure and degraded-durability results.
+- [ ] Replace raw key scanning with parsed Continue capability admission.
+- [ ] Implement resume reconstruction for `campaign=continue`.
+- [ ] Quarantine malformed, incompatible and legacy marker-only records.
+- [ ] Add first durable-outcome and first resumed-frame acknowledgements.
+- [ ] Add source, build and Pages persistence fixtures.
 
-- [ ] Add `RouteGeneration` and `RouteTransitionId`.
-- [ ] Publish one resource manifest per active route.
-- [ ] Include RAF, listeners, timeouts, audio, WebGL, canvases and public capabilities.
-- [ ] Reject commands from retired generations.
-
-### Leases and retirement
-
-- [ ] Retain and cancel RAF callback IDs.
-- [ ] Register listeners through removable leases.
-- [ ] Add CRT renderer `dispose()` with shader, program, buffer and texture receipts.
-- [ ] Add audio suspend/close policy for transition, pagehide and failure.
-- [ ] Retire `window.PhantomMenu` and `window.GameHost` through generation-aware facades.
-- [ ] Make retirement idempotent.
-
-### Navigation
-
-- [ ] Replace direct location mutation with `RouteTransitionCommand`.
-- [ ] Freeze duplicate menu transitions.
-- [ ] Route Escape and restart through the same authority.
-- [ ] Publish Accepted, Failed, Cancelled, Superseded and TimedOut results.
-- [ ] Restore the predecessor or show a route-independent fallback when navigation fails.
-
-### Visible proof
-
-- [ ] Publish the last accepted outgoing frame ID.
-- [ ] Carry transition ID into successor startup.
-- [ ] Publish `FirstRouteFrameAck`.
-- [ ] Expose last transition, retirement and visible-frame receipts through detached readback.
-
-### Fixtures
-
-- [ ] Add menu-to-campaign, campaign-to-menu and restart fixtures.
-- [ ] Inject RAF, listener, audio and CRT disposal failures.
-- [ ] Test duplicate transition, stale callbacks and public-host calls.
-- [ ] Test blocked navigation and successor startup failure.
-- [ ] Run source, built-output and Pages parity checks.
-- [ ] Run `npm run check` and `npm run build` after fixture wiring.
-
-## Dependency order
+## Do not claim complete until
 
 ```txt
-Route Generation
-  -> Resource Manifest
-  -> Lease Registration
-  -> Command Admission Freeze
-  -> Resource Retirement
-  -> Navigation Result
-  -> Failure Fallback or Restore
-  -> Successor Generation
-  -> FirstRouteFrameAck
-  -> source/build/Pages proof
+successful victory persistence is verified
+storage failure is visible and typed
+Continue is disabled for invalid candidates
+Continue resumes the admitted generation
+new campaign behavior is explicit
+first matching visible frames are acknowledged
+production output matches source behavior
 ```
