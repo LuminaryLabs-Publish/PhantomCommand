@@ -1,49 +1,43 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-14T13-40-59-04-00`
+**Timestamp:** `2026-07-14T18-41-11-04-00`
 
 ## Summary
 
-Implement Campaign Terminal Outcome Conflict Settlement Authority before treating victory, defeat, rewards, persistence or retry as reliable at final-wave boundaries.
+Implement Pause Input Command Admission Authority before treating the visible paused state as proof that campaign and camera mutation has stopped.
 
 ## Plan ledger
 
-**Goal:** replace independent terminal flags with one exactly-once result that every downstream participant consumes.
+**Goal:** make strict pause deterministic while retaining an option for a separately named tactical-planning mode.
 
-- [ ] Add stable `RunId`, `StepId` and `WaveId` values.
-- [ ] Replace direct terminal flag mutation with typed sanctum-loss and final-wave-clear proposals.
-- [ ] Define a versioned outcome precedence policy.
-- [ ] Classify zero, single, duplicate and conflicting proposals from one fixed step.
-- [ ] Settle exactly one immutable `CampaignOutcomeArtifact` per run.
-- [ ] Derive wave and terminal rewards from the accepted artifact.
-- [ ] Add idempotent reward settlement receipts.
-- [ ] Prepare victory persistence only after accepted victory.
-- [ ] Add typed storage commit results without changing accepted terminal truth on failure.
-- [ ] Replace independent `won` and `lost` public readback with one immutable terminal result.
-- [ ] Derive Canvas2D and CRT terminal presentation from the same result fingerprint.
-- [ ] Publish `FirstTerminalFrameAck` for the accepted outcome.
-- [ ] Replace raw reload retry with `CampaignRetryCommand`.
-- [ ] Retain predecessor outcome and retry lineage.
-- [ ] Reject late fixed-step work from predecessor runs.
-- [ ] Retain a bounded outcome journal.
-- [ ] Add headless final-wave breach and conflict fixtures.
-- [ ] Add reward idempotency and storage-failure fixtures.
-- [ ] Add browser GameHost and terminal-frame fixtures.
-- [ ] Require source, `dist` and GitHub Pages terminal parity.
+- [ ] Add `RunId`, `CommandId`, `InputRevision`, `PauseStateRevision` and `PausePolicyRevision`.
+- [ ] Replace raw `state.paused` toggling with `CampaignPauseCommand` and `CampaignResumeCommand`.
+- [ ] Settle held keys, drag and middle-button state at pause adoption.
+- [ ] Define strict-pause allowed, blocked and deferred command classes.
+- [ ] Block wave start, tower build and unit orders under strict pause.
+- [ ] Freeze camera pan, zoom and focus under strict pause.
+- [ ] Decide whether selection is blocked or belongs to an explicit tactical-planning mode.
+- [ ] Route pointer, wheel, keyboard and GameHost actions through one admission service.
+- [ ] Publish typed accepted, rejected and deferred results.
+- [ ] Journal blocked commands with the active pause revision.
+- [ ] Reject stale pre-pause input after resume.
+- [ ] Publish `FirstPausedFrameAck`.
+- [ ] Publish `FirstResumedCampaignFrameAck`.
+- [ ] Add headless pause command matrices.
+- [ ] Add browser keyboard, pointer, wheel and GameHost fixtures.
+- [ ] Add source, `dist` and GitHub Pages parity.
 
 ## Do not claim complete until
 
 ```txt
-won and lost cannot both be accepted
-final-wave breach has one policy-defined result
-rewards apply exactly once from the accepted artifact
-victory persistence cannot occur for accepted defeat
-GameHost and visible terminal UI cite one outcome fingerprint
-retry retains predecessor evidence and allocates a successor run
-late predecessor work cannot mutate the successor
-source, build and Pages pass the same terminal conflict matrix
+PAUSED frame and authoritative pause state cite one revision
+strict pause blocks every campaign and camera mutation not explicitly allowed
+public GameHost capabilities follow the same policy
+resume rejects stale held input
+tactical planning, if retained, is separately named and versioned
+source, build and Pages pass the same pause matrix
 ```
 
 ## Retained work
 
-The browser-startup, settings, durable save/resume, route retirement, scheduler, WebGL recovery, accessibility, input and combat plans remain active and are not superseded.
+Terminal settlement, browser startup, settings, durable save/resume, route retirement, scheduler, WebGL recovery, accessibility, input and combat plans remain active and are not superseded.
