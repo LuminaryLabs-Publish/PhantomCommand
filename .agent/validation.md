@@ -1,21 +1,22 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-14T02-58-28-04-00`  
+**Timestamp:** `2026-07-14T07-58-22-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited settings persistence, route capability, campaign adoption and visible-frame parity only. It did not modify or execute the product runtime.
+This run audited menu and campaign startup readiness, failure containment, fallback, retry and first-frame evidence. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
 **Goal:** state exactly what changed, what was inspected and what remains unproven.
 
 - [x] Documentation files added and refreshed.
-- [x] Source paths inspected: menu, CRT renderer, campaign, HTML and static checks.
+- [x] Source paths inspected: both HTML routes, menu, campaign, CRT renderer, static checks and build.
+- [x] Complete 20-kit inventory and services retained.
 - [x] No branch or pull request created.
 - [x] `main` used for every write.
-- [ ] Runtime settings fixtures remain unavailable and unexecuted.
+- [ ] Runtime startup fixtures remain unavailable and unexecuted.
 
 ## Change boundary
 
@@ -23,8 +24,7 @@ This run audited settings persistence, route capability, campaign adoption and v
 runtime JavaScript changed: no
 HTML or CSS changed: no
 gameplay changed: no
-settings behavior changed: no
-persistence behavior changed: no
+settings or persistence behavior changed: no
 audio behavior changed: no
 render behavior changed: no
 package scripts or dependencies changed: no
@@ -38,14 +38,28 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-settings schema fixtures: unavailable / not run
-menu-to-campaign settings parity fixture: unavailable / not run
-storage failure and migration fixtures: unavailable / not run
-first settings frame fixture: unavailable / not run
-built-output settings smoke: not run
-GitHub Pages settings smoke: not run
+menu browser startup fixture: unavailable / not run
+campaign browser startup fixture: unavailable / not run
+Canvas2D failure fixture: unavailable / not run
+WebGL and shader failure fixtures: unavailable / not run
+fallback and retry fixture: unavailable / not run
+first route frame fixture: unavailable / not run
+built-output startup smoke: not run
+GitHub Pages startup smoke: not run
+```
+
+## Existing proof boundary
+
+```txt
+menu check: regular-expression source markers
+campaign check: regular-expression source markers
+build: static file copy
+real browser startup: not exercised
+fault injection: not exercised
+resource rollback: not exercised
+first visible frame: not observed
 ```
 
 ## Claims not made
 
-No schema compatibility, verified persistence, campaign settings adoption, explicit ambience capability, atomic participant settlement, public settings readback, visible-frame convergence or production-readiness claim is made.
+No startup fault containment, capability admission, candidate rollback, fallback availability, retry isolation, first-frame convergence, source/build/Pages parity or production-readiness claim is made.
