@@ -1,59 +1,56 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-14T13-40-59-04-00`
+**Timestamp:** `2026-07-14T18-41-11-04-00`
 
 ## Summary
 
-Campaign victory and defeat are independent mutable flags. A final sanctum breach can remove the last enemy, set defeat and then satisfy final-wave clear logic in the same fixed step, allowing victory, rewards, persistence and victory presentation to follow.
+The visible pause overlay does not own command admission. Only simulation `update()` stops; camera and direct gameplay commands remain mutable.
 
 ## Plan ledger
 
-**Goal:** keep every blocker to exclusive campaign terminal settlement explicit.
+**Goal:** keep every blocker to authoritative pause and resume explicit.
 
-- [x] Record current source-backed terminal gaps.
+- [x] Record current source-backed pause gaps.
 - [ ] Close them through runtime implementation and executable headless/browser proof.
 
-## Current terminal gaps
+## Current pause gaps
 
 ```txt
-campaign RunId: absent
-fixed-step StepId: absent
-wave revision identity: absent
-terminal proposal envelope: absent
-sanctum-loss proposal: direct mutation only
-final-wave-clear proposal: direct mutation only
-terminal conflict classifier: absent
-versioned outcome precedence: absent
-exclusive accepted outcome: absent
-outcome fingerprint: absent
-reward-policy revision: absent
-wave reward settlement receipt: absent
-victory save candidate identity: absent
-save commit result: absent
-immutable public terminal readback: absent
-terminal projection descriptor: absent
-first terminal-frame acknowledgement: absent
-retry command: page reload only
-retry lineage: absent
-stale predecessor rejection: absent
-bounded outcome journal: absent
-source/build/Pages conflict fixtures: absent
+PauseStateRevision: absent
+PausePolicyRevision: absent
+strict versus tactical pause distinction: absent
+held-key settlement: absent
+drag/pointer settlement: absent
+camera freeze policy: absent
+keyboard command admission result: absent
+pointer command admission result: absent
+wheel command admission result: absent
+GameHost command admission result: absent
+wave-start pause guard: absent
+tower-build pause guard: absent
+unit-order pause guard: absent
+selection pause guard: absent
+camera pan/zoom/focus pause guard: absent
+blocked-command journal: absent
+stale input rejection on resume: absent
+FirstPausedFrameAck: absent
+FirstResumedCampaignFrameAck: absent
+source/build/Pages pause fixtures: absent
 ```
 
 ## Current risks
 
 ```txt
-won and lost can both be true
-victory can visually mask defeat
-wave-clear rewards can apply after sanctum destruction
-victory persistence can be attempted from a conflicting step
-public readback can expose contradictory flags
-raw reload discards predecessor evidence
-terminal policy depends on function ordering
-source-marker checks can pass while terminal behavior is wrong
-static build can succeed without terminal correctness
+PAUSED can be visible while state mutates
+a wave can be queued while paused
+souls and towers can change while paused
+orders can be prepared while paused
+camera can move behind the overlay
+public GameHost capabilities can bypass UI policy
+resume can adopt unclassified paused mutations
+tests can pass without executing pause behavior
 ```
 
 ## Retained gaps
 
-The browser-startup, settings, durable save/resume, route-resource retirement, scheduler, WebGL recovery, accessibility, spatial/keyboard input, public-host, phase and combat gaps remain retained in their timestamped audits.
+Terminal outcome, browser-startup, settings, durable save/resume, route-resource retirement, scheduler, WebGL recovery, accessibility, spatial/keyboard input, public-host and combat gaps remain retained in their timestamped audits.
