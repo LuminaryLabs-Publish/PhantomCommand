@@ -1,40 +1,44 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-14T02-58-28-04-00`
+**Timestamp:** `2026-07-14T07-58-22-04-00`
 
 ## Summary
 
-Implement Settings Route Adoption and Visible-Frame Authority before treating Ritual Settings as a game-wide capability.
+Implement Browser Route Startup Readiness and Failure Authority before treating either route as reliably bootable across browsers and deployed output.
 
 ## Plan ledger
 
-**Goal:** move from menu-local mutable preferences to one versioned settings document applied predictably across menu and campaign routes.
+**Goal:** move route initialization from top-level side effects to one staged attempt that either publishes a proved first frame or leaves a usable DOM fallback.
 
-- [ ] Define `phantom-command.settings.v1` with `crt`, `grain` and `ambience`.
-- [ ] Add settings revision, fingerprint and compatibility policy.
-- [ ] Normalize and migrate legacy unversioned documents.
-- [ ] Return typed read, write, unavailable and malformed storage results.
-- [ ] Verify writeback before claiming durable persistence.
-- [ ] Declare menu and campaign settings capability manifests.
-- [ ] Replace campaign hard-coded CRT/grain values with admitted settings.
-- [ ] Explicitly classify campaign ambience as supported or unsupported.
-- [ ] Add atomic participant adoption and rollback.
-- [ ] Expose immutable settings revision and result through `PhantomMenu` and `GameHost`.
-- [ ] Publish `FirstSettingsRevisionFrameAck` after menu and campaign application.
-- [ ] Add source, browser, build and Pages settings-parity fixtures.
+- [ ] Add parser-owned fallback containers and accessible status to `index.html` and `game.html`.
+- [ ] Wrap menu and campaign boot in explicit `main(startupCommand)` entrypoints.
+- [ ] Define route ID, startup attempt ID, source revision and build revision.
+- [ ] Probe the DOM root and Canvas2D context before route state creation.
+- [ ] Return typed WebGL, shader compile and program link results.
+- [ ] Prepare CRT resources without publishing them as live.
+- [ ] Prepare menu/campaign state, listener leases, public host and RAF lease as candidates.
+- [ ] Execute one source-frame probe and one CRT-frame probe.
+- [ ] Atomically adopt every participant or retire every candidate.
+- [ ] Publish `RouteStartupResult` and immutable public readback.
+- [ ] Publish `FirstRouteFrameAck` for the accepted attempt.
+- [ ] Add DOM fallback retry, reload and campaign return-to-menu commands.
+- [ ] Allocate a new attempt for every retry and reject stale completion.
+- [ ] Classify audio and storage failure as optional/degraded where appropriate.
+- [ ] Add real-browser success and fault-injection fixtures.
+- [ ] Require source, `dist` and GitHub Pages startup parity.
 
 ## Do not claim complete until
 
 ```txt
-menu and campaign consume the same accepted settings revision
-supported user choices are not silently overwritten
-unsupported route capabilities are explicit
-storage failure is observable
-public readback reports route adoption
-first matching visible frames are acknowledged
-production output matches source behavior
+required startup failures never leave an unexplained blank route
+candidate listeners, frames and GPU resources are retired on failure
+fallback controls remain visible and operable without WebGL
+retry cannot adopt stale predecessor work
+public host publication cites the accepted startup attempt
+first source and CRT frames cite the same attempt
+source, build and Pages pass the same fault matrix
 ```
 
 ## Retained work
 
-The prior durable save/resume, route lifecycle, fixed-step scheduler and WebGL recovery plans remain active and are not superseded by this settings audit.
+The settings, durable save/resume, route retirement, scheduler, WebGL recovery, accessibility, input and combat plans remain active and are not superseded.
