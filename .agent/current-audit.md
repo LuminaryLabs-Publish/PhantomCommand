@@ -1,66 +1,61 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-14T07-58-22-04-00`  
+**Timestamp:** `2026-07-14T13-40-59-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `browser-route-startup-readiness-failure-authority-audited`
+**Status:** `campaign-terminal-outcome-conflict-settlement-authority-audited`
 
 ## Summary
 
-Both routes perform startup through top-level module side effects. DOM lookup, Canvas2D acquisition, WebGL acquisition, shader compilation, resource creation, state construction and listener installation happen without an application-owned startup result. Required failure can leave a blank or inert route with no fallback, retry, rollback or first-frame evidence.
+Campaign terminal truth is split across independent mutable `won` and `lost` flags. A sanctum breach can set loss and remove the final enemy, after which the same fixed step can classify the final wave as cleared, grant rewards, set victory, write a victory save and render victory.
 
 ## Plan ledger
 
-**Goal:** make menu and campaign startup one admitted attempt with explicit capabilities, candidate ownership, atomic publication and visible failure handling.
+**Goal:** make terminal proposals from one fixed step settle into exactly one immutable outcome before rewards, persistence, public readback, presentation or retry proceed.
 
 - [x] Compare the complete Publish list with central tracking.
 - [x] Exclude `TheCavalryOfRome`.
 - [x] Select only PhantomCommand under the oldest eligible rule.
-- [x] Read route HTML, menu, campaign, CRT renderer, static checks and build.
+- [x] Read campaign state, simulation, reward, persistence, rendering and retry paths.
 - [x] Identify the interaction loop and active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Add the timestamped startup audit family.
+- [x] Add the timestamped terminal-settlement audit family.
 - [ ] Implement and execute the authority later.
 
 ## Current loop
 
 ```txt
-HTML parses
-  -> module evaluates
-  -> query route canvas
-  -> acquire Canvas2D and WebGL
-  -> compile/link shaders
-  -> allocate source and CRT resources
-  -> create menu or campaign state
-  -> attach listeners
-  -> publish host and request RAF
-
-failure before completion
-  -> exception or rejected module
-  -> no typed startup state
-  -> no resource rollback receipt
-  -> no visible fallback or retry
-  -> no first accepted frame acknowledgement
+active final wave
+  -> fixed-step update begins
+  -> final enemy reaches the sanctum
+  -> core is reduced to zero
+  -> enemy is deleted
+  -> lost becomes true
+  -> fixed-step update continues
+  -> no queued or live enemies remain
+  -> wave clear reward is granted
+  -> won becomes true
+  -> victory save is attempted
+  -> terminal UI selects victory before defeat
 ```
 
 ## Source-backed findings
 
 ```txt
-menu parser-owned fallback: absent
-campaign parser-owned fallback: static instructions only
-startup attempt ID: absent
-startup phases: absent
-Canvas2D probe result: absent
-WebGL probe result: throw on absence
-shader compile/link result: throw on failure
-candidate resource manifest: absent
-atomic startup adoption: absent
-startup rollback result: absent
-route startup result: absent
-retry command: absent
-superseded-attempt rejection: absent
-public host readiness revision: absent
-first route frame acknowledgement: absent
-browser startup fixtures: absent
+terminal enum: absent
+independent won and lost flags: present
+run identity: absent
+fixed-step identity: absent
+terminal proposal contract: absent
+conflict classifier: absent
+versioned precedence policy: absent
+exclusive terminal settlement: absent
+wave reward receipt: absent
+victory save commit receipt: absent
+terminal outcome fingerprint: absent
+immutable GameHost outcome: absent
+first terminal-frame acknowledgement: absent
+retry lineage: absent
+terminal conflict fixtures: absent
 ```
 
 ## Domains in use
@@ -69,32 +64,35 @@ browser startup fixtures: absent
 static route and ES module lifecycle
 DOM root and accessibility fallback
 Canvas2D source rendering
-WebGL context and CRT resource preparation
-shader compilation and linking
-procedural menu and campaign state preparation
-settings storage audio and navigation
-campaign input simulation combat and outcomes
-listener public-host and RAF publication
-startup identity phase capability and readiness
-candidate ownership atomic adoption and rollback
-failure projection retry and route escape
-first source/CRT frame evidence
-source checks static build Pages and central tracking
+WebGL context and CRT presentation
+procedural menu art, settings, save presence, audio and navigation
+campaign rings, pads, units, towers and wave catalog
+pointer, keyboard, wheel, blur and navigation input
+camera, projection, selection, building and orders
+fixed-step scheduling and mutable simulation
+wave queueing, spawning and completion
+movement, targeting, projectiles, damage and kill rewards
+sanctum core, victory, defeat and terminal precedence
+wave rewards and victory marker persistence
+terminal HUD, CRT frame and GameHost readback
+run, step, proposal, conflict and outcome authority
+reward, save, retry and journal settlement
+source checks, static build, Pages and central tracking
 ```
 
 ## Implemented kits and offered services
 
 ```txt
-crt-renderer-kit: WebGL context shaders buffer texture resize mapping upload and draw
+crt-renderer-kit: WebGL context, shaders, buffer, texture, resize, mapping, upload and CRT draw
 graveyard-art-kit: procedural menu and panel drawing
-menu-route-kit: selection panels fade transition and navigation
-menu-settings-persistence-kit: settings parse defaults mutation and writeback
+menu-route-kit: selection, panels, fade, transition and navigation
+menu-settings-persistence-kit: settings parse, defaults, mutation and writeback
 menu-save-presence-kit: local/session save-key scanning
-menu-audio-kit: ambience wind UI tones and delayed close
-campaign-route-shell-kit: campaign document source canvas and static instructions
-pixel-campaign-runtime-kit: state input selection building orders pause and camera
-fixed-step-campaign-simulation-kit: waves movement targeting projectiles damage rewards outcomes
-pixel-campaign-render-kit: world HUD minimap terminal overlays and CRT submission
+menu-audio-kit: ambience, wind, UI tones and delayed close
+campaign-route-shell-kit: campaign document, source canvas and static instructions
+pixel-campaign-runtime-kit: state, input, selection, building, orders, pause and camera
+fixed-step-campaign-simulation-kit: waves, spawning, movement, targeting, projectiles, damage, rewards and terminal flags
+pixel-campaign-render-kit: world, HUD, minimap, terminal overlay and CRT submission
 legacy-gamehost-diagnostics-kit: public state readback and direct capabilities
 menu-static-check-kit: menu source-marker checks
 campaign-static-check-kit: campaign source-marker checks
@@ -110,29 +108,30 @@ construct-sequence-update-kit: sequence advancement
 ## Required authority
 
 ```txt
-phantom-command-browser-route-startup-readiness-failure-authority-domain
+phantom-command-campaign-terminal-outcome-conflict-settlement-authority-domain
 ```
 
 ## Required transaction
 
 ```txt
-RouteStartupCommand
-  -> bind route, attempt and source/build revisions
-  -> probe DOM, Canvas2D, WebGL and shader capabilities
-  -> prepare route state, resources, listeners, host and frame lease
-  -> execute source and CRT probe frames
-  -> atomically adopt or roll back every candidate
-  -> publish RouteStartupResult
-  -> publish host only for the accepted attempt
-  -> publish FirstRouteFrameAck
+CampaignTerminalSettlementCommand
+  -> bind RunId, StepId, WaveId and policy revisions
+  -> collect sanctum-loss and final-wave-clear proposals
+  -> classify zero, one, duplicate or conflicting proposals
+  -> apply one explicit precedence policy
+  -> accept exactly one CampaignOutcomeArtifact
+  -> settle wave and terminal rewards exactly once
+  -> prepare persistence only for accepted victory
+  -> publish immutable GameHost and UI descriptors
+  -> acknowledge FirstTerminalFrameAck
 
-failure
-  -> retire candidates
-  -> project DOM fallback
-  -> expose retry and safe route escape
-  -> reject stale completion from superseded attempts
+CampaignRetryCommand
+  -> cite the accepted predecessor artifact
+  -> allocate successor RunId and retry lineage
+  -> reset participants atomically
+  -> reject late predecessor work
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, gameplay, rendering, HTML, package scripts, dependencies, workflows and deployment were not changed.
+Documentation only. Runtime, gameplay, rendering, persistence, HTML, package scripts, dependencies, workflows and deployment were not changed.
