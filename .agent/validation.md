@@ -1,22 +1,23 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-14T07-58-22-04-00`  
+**Timestamp:** `2026-07-14T13-40-59-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited menu and campaign startup readiness, failure containment, fallback, retry and first-frame evidence. It did not modify or execute the product runtime.
+This run audited campaign terminal conflict settlement, reward adoption, victory persistence, public readback, terminal presentation and retry lineage. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
 **Goal:** state exactly what changed, what was inspected and what remains unproven.
 
 - [x] Documentation files added and refreshed.
-- [x] Source paths inspected: both HTML routes, menu, campaign, CRT renderer, static checks and build.
+- [x] Full Publish inventory and central ledger comparison completed.
+- [x] Source paths inspected: campaign simulation, rendering, persistence, retry, menu, CRT renderer, static checks and build.
 - [x] Complete 20-kit inventory and services retained.
 - [x] No branch or pull request created.
 - [x] `main` used for every write.
-- [ ] Runtime startup fixtures remain unavailable and unexecuted.
+- [ ] Runtime terminal fixtures remain unavailable and unexecuted.
 
 ## Change boundary
 
@@ -24,8 +25,8 @@ This run audited menu and campaign startup readiness, failure containment, fallb
 runtime JavaScript changed: no
 HTML or CSS changed: no
 gameplay changed: no
-settings or persistence behavior changed: no
-audio behavior changed: no
+reward behavior changed: no
+persistence behavior changed: no
 render behavior changed: no
 package scripts or dependencies changed: no
 workflow or deployment changed: no
@@ -38,14 +39,13 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-menu browser startup fixture: unavailable / not run
-campaign browser startup fixture: unavailable / not run
-Canvas2D failure fixture: unavailable / not run
-WebGL and shader failure fixtures: unavailable / not run
-fallback and retry fixture: unavailable / not run
-first route frame fixture: unavailable / not run
-built-output startup smoke: not run
-GitHub Pages startup smoke: not run
+headless terminal conflict fixture: unavailable / not run
+reward idempotency fixture: unavailable / not run
+victory save eligibility fixture: unavailable / not run
+browser GameHost fixture: unavailable / not run
+first terminal-frame fixture: unavailable / not run
+built-output terminal smoke: not run
+GitHub Pages terminal smoke: not run
 ```
 
 ## Existing proof boundary
@@ -54,12 +54,13 @@ GitHub Pages startup smoke: not run
 menu check: regular-expression source markers
 campaign check: regular-expression source markers
 build: static file copy
-real browser startup: not exercised
-fault injection: not exercised
-resource rollback: not exercised
-first visible frame: not observed
+fixed-step terminal conflict: not executed
+reward settlement: not executed
+storage adoption: not executed
+terminal visible frame: not observed
+retry lineage: not exercised
 ```
 
 ## Claims not made
 
-No startup fault containment, capability admission, candidate rollback, fallback availability, retry isolation, first-frame convergence, source/build/Pages parity or production-readiness claim is made.
+No exclusive terminal settlement, precedence correctness, reward idempotency, victory-save eligibility, durable outcome, immutable public readback, retry lineage, first-frame convergence, source/build/Pages parity or production-readiness claim is made.
