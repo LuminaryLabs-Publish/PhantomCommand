@@ -1,158 +1,118 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-13T17-00-59-04-00`  
+**Timestamp:** `2026-07-13T21-02-54-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `route-session-resource-retirement-authority-audited`
+**Status:** `victory-save-durable-commit-resume-authority-audited`
 
 ## Summary
 
-Menu and campaign are independent browser route sessions, but neither owns a typed lifetime. They allocate canvases, CRT resources, RAF callbacks, event listeners and public capabilities at module scope. The menu may also allocate an AudioContext and persistent ambience. Navigation and restart use browser location APIs directly, with no resource manifest, retirement generation, disposal receipt, navigation result, failure fallback or first-successor-frame proof.
+Victory is committed to mutable campaign state and visible presentation before a single localStorage write is attempted. Storage failure is swallowed. The record contains only `scene`, `souls` and `wave`; campaign boot never reads it. The menu enables Continue when any non-empty value exists under one of three keys, without parsing or compatibility admission.
 
 ## Plan ledger
 
-**Goal:** require every route transition to retire the complete predecessor resource set and prove successor readiness.
+**Goal:** make campaign outcome durability, Continue capability and resume reconstruction one revisioned transaction.
 
-- [x] Compare the complete Publish repository list with central tracking.
+- [x] Compare the complete Publish list with central tracking.
 - [x] Exclude TheCavalryOfRome.
 - [x] Select only PhantomCommand under the oldest eligible rule.
-- [x] Read menu, campaign, CRT renderer, package and prior audit state.
+- [x] Read menu, campaign, package checks and retained audit state.
 - [x] Identify the interaction loop and active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Trace RAF, listeners, audio, GPU resources, public hosts and navigation.
-- [x] Add the timestamped audit family and refresh root `.agent` state.
+- [x] Add the timestamped persistence audit family.
 - [ ] Implement and execute the authority later.
 
-## Selection
+## Current loop
 
 ```txt
-accessible Publish repositories: 10
-eligible non-Cavalry repositories: 9
-central ledger entries: 9
-new eligible repositories: 0
-ledger-missing eligible repositories: 0
-selected: LuminaryLabs-Publish/PhantomCommand
-selection reason: oldest eligible central timestamp, 2026-07-13T11-41-10-04-00
-```
-
-## Complete interaction loop
-
-```txt
-menu
-  -> create canvases, art and CRT WebGL renderer
-  -> register canvas, document and hidden-button listeners
-  -> create audio lazily after input
-  -> publish window.PhantomMenu
-  -> recursive RAF
-  -> transition fade
-  -> location.href
-  -> implicit browser cleanup
-
-campaign
-  -> create canvases and CRT WebGL renderer
-  -> register canvas and global keyboard/blur listeners
-  -> publish window.GameHost
-  -> recursive RAF and fixed-step simulation
-  -> Escape location.href or R location.reload
-  -> implicit browser cleanup
+menu boot
+  -> scan three storage keys
+  -> enable Continue from raw presence
+campaign boot
+  -> construct fresh default state
+victory
+  -> set won and message
+  -> attempt marker-only localStorage write
+  -> swallow failure
+Continue
+  -> navigate to campaign=continue
+  -> construct fresh default state again
 ```
 
 ## Source-backed findings
 
-### No route generation or manifest
-
-Neither route identifies a session generation or inventories its callbacks, listeners, audio, WebGL resources, canvases, timeout work and public capabilities.
-
-### No explicit RAF retirement
-
-Recursive RAF IDs are not retained. No stop method, cancellation receipt or stale-callback rejection exists before navigation or reload.
-
-### No CRT disposal surface
-
-The renderer creates shaders, a program, buffer and texture but returns no `dispose()` operation. It exposes the raw WebGL context.
-
-### No route-driven audio retirement
-
-Audio is closed only when ambience is disabled. Route transition, page hide and page replacement do not own a typed suspend or close result.
-
-### No listener or public-host retirement
-
-Listeners are registered directly. Public hosts have no generation and remain callable until document replacement.
-
-### No terminal navigation result
-
-The menu later assigns `location.href`; campaign exit and restart call browser location APIs directly. Success, failure, timeout and supersession are unclassified.
-
-### No successor visible proof
-
-A route transition is treated as complete without proof that the successor route initialized and presented a frame.
+```txt
+save schema/version: absent
+save-candidate parsing before Continue: absent
+campaign query admission: absent
+campaign save read: absent
+complete checkpoint or snapshot: absent
+verified staged write and promotion: absent
+storage failure result: absent
+resume reconstruction: absent
+first durable outcome frame acknowledgement: absent
+first resumed frame acknowledgement: absent
+```
 
 ## Domains in use
 
 ```txt
 menu and campaign route shells
-browser navigation reload pagehide and document lifecycle
-route generation transition admission retirement failure and restoration
-RAF callback ownership and stale work rejection
-pointer keyboard wheel drag and native-button input
-AudioContext ambience tones activation suspension and closure
-Canvas2D source rendering and WebGL CRT presentation
-campaign camera simulation combat rewards and outcomes
-settings save presence and victory persistence
-public PhantomMenu and GameHost capabilities
-construction choreography
-source checks build Pages deployment and audit tracking
+browser URL query and storage
+settings and save-candidate admission
+campaign simulation combat economy and outcomes
+victory settlement and durable commit
+resume reconstruction and compatibility
+Canvas2D and WebGL CRT presentation
+input audio public hosts and construction choreography
+validation build Pages deployment and central tracking
 ```
 
 ## Implemented kits and offered services
 
 ```txt
-crt-renderer-kit: WebGL context shaders buffer texture resize mapping upload and draw
-graveyard-art-kit: procedural menu and panel drawing
-menu-route-kit: selection panels fade transition and location navigation
-menu-settings-persistence-kit: settings read/write
-menu-save-presence-kit: save-key scanning
-menu-audio-kit: AudioContext ambience tones and setting-driven delayed close
-campaign-route-shell-kit: campaign document and source canvas
-pixel-campaign-runtime-kit: state input selection building orders pause and camera
-fixed-step-campaign-simulation-kit: accumulator waves movement targeting projectiles damage and outcomes
-pixel-campaign-render-kit: world HUD minimap terminal and source-canvas rendering
-legacy-gamehost-diagnostics-kit: public state and direct capabilities
-menu-static-check-kit: menu source-marker checks
-campaign-static-check-kit: campaign source-marker checks
-static-build-copy-kit: deployable static copy
-pages-deploy-kit: GitHub Pages delivery
+crt-renderer-kit: WebGL CRT creation upload draw resize and mapping
+graveyard-art-kit: procedural menu drawing
+menu-route-kit: selection panels fade and navigation
+menu-settings-persistence-kit: settings read and write
+menu-save-presence-kit: local/session key presence scan
+menu-audio-kit: ambience and UI tones
+campaign-route-shell-kit: campaign page and source canvas
+pixel-campaign-runtime-kit: state input building orders pause camera
+fixed-step-campaign-simulation-kit: waves movement combat rewards outcomes
+pixel-campaign-render-kit: world HUD minimap and terminal projection
+legacy-gamehost-diagnostics-kit: public readback and direct commands
+menu-static-check-kit: menu marker checks
+campaign-static-check-kit: campaign marker checks
+static-build-copy-kit: static output
+pages-deploy-kit: Pages delivery
 construct-spiral-intro-kit: intro choreography
-construct-spiral-schedule-kit: ring and piece timing
-construct-piece-id-kit: stable construction identity
-construct-piece-state-kit: construction state projection
+construct-spiral-schedule-kit: sequence timing
+construct-piece-id-kit: piece identity
+construct-piece-state-kit: piece projection
 construct-sequence-update-kit: sequence advancement
 ```
 
 ## Required authority
 
 ```txt
-phantom-command-route-session-resource-retirement-authority-domain
+phantom-command-victory-save-durable-commit-resume-authority-domain
 ```
 
 ## Required transaction
 
 ```txt
-RouteTransitionCommand
-  -> bind source route generation and target
-  -> reject duplicate stale or retired commands
-  -> freeze predecessor command admission
-  -> collect resource manifest and participant receipts
-  -> cancel RAF and listener leases
-  -> suspend or close audio
-  -> dispose CRT resources
-  -> revoke public capabilities
-  -> publish ResourceRetirementResult
-  -> admit browser navigation
-  -> publish RouteTransitionResult
-  -> show bounded fallback or restore predecessor on failure
-  -> publish FirstRouteFrameAck from successor
+CampaignOutcomeCommitCommand
+  -> bind campaign session and expected revision
+  -> prepare and validate a versioned save candidate
+  -> stage, verify and promote one durable generation
+  -> publish CampaignSaveCommitResult
+  -> classify visible victory durability
+  -> derive Continue only from an admitted candidate
+  -> execute ResumeCommand against the accepted generation
+  -> publish ResumeAdmissionResult
+  -> publish first durable outcome and resumed frame acknowledgements
 ```
 
 ## Validation boundary
 
-Documentation-only. No route, audio, input, RAF, WebGL, gameplay, persistence, script, dependency or deployment behavior changed.
+Documentation only. Runtime, gameplay, persistence, rendering, package scripts, dependencies and deployment were not changed.
