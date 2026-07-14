@@ -1,70 +1,73 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-13T21-02-54-04-00`  
+**Timestamp:** `2026-07-14T02-58-28-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `victory-save-durable-commit-resume-authority-audited`
+**Status:** `settings-route-adoption-visible-frame-authority-audited`
 
 ## Summary
 
-Victory is committed to mutable campaign state and visible presentation before a single localStorage write is attempted. Storage failure is swallowed. The record contains only `scene`, `souls` and `wave`; campaign boot never reads it. The menu enables Continue when any non-empty value exists under one of three keys, without parsing or compatibility admission.
+The menu reads `phantomCommand.menuSettings`, normalizes `crt`, `grain` and `ambience`, applies the values live and attempts an unverified write. Campaign startup never reads that document. Its render loop calls the shared CRT renderer with hard-coded `crt: true` and `grain: "low"`; `GameHost` exposes no settings revision or result.
 
 ## Plan ledger
 
-**Goal:** make campaign outcome durability, Continue capability and resume reconstruction one revisioned transaction.
+**Goal:** make settings persistence, route capability, participant adoption and visible presentation one revisioned transaction.
 
 - [x] Compare the complete Publish list with central tracking.
-- [x] Exclude TheCavalryOfRome.
+- [x] Exclude `TheCavalryOfRome`.
 - [x] Select only PhantomCommand under the oldest eligible rule.
-- [x] Read menu, campaign, package checks and retained audit state.
+- [x] Read menu, CRT renderer, campaign, package checks and retained audit state.
 - [x] Identify the interaction loop and active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Add the timestamped persistence audit family.
+- [x] Add the timestamped settings audit family.
 - [ ] Implement and execute the authority later.
 
 ## Current loop
 
 ```txt
 menu boot
-  -> scan three storage keys
-  -> enable Continue from raw presence
+  -> parse unversioned settings document
+  -> apply menu CRT, grain and ambience
+settings edit
+  -> mutate live menu state
+  -> attempt unverified write
+  -> next menu frame applies values
 campaign boot
-  -> construct fresh default state
-victory
-  -> set won and message
-  -> attempt marker-only localStorage write
-  -> swallow failure
-Continue
-  -> navigate to campaign=continue
-  -> construct fresh default state again
+  -> ignore stored settings
+  -> force CRT enabled and grain low
+  -> expose no settings revision or application result
 ```
 
 ## Source-backed findings
 
 ```txt
-save schema/version: absent
-save-candidate parsing before Continue: absent
-campaign query admission: absent
-campaign save read: absent
-complete checkpoint or snapshot: absent
-verified staged write and promotion: absent
-storage failure result: absent
-resume reconstruction: absent
-first durable outcome frame acknowledgement: absent
-first resumed frame acknowledgement: absent
+settings key: phantomCommand.menuSettings
+stored fields: crt, grain, ambience
+schema/version: absent
+accepted revision: absent
+verified write: absent
+menu settings application: present
+campaign settings read: absent
+campaign CRT policy: hard-coded enabled
+campaign grain policy: hard-coded low
+campaign ambience capability: undeclared
+public campaign settings readback: absent
+first settings revision frame acknowledgement: absent
 ```
 
 ## Domains in use
 
 ```txt
 menu and campaign route shells
-browser URL query and storage
-settings and save-candidate admission
+browser localStorage and navigation
+settings parsing mutation persistence and migration
+settings schema revision and route capability
+Canvas2D source presentation
+WebGL CRT grain curve aberration vignette and fade
+menu AudioContext ambience and UI tones
 campaign simulation combat economy and outcomes
-victory settlement and durable commit
-resume reconstruction and compatibility
-Canvas2D and WebGL CRT presentation
-input audio public hosts and construction choreography
+input public hosts and construction choreography
 validation build Pages deployment and central tracking
+settings application and visible-frame evidence
 ```
 
 ## Implemented kits and offered services
@@ -73,13 +76,13 @@ validation build Pages deployment and central tracking
 crt-renderer-kit: WebGL CRT creation upload draw resize and mapping
 graveyard-art-kit: procedural menu drawing
 menu-route-kit: selection panels fade and navigation
-menu-settings-persistence-kit: settings read and write
-menu-save-presence-kit: local/session key presence scan
-menu-audio-kit: ambience and UI tones
+menu-settings-persistence-kit: settings read defaults mutation and writeback
+menu-save-presence-kit: local/session key scanning
+menu-audio-kit: ambience wind UI tones and delayed close
 campaign-route-shell-kit: campaign page and source canvas
-pixel-campaign-runtime-kit: state input building orders pause camera
+pixel-campaign-runtime-kit: state input building orders pause and camera
 fixed-step-campaign-simulation-kit: waves movement combat rewards outcomes
-pixel-campaign-render-kit: world HUD minimap and terminal projection
+pixel-campaign-render-kit: world HUD minimap terminal and CRT submission
 legacy-gamehost-diagnostics-kit: public readback and direct commands
 menu-static-check-kit: menu marker checks
 campaign-static-check-kit: campaign marker checks
@@ -95,24 +98,24 @@ construct-sequence-update-kit: sequence advancement
 ## Required authority
 
 ```txt
-phantom-command-victory-save-durable-commit-resume-authority-domain
+phantom-command-settings-route-adoption-visible-frame-authority-domain
 ```
 
 ## Required transaction
 
 ```txt
-CampaignOutcomeCommitCommand
-  -> bind campaign session and expected revision
-  -> prepare and validate a versioned save candidate
-  -> stage, verify and promote one durable generation
-  -> publish CampaignSaveCommitResult
-  -> classify visible victory durability
-  -> derive Continue only from an admitted candidate
-  -> execute ResumeCommand against the accepted generation
-  -> publish ResumeAdmissionResult
-  -> publish first durable outcome and resumed frame acknowledgements
+SettingsChangeCommand
+  -> bind schema, settings revision and route generation
+  -> normalize and validate a detached candidate
+  -> stage and verify storage when available
+  -> classify route support for CRT, grain and ambience
+  -> prepare route participants
+  -> atomically adopt supported settings or preserve predecessors
+  -> publish SettingsAdoptionResult
+  -> expose immutable route readback
+  -> publish FirstSettingsRevisionFrameAck
 ```
 
 ## Validation boundary
 
-Documentation only. Runtime, gameplay, persistence, rendering, package scripts, dependencies and deployment were not changed.
+Documentation only. Runtime, gameplay, persistence behavior, audio, rendering, package scripts, dependencies and deployment were not changed.
