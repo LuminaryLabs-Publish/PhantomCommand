@@ -1,23 +1,23 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-15T08-41-37-04-00`  
+**Timestamp:** `2026-07-15T13-41-25-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited repository selection, campaign boot, mutable state and camera ownership, `window.GameHost` publication, fixed-step and render consumption, static checks, package scripts and deployment proof boundaries. It did not modify or execute the product runtime.
+This run audited repository selection, menu audio creation, context reuse, persistent and transient sources, ambience shutdown, route navigation, package scripts and deployment proof boundaries. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
 **Goal:** state exactly what was inspected, changed and not proven.
 
-- [x] Inspect `game.html` campaign presentation.
-- [x] Inspect `src/campaign/campaign-scene.js` state, camera, public host, update and render paths.
-- [x] Inspect `scripts/check-campaign.mjs` and `package.json` validation surfaces.
-- [x] Confirm the static check requires the GameHost marker but not least-authority behavior.
+- [x] Inspect `src/menu/graveyard-menu.js` audio, settings, input and route paths.
+- [x] Inspect `src/campaign/campaign-scene.js` and confirm the campaign creates no audio graph.
+- [x] Inspect `package.json` validation surfaces.
+- [x] Confirm no explicit visibility, pagehide or route audio settlement exists.
 - [x] Change documentation only.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Execute public capability and visible-frame browser fixtures.
+- [ ] Execute audio unlock, lifecycle and retirement browser fixtures.
 - [ ] Execute source, build and Pages parity fixtures.
 
 ## Change boundary
@@ -26,6 +26,7 @@ This run audited repository selection, campaign boot, mutable state and camera o
 documentation changed: yes
 runtime JavaScript changed: no
 HTML or CSS changed: no
+audio behavior changed: no
 public API behavior changed: no
 input behavior changed: no
 gameplay changed: no
@@ -46,19 +47,21 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-immutable readback fixture: unavailable
-allowlisted mutation fixture: unavailable
-unsupported command fixture: unavailable
-stale revision fixture: unavailable
-duplicate command fixture: unavailable
-capability retirement fixture: unavailable
-Canvas2D and CRT frame convergence fixture: unavailable
+browser capability fixture: unavailable
+accepted unlock fixture: unavailable
+suspended-context resume fixture: unavailable
+ambience preference fixture: unavailable
+visibility settlement fixture: unavailable
+route settlement fixture: unavailable
+pagehide retirement fixture: unavailable
+stale callback fixture: unavailable
+audio resource trace: unavailable
 built-output fixture: not run
 GitHub Pages fixture: not run
 ```
 
 ## Evidence level
 
-The source proves that `window.GameHost` contains direct references to the campaign `state` and `camera` objects and direct `startWave`, `build` and `setZoom` functions. It also proves that fixed-step simulation and rendering consume those same objects and that the static check requires the GameHost marker. It does not prove that an external caller has exploited the surface or that a visible defect occurs in a browser.
+The source proves that accepted menu input calls `ensureAudio()`, that the helper creates and starts a persistent drone and looping wind source, that an existing `state.audio` causes an immediate return, that settings-triggered shutdown fades the master and schedules `context.close()`, and that route navigation does not explicitly call that shutdown path. It does not prove an audible failure, leak, overlap or browser-policy defect.
 
-No least-authority capability publication, expected-revision admission, exactly-once settlement, lifecycle retirement, visible-frame convergence, artifact parity, Pages parity or production readiness is claimed.
+No audio unlock correctness, suspended-context recovery, lifecycle settlement, exact retirement, audible/silent convergence, artifact parity, Pages parity or production readiness is claimed.
