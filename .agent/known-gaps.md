@@ -1,70 +1,70 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-15T03-24-35-04-00`
+**Timestamp:** `2026-07-15T08-41-37-04-00`
 
 ## Summary
 
-The campaign has no complete device-control admission contract. Touch reaches only a subset of primary-pointer actions while critical campaign actions remain keyboard, multi-button mouse or wheel only.
+The campaign publishes mutable runtime owners and direct mutation functions through an ambient global. Observation, mutation, caller identity, expected revisions, retirement and visible-frame evidence are not separated.
 
 ## Plan ledger
 
-**Goal:** maintain an explicit list of unresolved control-coverage, gesture and evidence gaps.
+**Goal:** maintain an explicit list of unresolved public capability, settlement, lifecycle and evidence gaps.
 
-- [x] Record source-backed action-coverage gaps.
-- [x] Separate source evidence from unexecuted device claims.
+- [x] Record source-backed host capability gaps.
+- [x] Separate source evidence from unexecuted browser claims.
 - [ ] Close each gap with implementation and executable proof.
 
 ## Gaps
 
 ```txt
-device capability revision: absent
-required action manifest: absent
-control profile descriptor: absent
-control generation identity: absent
-touch control surface: absent
-touch wave-start producer: absent
-touch unit-order producer: absent
-touch tower-type producer: absent
-touch camera-pan producer: absent
-touch camera-zoom producer: absent
-touch pause producer: absent
-touch restart producer: absent
-touch exit producer: absent
-touch focus producer: absent
-additive touch selection policy: absent
-selection/pan/order gesture arbitration: absent
-pinch cancellation policy: absent
-pointercancel settlement: absent
-synthetic mouse duplicate suppression: absent
-typed campaign action results: absent
-first control-surface frame acknowledgement: absent
-first action-effect frame acknowledgement: absent
-touch-only browser fixture: absent
-hybrid-input browser fixture: absent
-source/build/Pages control parity: absent
+public capability policy revision: absent
+public capability set identity: absent
+diagnostic caller lease: absent
+immutable campaign snapshot contract: absent
+immutable camera snapshot contract: absent
+campaign state revision: absent
+camera state revision: absent
+public command envelope: absent
+expected revision admission: absent
+public command idempotency: absent
+allowlisted campaign commands: absent
+allowlisted camera commands: absent
+typed public mutation result: absent
+capability retirement result: absent
+late-caller rejection: absent
+route/runtime generation binding: absent
+Canvas2D frame revision: absent
+CRT frame revision: absent
+first public mutation visible-frame acknowledgement: absent
+public capability browser fixture: absent
+source/build/Pages capability parity: absent
 ```
 
 ## Source-backed mismatch
 
 ```txt
-touch reachable:
-  primary-pointer tap selection
-  primary-pointer box selection
-  repeated pad activation using current tower type
+published directly:
+  mutable state object
+  mutable camera object
+  startWave function
+  build function
+  setZoom function
 
-touch unreachable through normal player UI:
-  start wave
-  move or attack order
-  choose tower type
-  complete camera pan and zoom
-  focus selection
-  pause or resume
-  restart
-  exit to menu
+published safely only in part:
+  getState returns a cloned summary
+
+missing:
+  capability restriction
+  caller identity
+  expected revisions
+  exactly-once settlement
+  typed results
+  retirement
+  frame evidence
 ```
 
-The normal campaign cannot progress through a touch-only player surface because the first wave starts through Space and no visible touch wave action exists.
+The campaign static check requires the `window.GameHost` marker but does not constrain the public members or prove safe settlement.
 
 ## Retained gaps
 
-Earlier render-order, pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
+Earlier device-control, render-order, pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
