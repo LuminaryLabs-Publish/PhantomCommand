@@ -1,37 +1,39 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-14T18-41-11-04-00`  
+**Timestamp:** `2026-07-14T23-38-29-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited pause state, command admission, camera ownership, public capabilities, paused-frame projection and resume boundaries. It did not modify or execute the product runtime.
+This run audited isometric projection, world-item painter ordering, sanctum occlusion, projectiles, effects, health overlays, CRT presentation and deployment proof boundaries. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
-**Goal:** state exactly what changed, what was inspected and what remains unproven.
+**Goal:** state exactly what was inspected, changed and not proven.
 
-- [x] Documentation files added and refreshed.
-- [x] Full Publish inventory and central ledger comparison completed.
-- [x] Ten eligible root `.agent` entrypoints confirmed.
-- [x] Current heads compared with recorded documentation heads.
-- [x] Source paths inspected: campaign state, input handlers, pause gate, camera frame, rendering and GameHost.
-- [x] Complete 20-kit inventory and services retained.
-- [x] No branch or pull request created.
-- [x] `main` used for every write.
-- [ ] Runtime pause fixtures remain unavailable and unexecuted.
+- [x] Inspect `src/campaign/campaign-scene.js` render and simulation paths.
+- [x] Inspect `scripts/check-campaign.mjs` and `package.json` validation surfaces.
+- [x] Confirm the source marker check does not execute painter ordering.
+- [x] Change documentation only.
+- [x] Push only to `main`; create no branch or pull request.
+- [ ] Execute headless ordering fixtures.
+- [ ] Execute Canvas2D and CRT browser fixtures.
+- [ ] Execute build and Pages parity fixtures.
 
 ## Change boundary
 
 ```txt
+documentation changed: yes
 runtime JavaScript changed: no
-HTML or CSS changed: no
+Canvas2D rendering changed: no
+WebGL/CRT rendering changed: no
 gameplay changed: no
-camera or input behavior changed: no
 persistence changed: no
-render behavior changed: no
-package scripts or dependencies changed: no
-workflow or deployment changed: no
+package scripts changed: no
+dependencies changed: no
+tests changed: no
+workflow changed: no
+deployment changed: no
 branch created: no
 pull request created: no
 ```
@@ -41,29 +43,15 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-headless pause command matrix: unavailable / not run
-browser keyboard fixture: unavailable / not run
-browser pointer and wheel fixture: unavailable / not run
-public GameHost pause fixture: unavailable / not run
-first paused-frame fixture: unavailable / not run
-first resumed-frame fixture: unavailable / not run
-built-output pause smoke: not run
-GitHub Pages pause smoke: not run
+headless render-plan fixture: unavailable
+Canvas2D pixel fixture: unavailable
+CRT-visible frame fixture: unavailable
+built-output fixture: not run
+GitHub Pages fixture: not run
 ```
 
-## Existing proof boundary
+## Evidence level
 
-```txt
-menu check: regular-expression source markers
-campaign check: regular-expression source markers
-build: static file copy
-pause command admission: not executed
-camera freeze: not executed
-public-host policy: not executed
-paused visible frame: not observed
-resume stale-input rejection: not exercised
-```
+The source proves that towers and units are sorted by `x + z` and that projectiles, effects and the sanctum are drawn afterward, with the sanctum last. It does not prove the frequency or severity of visible artifacts in a browser.
 
-## Claims not made
-
-No strict-pause correctness, tactical-pause policy, camera freeze, command rejection, public-host convergence, stale-input rejection, paused/resumed frame convergence, source/build/Pages parity or production-readiness claim is made.
+No render-order correctness, visual equivalence, visible-frame convergence, build parity, deployment parity or production-readiness claim is made.
