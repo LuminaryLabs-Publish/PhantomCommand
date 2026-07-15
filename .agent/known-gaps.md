@@ -1,51 +1,70 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-14T23-38-29-04-00`
+**Timestamp:** `2026-07-15T03-24-35-04-00`
 
 ## Summary
 
-World-space rendering lacks one complete painter contract. The current source depth-sorts only towers and units; projectiles, effects and the sanctum use fixed class order.
+The campaign has no complete device-control admission contract. Touch reaches only a subset of primary-pointer actions while critical campaign actions remain keyboard, multi-button mouse or wheel only.
 
 ## Plan ledger
 
-**Goal:** maintain an explicit list of unresolved render-order and evidence gaps.
+**Goal:** maintain an explicit list of unresolved control-coverage, gesture and evidence gaps.
 
-- [x] Record source-backed ordering gaps.
-- [x] Separate observed source behavior from unexecuted visual claims.
+- [x] Record source-backed action-coverage gaps.
+- [x] Separate source evidence from unexecuted device claims.
 - [ ] Close each gap with implementation and executable proof.
 
 ## Gaps
 
 ```txt
-frame identity: absent
-simulation snapshot revision: absent
-camera projection revision: absent
-world-renderable descriptor: absent
-shared depth-key service: absent
-stable tie-break policy: absent
-sanctum world-item admission: absent
-projectile world-order admission: absent
-effect world-order admission: absent
-health-bar occlusion policy: implicit
-immutable render plan: absent
-per-item draw receipts: absent
-stale mixed-revision frame rejection: absent
-first CRT-visible ordered-frame acknowledgement: absent
-headless ordering matrix: absent
-Canvas2D pixel probes: absent
-source/build/Pages parity fixture: absent
+device capability revision: absent
+required action manifest: absent
+control profile descriptor: absent
+control generation identity: absent
+touch control surface: absent
+touch wave-start producer: absent
+touch unit-order producer: absent
+touch tower-type producer: absent
+touch camera-pan producer: absent
+touch camera-zoom producer: absent
+touch pause producer: absent
+touch restart producer: absent
+touch exit producer: absent
+touch focus producer: absent
+additive touch selection policy: absent
+selection/pan/order gesture arbitration: absent
+pinch cancellation policy: absent
+pointercancel settlement: absent
+synthetic mouse duplicate suppression: absent
+typed campaign action results: absent
+first control-surface frame acknowledgement: absent
+first action-effect frame acknowledgement: absent
+touch-only browser fixture: absent
+hybrid-input browser fixture: absent
+source/build/Pages control parity: absent
 ```
 
 ## Source-backed mismatch
 
 ```txt
-entity painter order = ascending x + z
-sanctum depth = 0
-sanctum draw position = after every entity projectile and effect
+touch reachable:
+  primary-pointer tap selection
+  primary-pointer box selection
+  repeated pad activation using current tower type
+
+touch unreachable through normal player UI:
+  start wave
+  move or attack order
+  choose tower type
+  complete camera pan and zoom
+  focus selection
+  pause or resume
+  restart
+  exit to menu
 ```
 
-Near-side objects with `x + z > 0` should be capable of occluding the sanctum but are drawn before it.
+The normal campaign cannot progress through a touch-only player surface because the first wave starts through Space and no visible touch wave action exists.
 
 ## Retained gaps
 
-Earlier pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
+Earlier render-order, pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
