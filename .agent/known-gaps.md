@@ -1,56 +1,51 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-14T18-41-11-04-00`
+**Timestamp:** `2026-07-14T23-38-29-04-00`
 
 ## Summary
 
-The visible pause overlay does not own command admission. Only simulation `update()` stops; camera and direct gameplay commands remain mutable.
+World-space rendering lacks one complete painter contract. The current source depth-sorts only towers and units; projectiles, effects and the sanctum use fixed class order.
 
 ## Plan ledger
 
-**Goal:** keep every blocker to authoritative pause and resume explicit.
+**Goal:** maintain an explicit list of unresolved render-order and evidence gaps.
 
-- [x] Record current source-backed pause gaps.
-- [ ] Close them through runtime implementation and executable headless/browser proof.
+- [x] Record source-backed ordering gaps.
+- [x] Separate observed source behavior from unexecuted visual claims.
+- [ ] Close each gap with implementation and executable proof.
 
-## Current pause gaps
-
-```txt
-PauseStateRevision: absent
-PausePolicyRevision: absent
-strict versus tactical pause distinction: absent
-held-key settlement: absent
-drag/pointer settlement: absent
-camera freeze policy: absent
-keyboard command admission result: absent
-pointer command admission result: absent
-wheel command admission result: absent
-GameHost command admission result: absent
-wave-start pause guard: absent
-tower-build pause guard: absent
-unit-order pause guard: absent
-selection pause guard: absent
-camera pan/zoom/focus pause guard: absent
-blocked-command journal: absent
-stale input rejection on resume: absent
-FirstPausedFrameAck: absent
-FirstResumedCampaignFrameAck: absent
-source/build/Pages pause fixtures: absent
-```
-
-## Current risks
+## Gaps
 
 ```txt
-PAUSED can be visible while state mutates
-a wave can be queued while paused
-souls and towers can change while paused
-orders can be prepared while paused
-camera can move behind the overlay
-public GameHost capabilities can bypass UI policy
-resume can adopt unclassified paused mutations
-tests can pass without executing pause behavior
+frame identity: absent
+simulation snapshot revision: absent
+camera projection revision: absent
+world-renderable descriptor: absent
+shared depth-key service: absent
+stable tie-break policy: absent
+sanctum world-item admission: absent
+projectile world-order admission: absent
+effect world-order admission: absent
+health-bar occlusion policy: implicit
+immutable render plan: absent
+per-item draw receipts: absent
+stale mixed-revision frame rejection: absent
+first CRT-visible ordered-frame acknowledgement: absent
+headless ordering matrix: absent
+Canvas2D pixel probes: absent
+source/build/Pages parity fixture: absent
 ```
+
+## Source-backed mismatch
+
+```txt
+entity painter order = ascending x + z
+sanctum depth = 0
+sanctum draw position = after every entity projectile and effect
+```
+
+Near-side objects with `x + z > 0` should be capable of occluding the sanctum but are drawn before it.
 
 ## Retained gaps
 
-Terminal outcome, browser-startup, settings, durable save/resume, route-resource retirement, scheduler, WebGL recovery, accessibility, spatial/keyboard input, public-host and combat gaps remain retained in their timestamped audits.
+Earlier pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
