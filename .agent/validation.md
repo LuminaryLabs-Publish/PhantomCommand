@@ -1,23 +1,23 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-15T03-24-35-04-00`  
+**Timestamp:** `2026-07-15T08-41-37-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited campaign shell semantics, keyboard and pointer listeners, wheel input, touch reachability, semantic action coverage, visible control projection, package checks and deployment proof boundaries. It did not modify or execute the product runtime.
+This run audited repository selection, campaign boot, mutable state and camera ownership, `window.GameHost` publication, fixed-step and render consumption, static checks, package scripts and deployment proof boundaries. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
 **Goal:** state exactly what was inspected, changed and not proven.
 
-- [x] Inspect `game.html` campaign presentation and accessibility fallback.
-- [x] Inspect `src/campaign/campaign-scene.js` input, camera, campaign and frame paths.
+- [x] Inspect `game.html` campaign presentation.
+- [x] Inspect `src/campaign/campaign-scene.js` state, camera, public host, update and render paths.
 - [x] Inspect `scripts/check-campaign.mjs` and `package.json` validation surfaces.
-- [x] Confirm the source check does not execute device profiles or touch actions.
+- [x] Confirm the static check requires the GameHost marker but not least-authority behavior.
 - [x] Change documentation only.
 - [x] Push only to `main`; create no branch or pull request.
-- [ ] Execute touch-only and hybrid browser fixtures.
+- [ ] Execute public capability and visible-frame browser fixtures.
 - [ ] Execute source, build and Pages parity fixtures.
 
 ## Change boundary
@@ -26,10 +26,11 @@ This run audited campaign shell semantics, keyboard and pointer listeners, wheel
 documentation changed: yes
 runtime JavaScript changed: no
 HTML or CSS changed: no
+public API behavior changed: no
 input behavior changed: no
 gameplay changed: no
 Canvas2D rendering changed: no
-WebGL/CRT rendering changed: no
+WebGL CRT rendering changed: no
 persistence changed: no
 package scripts changed: no
 dependencies changed: no
@@ -45,18 +46,19 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-keyboard/mouse browser fixture: unavailable
-touch-only browser fixture: unavailable
-hybrid-input browser fixture: unavailable
-pointer-cancel fixture: unavailable
-first control-surface frame fixture: unavailable
-first action-effect frame fixture: unavailable
+immutable readback fixture: unavailable
+allowlisted mutation fixture: unavailable
+unsupported command fixture: unavailable
+stale revision fixture: unavailable
+duplicate command fixture: unavailable
+capability retirement fixture: unavailable
+Canvas2D and CRT frame convergence fixture: unavailable
 built-output fixture: not run
 GitHub Pages fixture: not run
 ```
 
 ## Evidence level
 
-The source proves that campaign actions are distributed across keyboard keys, pointer buttons and the wheel, while the route exposes no visible touch control layer. It also proves that touch primary-pointer events can reach selection paths. It does not prove physical-device behavior, browser-specific synthetic event behavior or the frequency of user failure.
+The source proves that `window.GameHost` contains direct references to the campaign `state` and `camera` objects and direct `startWave`, `build` and `setZoom` functions. It also proves that fixed-step simulation and rendering consume those same objects and that the static check requires the GameHost marker. It does not prove that an external caller has exploited the surface or that a visible defect occurs in a browser.
 
-No touch playability, device-profile admission, gesture safety, action-effect convergence, build parity, deployment parity or production readiness is claimed.
+No least-authority capability publication, expected-revision admission, exactly-once settlement, lifecycle retirement, visible-frame convergence, artifact parity, Pages parity or production readiness is claimed.
