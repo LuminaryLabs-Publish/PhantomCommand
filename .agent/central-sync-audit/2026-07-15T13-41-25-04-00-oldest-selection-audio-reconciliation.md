@@ -1,15 +1,15 @@
 # Oldest Selection and Menu Audio Reconciliation
 
 **Timestamp:** `2026-07-15T13-41-25-04-00`  
-**Status:** `repo-local-audit-complete-central-sync-pending`
+**Status:** `central-reconciled`
 
 ## Summary
 
-The accessible Publish organization contains 11 repositories. After excluding `TheCavalryOfRome`, all ten eligible repositories had central-ledger and root `.agent` coverage, and no eligible repository was new, missing, undocumented or runtime-ahead. PhantomCommand had the oldest synchronized central timestamp and was selected alone.
+The accessible Publish organization contains 11 repositories. After excluding `TheCavalryOfRome`, all ten eligible repositories had central-ledger and root `.agent` coverage, and no eligible repository was new, missing, undocumented or runtime-ahead. PhantomCommand had the oldest synchronized central timestamp, was selected alone, and its menu-audio lifecycle audit was logged in `LuminaryLabs-Dev/LuminaryLabs` on `main`.
 
 ## Plan ledger
 
-**Goal:** preserve deterministic selection and reconcile the menu-audio lifecycle finding into `LuminaryLabs-Dev/LuminaryLabs`.
+**Goal:** preserve deterministic selection and complete central reconciliation for the menu-audio lifecycle finding.
 
 - [x] Enumerate the complete Publish repository list.
 - [x] Exclude Cavalry of Rome.
@@ -17,10 +17,10 @@ The accessible Publish organization contains 11 repositories. After excluding `T
 - [x] Select only PhantomCommand through the oldest synchronized rule.
 - [x] Add the repo-local audit family.
 - [x] Record the new status, finding and output paths.
-- [ ] Add the central internal change log.
-- [ ] Update the central PhantomCommand ledger.
-- [ ] Bind the final repo-local documentation head.
-- [ ] Mark this reconciliation complete.
+- [x] Add the central internal change log.
+- [x] Update the central PhantomCommand ledger.
+- [x] Push both repositories only to `main`.
+- [x] Create no branch or pull request.
 
 ## Comparison
 
@@ -37,22 +37,28 @@ ZombieOrchard      2026-07-15T12-39-01-04-00
 TheUnmappedHouse   2026-07-15T12-59-24-04-00
 ```
 
-## Central reconciliation payload
+## Central reconciliation result
 
 ```txt
-new status:
+central repository:
+  LuminaryLabs-Dev/LuminaryLabs
+
+central status:
   menu-audio-unlock-lifecycle-authority-central-reconciled
 
-new technical status:
+technical status:
   menu-audio-unlock-lifecycle-authority-audited
 
-retained current status:
+retained status:
   public-diagnostic-capability-frame-admission-authority-central-reconciled
 
-new central change log:
+central change log:
   internal-change-log/2026-07-15T13-41-25-04-00-phantom-command-menu-audio-lifecycle.md
+
+central reconciliation commit at time of acknowledgement:
+  c6e75f90f9c55466ce281b2c6ffd5ee6d79faa30
 ```
 
-## Finding to retain centrally
+## Finding retained centrally
 
 The menu creates a persistent AudioContext graph but does not explicitly resume an existing suspended context, settle audio on visibility or route changes, retire source nodes individually, reject stale delayed-close callbacks or publish audible/silent lifecycle acknowledgements.
