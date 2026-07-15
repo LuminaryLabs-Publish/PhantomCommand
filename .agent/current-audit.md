@@ -1,43 +1,44 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-14T23-38-29-04-00`  
+**Timestamp:** `2026-07-15T03-24-35-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `isometric-render-order-frame-authority-audited`
+**Status:** `device-control-action-coverage-authority-audited`
 
 ## Summary
 
-The campaign’s isometric painter order is only partially authoritative. Towers and units are sorted by `x + z`, while projectiles, effects and the sanctum are drawn afterward in fixed class order. The depth-zero sanctum is always last and can cover near-side entities and attached health bars.
+The campaign input model is not device neutral. Primary-pointer selection is touch reachable, but wave start, unit order, tower selection, full camera navigation, pause, restart, exit and focus are bound to keyboard, secondary/middle mouse buttons or the wheel. The campaign route exposes no visible touch control layer.
 
 ## Plan ledger
 
-**Goal:** make one immutable ordered world-item plan the only source for Canvas2D world drawing and CRT-visible frame admission.
+**Goal:** admit only control profiles that cover every required campaign action and prove both the visible controls and their simulation/presentation effects.
 
-- [x] Trace projection and active draw order.
-- [x] Confirm `x + z` is the principal screen-depth key.
-- [x] Identify render classes outside the shared ordering.
-- [x] Define stable layers, tie breaks, results and visible-frame acknowledgement.
+- [x] Trace keyboard, pointer-button, wheel and touch-pointer producers.
+- [x] Trace every campaign and camera action they mutate.
+- [x] Identify touch-only coverage and progression gaps.
+- [x] Define device profile, action manifest, command result and frame evidence surfaces.
 - [ ] Implement the authority.
-- [ ] Add headless ordering and browser pixel fixtures.
+- [ ] Add touch-only, keyboard/mouse and hybrid fixtures.
 - [ ] Prove source, build and Pages parity.
 
 ## Current source path
 
 ```txt
-rings lanes pads
-  -> sorted towers + units
-  -> all projectiles
-  -> all effects
-  -> sanctum always last
-  -> HUD minimap and modal overlays
-  -> CRT upload and presentation
+campaign boot
+  -> one full-screen canvas
+  -> direct keyboard, pointer and wheel listeners
+  -> primary touch pointer can select
+  -> no touch action map or visible control profile
+  -> Space remains the normal wave-start path
+  -> right click remains the normal unit-order path
+  -> first wave and complete command loop are unavailable to touch-only users
 ```
 
 ## Required authority
 
 ```txt
-phantom-command-isometric-render-order-frame-authority-domain
+phantom-command-device-control-action-coverage-authority-domain
 ```
 
 ## Validation boundary
 
-Documentation only. No product source, renderer behavior, gameplay, tests, build or deployment changed.
+Documentation only. No product source, input behavior, gameplay, rendering, tests, build or deployment changed.
