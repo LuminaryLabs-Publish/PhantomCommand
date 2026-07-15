@@ -1,48 +1,49 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-15T13-41-25-04-00`
+**Timestamp:** `2026-07-15T18-39-30-04-00`
 
 ## Summary
 
-Add one menu-audio lifecycle authority that owns browser capability, context generation, unlock/resume, persistent ambience, transient cues, route settlement and exact retirement.
+Add one campaign pointer-feedback authority that observes pointer presence, derives immutable hover candidates, renders a visible reticle or equivalent affordance, and binds committed commands to the feedback revision the player saw.
 
 ## Plan ledger
 
-**Goal:** make every audio resource and callback belong to one accepted generation and terminate with an immutable result.
+**Goal:** make hidden-cursor pointer play legible, revision-correct and lifecycle-safe without moving campaign truth into presentation.
 
-- [ ] Add `MenuAudioPolicy` and `AudioContextGeneration`.
-- [ ] Observe `AudioContext.state` and browser capability.
-- [ ] Resume an existing suspended context after an accepted gesture.
-- [ ] Add stable persistent-source and transient-cue leases.
-- [ ] Separate ambience preference from UI-cue policy if product intent requires it.
-- [ ] Bind every cue to route, interaction and audio generations.
-- [ ] Deduplicate stale and duplicate cue requests.
-- [ ] Add explicit hidden-document suspend or silence policy.
-- [ ] Add route-transition audio settlement.
-- [ ] Add `pagehide` retirement.
-- [ ] Stop and disconnect persistent and transient nodes exactly once.
-- [ ] Bind delayed callbacks to the originating generation.
-- [ ] Reject late callbacks after a successor generation is adopted.
-- [ ] Publish `MenuAudioUnlockResult`, `MenuAudioProjectionResult` and `MenuAudioSettlementResult`.
-- [ ] Publish `FirstAudibleMenuFrameAck` and `FirstSilentRouteTransitionAck`.
-- [ ] Extend static checks with lifecycle markers only after runtime implementation.
+- [ ] Add `CampaignPointerFeedbackPolicy` and `InputSurfaceGeneration`.
+- [ ] Publish monotonic `PointerSampleRevision` values.
+- [ ] Observe pointer enter, move, leave, cancel, blur and route retirement.
+- [ ] Reuse the accepted spatial-input projection result rather than creating a second coordinate authority.
+- [ ] Query immutable ally, pad, enemy, ground and drag candidates.
+- [ ] Publish explicit outside and no-candidate results.
+- [ ] Add selection-candidate preview.
+- [ ] Add build-pad hover and availability preview.
+- [ ] Add enemy order and ground-anchor preview.
+- [ ] Add drag candidate membership preview.
+- [ ] Add a rendered reticle whenever the native cursor remains hidden.
+- [ ] Define contrast-safe semantic roles for reticle and candidate marks.
+- [ ] Settle feedback under pause, terminal, blur, pointerleave, pointercancel and route exit policy.
+- [ ] Reject stale surface, projection, camera, entity-set and pad-set evidence.
+- [ ] Require pointer commands to cite the accepted feedback revision where continuity is required.
+- [ ] Publish `PointerFeedbackResult` and `PointerFeedbackFrameResult`.
+- [ ] Publish `FirstPointerFeedbackFrameAck`.
+- [ ] Extend static checks only after implementation markers exist.
 - [ ] Execute source, built-output and Pages browser fixtures.
 
 ## Completion gate
 
 ```txt
-one audio policy revision
-one active context generation
-accepted gesture required for unlock or resume
-one lease per persistent source
-one lease per transient cue
-one terminal result per command
-one declared visibility policy
-one route-settlement result
-one page-retirement receipt
-no stale callback can affect a successor
-one audible acknowledgement
-one silent transition acknowledgement
+one pointer feedback policy revision
+one active input surface generation
+one accepted projection authority
+one immutable candidate result per admitted sample
+one visible pointer affordance under hidden-cursor policy
+explicit outside and miss results
+candidate preview agrees with committed command
+stale feedback cannot mutate a successor state
+blocking overlays settle feedback explicitly
+one matching pointer-feedback frame acknowledgement
+source build and Pages fixtures pass
 ```
 
-Do not claim browser-audio correctness until suspended-context, visibility, route, retirement and stale-callback fixtures pass.
+Do not claim pointer-feedback correctness until candidate-to-command continuity, lifecycle, contrast and deployed-origin fixtures pass.
