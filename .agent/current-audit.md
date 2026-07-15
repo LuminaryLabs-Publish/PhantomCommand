@@ -1,44 +1,47 @@
 # PhantomCommand Current Audit
 
-**Timestamp:** `2026-07-15T03-24-35-04-00`  
+**Timestamp:** `2026-07-15T08-41-37-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `device-control-action-coverage-authority-audited`
+**Status:** `public-diagnostic-capability-frame-admission-authority-audited`
 
 ## Summary
 
-The campaign input model is not device neutral. Primary-pointer selection is touch reachable, but wave start, unit order, tower selection, full camera navigation, pause, restart, exit and focus are bound to keyboard, secondary/middle mouse buttons or the wheel. The campaign route exposes no visible touch control layer.
+`window.GameHost` publishes the same mutable campaign state and camera objects consumed by fixed-step simulation and rendering. It also publishes direct `startWave`, `build` and `setZoom` functions. External callers can therefore change simulation or presentation truth outside normal input ownership without a versioned capability set, caller lease, expected revision, idempotency key, typed result, retirement receipt or matching Canvas2D/CRT frame acknowledgement.
 
 ## Plan ledger
 
-**Goal:** admit only control profiles that cover every required campaign action and prove both the visible controls and their simulation/presentation effects.
+**Goal:** publish only immutable diagnostic readback by default and require explicit, allowlisted, versioned settlement for any public mutation.
 
-- [x] Trace keyboard, pointer-button, wheel and touch-pointer producers.
-- [x] Trace every campaign and camera action they mutate.
-- [x] Identify touch-only coverage and progression gaps.
-- [x] Define device profile, action manifest, command result and frame evidence surfaces.
+- [x] Trace `GameHost` publication into campaign and camera owners.
+- [x] Trace direct host mutations into the next fixed-step and render frame.
+- [x] Inspect the campaign static check and confirm it only requires the marker.
+- [x] Define capability, command, result, retirement and frame-evidence surfaces.
 - [ ] Implement the authority.
-- [ ] Add touch-only, keyboard/mouse and hybrid fixtures.
+- [ ] Add read, write, stale, duplicate, retirement and visible-frame fixtures.
 - [ ] Prove source, build and Pages parity.
 
 ## Current source path
 
 ```txt
 campaign boot
-  -> one full-screen canvas
-  -> direct keyboard, pointer and wheel listeners
-  -> primary touch pointer can select
-  -> no touch action map or visible control profile
-  -> Space remains the normal wave-start path
-  -> right click remains the normal unit-order path
-  -> first wave and complete command loop are unavailable to touch-only users
+  -> create mutable state and camera owners
+  -> attach player input and fixed-step RAF
+  -> publish window.GameHost with state camera startWave build getState setZoom
+
+external caller
+  -> mutate live state or camera
+  -> or call a direct function
+  -> no expected revision or typed settlement
+  -> next update/render consumes changed values
+  -> no matching source-frame or presented-frame acknowledgement
 ```
 
 ## Required authority
 
 ```txt
-phantom-command-device-control-action-coverage-authority-domain
+phantom-command-public-diagnostic-capability-frame-admission-authority-domain
 ```
 
 ## Validation boundary
 
-Documentation only. No product source, input behavior, gameplay, rendering, tests, build or deployment changed.
+Documentation only. No public API, product source, gameplay, rendering, persistence, tests, build or deployment behavior changed.
