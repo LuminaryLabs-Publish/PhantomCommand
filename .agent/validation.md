@@ -1,23 +1,23 @@
 # PhantomCommand Validation
 
-**Timestamp:** `2026-07-15T13-41-25-04-00`  
+**Timestamp:** `2026-07-15T18-39-30-04-00`  
 **Status:** `documentation-only`
 
 ## Summary
 
-This run audited repository selection, menu audio creation, context reuse, persistent and transient sources, ambience shutdown, route navigation, package scripts and deployment proof boundaries. It did not modify or execute the product runtime.
+This run audited repository selection, campaign cursor policy, pointer projection, selection/build/order targeting, Canvas2D feedback, CRT presentation, static checks and deployment proof boundaries. It did not modify or execute the product runtime.
 
 ## Plan ledger
 
 **Goal:** state exactly what was inspected, changed and not proven.
 
-- [x] Inspect `src/menu/graveyard-menu.js` audio, settings, input and route paths.
-- [x] Inspect `src/campaign/campaign-scene.js` and confirm the campaign creates no audio graph.
-- [x] Inspect `package.json` validation surfaces.
-- [x] Confirm no explicit visibility, pagehide or route audio settlement exists.
+- [x] Inspect `game.html` canvas and cursor policy.
+- [x] Inspect `src/campaign/campaign-scene.js` pointer, camera, selection, build, order and render paths.
+- [x] Inspect `src/menu/crt-renderer.js` screen/source presentation boundaries.
+- [x] Inspect `scripts/check-campaign.mjs` and `package.json` validation surfaces.
+- [x] Confirm no normal replacement cursor, hover target or candidate preview is rendered.
 - [x] Change documentation only.
-- [x] Push only to `main`; create no branch or pull request.
-- [ ] Execute audio unlock, lifecycle and retirement browser fixtures.
+- [ ] Execute pointer-presence, hover, candidate continuity, contrast and lifecycle browser fixtures.
 - [ ] Execute source, build and Pages parity fixtures.
 
 ## Change boundary
@@ -26,9 +26,8 @@ This run audited repository selection, menu audio creation, context reuse, persi
 documentation changed: yes
 runtime JavaScript changed: no
 HTML or CSS changed: no
-audio behavior changed: no
-public API behavior changed: no
-input behavior changed: no
+pointer behavior changed: no
+camera behavior changed: no
 gameplay changed: no
 Canvas2D rendering changed: no
 WebGL CRT rendering changed: no
@@ -47,21 +46,23 @@ pull request created: no
 ```txt
 npm run check: not run
 npm run build: not run
-browser capability fixture: unavailable
-accepted unlock fixture: unavailable
-suspended-context resume fixture: unavailable
-ambience preference fixture: unavailable
-visibility settlement fixture: unavailable
-route settlement fixture: unavailable
-pagehide retirement fixture: unavailable
-stale callback fixture: unavailable
-audio resource trace: unavailable
+pointer-presence fixture: unavailable
+native-versus-rendered cursor fixture: unavailable
+ally-hover fixture: unavailable
+build-pad hover fixture: unavailable
+enemy-order preview fixture: unavailable
+ground-anchor preview fixture: unavailable
+drag candidate fixture: unavailable
+camera anchor fixture: unavailable
+overlay and lifecycle fixture: unavailable
+contrast screenshot fixture: unavailable
+candidate-to-command revision trace: unavailable
 built-output fixture: not run
 GitHub Pages fixture: not run
 ```
 
 ## Evidence level
 
-The source proves that accepted menu input calls `ensureAudio()`, that the helper creates and starts a persistent drone and looping wind source, that an existing `state.audio` causes an immediate return, that settings-triggered shutdown fades the master and schedules `context.close()`, and that route navigation does not explicitly call that shutdown path. It does not prove an audible failure, leak, overlap or browser-policy defect.
+The source proves that the campaign canvas uses `cursor:none`, that pointer samples are converted to source coordinates, that ordinary rendering does not draw a pointer reticle or hover candidate, that only an active drag draws a rectangle, and that selection/build/order candidates are resolved during command events. It does not prove a measured misclick rate, inaccessible campaign, contrast failure or browser-specific defect.
 
-No audio unlock correctness, suspended-context recovery, lifecycle settlement, exact retirement, audible/silent convergence, artifact parity, Pages parity or production readiness is claimed.
+No pointer-feedback correctness, target-preview correctness, candidate-to-command continuity, lifecycle settlement, visual contrast, artifact parity, Pages parity or production readiness is claimed.
