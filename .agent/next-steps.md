@@ -1,37 +1,40 @@
 # PhantomCommand Next Steps
 
-**Timestamp:** `2026-07-14T23-38-29-04-00`
+**Timestamp:** `2026-07-15T03-24-35-04-00`
 
 ## Summary
 
-Implement Isometric Render Order Frame Authority before treating the Canvas2D or CRT frame as proof of correct near/far occlusion around the sanctum.
+Implement Device Control Action Coverage Authority before claiming touch or hybrid-device playability. Keep current keyboard and mouse behavior as adapters, but route every producer through semantic campaign commands and add a visible touch profile that covers the complete loop.
 
 ## Plan ledger
 
-**Goal:** replace fixed class-order drawing with a stable, versioned render plan that includes every world-space item.
+**Goal:** replace modality-bound direct mutation with complete, versioned device profiles and typed action settlement.
 
-- [ ] Add `FrameId`, `SimulationRevision`, `CameraRevision` and render-policy revision.
-- [ ] Normalize sanctum, towers, units, projectiles and effects into world-renderable descriptors.
-- [ ] Derive `depthKey = x + z` through one shared service.
-- [ ] Add stable tie breaks based on class policy and item identity.
-- [ ] Insert the sanctum at depth zero instead of drawing it last.
-- [ ] Admit projectiles and effects into the world order or an explicit versioned overlay layer.
-- [ ] Choose and document the health-bar occlusion policy.
-- [ ] Build one immutable `IsometricRenderPlan` per accepted snapshot.
-- [ ] Publish per-item draw receipts and `RenderFrameResult`.
-- [ ] Acknowledge the first CRT-visible frame matching the plan fingerprint.
-- [ ] Add far-side, near-side and equal-depth headless fixtures.
-- [ ] Add deterministic Canvas2D pixel probes around the sanctum.
-- [ ] Run the same fixture against source, `dist` and GitHub Pages.
+- [ ] Add `RequiredActionManifest` for selection, order, construction, wave, camera, pause and terminal actions.
+- [ ] Add `DeviceCapabilityProfile` for keyboard, fine pointer, coarse pointer, touch, hover and hybrid states.
+- [ ] Add versioned `ControlProfileDescriptor` and `ControlGeneration` identities.
+- [ ] Convert keyboard, pointer and wheel listeners into adapters that emit semantic commands.
+- [ ] Add a responsive touch control layer for wave start, order mode, tower choice, pan, zoom, pause, restart, exit and focus.
+- [ ] Preserve tap and box selection while preventing selection/pan/order conflicts.
+- [ ] Add pinch cancellation, pointer-cancel settlement and synthetic-mouse duplicate suppression.
+- [ ] Add explicit build confirmation rather than relying only on repeated pad selection.
+- [ ] Publish `DeviceControlAdmissionResult` with required and covered actions.
+- [ ] Publish one typed result for every campaign and camera action.
+- [ ] Add `FirstDeviceControlSurfaceFrameAck`.
+- [ ] Add `FirstDeviceActionEffectFrameAck`.
+- [ ] Execute keyboard/mouse, touch-only and hybrid browser matrices.
+- [ ] Run the same matrix against source, built output and GitHub Pages.
 
 ## Completion gate
 
 ```txt
-one snapshot
-one camera revision
-one ordered world-item plan
-one Canvas2D draw result
-one matching CRT-visible frame acknowledgement
+one route revision
+one device-capability revision
+one admitted control profile
+complete required-action coverage
+one active gesture owner per pointer sequence
+one terminal result per semantic command
+one matching Canvas2D and CRT action-effect frame
 ```
 
-Do not claim render-order correctness before all five identities converge.
+Do not claim mobile or touch playability until the complete gate passes on a real or emulated touch browser.
