@@ -1,71 +1,76 @@
 # PhantomCommand Known Gaps
 
-**Timestamp:** `2026-07-15T13-41-25-04-00`
+**Timestamp:** `2026-07-15T18-39-30-04-00`
 
 ## Summary
 
-Menu audio resources are created and mutated through local helpers without generation identity, context-state admission, route/visibility settlement, exact retirement or browser proof.
+The campaign hides the native pointer and has no equivalent precommit cursor, reticle, hover target, selection preview, build preview or order preview tied to accepted input and render revisions.
 
 ## Plan ledger
 
-**Goal:** keep unresolved menu-audio policy, ownership, lifecycle and evidence gaps explicit.
+**Goal:** keep unresolved pointer visibility, candidate, lifecycle and proof gaps explicit.
 
-- [x] Record source-backed audio lifecycle gaps.
+- [x] Record source-backed pointer-feedback gaps.
+- [x] Separate precommit feedback from existing post-commit effects.
 - [x] Separate source evidence from unexecuted browser claims.
 - [ ] Close each gap with implementation and executable proof.
 
 ## Gaps
 
 ```txt
-menu audio policy revision: absent
-AudioContext generation identity: absent
-browser capability result: absent
-accepted unlock result: absent
-existing suspended-context resume: absent
-context state observer: absent
-persistent ambience source leases: absent
-transient cue leases: absent
-cue idempotency: absent
-ambience and UI-cue policy separation: absent
-visibility settlement policy: absent
-route-transition settlement: absent
-pagehide retirement: absent
-source stop receipts: absent
-source disconnect receipts: absent
-context close receipt: absent
-delayed-close generation binding: absent
-late callback rejection: absent
-MenuAudioUnlockResult: absent
-MenuAudioProjectionResult: absent
-MenuAudioSettlementResult: absent
-FirstAudibleMenuFrameAck: absent
-FirstSilentRouteTransitionAck: absent
-browser lifecycle fixture: absent
-source/build/Pages audio parity: absent
+campaign pointer feedback policy revision: absent
+input surface generation: absent
+pointer sample revision: absent
+pointer presence result: absent
+pointer visibility mode: implicit cursor:none
+replacement cursor or reticle: absent
+hover query result: absent
+hovered ally preview: absent
+hovered enemy preview: absent
+hovered build-pad preview: absent
+build availability preview: absent
+order ground-anchor preview: absent
+drag candidate membership preview: absent
+outside-source feedback: absent
+no-candidate feedback: absent
+cursor contrast policy: absent
+overlay feedback policy: absent
+pointerleave settlement: absent
+pointercancel settlement: absent
+route-retirement settlement: absent
+stale feedback rejection: absent
+PointerFeedbackResult: absent
+PointerFeedbackFrameResult: absent
+FirstPointerFeedbackFrameAck: absent
+candidate-to-command continuity proof: absent
+browser pointer-feedback fixture: absent
+source/build/Pages pointer-feedback parity: absent
 ```
 
 ## Source-backed mismatch
 
 ```txt
 present:
-  AudioContext creation
-  master gain
-  persistent drone
-  looping wind
-  transient UI tones
-  settings-triggered delayed close
+  cursor:none on the campaign canvas
+  pointer source x y and inside state
+  ally and pad point hit tests
+  enemy and ground order resolution
+  drag rectangle while dragging
+  selected-unit rings after commit
+  selected-pad state after commit
+  transient order effect after commit
 
 missing:
-  explicit resume for an existing suspended context
-  route and visibility settlement
-  exact source retirement
-  callback generation ownership
-  immutable lifecycle results
-  audible and silent acknowledgements
+  ordinary pointer location projection
+  precommit candidate identity
+  explicit outside or miss result
+  revision-bound feedback frame
+  feedback-to-command continuity
+  browser proof
 ```
 
-`ensureAudio()` returns whenever `state.audio` exists, regardless of context state. `stopAmbience()` is reached only from the settings toggle and schedules an unversioned delayed close. New and Continue navigate after a visual fade without an explicit audio settlement command.
+The render path uses `input.pointer` for drag geometry and event-side projection, but no ordinary pointer mark or hover descriptor is drawn. Selection and order target resolution occur during the committing event.
 
 ## Retained gaps
 
-Earlier public-capability, device-control, render-order, pause, terminal-outcome, startup, settings, save, lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
+Earlier menu-audio, public-capability, device-control, render-order, pause, terminal-outcome, startup, settings, save, route-lifecycle, scheduler, WebGL, accessibility, spatial-input, keyboard-input and combat-modifier gaps remain active until implemented and proven.
