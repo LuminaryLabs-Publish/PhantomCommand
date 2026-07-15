@@ -1,14 +1,15 @@
 # Oldest Selection and Device Control Reconciliation
 
-**Timestamp:** `2026-07-15T03-24-35-04-00`
+**Timestamp:** `2026-07-15T03-24-35-04-00`  
+**Status:** `central-reconciled`
 
 ## Summary
 
-The accessible Publish organization still contains 11 repositories. After excluding `TheCavalryOfRome`, all ten eligible repositories had central-ledger and root `.agent` coverage, and no eligible runtime was ahead of its recorded documentation head. PhantomCommand had the oldest synchronized central timestamp and was selected alone.
+The accessible Publish organization contains 11 repositories. After excluding `TheCavalryOfRome`, all ten eligible repositories had central-ledger and root `.agent` coverage, and no eligible runtime was ahead of its recorded documentation head. PhantomCommand had the oldest synchronized central timestamp, was selected alone, and its device-control audit was logged in `LuminaryLabs-Dev/LuminaryLabs` on `main`.
 
 ## Plan ledger
 
-**Goal:** preserve deterministic repository selection and prepare exact central-ledger reconciliation for this audit.
+**Goal:** preserve deterministic repository selection and complete exact central-ledger reconciliation for this audit.
 
 - [x] Enumerate the full Publish repository list.
 - [x] Exclude Cavalry of Rome.
@@ -17,7 +18,10 @@ The accessible Publish organization still contains 11 repositories. After exclud
 - [x] Apply the oldest synchronized timestamp rule.
 - [x] Select only PhantomCommand.
 - [x] Record the device-control finding and output paths.
-- [ ] Update the central ledger after repo-local documentation commits settle.
+- [x] Add the central internal change log.
+- [x] Update the central PhantomCommand ledger.
+- [x] Push both repositories only to `main`.
+- [x] Create no branch or pull request.
 
 ## Comparison
 
@@ -38,23 +42,29 @@ previous central timestamp: 2026-07-14T23-38-29-04-00
 selection reason: oldest synchronized central timestamp
 ```
 
-## Central reconciliation payload
+## Central reconciliation result
 
 ```txt
-new status:
+central repository:
+  LuminaryLabs-Dev/LuminaryLabs
+
+central status:
   device-control-action-coverage-authority-central-reconciled
 
-new technical status:
+technical status:
   device-control-action-coverage-authority-audited
 
-retained current status:
+retained status:
   isometric-render-order-frame-authority-central-reconciled
 
-new central change log:
+central change log:
   internal-change-log/2026-07-15T03-24-35-04-00-phantom-command-device-control-action-coverage.md
+
+central reconciliation commit at time of acknowledgement:
+  bd97c8d9c07a7c35d20d5bef4e7da647c9918e6a
 ```
 
-## Finding to retain centrally
+## Finding retained centrally
 
 Touch pointers can select or box-select and can activate a pad, but the normal campaign requires keyboard, multi-button mouse and wheel producers for wave start, unit order, tower choice, camera navigation, pause and terminal actions. No semantic touch-control surface, profile admission result or matching action-effect frame proof exists.
 
