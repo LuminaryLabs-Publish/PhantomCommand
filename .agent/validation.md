@@ -1,11 +1,11 @@
 # Validation
 
-**Timestamp:** `2026-07-16T10-38-36-04-00`  
-**Status:** `wheel-zoom-delta-anchor-convergence-authority-audited`
+**Timestamp:** `2026-07-16T17-40-04-04-00`  
+**Status:** `isometric-marquee-selection-geometry-authority-audited`
 
 ## Summary
 
-This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and wheel-zoom gap classification only. It does not validate cross-device wheel semantics or pointer-anchor convergence because no runtime authority or executable fixture was added.
+This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and marquee-selection geometry classification only. It does not validate corrected selection membership because no runtime authority or executable fixture was added.
 
 ## Plan ledger
 
@@ -15,11 +15,11 @@ This pass validates repository selection, documentation scope, source evidence, 
 - [x] Exclude `LuminaryLabs-Publish/TheCavalryOfRome`.
 - [x] Confirm ten central ledger entries, ten root `.agent` states and synchronized heads.
 - [x] Select PhantomCommand through the oldest synchronized timestamp rule.
-- [x] Inspect menu, CRT, campaign, wheel, camera, validation and deployment sources.
+- [x] Inspect menu, CRT, campaign, selection, camera, validation and deployment sources.
 - [x] Preserve all 20 implemented kits and services.
-- [x] Add the timestamped wheel-zoom audit family.
+- [x] Add the timestamped marquee-selection audit family.
 - [x] Refresh required root `.agent` files and the machine registry.
-- [ ] Execute wheel-device and anchor-convergence fixtures.
+- [ ] Execute geometry, camera, artifact and Pages fixtures.
 
 ## Changed
 
@@ -46,6 +46,7 @@ game.html
 src/menu/graveyard-menu.js
 src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
+scripts/check-campaign.mjs
 package.json
 .agent root documents and kit registry
 central PhantomCommand ledger
@@ -57,27 +58,26 @@ full Publish repository inventory and synchronized heads
 ```txt
 npm run check
 npm run build
-pixel-mode wheel fixture
-line-mode wheel fixture
-page-mode wheel fixture
-smooth trackpad and momentum fixture
-off-center pointer-anchor fixture
-min/max zoom no-op fixture
-stale route/camera revision fixture
+left-to-right drag fixture
+right-to-left drag fixture
+vertical reverse-drag fixture
+isometric-axis crossing fixture
+screen-edge and exact-boundary fixture
+camera-change-during-drag fixture
 built-output smoke
-Pages-origin wheel-zoom smoke
+Pages-origin marquee smoke
 ```
 
 ## Evidence status
 
 ```txt
-raw deltaY scaling: confirmed
-deltaMode normalization: absent
-targetZoom clamping: confirmed
-before/after anchor calculation under unchanged current zoom: confirmed
-later RAF zoom easing: confirmed
-typed result and frame acknowledgements: absent
-actual cross-device incident: not reproduced
+visible source-space drag rectangle: confirmed
+two diagonal inverse transforms: confirmed
+four-corner inverse transform: absent
+direct screen-space membership: absent
+camera-bound drag generation: absent
+typed result and frame acknowledgement: absent
+actual user incident: not reproduced
 ```
 
-No cross-device wheel equivalence, trackpad correctness, pointer-anchor preservation, camera convergence, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
+No corrected marquee membership, drag-direction equivalence, camera-generation safety, selected-frame convergence, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
