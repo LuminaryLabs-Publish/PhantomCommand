@@ -1,73 +1,80 @@
 # Current Audit
 
-**Timestamp:** `2026-07-16T10-38-36-04-00`  
+**Timestamp:** `2026-07-16T17-40-04-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `wheel-zoom-delta-anchor-convergence-authority-audited`
+**Status:** `isometric-marquee-selection-geometry-authority-audited`
 
 ## Summary
 
-The campaign wheel handler multiplies raw `deltaY` by a fixed scalar without consulting `deltaMode`. It then calculates both pointer-anchor world positions with the unchanged current camera zoom, so the attempted camera correction is zero. The RAF changes zoom later, allowing the world point beneath the pointer to drift.
+The campaign draws a source-space drag rectangle but resolves selection by inverse-transforming only its top-left and bottom-right corners. Because isometric world z depends on both screen y and negative screen x, those two corners are not the z extrema. The selected unit set can therefore omit units visibly inside the rectangle or include units outside it.
 
 ## Plan ledger
 
-**Goal:** define one wheel-zoom authority that normalizes device evidence, preserves the selected world anchor through eased zoom, and binds the accepted command to the visible camera frame.
+**Goal:** define one marquee-selection authority that binds the drag gesture to an exact camera snapshot, resolves membership against the visible source-space rectangle, and acknowledges the matching selected-state frame.
 
 - [x] Reconcile the current Publish inventory and central repo ledger.
 - [x] Select PhantomCommand by the oldest synchronized timestamp.
 - [x] Inspect `game.html`, `src/campaign/campaign-scene.js`, `src/menu/crt-renderer.js`, package scripts and retained audits.
 - [x] Identify the interaction loop, domains, all 20 implemented kits and their services.
-- [x] Define 19 wheel-zoom authority surfaces.
+- [x] Define 19 marquee-selection authority surfaces.
 - [x] Add the timestamped audit family.
-- [ ] Implement and execute cross-device wheel and anchor-convergence fixtures.
+- [ ] Implement and execute screen/world membership fixtures.
 
 ## Source-backed path
 
 ```txt
-canvas wheel event
-  -> prevent default
-  -> map pointer to source coordinates
-  -> before = screenToWorld(pointer) using camera.zoom
-  -> targetZoom *= exp(-deltaY * 0.0012)
-  -> after = screenToWorld(pointer) using the same camera.zoom
-  -> before - after equals zero
-  -> no effective camera anchor correction
+pointerdown
+  -> store source-space drag origin
 
-later RAF
-  -> camera.zoom eases toward targetZoom
-  -> world projection changes around camera center
-  -> world point beneath pointer moves
+pointermove
+  -> update source-space pointer
+  -> draw the visible rectangle from origin to current pointer
+
+pointerup
+  -> normalize screen min/max
+  -> inverse-transform top-left as A
+  -> inverse-transform bottom-right as B
+  -> derive world x/z min/max from A and B only
+  -> filter allied units against that world box
 ```
+
+For the current inverse transform:
+
+```txt
+worldX = cameraX + screenY/0.72 + screenX/1.44
+worldZ = cameraZ + screenY/0.72 - screenX/1.44
+```
+
+Top-left and bottom-right contain world-x extrema, but world-z extrema occur at top-right and bottom-left. The current two-corner box is therefore not equivalent to the visible drag rectangle.
 
 ## Main gaps
 
 ```txt
-WheelEvent.deltaMode normalization
-pixel line and page unit policy
-trackpad burst and momentum coalescing
-accepted wheel-command identity
-camera zoom revision
-world-anchor snapshot
-anchor-preserving camera solve
-stale route and camera revision rejection
-WheelZoomResult
-FirstWheelZoomFrameAck
-ZoomAnchorConvergenceAck
-browser artifact and Pages cross-device fixtures
+camera snapshot bound to drag generation
+four-corner world polygon
+or direct screen-space membership evaluation
+viewport-inside admission
+drag direction normalization result
+replace/add selection policy result
+stale camera/route rejection
+MarqueeSelectionResult
+FirstMarqueeSelectionFrameAck
+browser artifact and Pages geometry fixtures
 ```
 
 ## Required authority
 
-`phantom-command-wheel-zoom-delta-anchor-convergence-authority-domain`
+`phantom-command-isometric-marquee-selection-geometry-authority-domain`
 
 ## Inventory summary
 
 ```txt
 implemented kits: 20
-planned wheel-zoom surfaces: 19
+planned marquee-selection surfaces: 19
 ```
 
-The full kit-by-kit services and source evidence are in `.agent/trackers/2026-07-16T10-38-36-04-00/project-breakdown.md`.
+The full kit-by-kit services and source evidence are in `.agent/trackers/2026-07-16T17-40-04-04-00/project-breakdown.md`.
 
 ## Validation boundary
 
-Documentation changed. Runtime JavaScript, HTML, CSS, gameplay, simulation, rendering behavior, camera behavior, persistence, dependencies, tests, workflows, build and deployment did not change. No cross-device zoom correctness, pointer-anchor convergence or production-readiness claim is made.
+Documentation changed. Runtime JavaScript, HTML, CSS, gameplay, simulation, input behavior, camera behavior, rendering behavior, persistence, dependencies, tests, workflows, build and deployment did not change. No corrected marquee membership, selected-frame convergence or production-readiness claim is made.
