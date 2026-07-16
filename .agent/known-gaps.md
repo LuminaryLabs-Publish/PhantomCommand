@@ -1,51 +1,48 @@
 # Known Gaps
 
-**Generated:** `2026-07-16T10-38-36-04-00`  
-**Status:** `wheel-zoom-delta-anchor-convergence-authority-audited`
+**Generated:** `2026-07-16T17-40-04-04-00`  
+**Status:** `isometric-marquee-selection-geometry-authority-audited`
 
 ## Current priority
 
-- The campaign reads raw `WheelEvent.deltaY` without `deltaMode` normalization.
-- Pixel, line and page wheel units therefore share one fixed multiplier despite different meanings.
-- Smooth trackpad bursts and momentum have no coalescing or command identity.
-- `before` and `after` world coordinates are both calculated with the unchanged current `camera.zoom`.
-- The attempted pointer-anchor correction is consequently zero at wheel-event time.
-- RAF changes `camera.zoom` later, so projection changes around the camera center rather than the intended pointer anchor.
-- No camera-zoom revision binds the wheel event, target zoom, camera translation and rendered frame.
-- No stale route or camera-generation rejection exists for wheel evidence.
-- No explicit unchanged result exists when zoom is already clamped at its minimum or maximum.
-- No `WheelZoomResult` exists.
-- No `FirstWheelZoomFrameAck` exists.
-- No `ZoomAnchorConvergenceAck` exists.
-- No browser, built-artifact or Pages fixture proves cross-device zoom equivalence or pointer-anchor stability.
+- The visible drag box is represented in source-screen coordinates.
+- Selection membership is evaluated in world coordinates.
+- Only the normalized top-left and bottom-right screen corners are inverse-transformed.
+- The isometric inverse transform makes world z increase with screen y and decrease with screen x.
+- Top-right and bottom-left therefore contain the true world-z extrema.
+- The current two-corner world box is not the inverse image of the visible screen rectangle.
+- Camera and viewport revisions are not bound to one drag generation.
+- Pointer-up does not publish an accepted, unchanged, cancelled, stale or invalid result.
+- No `MarqueeSelectionResult` exists.
+- No `FirstMarqueeSelectionFrameAck` exists.
+- No browser, built-artifact or Pages fixture compares visible rectangle membership with the selected unit set.
 
 ## Source-backed evidence
 
 ```txt
-wheel listener: present
-deltaY scalar: present
-deltaMode read: absent
-targetZoom clamp: present
-pointer-to-source mapping: present
-before world anchor: present
-after world anchor under changed current zoom: absent
-zero immediate anchor correction: implied by identical inputs
-later zoom easing: present
-typed zoom result and frame acknowledgements: absent
+source-space drag origin: present
+source-space live pointer: present
+visible normalized rectangle: present
+top-left inverse transform: present
+bottom-right inverse transform: present
+top-right inverse transform: absent
+bottom-left inverse transform: absent
+screen-space unit membership: absent
+four-corner polygon membership: absent
+typed result and frame acknowledgement: absent
 ```
 
 ## Not claimed
 
 ```txt
-mouse-wheel failure on every device
-trackpad failure on every browser
-camera instability outside wheel zoom
-cross-device zoom equivalence
-pointer-anchor preservation
+every drag necessarily selects the wrong set
+all camera states exhibit the same error magnitude
+click selection is broken
+orders or combat are broken
 browser artifact or Pages parity
 production readiness
 ```
 
 ## Retained gaps
 
-Motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separately documented.
+Wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separately documented.
