@@ -2,74 +2,74 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Latest audit:** `2026-07-16T00-00-40-04-00`  
-**Status:** `campaign-audio-event-projection-authority-audited`
+**Latest audit:** `2026-07-16T04-27-44-04-00`  
+**Status:** `motion-preference-animation-admission-authority-audited`
 
 ## Summary
 
-PhantomCommand combines a procedural Canvas2D menu, menu-owned WebAudio, a fixed-step isometric grave-ring campaign, Canvas2D world/HUD/minimap rendering, WebGL CRT presentation, local persistence, static validation, build and Pages delivery. The active audit isolates campaign audio: the menu owns ambience and UI tones, but `game.html` loads only `campaign-scene.js`, and accepted wave, build, order, combat, core-damage, pause, win and loss transitions have no campaign audio projection or audible-result evidence.
+PhantomCommand combines a procedural Canvas2D menu, menu WebAudio, a fixed-step isometric campaign, Canvas2D world/HUD/minimap rendering, WebGL CRT presentation, persistence, static validation, build and Pages delivery. The active audit isolates motion preference: both routes continuously animate fog, parallax, characters, pulses, transitions, camera/effects and time-dependent CRT flicker/grain, but no operating-system reduced-motion observer, product override, motion classifier, projection result or reduced-motion frame acknowledgement exists.
 
 ## Plan ledger
 
-**Goal:** project campaign sound only from accepted gameplay transitions while keeping campaign truth in the simulation and preserving browser audio lifecycle, preference, deduplication and voice-budget ownership.
+**Goal:** preserve campaign timing and interaction meaning while making optional visual motion consume one revision-bound normal, reduced or static policy.
 
-- [x] Compare the full 11-repository Publish inventory with ten central ledgers.
+- [x] Compare the full 11-repository Publish inventory with central tracking.
 - [x] Exclude `LuminaryLabs-Publish/TheCavalryOfRome`.
-- [x] Identify one documentation-ahead mismatch: central tracking recorded PhantomCommand head `cdb3e9346211d0ddac8bf08798a79259e9f7f78b`, while `main` was `d7df091b3a898e99f804e2af00a307b4df96b09d`.
-- [x] Select only PhantomCommand before the oldest-documented fallback.
-- [x] Trace menu audio, campaign boot, gameplay transitions, rendering, lifecycle, validation and deployment.
+- [x] Confirm no new, missing, undocumented or runtime-ahead eligible repository.
+- [x] Select only PhantomCommand by the oldest synchronized timestamp.
+- [x] Trace menu, CRT, campaign, construction, lifecycle, validation and deployment surfaces.
 - [x] Preserve all 20 implemented kits and their services.
-- [x] Define one parent campaign-audio authority and 21 coordinating surfaces.
-- [x] Add the timestamped tracker and focused audit family.
-- [ ] Implement semantic campaign audio events, lifecycle-safe projection and executable browser fixtures.
+- [x] Define 21 motion-preference authority surfaces.
+- [x] Add the timestamped audit family.
+- [ ] Implement and execute reduced-motion browser fixtures.
 
 ## Complete interaction loop
 
 ```txt
 menu
   -> restore settings and save presence
-  -> user gesture creates menu AudioContext
-  -> ambience and UI tones project
+  -> continuous procedural Canvas2D motion
+  -> time-varying CRT presentation
   -> route to campaign
 
 campaign
   -> keyboard pointer and wheel input
-  -> fixed-step waves movement combat rewards and terminal settlement
-  -> Canvas2D world HUD minimap effects and overlays
-  -> WebGL CRT presentation
-  -> no campaign AudioContext cue registry or audio result
+  -> fixed-step simulation
+  -> entity effects camera and HUD projection
+  -> time-varying CRT presentation
 
-terminal
-  -> win or loss message and overlay
-  -> optional victory save marker
-  -> no authored terminal cue or audiovisual convergence acknowledgement
+motion preference
+  -> no OS observer or product override
+  -> no essential/ornamental classification
+  -> normal motion remains active on both routes
+  -> no reduced-motion result or frame acknowledgement
 ```
 
 ## Inventory
 
 ```txt
 implemented source-backed kits: 20
-planned campaign-audio authority surfaces: 22
+planned motion-preference authority surfaces: 21
 ```
 
 ## Required parent domain
 
-`phantom-command-campaign-audio-event-projection-authority-domain`
+`phantom-command-motion-preference-animation-admission-authority-domain`
 
 ## Read this pass first
 
 ```txt
-.agent/trackers/2026-07-16T00-00-40-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-16T00-00-40-04-00.md
-.agent/architecture-audit/2026-07-16T00-00-40-04-00-campaign-audio-event-projection-dsk-map.md
-.agent/render-audit/2026-07-16T00-00-40-04-00-silent-campaign-audiovisual-frame-gap.md
-.agent/gameplay-audit/2026-07-16T00-00-40-04-00-silent-wave-build-combat-outcome-loop.md
-.agent/interaction-audit/2026-07-16T00-00-40-04-00-campaign-audio-command-result-map.md
-.agent/audio-audit/2026-07-16T00-00-40-04-00-campaign-unlock-cue-ambience-lifecycle-contract.md
-.agent/deploy-audit/2026-07-16T00-00-40-04-00-campaign-audio-browser-fixture-gate.md
-.agent/central-sync-audit/2026-07-16T00-00-40-04-00-documentation-ahead-campaign-audio-reconciliation.md
+.agent/trackers/2026-07-16T04-27-44-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-16T04-27-44-04-00.md
+.agent/architecture-audit/2026-07-16T04-27-44-04-00-motion-preference-animation-admission-dsk-map.md
+.agent/render-audit/2026-07-16T04-27-44-04-00-continuous-motion-reduced-frame-gap.md
+.agent/gameplay-audit/2026-07-16T04-27-44-04-00-reduced-motion-essential-simulation-loop.md
+.agent/interaction-audit/2026-07-16T04-27-44-04-00-motion-preference-command-result-map.md
+.agent/motion-preference-audit/2026-07-16T04-27-44-04-00-os-override-animation-policy-contract.md
+.agent/deploy-audit/2026-07-16T04-27-44-04-00-reduced-motion-browser-fixture-gate.md
+.agent/central-sync-audit/2026-07-16T04-27-44-04-00-oldest-selection-motion-preference-reconciliation.md
 ```
 
 ## Retained authorities
 
-Pointer-gesture capture and cancellation, pointer feedback, menu audio lifecycle, public diagnostics, device coverage, isometric render order, pause admission, terminal conflict settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and spatial input remain separate retained authorities.
+Campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, public diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and spatial input remain separate retained authorities.
