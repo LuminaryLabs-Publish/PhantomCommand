@@ -1,44 +1,43 @@
 # Next Steps
 
-**Generated:** `2026-07-16T00-00-40-04-00`  
-**Status:** `campaign-audio-event-projection-authority-audited`
+**Generated:** `2026-07-16T04-27-44-04-00`  
+**Status:** `motion-preference-animation-admission-authority-audited`
 
 ## Plan ledger
 
-**Goal:** add one lifecycle-safe campaign-audio projection downstream of accepted campaign transitions.
+**Goal:** add one motion-preference authority that preserves gameplay truth while adapting optional presentation across menu and campaign routes.
 
-- [ ] Add stable `CampaignAudioEventId`, campaign session generation and frame revision values.
-- [ ] Convert accepted wave start, spawn, build, order, attack, hit, death, core-damage, pause, victory and defeat transitions into immutable semantic audio events.
-- [ ] Keep event creation in campaign-result settlement rather than raw keyboard or pointer handlers.
-- [ ] Add campaign audio capability observation and accepted user-gesture unlock.
-- [ ] Create one campaign `AudioContext` owner with master, ambience, effects and UI buses.
-- [ ] Read the existing `phantomCommand.menuSettings` ambience preference without letting menu code own campaign lifecycle.
-- [ ] Define deterministic cue descriptors and procedural providers for wave, build, order, combat, sanctum and terminal events.
-- [ ] Add graveyard ambience that starts, suspends, resumes and retires with the campaign route.
-- [ ] Project listener and source positions from the accepted camera and world frame where spatial cues add value.
-- [ ] Deduplicate events by campaign session and event identity.
-- [ ] Add voice pools, priority, maximum concurrent voices and per-frame cue budgets.
-- [ ] Settle loops and contexts on pause, blur, visibility loss, pagehide, retry and route exit.
-- [ ] Publish `CampaignAudioProjectionResult` for played, suppressed, duplicate, muted, suspended, failed and retired work.
-- [ ] Publish `FirstAudibleCampaignCueAck` and `FirstCampaignAudioVisualConvergenceAck`.
-- [ ] Add fake-clock and fake-audio provider fixtures.
-- [ ] Add browser fixtures for unlock, persisted mute, wave, build, combat, terminal, pause/resume and route retirement.
-- [ ] Prove rapid combat does not exceed the voice budget.
-- [ ] Run `npm run check`, `npm run build`, built-output smoke and Pages-origin audio smoke.
+- [ ] Add `matchMedia('(prefers-reduced-motion: reduce)')` observation with a removable change listener.
+- [ ] Add a versioned product override with `system`, `normal`, `reduced` and optional `static` modes.
+- [ ] Resolve one effective motion policy and monotonic policy revision.
+- [ ] Bind policy adoption to document and route generations.
+- [ ] Classify fixed-step campaign simulation as essential and route-local animation as presentation.
+- [ ] Adapt menu fog drift, star twinkle, crow flap, reaper sway, selection pulse and pointer parallax.
+- [ ] Replace reduced-motion menu transitions with a brief dissolve or immediate route change.
+- [ ] Disable temporal CRT flicker and use static or no grain in reduced/static modes.
+- [ ] Shorten or remove campaign camera easing without changing camera targets.
+- [ ] Replace nonessential hit/projectile motion with low-displacement opacity or static markers.
+- [ ] Shorten or collapse construction choreography while preserving final piece state.
+- [ ] Keep wave cadence, unit movement, targeting, damage, rewards and terminal settlement unchanged.
+- [ ] Publish `MotionProjectionResult` for accepted, unchanged, superseded, unsupported, invalid and retired work.
+- [ ] Publish `FirstReducedMotionMenuFrameAck` and `FirstReducedMotionCampaignFrameAck`.
+- [ ] Add normal/reduced/static fixtures for menu and campaign routes.
+- [ ] Prove identical campaign simulation snapshots under normal and reduced presentation.
+- [ ] Prove live OS preference changes cannot write into a retired route.
+- [ ] Run `npm run check`, `npm run build`, built-output smoke and Pages-origin fixtures.
 
 ## Required first vertical slice
 
 ```txt
-accepted startWave result
-  -> CampaignAudioEventId
-  -> campaign audio capability and unlock admission
-  -> wave cue descriptor
-  -> bounded provider effect
-  -> CampaignAudioProjectionResult
-  -> matching visible wave frame
-  -> FirstCampaignAudioVisualConvergenceAck
+OS reports prefers-reduced-motion
+  -> MotionPreferenceAdmissionCommand
+  -> reduced policy revision
+  -> menu fog/parallax/pulse and CRT adapters
+  -> MotionProjectionResult
+  -> presented reduced-motion menu frame
+  -> FirstReducedMotionMenuFrameAck
 ```
 
 ## Keep separate
 
-Menu audio, campaign simulation, pointer admission, fixed-step scheduling, rendering, persistence and deployment remain separate authorities composed by event and frame revisions.
+Campaign simulation, input admission, audio, persistence, WebGL recovery, route retirement and deployment remain separate authorities composed through route, policy and frame revisions.
