@@ -1,11 +1,11 @@
 # Central Sync Audit — Documentation-Ahead Campaign Audio Reconciliation
 
 **Timestamp:** `2026-07-16T00-00-40-04-00`  
-**Status:** `campaign-audio-event-projection-authority-audited`
+**Status:** `campaign-audio-event-projection-authority-central-reconciled`
 
 ## Summary
 
-The full Publish comparison found no new, ledger-missing or root-agent-missing eligible repository. PhantomCommand was selected because its `main` head contained a final documentation reconciliation commit not yet reflected by the central ledger, making it the highest-priority documentation-ahead project before the oldest-timestamp fallback.
+The full Publish comparison found no new, ledger-missing or root-agent-missing eligible repository. PhantomCommand was selected because its `main` head contained a final documentation reconciliation commit not yet reflected by the central ledger, making it the highest-priority documentation-ahead project before the oldest-timestamp fallback. The central ledger and internal change log now contain this campaign-audio audit.
 
 ## Plan ledger
 
@@ -18,8 +18,9 @@ The full Publish comparison found no new, ledger-missing or root-agent-missing e
 - [x] Identify PhantomCommand central recorded head `cdb3e9346211d0ddac8bf08798a79259e9f7f78b` versus pre-audit `main` head `d7df091b3a898e99f804e2af00a307b4df96b09d`.
 - [x] Select only PhantomCommand.
 - [x] Add the repo-local campaign-audio audit family.
-- [ ] Bind the final repo-local head in `LuminaryLabs-Dev/LuminaryLabs`.
-- [ ] Add the central internal change-log entry.
+- [x] Update `repo-ledger/LuminaryLabs-Publish/PhantomCommand.md`.
+- [x] Add `internal-change-log/2026-07-16T00-00-40-04-00-phantom-command-campaign-audio-event-projection.md`.
+- [x] Reserve this confirmation commit as the final repo-local documentation head for central rebinding.
 
 ## Selection state
 
@@ -45,14 +46,14 @@ central ledger:
 central change log:
   internal-change-log/2026-07-16T00-00-40-04-00-phantom-command-campaign-audio-event-projection.md
 
-new central status:
+central status:
   campaign-audio-event-projection-authority-central-reconciled
 
 repo-local technical status:
   campaign-audio-event-projection-authority-audited
 ```
 
-## Findings to preserve centrally
+## Findings preserved centrally
 
 - PhantomCommand has 20 implemented kits.
 - The menu owns WebAudio ambience and UI tones.
@@ -63,4 +64,4 @@ repo-local technical status:
 
 ## Validation boundary
 
-This repo-local record precedes the central write. The exact final repo-local head must be read after all timestamped files are committed and then copied into the central ledger and change log.
+The central records were written on `main`, with no branch or pull request. This confirmation commit is the last repo-local change for the run; the central ledger and change log must record its exact SHA.
