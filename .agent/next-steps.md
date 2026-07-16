@@ -1,46 +1,46 @@
 # Next Steps
 
-**Generated:** `2026-07-16T10-38-36-04-00`  
-**Status:** `wheel-zoom-delta-anchor-convergence-authority-audited`
+**Generated:** `2026-07-16T17-40-04-04-00`  
+**Status:** `isometric-marquee-selection-geometry-authority-audited`
 
 ## Plan ledger
 
-**Goal:** replace the direct wheel mutation with one normalized, revision-bound zoom transaction that keeps the intended world point beneath the pointer throughout camera convergence.
+**Goal:** replace the two-corner world-box shortcut with one camera-bound marquee transaction whose accepted unit membership exactly matches the visible source-space rectangle.
 
-- [ ] Normalize `WheelEvent.deltaY` using `deltaMode` for pixel, line and page units.
-- [ ] Define bounded line-height and page-height conversion policy values.
-- [ ] Coalesce high-frequency trackpad evidence into a stable wheel-command revision.
-- [ ] Record route, canvas, pointer, camera and policy revisions on admission.
-- [ ] Reject evidence from retired routes or stale camera generations.
-- [ ] Snapshot the world-space anchor beneath the pointer before changing zoom.
-- [ ] Derive the accepted clamped `targetZoom` from normalized evidence.
-- [ ] Solve camera position against the stored world anchor while zoom eases.
-- [ ] Settle exact no-op results at min/max zoom rather than emitting ambiguous movement.
-- [ ] Publish `WheelZoomResult` for accepted, unchanged, superseded, invalid and retired commands.
-- [ ] Publish `FirstWheelZoomFrameAck` for the first frame using the accepted zoom revision.
-- [ ] Publish `ZoomAnchorConvergenceAck` when the target and anchor tolerances settle.
-- [ ] Add mouse-wheel pixel-mode fixtures.
-- [ ] Add line-mode and page-mode fixtures.
-- [ ] Add smooth trackpad and momentum-burst fixtures.
-- [ ] Prove identical normalized zoom intent across representative device units.
-- [ ] Prove the world point beneath an off-center pointer remains stable through easing.
-- [ ] Prove clamped zoom produces an explicit unchanged result.
+- [ ] Allocate one drag generation on accepted primary-pointer down.
+- [ ] Bind route, canvas, source viewport, camera and selection revisions.
+- [ ] Reject starts and completions outside the playable source viewport.
+- [ ] Normalize drag direction into one source-space rectangle.
+- [ ] Freeze the camera snapshot used for the gesture, or explicitly reproject the start point when the camera changes.
+- [ ] Project each eligible allied unit into source space and test point membership against the visible rectangle.
+- [ ] Alternatively, inverse-transform all four corners and use a convex world-polygon membership test.
+- [ ] Preserve click selection through a declared distance threshold.
+- [ ] Define replace, additive and toggle policy for Shift-modified gestures.
+- [ ] Reject pointer-up evidence from retired drag, route or camera generations.
+- [ ] Publish `MarqueeSelectionResult` with candidate, accepted and rejected unit IDs.
+- [ ] Commit selected state exactly once.
+- [ ] Publish `FirstMarqueeSelectionFrameAck` for the first frame drawing the accepted selected set.
+- [ ] Add left-to-right and right-to-left fixtures.
+- [ ] Add top-to-bottom and bottom-to-top fixtures.
+- [ ] Add rectangles crossing both isometric axes.
+- [ ] Add units near all four screen edges and exact-boundary cases.
+- [ ] Add camera pan/zoom-during-drag policy fixtures.
 - [ ] Run `npm run check`, `npm run build`, built-output smoke and Pages-origin fixtures.
 
 ## Required first vertical slice
 
 ```txt
-line-mode wheel event over an off-center world point
-  -> WheelZoomAdmissionCommand
-  -> normalized pixel-equivalent delta
-  -> accepted target zoom and world-anchor snapshot
-  -> camera anchor solve during easing
-  -> WheelZoomResult
-  -> rendered matching camera frame
-  -> FirstWheelZoomFrameAck
-  -> ZoomAnchorConvergenceAck
+drag rectangle crossing the isometric z axis
+  -> MarqueeSelectionCommand
+  -> accepted camera and viewport revisions
+  -> source-space candidate projection
+  -> exact rectangle membership
+  -> MarqueeSelectionResult
+  -> selected-state commit
+  -> rendered matching selection rings
+  -> FirstMarqueeSelectionFrameAck
 ```
 
 ## Keep separate
 
-Fixed-step campaign simulation, selection, orders, pointer capture, motion preference, pause admission, route retirement, WebGL recovery and deployment remain separate authorities composed through route, camera and frame revisions.
+Wheel zoom, pointer capture, camera pan, fixed-step simulation, orders, building, pause, route retirement, WebGL recovery and deployment remain separate authorities composed through route, camera, selection and frame revisions.
