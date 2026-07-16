@@ -1,59 +1,22 @@
-# PhantomCommand Current Audit
+# Current Audit
 
-**Timestamp:** `2026-07-15T18-39-30-04-00`  
-**Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `campaign-pointer-feedback-projection-authority-audited`
+**Timestamp:** `2026-07-15T23-38-46-04-00`  
+**Status:** `pointer-gesture-capture-cancel-authority-audited`
 
 ## Summary
 
-The campaign suppresses the browser cursor and tracks projected pointer coordinates, but the ordinary render path supplies no replacement cursor, hover reticle, candidate unit, candidate pad, enemy target or move anchor. Dragging draws a rectangle, while selection rings and order effects appear only after state mutates.
+Campaign pointer gestures are canvas-local rather than lifecycle-owned. Primary-button drag and middle-button pan begin in `pointerdown`, but the canvas does not call `setPointerCapture()`. Completion is recognized only by canvas `pointerup`; no `pointercancel`, `lostpointercapture`, `pointerleave`, visibility or page-retirement result settles the active gesture.
 
-## Plan ledger
+## Source-backed finding
 
-**Goal:** turn pointer feedback into an immutable projection that precedes and matches the command result.
+- `pointerdown` creates `input.drag` or sets `input.middle=true`.
+- `pointerup` clears those values only when the release reaches the canvas.
+- `pointermove` continues panning while `input.middle` is true.
+- rendering continues drawing the drag rectangle while `input.drag` exists.
+- blur clears both states, but blur is not guaranteed when a pointer leaves and releases outside the canvas.
 
-- [x] Trace CSS cursor policy and pointer storage.
-- [x] Trace point selection, pad selection, orders, drag selection, pan and zoom.
-- [x] Trace Canvas2D and CRT frame submission.
-- [x] Separate precommit feedback from post-commit state.
-- [x] Define policy, candidate, frame-plan, result and acknowledgement surfaces.
-- [ ] Implement the authority.
-- [ ] Add pointer, hover, candidate continuity, contrast and lifecycle fixtures.
-- [ ] Prove source, build and Pages parity.
-
-## Current source path
-
-```txt
-game.html
-  -> canvas cursor:none
-
-pointermove
-  -> crt.screenToSource
-  -> store source x y and inside
-
-render
-  -> world
-  -> HUD and minimap
-  -> pause or terminal overlay
-  -> drag rectangle only while input.drag exists
-  -> CRT presentation
-
-left click
-  -> resolve ally or pad candidate
-  -> mutate selection or selectedPad
-
-right click
-  -> resolve enemy or ground point
-  -> mutate unit order
-  -> emit post-commit effect
-```
+No stuck gesture was reproduced in a browser; this is a source-permitted lifecycle gap.
 
 ## Required authority
 
-```txt
-phantom-command-campaign-pointer-feedback-projection-authority-domain
-```
-
-## Validation boundary
-
-Documentation only. No HTML, CSS, JavaScript, input, gameplay, Canvas2D, WebGL, tests, build or deployment behavior changed.
+`phantom-command-pointer-gesture-capture-cancel-authority-domain`

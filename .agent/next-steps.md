@@ -1,49 +1,16 @@
-# PhantomCommand Next Steps
-
-**Timestamp:** `2026-07-15T18-39-30-04-00`
-
-## Summary
-
-Add one campaign pointer-feedback authority that observes pointer presence, derives immutable hover candidates, renders a visible reticle or equivalent affordance, and binds committed commands to the feedback revision the player saw.
+# Next Steps
 
 ## Plan ledger
 
-**Goal:** make hidden-cursor pointer play legible, revision-correct and lifecycle-safe without moving campaign truth into presentation.
+**Goal:** settle selection-drag and camera-pan gestures exactly once and bind their accepted result to the next visible campaign frame.
 
-- [ ] Add `CampaignPointerFeedbackPolicy` and `InputSurfaceGeneration`.
-- [ ] Publish monotonic `PointerSampleRevision` values.
-- [ ] Observe pointer enter, move, leave, cancel, blur and route retirement.
-- [ ] Reuse the accepted spatial-input projection result rather than creating a second coordinate authority.
-- [ ] Query immutable ally, pad, enemy, ground and drag candidates.
-- [ ] Publish explicit outside and no-candidate results.
-- [ ] Add selection-candidate preview.
-- [ ] Add build-pad hover and availability preview.
-- [ ] Add enemy order and ground-anchor preview.
-- [ ] Add drag candidate membership preview.
-- [ ] Add a rendered reticle whenever the native cursor remains hidden.
-- [ ] Define contrast-safe semantic roles for reticle and candidate marks.
-- [ ] Settle feedback under pause, terminal, blur, pointerleave, pointercancel and route exit policy.
-- [ ] Reject stale surface, projection, camera, entity-set and pad-set evidence.
-- [ ] Require pointer commands to cite the accepted feedback revision where continuity is required.
-- [ ] Publish `PointerFeedbackResult` and `PointerFeedbackFrameResult`.
-- [ ] Publish `FirstPointerFeedbackFrameAck`.
-- [ ] Extend static checks only after implementation markers exist.
-- [ ] Execute source, built-output and Pages browser fixtures.
-
-## Completion gate
-
-```txt
-one pointer feedback policy revision
-one active input surface generation
-one accepted projection authority
-one immutable candidate result per admitted sample
-one visible pointer affordance under hidden-cursor policy
-explicit outside and miss results
-candidate preview agrees with committed command
-stale feedback cannot mutate a successor state
-blocking overlays settle feedback explicitly
-one matching pointer-feedback frame acknowledgement
-source build and Pages fixtures pass
-```
-
-Do not claim pointer-feedback correctness until candidate-to-command continuity, lifecycle, contrast and deployed-origin fixtures pass.
+- [ ] Allocate a `PointerGestureGeneration` on accepted primary or middle `pointerdown`.
+- [ ] Call `setPointerCapture(pointerId)` and publish an admission result.
+- [ ] Bind move and release evidence to pointer id, button and gesture generation.
+- [ ] Settle through `pointerup`, `pointercancel`, `lostpointercapture`, blur, visibility loss and route retirement.
+- [ ] Release pointer capture exactly once when still owned.
+- [ ] Clear drag/pan state and reject stale events from retired generations.
+- [ ] Publish typed completed, cancelled, interrupted, stale and unsupported results.
+- [ ] Acknowledge the first matching drag-selection or camera-pan frame.
+- [ ] Add browser fixtures for release outside, cancellation, multi-pointer input, blur and route exit.
+- [ ] Verify source, built output and Pages behavior.
