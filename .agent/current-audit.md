@@ -1,78 +1,73 @@
 # Current Audit
 
-**Timestamp:** `2026-07-16T04-27-44-04-00`  
+**Timestamp:** `2026-07-16T10-38-36-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `motion-preference-animation-admission-authority-audited`
+**Status:** `wheel-zoom-delta-anchor-convergence-authority-audited`
 
 ## Summary
 
-The menu and campaign routes continuously render time-varying Canvas2D and CRT effects. Neither route observes `prefers-reduced-motion`, resolves a stored motion override, classifies essential simulation separately from ornamental presentation, or publishes a reduced-motion projection result and frame acknowledgement.
+The campaign wheel handler multiplies raw `deltaY` by a fixed scalar without consulting `deltaMode`. It then calculates both pointer-anchor world positions with the unchanged current camera zoom, so the attempted camera correction is zero. The RAF changes zoom later, allowing the world point beneath the pointer to drift.
 
 ## Plan ledger
 
-**Goal:** define one route-spanning motion authority that reduces optional visual motion without changing fixed-step gameplay, hit testing or command meaning.
+**Goal:** define one wheel-zoom authority that normalizes device evidence, preserves the selected world anchor through eased zoom, and binds the accepted command to the visible camera frame.
 
 - [x] Reconcile the current Publish inventory and central repo ledger.
 - [x] Select PhantomCommand by the oldest synchronized timestamp.
-- [x] Inspect `index.html`, `game.html`, menu art, menu runtime, CRT renderer, campaign runtime, package scripts and retained audits.
+- [x] Inspect `game.html`, `src/campaign/campaign-scene.js`, `src/menu/crt-renderer.js`, package scripts and retained audits.
 - [x] Identify the interaction loop, domains, all 20 implemented kits and their services.
-- [x] Define 21 motion-preference authority surfaces.
+- [x] Define 19 wheel-zoom authority surfaces.
 - [x] Add the timestamped audit family.
-- [ ] Implement and execute normal, reduced and static browser fixtures.
+- [ ] Implement and execute cross-device wheel and anchor-convergence fixtures.
 
 ## Source-backed path
 
 ```txt
-menu RAF
-  -> fog drift star twinkle crow flap reaper sway selection pulse pointer parallax
-  -> transition flash/fade
-  -> CRT time-based flicker and grain
-  -> presented frame
+canvas wheel event
+  -> prevent default
+  -> map pointer to source coordinates
+  -> before = screenToWorld(pointer) using camera.zoom
+  -> targetZoom *= exp(-deltaY * 0.0012)
+  -> after = screenToWorld(pointer) using the same camera.zoom
+  -> before - after equals zero
+  -> no effective camera anchor correction
 
-campaign RAF
-  -> fixed-step accepted simulation state
-  -> entity animation effects and camera easing
-  -> CRT time-based flicker and grain
-  -> presented frame
-
-preference path
-  -> no OS media-query observer
-  -> no product motion override
-  -> no policy result
-  -> no reduced-motion frame acknowledgement
+later RAF
+  -> camera.zoom eases toward targetZoom
+  -> world projection changes around camera center
+  -> world point beneath pointer moves
 ```
 
 ## Main gaps
 
 ```txt
-operating-system motion capability observation
-product motion override and precedence
-normal reduced and static policy modes
-essential versus ornamental motion classification
-live preference-change settlement
-route-generation and stale-listener rejection
-menu fog parallax character pulse and transition adapters
-CRT temporal-effect adapter
-campaign camera and effect adapters
-construction choreography adapter
-MotionProjectionResult
-FirstReducedMotionMenuFrameAck
-FirstReducedMotionCampaignFrameAck
+WheelEvent.deltaMode normalization
+pixel line and page unit policy
+trackpad burst and momentum coalescing
+accepted wheel-command identity
+camera zoom revision
+world-anchor snapshot
+anchor-preserving camera solve
+stale route and camera revision rejection
+WheelZoomResult
+FirstWheelZoomFrameAck
+ZoomAnchorConvergenceAck
+browser artifact and Pages cross-device fixtures
 ```
 
 ## Required authority
 
-`phantom-command-motion-preference-animation-admission-authority-domain`
+`phantom-command-wheel-zoom-delta-anchor-convergence-authority-domain`
 
 ## Inventory summary
 
 ```txt
 implemented kits: 20
-planned motion-preference surfaces: 21
+planned wheel-zoom surfaces: 19
 ```
 
-The full kit-by-kit services and source evidence are in `.agent/trackers/2026-07-16T04-27-44-04-00/project-breakdown.md`.
+The full kit-by-kit services and source evidence are in `.agent/trackers/2026-07-16T10-38-36-04-00/project-breakdown.md`.
 
 ## Validation boundary
 
-Documentation changed. Runtime JavaScript, HTML, CSS, gameplay, simulation, rendering, audio, persistence, dependencies, tests, workflows, build and deployment did not change. No reduced-motion correctness or production-readiness claim is made.
+Documentation changed. Runtime JavaScript, HTML, CSS, gameplay, simulation, rendering behavior, camera behavior, persistence, dependencies, tests, workflows, build and deployment did not change. No cross-device zoom correctness, pointer-anchor convergence or production-readiness claim is made.
