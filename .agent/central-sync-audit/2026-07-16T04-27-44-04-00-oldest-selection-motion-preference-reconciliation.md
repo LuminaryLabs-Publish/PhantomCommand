@@ -1,11 +1,11 @@
 # Central Sync Audit — Oldest Selection Motion Preference Reconciliation
 
 **Timestamp:** `2026-07-16T04-27-44-04-00`  
-**Status:** `motion-preference-animation-admission-authority-audited`
+**Status:** `motion-preference-animation-admission-authority-central-reconciled`
 
 ## Summary
 
-The latest full Publish comparison found no new, ledger-missing, root-agent-missing, undocumented or runtime-ahead eligible repository. PhantomCommand was the oldest synchronized eligible entry and was selected as the only project for this pass.
+The latest full Publish comparison found no new, ledger-missing, root-agent-missing, undocumented or runtime-ahead eligible repository. PhantomCommand was the oldest synchronized eligible entry and was selected as the only project for this pass. The central ledger and internal change log now contain the motion-preference audit.
 
 ## Plan ledger
 
@@ -16,9 +16,9 @@ The latest full Publish comparison found no new, ledger-missing, root-agent-miss
 - [x] Confirm ten eligible central ledgers and root `.agent` states from the latest synchronized comparison.
 - [x] Select only `LuminaryLabs-Publish/PhantomCommand` by oldest timestamp.
 - [x] Add the repo-local motion-preference audit family.
-- [ ] Update `repo-ledger/LuminaryLabs-Publish/PhantomCommand.md`.
-- [ ] Add `internal-change-log/2026-07-16T04-27-44-04-00-phantom-command-motion-preference-animation-admission.md`.
-- [ ] Bind the final repo-local documentation head centrally.
+- [x] Update `repo-ledger/LuminaryLabs-Publish/PhantomCommand.md`.
+- [x] Add `internal-change-log/2026-07-16T04-27-44-04-00-phantom-command-motion-preference-animation-admission.md`.
+- [x] Reserve this confirmation commit as the final repo-local documentation head for central rebinding.
 
 ## Selection state
 
@@ -33,7 +33,7 @@ selected: LuminaryLabs-Publish/PhantomCommand
 prior central timestamp: 2026-07-16T00-00-40-04-00
 ```
 
-## Findings to preserve centrally
+## Findings preserved centrally
 
 - PhantomCommand has 20 implemented source-backed kits.
 - Menu and campaign routes both run continuous time-varying visual presentation.
@@ -43,6 +43,14 @@ prior central timestamp: 2026-07-16T00-00-40-04-00
 - No `MotionProjectionResult` or reduced-motion frame acknowledgement exists.
 - The proposed parent domain contains 21 coordinating surfaces.
 
+## Central records
+
+```txt
+repo-ledger/LuminaryLabs-Publish/PhantomCommand.md
+internal-change-log/2026-07-16T04-27-44-04-00-phantom-command-motion-preference-animation-admission.md
+status: motion-preference-animation-admission-authority-central-reconciled
+```
+
 ## Validation boundary
 
-This repo-local record precedes the central write. Runtime behavior was not changed or executed.
+The central records were written on `main`, with no branch or pull request. This confirmation commit is the final repo-local change for the run and must be bound by exact SHA in both central records.
