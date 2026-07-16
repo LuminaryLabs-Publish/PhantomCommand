@@ -1,27 +1,81 @@
 # Validation
 
-**Timestamp:** `2026-07-15T23-38-46-04-00`
+**Timestamp:** `2026-07-16T00-00-40-04-00`  
+**Status:** `campaign-audio-event-projection-authority-audited`
+
+## Summary
+
+This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and campaign-audio gap classification only. It does not validate audible gameplay because no campaign audio runtime or executable fixture was added.
+
+## Plan ledger
+
+**Goal:** state exactly what changed and what remains unproven.
+
+- [x] Enumerate 11 accessible Publish repositories.
+- [x] Exclude `LuminaryLabs-Publish/TheCavalryOfRome`.
+- [x] Confirm ten central ledger entries and ten root `.agent` states from the latest inventory.
+- [x] Identify PhantomCommand as documentation-ahead of its central recorded head.
+- [x] Inspect menu audio, campaign transitions, visual projection, lifecycle, validation and deployment sources.
+- [x] Preserve all 20 implemented kits and services.
+- [x] Add the timestamped campaign-audio audit family.
+- [x] Refresh required root `.agent` files and the machine registry.
+- [ ] Execute campaign-audio fixtures.
+
+## Changed
 
 ```txt
-documentation changed: yes
-runtime JavaScript changed: no
-HTML or CSS changed: no
-pointer behavior changed: no
-camera or selection behavior changed: no
-gameplay or rendering changed: no
-persistence changed: no
-packages dependencies tests workflows build and deployment changed: no
-branch created: no
-pull request created: no
-
-npm run check: not run
-npm run build: not run
-outside-release fixture: unavailable
-pointercancel fixture: unavailable
-lostpointercapture fixture: unavailable
-multi-pointer fixture: unavailable
-blur visibility and route-retirement fixtures: unavailable
-source build and Pages parity: not run
+documentation: yes
+runtime JavaScript: no
+HTML or CSS: no
+gameplay or simulation: no
+rendering: no
+persistence: no
+audio behavior: no
+packages or dependencies: no
+tests or workflows: no
+build or deployment: no
+branch creation: no
+pull request creation: no
 ```
 
-No pointer-capture correctness, cancellation correctness, stuck-gesture repair, visible-frame convergence, artifact parity, Pages parity or production readiness is claimed.
+## Source inspection completed
+
+```txt
+index.html
+game.html
+src/menu/graveyard-menu.js
+src/menu/crt-renderer.js
+src/campaign/campaign-scene.js
+package.json
+.agent root documents and kit registry
+central PhantomCommand ledger
+full Publish repository inventory
+```
+
+## Not executed
+
+```txt
+npm run check
+npm run build
+campaign audio unlock fixture
+persisted ambience preference fixture
+wave build order and combat cue fixtures
+pause visibility retry and route-retirement fixtures
+cue deduplication and voice-budget fixtures
+audiovisual convergence fixture
+built-output smoke
+Pages-origin audio smoke
+```
+
+## Evidence status
+
+```txt
+menu AudioContext and ambience: confirmed
+campaign visual transitions: confirmed
+campaign audio provider: absent
+campaign cue registry: absent
+campaign audio results and acknowledgements: absent
+actual audible defect: not reproduced
+```
+
+No audible gameplay, browser-unlock reliability, cue correctness, preference adoption, lifecycle safety, voice-budget correctness, audiovisual convergence, artifact parity, Pages parity or production readiness is claimed.
