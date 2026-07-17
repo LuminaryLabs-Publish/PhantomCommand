@@ -1,20 +1,20 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-17T06-38-14-04-00",
-  "status": "campaign-input-region-arbitration-authority-audited",
-  "repositoryRevisionReviewed": "c36fdc0cb2b9a23e002b4b949efe30f913f3b541",
+  "updatedAt": "2026-07-17T11-39-49-04-00",
+  "status": "campaign-camera-coverage-bounds-authority-audited",
+  "repositoryRevisionReviewed": "8a773ba4c6a954759d47564611153fed02696f94",
   "runtimeSourceRevisionReviewed": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
-  "sourceTracker": ".agent/trackers/2026-07-17T06-38-14-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-17T06-38-14-04-00.md",
+  "sourceTracker": ".agent/trackers/2026-07-17T11-39-49-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-17T11-39-49-04-00.md",
   "audits": {
-    "architecture": ".agent/architecture-audit/2026-07-17T06-38-14-04-00-campaign-input-region-arbitration-dsk-map.md",
-    "render": ".agent/render-audit/2026-07-17T06-38-14-04-00-visible-ui-world-command-occlusion-gap.md",
-    "gameplay": ".agent/gameplay-audit/2026-07-17T06-38-14-04-00-visible-region-world-command-loop.md",
-    "interaction": ".agent/interaction-audit/2026-07-17T06-38-14-04-00-input-region-command-result-map.md",
-    "inputRegion": ".agent/input-region-audit/2026-07-17T06-38-14-04-00-source-region-occlusion-contract.md",
-    "deploy": ".agent/deploy-audit/2026-07-17T06-38-14-04-00-input-region-browser-fixture-gate.md",
-    "centralSync": ".agent/central-sync-audit/2026-07-17T06-38-14-04-00-oldest-selection-input-region-reconciliation.md"
+    "architecture": ".agent/architecture-audit/2026-07-17T11-39-49-04-00-campaign-camera-coverage-bounds-dsk-map.md",
+    "render": ".agent/render-audit/2026-07-17T11-39-49-04-00-square-center-clamp-visible-coverage-gap.md",
+    "gameplay": ".agent/gameplay-audit/2026-07-17T11-39-49-04-00-camera-coverage-gameplay-loop.md",
+    "interaction": ".agent/interaction-audit/2026-07-17T11-39-49-04-00-camera-intent-boundary-result-map.md",
+    "cameraBounds": ".agent/camera-bounds-audit/2026-07-17T11-39-49-04-00-visible-footprint-envelope-contract.md",
+    "deploy": ".agent/deploy-audit/2026-07-17T11-39-49-04-00-camera-bounds-browser-fixture-gate.md",
+    "centralSync": ".agent/central-sync-audit/2026-07-17T11-39-49-04-00-oldest-selection-camera-bounds-reconciliation.md"
   },
   "selection": {
     "accessibleRepoCount": 11,
@@ -26,33 +26,36 @@
     "undocumentedCount": 0,
     "runtimeAheadCount": 0,
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "selectedRepositoryHead": "c36fdc0cb2b9a23e002b4b949efe30f913f3b541",
+    "selectedRepositoryHead": "8a773ba4c6a954759d47564611153fed02696f94",
     "selectedRuntimeSourceHead": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
+    "selectedPriorCentralTimestamp": "2026-07-17T06-38-14-04-00",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "PhantomCommand had the oldest synchronized eligible central timestamp."
   },
   "census": {
     "implementedSurfaceCount": 20,
-    "plannedInputRegionSurfaceCount": 18
+    "plannedCameraCoverageSurfaceCount": 19
   },
   "interactionLoop": [
     "restore menu settings and save presence",
-    "render procedural menu through Canvas2D and WebGL CRT",
+    "render the procedural menu through Canvas2D WebAudio and WebGL CRT",
     "route into the fixed-step isometric campaign",
-    "map browser pointer evidence into the 640x360 source surface",
-    "render world HUD controls minimap and modal overlays into one source frame",
-    "issue selection marquee and order commands without visible-region arbitration",
-    "advance gameplay and render the resulting frame"
+    "admit keyboard middle-pointer wheel focus or public-host camera intent",
+    "mutate camera center zoom or anchor",
+    "clamp camera x and z independently without a zoom-aware visible-footprint policy",
+    "advance gameplay and render Canvas2D and CRT frames without a camera-boundary result or acknowledgement"
   ],
   "domainsInUse": [
     "static HTML routes and ES modules",
     "browser document RAF focus blur pointer keyboard wheel and storage lifecycle",
     "procedural menu settings save presence audio and routing",
     "Canvas2D world HUD controls minimap overlays and pixel typography",
-    "WebGL context shaders texture upload viewport CRT and source mapping",
+    "WebGL context shaders source texture upload viewport CRT and source mapping",
     "campaign units towers waves combat resources selection orders and terminal state",
-    "fixed-step scheduling camera persistence diagnostics build Pages and audit governance",
-    "source-region classification command admission and visible-frame proof"
+    "fixed-step scheduling movement targeting projectiles rewards effects and outcomes",
+    "camera position velocity zoom source-world transforms pan focus and clamping",
+    "circular arena extent visible isometric footprint coverage policy and frame proof",
+    "persistence diagnostics static checks build Pages and audit governance"
   ],
   "implementedKits": {
     "crt-renderer-kit": ["WebGL context", "shader compile/link", "source texture upload", "DPR-capped resize", "CRT effects", "contain mapping", "browser-screen to source mapping"],
@@ -77,27 +80,28 @@
     "construct-sequence-update-kit": ["construction sequence advancement", "settlement"]
   },
   "authority": {
-    "parentDomain": "phantom-command-campaign-input-region-arbitration-authority-domain",
-    "mainFinding": "The renderer owns visible world, HUD, controls, minimap and modal regions, while campaign pointer handlers consume source coordinates without enforcing the source-inside flag or resolving the topmost visible region before world mutation.",
+    "parentDomain": "phantom-command-campaign-camera-coverage-bounds-authority-domain",
+    "mainFinding": "The circular arena radius is 147, while independent x and z clamps admit camera centers up to 207.89 world units from the origin and do not account for zoom, the asymmetric visible source footprint or an explicit coverage policy.",
     "plannedSurfaces": [
-      "phantom-command-campaign-input-region-arbitration-authority-domain",
-      "source-presentation-region-manifest-kit",
-      "crt-source-inside-admission-kit",
-      "visible-region-z-order-kit",
-      "hud-hit-region-kit",
-      "tower-control-hit-region-kit",
-      "minimap-hit-region-kit",
-      "modal-overlay-hit-region-kit",
-      "pointer-region-gesture-lease-kit",
-      "world-region-command-admission-kit",
-      "stale-region-generation-rejection-kit",
-      "input-region-decision-result-kit",
-      "world-command-admission-result-kit",
-      "first-region-bound-command-frame-ack-kit",
-      "input-region-browser-fixture-kit",
-      "built-artifact-input-region-parity-kit",
-      "pages-input-region-parity-kit",
-      "central-reconciliation-kit"
+      "phantom-command-campaign-camera-coverage-bounds-authority-domain",
+      "circular-playfield-extent-kit",
+      "source-viewport-footprint-kit",
+      "isometric-visible-world-footprint-kit",
+      "camera-coverage-policy-kit",
+      "zoom-aware-camera-envelope-kit",
+      "camera-target-admission-kit",
+      "keyboard-pan-camera-constraint-kit",
+      "middle-pan-camera-constraint-kit",
+      "wheel-anchor-camera-constraint-kit",
+      "focus-camera-constraint-kit",
+      "public-host-camera-constraint-kit",
+      "camera-boundary-settlement-kit",
+      "stale-camera-revision-rejection-kit",
+      "camera-coverage-result-kit",
+      "first-camera-bounds-frame-ack-kit",
+      "camera-bounds-browser-fixture-kit",
+      "built-artifact-camera-bounds-parity-kit",
+      "pages-camera-bounds-parity-kit"
     ]
   },
   "validation": {
