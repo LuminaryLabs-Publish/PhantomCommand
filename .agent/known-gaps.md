@@ -1,50 +1,58 @@
 # Known Gaps
 
-**Generated:** `2026-07-16T23-59-01-04-00`  
-**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
+**Generated:** `2026-07-17T06-38-14-04-00`  
+**Status:** `campaign-input-region-arbitration-authority-audited`
 
 ## Current priority
 
-- Browser pointer coordinates are mapped into the 640×360 source surface.
-- Middle pointerdown stores a source-space position.
-- Middle pointermove calculates source-space dx/dy.
-- The canonical inverse transform uses `1 / 1.44` for horizontal source motion.
-- The active middle-pan path uses `1 / 0.72` for horizontal source motion.
-- Horizontal camera displacement is therefore twice the canonical grabbed-anchor displacement.
-- Vertical displacement uses the canonical `1 / 0.72` term.
-- The pointer-down world anchor is not retained.
-- Keyboard and middle-pan camera mutations have no explicit arbitration result.
-- Camera-boundary divergence is not classified.
-- No `MiddlePanResult` exists.
-- No `FirstMiddlePanFrameAck` exists.
-- No `PanAnchorConvergenceAck` exists.
-- No browser, built-artifact or Pages fixture measures anchor error.
+The campaign source canvas visually layers HUD, tower controls, minimap and modal overlays above the world. Pointer handlers map browser evidence into source coordinates but do not enforce the returned `inside` flag or classify the topmost visible region before issuing world commands.
 
-## Source-backed evidence
+## Confirmed by inspection
 
 ```txt
-screen-to-source mapping: present
-canonical screenToWorld transform: present
-middle-button gesture state: present
-source dx/dy calculation: present
-duplicated middle-pan transform: present
-canonical horizontal coefficient: absent from middle-pan path
-grabbed world-anchor snapshot: absent
-typed result and frame acknowledgement: absent
+fixed 640x360 source surface: present
+CRT browser-to-source mapping: present
+source x/y/inside result: present
+HUD/control/minimap/modal drawing: present
+click selection: present
+marquee selection: present
+right-click orders: present
 ```
 
-## Not claimed
+## Input-region gaps
 
 ```txt
-every player perceives the current pan as unusable
-vertical middle pan is mathematically incorrect
-keyboard camera pan is broken
-wheel zoom is broken
-selection, orders or combat are broken
-browser artifact or Pages parity
-production readiness
+inside-source rejection: absent
+source-region manifest: absent
+visible z-order resolver: absent
+HUD hit-region authority: absent
+tower-control hit-region authority: absent
+minimap interaction policy: absent
+modal world-input suspension result: absent
+gesture-region lease: absent
+stale route/frame/manifest rejection: absent
+InputRegionDecisionResult: absent
+WorldCommandAdmissionResult: absent
+FirstRegionBoundCommandFrameAck: absent
 ```
 
-## Retained gaps
+## Validation gaps
 
-Marquee selection, wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separately documented.
+```txt
+HUD no-fallthrough browser fixture: absent
+control-strip no-marquee fixture: absent
+minimap no-order fixture: absent
+modal suspension fixture: absent
+letterbox rejection fixture: absent
+unobscured world behavior fixture: absent
+built artifact parity: not run
+Pages parity: not run
+```
+
+## Risk boundary
+
+No specific production incident was reproduced. The source-backed risk is that the rendered topmost target and the interaction target can disagree because the renderer owns visible regions while campaign commands consume only source coordinates.
+
+## Claim boundary
+
+Do not claim region-aware command safety, artifact parity, Pages parity or production readiness until executable fixtures pass.
