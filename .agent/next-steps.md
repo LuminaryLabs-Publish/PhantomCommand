@@ -1,45 +1,58 @@
 # Next Steps
 
-**Generated:** `2026-07-16T23-59-01-04-00`  
-**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
+**Generated:** `2026-07-17T06-38-14-04-00`  
+**Status:** `campaign-input-region-arbitration-authority-audited`
 
-## Plan ledger
+## Intent
 
-**Goal:** replace duplicated middle-pan camera math with one revision-bound gesture transaction using the canonical isometric inverse transform.
+Make visible source-region ownership authoritative before selection, marquee and order commands mutate campaign state.
 
-- [ ] Allocate one pan generation on accepted middle-button pointerdown.
-- [ ] Bind document, route, canvas, source viewport, pointer, camera and zoom revisions.
-- [ ] Reject gesture starts outside the active source viewport.
-- [ ] Capture the exact world anchor under the accepted source position.
-- [ ] Normalize ordered source dx/dy evidence.
-- [ ] Convert source deltas with the same coefficients used by `screenToWorld`.
-- [ ] Remove the duplicated `1 / 0.72` horizontal conversion.
-- [ ] Define arbitration between simultaneous keyboard pan and middle pan.
-- [ ] Settle campaign camera bounds and report intentional clamp divergence.
-- [ ] Reject stale, cancelled, blurred or route-retired evidence.
-- [ ] Publish `MiddlePanAdmissionResult`.
-- [ ] Publish `MiddlePanResult` with requested and settled camera revisions.
-- [ ] Publish `FirstMiddlePanFrameAck`.
-- [ ] Publish `PanAnchorConvergenceAck`.
-- [ ] Add horizontal, vertical and diagonal gesture fixtures.
-- [ ] Repeat fixtures at minimum, default and maximum zoom.
-- [ ] Add camera-boundary, blur, resize, letterbox and pillarbox fixtures.
-- [ ] Run `npm run check`, `npm run build`, built-output smoke and Pages-origin fixtures.
+## Checklist
 
-## Required first vertical slice
+### Phase 1: Region manifest
+
+- [ ] Publish source viewport, world, HUD, controls, minimap and modal regions from the render layout.
+- [ ] Give the manifest a route, frame, viewport and overlay revision.
+- [ ] Resolve topmost visible region with the same z-order used by rendering.
+
+### Phase 2: Pointer admission
+
+- [ ] Enforce `screenToSource().inside` before `screenToWorld()`.
+- [ ] Bind pointerdown, move and up to one gesture and region-manifest revision.
+- [ ] Retire world gestures when a modal opens, the viewport changes or the route exits.
+- [ ] Define explicit passive or navigation behavior for the minimap.
+
+### Phase 3: Command settlement
+
+- [ ] Require an accepted world region for click selection.
+- [ ] Require an accepted world region for marquee selection.
+- [ ] Require an accepted world region for right-click orders.
+- [ ] Publish `InputRegionDecisionResult` and `WorldCommandAdmissionResult`.
+- [ ] Publish `FirstRegionBoundCommandFrameAck`.
+
+### Phase 4: Fixtures
+
+- [ ] HUD click does not select or order.
+- [ ] Tower-control drag does not marquee-select.
+- [ ] Passive minimap RMB does not order.
+- [ ] Modal overlay suspends world commands.
+- [ ] Letterbox/pillarbox evidence is rejected.
+- [ ] Unobscured world click, drag and order preserve existing behavior.
+- [ ] Run source, built-artifact and Pages-origin parity fixtures.
+
+## Recommended file cut
 
 ```txt
-middle pointerdown at source position
-  -> MiddlePanAdmissionCommand
-  -> grabbed world-anchor snapshot
-  -> horizontal source delta
-  -> canonical inverse-transform camera displacement
-  -> MiddlePanResult
-  -> matching rendered camera revision
-  -> FirstMiddlePanFrameAck
-  -> PanAnchorConvergenceAck
+src/campaign/campaign-scene.js
+src/campaign/input-region-manifest.js
+src/campaign/input-region-authority.js
+tests/browser/campaign-input-regions.html
 ```
 
-## Keep separate
+## Compatibility constraints
 
-Marquee selection, wheel zoom, pointer capture, keyboard movement, fixed-step simulation, orders, building, pause, route retirement, WebGL recovery and deployment remain separate authorities composed through route, pointer, camera and frame revisions.
+Preserve the 640×360 source surface, CRT mapping, UI layout, camera transforms, selection rules, order semantics, fixed-step simulation, rendering appearance, saves, audio and deployment.
+
+## Claim boundary
+
+Do not claim pointer-region correctness until source, artifact and Pages fixtures prove that presentation-region evidence cannot fall through into world mutation.
