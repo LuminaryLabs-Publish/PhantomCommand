@@ -1,11 +1,11 @@
 # Validation
 
-**Timestamp:** `2026-07-16T17-40-04-04-00`  
-**Status:** `isometric-marquee-selection-geometry-authority-audited`
+**Timestamp:** `2026-07-16T23-59-01-04-00`  
+**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
 
 ## Summary
 
-This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and marquee-selection geometry classification only. It does not validate corrected selection membership because no runtime authority or executable fixture was added.
+This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and middle-pan transform classification only. It does not validate corrected camera behavior because no runtime authority or executable fixture was added.
 
 ## Plan ledger
 
@@ -13,13 +13,13 @@ This pass validates repository selection, documentation scope, source evidence, 
 
 - [x] Enumerate 11 accessible Publish repositories.
 - [x] Exclude `LuminaryLabs-Publish/TheCavalryOfRome`.
-- [x] Confirm ten central ledger entries, ten root `.agent` states and synchronized heads.
-- [x] Select PhantomCommand through the oldest synchronized timestamp rule.
-- [x] Inspect menu, CRT, campaign, selection, camera, validation and deployment sources.
+- [x] Confirm ten eligible central ledger and root `.agent` records.
+- [x] Select PhantomCommand through the oldest documented-selection rule.
+- [x] Inspect menu, CRT, campaign, camera, input, validation and deployment sources.
 - [x] Preserve all 20 implemented kits and services.
-- [x] Add the timestamped marquee-selection audit family.
+- [x] Add the timestamped middle-pan audit family.
 - [x] Refresh required root `.agent` files and the machine registry.
-- [ ] Execute geometry, camera, artifact and Pages fixtures.
+- [ ] Execute anchor-convergence, artifact and Pages fixtures.
 
 ## Changed
 
@@ -43,14 +43,13 @@ pull request creation: no
 ```txt
 index.html
 game.html
-src/menu/graveyard-menu.js
 src/menu/crt-renderer.js
 src/campaign/campaign-scene.js
-scripts/check-campaign.mjs
+scripts/build-static.mjs
 package.json
 .agent root documents and kit registry
 central PhantomCommand ledger
-full Publish repository inventory and synchronized heads
+full Publish repository inventory and current eligible heads
 ```
 
 ## Not executed
@@ -58,26 +57,27 @@ full Publish repository inventory and synchronized heads
 ```txt
 npm run check
 npm run build
-left-to-right drag fixture
-right-to-left drag fixture
-vertical reverse-drag fixture
-isometric-axis crossing fixture
-screen-edge and exact-boundary fixture
-camera-change-during-drag fixture
+horizontal middle-pan fixture
+vertical middle-pan fixture
+diagonal middle-pan fixture
+min/default/max zoom fixture
+camera-boundary fixture
+blur and cancellation fixture
+letterbox/pillarbox fixture
 built-output smoke
-Pages-origin marquee smoke
+Pages-origin middle-pan smoke
 ```
 
 ## Evidence status
 
 ```txt
-visible source-space drag rectangle: confirmed
-two diagonal inverse transforms: confirmed
-four-corner inverse transform: absent
-direct screen-space membership: absent
-camera-bound drag generation: absent
-typed result and frame acknowledgement: absent
+browser-screen to source mapping: confirmed
+canonical screenToWorld coefficients: confirmed
+middle-pan duplicated coefficients: confirmed
+horizontal 2x coefficient mismatch: confirmed
+grabbed world-anchor snapshot: absent
+typed result and frame acknowledgements: absent
 actual user incident: not reproduced
 ```
 
-No corrected marquee membership, drag-direction equivalence, camera-generation safety, selected-frame convergence, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
+No corrected camera behavior, pan-anchor convergence, input arbitration, camera-boundary settlement, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
