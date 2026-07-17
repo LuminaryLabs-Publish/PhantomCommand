@@ -1,58 +1,72 @@
 # Known Gaps
 
-**Generated:** `2026-07-17T06-38-14-04-00`  
-**Status:** `campaign-input-region-arbitration-authority-audited`
+**Generated:** `2026-07-17T11-39-49-04-00`  
+**Status:** `campaign-camera-coverage-bounds-authority-audited`
 
 ## Current priority
 
-The campaign source canvas visually layers HUD, tower controls, minimap and modal overlays above the world. Pointer handlers map browser evidence into source coordinates but do not enforce the returned `inside` flag or classify the topmost visible region before issuing world commands.
+The circular grave-ring arena has an outer radius of `147`, while the runtime admits camera centers inside a square `[-147,147] × [-147,147]`. The camera constraint does not account for zoom, the visible isometric source footprint or a declared minimum-coverage policy.
 
 ## Confirmed by inspection
 
 ```txt
 fixed 640x360 source surface: present
-CRT browser-to-source mapping: present
-source x/y/inside result: present
-HUD/control/minimap/modal drawing: present
-click selection: present
-marquee selection: present
-right-click orders: present
+isometric world/source transforms: present
+camera projection origin at (320,210): present
+zoom range 0.34..2.45: present
+keyboard pan: present
+middle pan: present
+wheel-anchor zoom: present
+focus command: present
+public mutable camera reference: present
+independent x/z frame clamp: present
 ```
 
-## Input-region gaps
+## Camera-coverage gaps
 
 ```txt
-inside-source rejection: absent
-source-region manifest: absent
-visible z-order resolver: absent
-HUD hit-region authority: absent
-tower-control hit-region authority: absent
-minimap interaction policy: absent
-modal world-input suspension result: absent
-gesture-region lease: absent
-stale route/frame/manifest rejection: absent
-InputRegionDecisionResult: absent
-WorldCommandAdmissionResult: absent
-FirstRegionBoundCommandFrameAck: absent
+circular camera-center policy: absent
+explicit aesthetic overscan policy: absent
+zoom-aware visible-footprint envelope: absent
+minimum arena-coverage invariant: absent
+sanctum visibility invariant: absent
+selection-focus visibility invariant: absent
+shared admission for all camera producers: absent
+pre-render camera-boundary settlement: absent
+stale viewport/projection/zoom rejection: absent
+CameraCoverageResult: absent
+FirstCameraBoundsFrameAck: absent
 ```
+
+## Quantified boundary row
+
+```txt
+outer ring radius: 147
+square-clamp corner radius: 207.89
+excess beyond outer ring: 60.89
+excess ratio: 41.42%
+```
+
+The current source-corner footprint also ranges from approximately `1525.18` world units at minimum zoom to `211.66` at maximum zoom. A strict whole-frame-inside-arena policy is therefore not achievable and should not be assumed.
 
 ## Validation gaps
 
 ```txt
-HUD no-fallthrough browser fixture: absent
-control-strip no-marquee fixture: absent
-minimap no-order fixture: absent
-modal suspension fixture: absent
-letterbox rejection fixture: absent
-unobscured world behavior fixture: absent
+keyboard edge fixture: absent
+middle-pan edge fixture: absent
+wheel-anchor boundary fixture: absent
+focus boundary fixture: absent
+public-host mutation fixture: absent
+minimum/default/maximum zoom fixture: absent
+resize/DPR stale-envelope fixture: absent
 built artifact parity: not run
 Pages parity: not run
 ```
 
 ## Risk boundary
 
-No specific production incident was reproduced. The source-backed risk is that the rendered topmost target and the interaction target can disagree because the renderer owns visible regions while campaign commands consume only source coordinates.
+No specific production incident was reproduced. The source-backed risk is that camera reachability and tactical arena visibility are determined by incidental axis clamps rather than a named, observable gameplay and render policy.
 
 ## Claim boundary
 
-Do not claim region-aware command safety, artifact parity, Pages parity or production readiness until executable fixtures pass.
+Do not claim camera-boundary correctness, anchor preservation, coverage guarantees, artifact parity, Pages parity or production readiness until executable fixtures pass.
