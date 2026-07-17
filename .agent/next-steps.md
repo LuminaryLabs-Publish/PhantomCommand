@@ -1,46 +1,45 @@
 # Next Steps
 
-**Generated:** `2026-07-16T17-40-04-04-00`  
-**Status:** `isometric-marquee-selection-geometry-authority-audited`
+**Generated:** `2026-07-16T23-59-01-04-00`  
+**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
 
 ## Plan ledger
 
-**Goal:** replace the two-corner world-box shortcut with one camera-bound marquee transaction whose accepted unit membership exactly matches the visible source-space rectangle.
+**Goal:** replace duplicated middle-pan camera math with one revision-bound gesture transaction using the canonical isometric inverse transform.
 
-- [ ] Allocate one drag generation on accepted primary-pointer down.
-- [ ] Bind route, canvas, source viewport, camera and selection revisions.
-- [ ] Reject starts and completions outside the playable source viewport.
-- [ ] Normalize drag direction into one source-space rectangle.
-- [ ] Freeze the camera snapshot used for the gesture, or explicitly reproject the start point when the camera changes.
-- [ ] Project each eligible allied unit into source space and test point membership against the visible rectangle.
-- [ ] Alternatively, inverse-transform all four corners and use a convex world-polygon membership test.
-- [ ] Preserve click selection through a declared distance threshold.
-- [ ] Define replace, additive and toggle policy for Shift-modified gestures.
-- [ ] Reject pointer-up evidence from retired drag, route or camera generations.
-- [ ] Publish `MarqueeSelectionResult` with candidate, accepted and rejected unit IDs.
-- [ ] Commit selected state exactly once.
-- [ ] Publish `FirstMarqueeSelectionFrameAck` for the first frame drawing the accepted selected set.
-- [ ] Add left-to-right and right-to-left fixtures.
-- [ ] Add top-to-bottom and bottom-to-top fixtures.
-- [ ] Add rectangles crossing both isometric axes.
-- [ ] Add units near all four screen edges and exact-boundary cases.
-- [ ] Add camera pan/zoom-during-drag policy fixtures.
+- [ ] Allocate one pan generation on accepted middle-button pointerdown.
+- [ ] Bind document, route, canvas, source viewport, pointer, camera and zoom revisions.
+- [ ] Reject gesture starts outside the active source viewport.
+- [ ] Capture the exact world anchor under the accepted source position.
+- [ ] Normalize ordered source dx/dy evidence.
+- [ ] Convert source deltas with the same coefficients used by `screenToWorld`.
+- [ ] Remove the duplicated `1 / 0.72` horizontal conversion.
+- [ ] Define arbitration between simultaneous keyboard pan and middle pan.
+- [ ] Settle campaign camera bounds and report intentional clamp divergence.
+- [ ] Reject stale, cancelled, blurred or route-retired evidence.
+- [ ] Publish `MiddlePanAdmissionResult`.
+- [ ] Publish `MiddlePanResult` with requested and settled camera revisions.
+- [ ] Publish `FirstMiddlePanFrameAck`.
+- [ ] Publish `PanAnchorConvergenceAck`.
+- [ ] Add horizontal, vertical and diagonal gesture fixtures.
+- [ ] Repeat fixtures at minimum, default and maximum zoom.
+- [ ] Add camera-boundary, blur, resize, letterbox and pillarbox fixtures.
 - [ ] Run `npm run check`, `npm run build`, built-output smoke and Pages-origin fixtures.
 
 ## Required first vertical slice
 
 ```txt
-drag rectangle crossing the isometric z axis
-  -> MarqueeSelectionCommand
-  -> accepted camera and viewport revisions
-  -> source-space candidate projection
-  -> exact rectangle membership
-  -> MarqueeSelectionResult
-  -> selected-state commit
-  -> rendered matching selection rings
-  -> FirstMarqueeSelectionFrameAck
+middle pointerdown at source position
+  -> MiddlePanAdmissionCommand
+  -> grabbed world-anchor snapshot
+  -> horizontal source delta
+  -> canonical inverse-transform camera displacement
+  -> MiddlePanResult
+  -> matching rendered camera revision
+  -> FirstMiddlePanFrameAck
+  -> PanAnchorConvergenceAck
 ```
 
 ## Keep separate
 
-Wheel zoom, pointer capture, camera pan, fixed-step simulation, orders, building, pause, route retirement, WebGL recovery and deployment remain separate authorities composed through route, camera, selection and frame revisions.
+Marquee selection, wheel zoom, pointer capture, keyboard movement, fixed-step simulation, orders, building, pause, route retirement, WebGL recovery and deployment remain separate authorities composed through route, pointer, camera and frame revisions.
