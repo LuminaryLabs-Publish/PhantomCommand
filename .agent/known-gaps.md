@@ -1,48 +1,50 @@
 # Known Gaps
 
-**Generated:** `2026-07-16T17-40-04-04-00`  
-**Status:** `isometric-marquee-selection-geometry-authority-audited`
+**Generated:** `2026-07-16T23-59-01-04-00`  
+**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
 
 ## Current priority
 
-- The visible drag box is represented in source-screen coordinates.
-- Selection membership is evaluated in world coordinates.
-- Only the normalized top-left and bottom-right screen corners are inverse-transformed.
-- The isometric inverse transform makes world z increase with screen y and decrease with screen x.
-- Top-right and bottom-left therefore contain the true world-z extrema.
-- The current two-corner world box is not the inverse image of the visible screen rectangle.
-- Camera and viewport revisions are not bound to one drag generation.
-- Pointer-up does not publish an accepted, unchanged, cancelled, stale or invalid result.
-- No `MarqueeSelectionResult` exists.
-- No `FirstMarqueeSelectionFrameAck` exists.
-- No browser, built-artifact or Pages fixture compares visible rectangle membership with the selected unit set.
+- Browser pointer coordinates are mapped into the 640×360 source surface.
+- Middle pointerdown stores a source-space position.
+- Middle pointermove calculates source-space dx/dy.
+- The canonical inverse transform uses `1 / 1.44` for horizontal source motion.
+- The active middle-pan path uses `1 / 0.72` for horizontal source motion.
+- Horizontal camera displacement is therefore twice the canonical grabbed-anchor displacement.
+- Vertical displacement uses the canonical `1 / 0.72` term.
+- The pointer-down world anchor is not retained.
+- Keyboard and middle-pan camera mutations have no explicit arbitration result.
+- Camera-boundary divergence is not classified.
+- No `MiddlePanResult` exists.
+- No `FirstMiddlePanFrameAck` exists.
+- No `PanAnchorConvergenceAck` exists.
+- No browser, built-artifact or Pages fixture measures anchor error.
 
 ## Source-backed evidence
 
 ```txt
-source-space drag origin: present
-source-space live pointer: present
-visible normalized rectangle: present
-top-left inverse transform: present
-bottom-right inverse transform: present
-top-right inverse transform: absent
-bottom-left inverse transform: absent
-screen-space unit membership: absent
-four-corner polygon membership: absent
+screen-to-source mapping: present
+canonical screenToWorld transform: present
+middle-button gesture state: present
+source dx/dy calculation: present
+duplicated middle-pan transform: present
+canonical horizontal coefficient: absent from middle-pan path
+grabbed world-anchor snapshot: absent
 typed result and frame acknowledgement: absent
 ```
 
 ## Not claimed
 
 ```txt
-every drag necessarily selects the wrong set
-all camera states exhibit the same error magnitude
-click selection is broken
-orders or combat are broken
+every player perceives the current pan as unusable
+vertical middle pan is mathematically incorrect
+keyboard camera pan is broken
+wheel zoom is broken
+selection, orders or combat are broken
 browser artifact or Pages parity
 production readiness
 ```
 
 ## Retained gaps
 
-Wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separately documented.
+Marquee selection, wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separately documented.
