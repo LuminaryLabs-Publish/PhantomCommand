@@ -1,83 +1,70 @@
 # Current Audit
 
-**Timestamp:** `2026-07-16T23-59-01-04-00`  
+**Timestamp:** `2026-07-17T06-38-14-04-00`  
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
-**Status:** `isometric-middle-pan-anchor-convergence-authority-audited`
+**Status:** `campaign-input-region-arbitration-authority-audited`
 
 ## Summary
 
-The campaign's middle-button camera pan duplicates isometric inverse-transform math. Its vertical source-delta coefficient matches the canonical transform, but its horizontal coefficient is twice the canonical value. The world point apparently grabbed at pointer-down therefore drifts away from the pointer during horizontal and diagonal pan gestures.
+The campaign renders the world, HUD, tower controls, minimap and pause/victory/loss overlays into one fixed 640×360 Canvas2D source. Pointer mapping returns `{x, y, inside}`, but campaign click, marquee and right-click order handlers do not enforce `inside` or classify the topmost visible source region before calling `screenToWorld()` and mutating gameplay state.
 
-## Plan ledger
+## Intent
 
-**Goal:** define one middle-pan authority that binds pointer, viewport and camera generations, resolves camera displacement with the canonical inverse transform, and acknowledges the matching converged frame.
+Bind pointer evidence to the same visible region generation used by rendering, and admit world commands only from an unobscured world region.
 
-- [x] Reconcile the current Publish inventory and central repo ledger.
-- [x] Select PhantomCommand by the oldest documented-selection rule.
-- [x] Inspect `game.html`, `src/campaign/campaign-scene.js`, `src/menu/crt-renderer.js`, package/build surfaces and retained audits.
-- [x] Identify the interaction loop, domains, all 20 implemented kits and their services.
-- [x] Define 19 middle-pan anchor authority surfaces.
-- [x] Add the timestamped audit family.
-- [ ] Implement and execute screen/source/world anchor fixtures.
+## Checklist
 
-## Source-backed path
+- [x] Compare all 11 Publish repositories.
+- [x] Exclude Cavalry of Rome.
+- [x] Select PhantomCommand as the oldest synchronized eligible repository.
+- [x] Preserve the complete 20-kit service inventory.
+- [x] Trace CRT mapping, source layout, pointer evidence and world commands.
+- [x] Add the `2026-07-17T06-38-14-04-00` audit family.
+- [ ] Implement region manifests and typed command admission.
+- [ ] Execute source, artifact and Pages fixtures.
+
+## Interaction loop
 
 ```txt
-pointerdown(button=1)
-  -> store source x/y
-
-pointermove while middle
-  -> calculate source dx/dy
-  -> mutate camera x/z with duplicated coefficients
-
-next RAF
-  -> apply keyboard camera velocity
-  -> clamp camera
-  -> advance fixed-step simulation
-  -> render the camera projection
+pointer event
+  -> CRT browser/source mapping
+  -> source x/y/inside
+  -> no HUD/minimap/modal/world region decision
+  -> screenToWorld
+  -> select, marquee or order mutation
+  -> fixed-step simulation
+  -> next rendered frame
 ```
 
-## Transform comparison
+## Domains in use
 
 ```txt
-canonical horizontal term: deltaX / (zoom * 1.44)
-active horizontal term:    deltaX / (zoom * 0.72)
-active/canonical ratio:     2.0
-
-canonical vertical term:   deltaY / (zoom * 0.72)
-active vertical term:      deltaY / (zoom * 0.72)
+browser route, modules, DOM, RAF, focus, pointer, keyboard, wheel and storage
+procedural menu, settings, save presence, audio and route transition
+Canvas2D world, HUD, controls, minimap, overlays and typography
+WebGL CRT, texture upload, viewport and source mapping
+campaign units, towers, waves, combat, resources, selection and orders
+camera, fixed-step scheduling, persistence, diagnostics, static build and Pages
+source-region classification, command admission and visible-frame proof
 ```
 
-The active path can consume the same source coordinate system as `screenToWorld`, but does not reuse its inverse-transform authority.
-
-## Main gaps
+## Current gap
 
 ```txt
-canonical source-delta inverse-transform service
-grabbed world-anchor snapshot
-route, viewport, pointer and camera revision binding
-keyboard-pan versus middle-pan arbitration
-camera-boundary settlement result
-stale and cancelled gesture rejection
-MiddlePanResult
-FirstMiddlePanFrameAck
-PanAnchorConvergenceAck
-browser, artifact and Pages fixtures
+source inside value: present but unenforced
+source-region manifest: absent
+visible z-order interaction authority: absent
+HUD/control/minimap/modal classification: absent
+world-command region lease: absent
+InputRegionDecisionResult: absent
+WorldCommandAdmissionResult: absent
+FirstRegionBoundCommandFrameAck: absent
 ```
 
 ## Required authority
 
-`phantom-command-isometric-middle-pan-anchor-convergence-authority-domain`
+`phantom-command-campaign-input-region-arbitration-authority-domain`
 
-## Inventory summary
+## Boundary
 
-```txt
-implemented kits: 20
-planned middle-pan surfaces: 19
-```
-
-The full kit-by-kit services and source evidence are in `.agent/trackers/2026-07-16T23-59-01-04-00/project-breakdown.md`.
-
-## Validation boundary
-
-Documentation changed. Runtime JavaScript, HTML, CSS, gameplay, simulation, input behavior, camera behavior, rendering behavior, persistence, dependencies, tests, workflows, build and deployment did not change. No corrected pan coefficient, anchor convergence or production-readiness claim is made.
+Documentation only. No runtime pointer, gameplay, rendering, test, build or deployment behavior changed.
