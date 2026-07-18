@@ -1,20 +1,20 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-17T23-41-44-04-00",
-  "status": "menu-pointer-target-admission-authority-audited",
-  "repositoryRevisionReviewed": "3ec991ec08f3ccf520ea983a5bbd971e8b45bb7c",
+  "updatedAt": "2026-07-18T10-38-06-04-00",
+  "status": "campaign-target-query-work-budget-authority-audited",
+  "repositoryRevisionReviewed": "b1293276a98e9279f3bf02f88d6a4b0d1ce87824",
   "runtimeSourceRevisionReviewed": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
-  "sourceTracker": ".agent/trackers/2026-07-17T23-41-44-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-17T23-41-44-04-00.md",
+  "sourceTracker": ".agent/trackers/2026-07-18T10-38-06-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-18T10-38-06-04-00.md",
   "audits": {
-    "architecture": ".agent/architecture-audit/2026-07-17T23-41-44-04-00-menu-pointer-target-admission-dsk-map.md",
-    "render": ".agent/render-audit/2026-07-17T23-41-44-04-00-background-click-visible-action-gap.md",
-    "gameplay": ".agent/gameplay-audit/2026-07-17T23-41-44-04-00-menu-pointer-action-loop.md",
-    "interaction": ".agent/interaction-audit/2026-07-17T23-41-44-04-00-pointer-target-command-result-map.md",
-    "menuInput": ".agent/menu-input-audit/2026-07-17T23-41-44-04-00-background-and-letterbox-admission-contract.md",
-    "deploy": ".agent/deploy-audit/2026-07-17T23-41-44-04-00-menu-pointer-browser-fixture-gate.md",
-    "centralSync": ".agent/central-sync-audit/2026-07-17T23-41-44-04-00-oldest-selection-menu-pointer-reconciliation.md"
+    "architecture": ".agent/architecture-audit/2026-07-18T10-38-06-04-00-campaign-target-query-work-budget-dsk-map.md",
+    "render": ".agent/render-audit/2026-07-18T10-38-06-04-00-target-query-generation-presentation-gap.md",
+    "gameplay": ".agent/gameplay-audit/2026-07-18T10-38-06-04-00-campaign-combat-target-query-loop.md",
+    "interaction": ".agent/interaction-audit/2026-07-18T10-38-06-04-00-target-query-command-result-map.md",
+    "simulationQuery": ".agent/simulation-query-audit/2026-07-18T10-38-06-04-00-team-index-query-budget-contract.md",
+    "deploy": ".agent/deploy-audit/2026-07-18T10-38-06-04-00-target-query-budget-fixture-gate.md",
+    "centralSync": ".agent/central-sync-audit/2026-07-18T10-38-06-04-00-oldest-selection-target-query-reconciliation.md"
   },
   "selection": {
     "accessibleRepoCount": 11,
@@ -26,37 +26,37 @@
     "undocumentedCount": 0,
     "runtimeAheadCount": 0,
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "selectedRepositoryHead": "3ec991ec08f3ccf520ea983a5bbd971e8b45bb7c",
+    "selectedRepositoryHead": "b1293276a98e9279f3bf02f88d6a4b0d1ce87824",
     "selectedRuntimeSourceHead": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
-    "selectedPriorCentralTimestamp": "2026-07-17T11-39-49-04-00",
+    "selectedPriorCentralTimestamp": "2026-07-17T23-41-44-04-00",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "PhantomCommand had the oldest synchronized eligible central timestamp."
   },
   "census": {
     "implementedSurfaceCount": 20,
-    "plannedMenuPointerTargetSurfaceCount": 17
+    "plannedCampaignTargetQuerySurfaceCount": 20
   },
   "interactionLoop": [
     "restore menu settings and save presence",
     "render the procedural menu through Canvas2D WebAudio and WebGL CRT",
-    "map browser pointer evidence into CRT source coordinates",
-    "run main-menu or settings-panel hit testing",
-    "allow hit-test misses to retain the selected row and still execute activation",
-    "navigate mutate settings or change panel state without a typed pointer-target result",
-    "route into the fixed-step isometric campaign and render Canvas2D and CRT frames"
+    "navigate into the isometric campaign",
+    "select units or pads build towers issue orders and start waves",
+    "advance fixed-step spawn movement targeting combat and projectiles",
+    "rebuild enemy and ally arrays inside per-unit per-tower and splash queries",
+    "render campaign world HUD minimap and CRT without target-query generation proof"
   ],
   "domainsInUse": [
     "static HTML routes and ES modules",
     "browser document RAF focus blur pointer keyboard wheel and storage lifecycle",
     "procedural menu settings save presence audio and routing",
     "CRT browser-screen containment source-coordinate mapping and visible presentation",
-    "main-menu rows settings rows credits panel enabled state and selection state",
-    "pointer target classification action admission result settlement and visible-frame proof",
     "Canvas2D world HUD controls minimap overlays and pixel typography",
     "WebGL context shaders source texture upload viewport and CRT",
-    "campaign units towers waves combat resources selection orders and terminal state",
-    "fixed-step scheduling movement targeting projectiles rewards effects and outcomes",
-    "persistence diagnostics static checks build Pages and audit governance"
+    "campaign rings lanes pads towers units waves resources and outcomes",
+    "fixed-step spawn movement targeting projectiles combat rewards and effects",
+    "combat team membership target indexes nearest-target queries and work budgets",
+    "camera selection building orders persistence and diagnostics",
+    "static checks build Pages and audit governance"
   ],
   "implementedKits": {
     "crt-renderer-kit": ["WebGL context", "shader compile/link", "source texture upload", "DPR-capped resize", "CRT effects", "contain mapping", "browser-screen to source mapping"],
@@ -81,26 +81,29 @@
     "construct-sequence-update-kit": ["construction sequence advancement", "settlement"]
   },
   "authority": {
-    "parentDomain": "phantom-command-menu-pointer-target-admission-authority-domain",
-    "mainFinding": "Main-menu and settings-panel hit-test misses return -1, but pointer-down still executes the retained selected row through activateMain or activatePanel.",
+    "parentDomain": "phantom-command-campaign-target-query-work-budget-authority-domain",
+    "mainFinding": "enemies() and allies() each rebuild an Object.values array and filtered team array inside fixed-step unit tower and projectile query paths; the six-player pre-wave state creates a source-visible floor of 12 query arrays per accepted tick.",
     "plannedSurfaces": [
-      "phantom-command-menu-pointer-target-admission-authority-domain",
-      "crt-source-pointer-evidence-kit",
-      "menu-main-hit-region-kit",
-      "menu-panel-hit-region-kit",
-      "menu-visible-layer-order-kit",
-      "menu-item-enablement-admission-kit",
-      "menu-background-click-rejection-kit",
-      "menu-stale-selection-pointer-rejection-kit",
-      "keyboard-selection-activation-separation-kit",
-      "menu-pointer-target-result-kit",
-      "menu-action-admission-kit",
-      "menu-action-result-kit",
-      "first-menu-pointer-action-frame-ack-kit",
-      "menu-pointer-browser-fixture-kit",
-      "built-artifact-menu-pointer-parity-kit",
-      "pages-menu-pointer-parity-kit",
-      "menu-pointer-static-policy-check-kit"
+      "phantom-command-campaign-target-query-work-budget-authority-domain",
+      "campaign-combat-generation-admission-kit",
+      "campaign-unit-membership-revision-kit",
+      "campaign-combat-team-index-kit",
+      "campaign-enemy-query-view-kit",
+      "campaign-ally-query-view-kit",
+      "campaign-target-query-scratch-lease-kit",
+      "campaign-target-query-admission-kit",
+      "campaign-nearest-target-selection-kit",
+      "campaign-unit-target-query-kit",
+      "campaign-tower-target-query-kit",
+      "campaign-projectile-splash-query-kit",
+      "campaign-stale-team-index-rejection-kit",
+      "campaign-target-query-work-observation-kit",
+      "campaign-target-query-budget-policy-kit",
+      "campaign-target-query-budget-settlement-kit",
+      "campaign-combat-target-query-digest-kit",
+      "first-target-query-bound-frame-ack-kit",
+      "campaign-target-query-determinism-fixture-kit",
+      "campaign-target-query-deployment-parity-kit"
     ]
   },
   "validation": {
