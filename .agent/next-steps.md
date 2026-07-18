@@ -1,61 +1,66 @@
 # Next Steps
 
-**Generated:** `2026-07-17T23-41-44-04-00`  
-**Status:** `menu-pointer-target-admission-authority-audited`
+**Generated:** `2026-07-18T10-38-06-04-00`  
+**Status:** `campaign-target-query-work-budget-authority-audited`
 
 ## Intent
 
-Require a valid pointer target before pointer input can activate a main-menu item, mutate a setting or dismiss a panel, while preserving keyboard selection behavior.
+Replace repeated ad hoc team-array construction with one generation-owned combat index while preserving deterministic nearest-target gameplay.
 
 ## Checklist
 
-### Phase 1: Target model
+### Phase 1: Membership generation
 
-- [ ] Define `MenuPointerTargetResult` classifications: outside-source, background, disabled-item, main-item, settings-item and dismiss-target.
-- [ ] Bind target decisions to source-mapping, panel, row-layout and enablement generations.
-- [ ] Keep keyboard selection activation as a separate explicit producer.
-- [ ] Define whether Credits intentionally dismisses anywhere inside the panel or only on an authored target.
+- [ ] Define `CampaignCombatGenerationResult` with tick and membership revisions.
+- [ ] Publish unit membership changes on spawn, death, reset and terminal cleanup.
+- [ ] Build stable enemy and ally views once per accepted generation.
+- [ ] Preserve deterministic iteration order.
 
-### Phase 2: Admission
+### Phase 2: Query service
 
-- [ ] Return immediately on outside-source and background pointer results.
-- [ ] Reject disabled items with a typed reason.
-- [ ] Activate the exact main-menu row under the pointer.
-- [ ] Mutate the exact settings row under the pointer.
-- [ ] Never consume stale `menu.selected` or `state.panel.selected` after a pointer miss.
-- [ ] Publish `MenuActionResult`.
+- [ ] Define `TargetQueryCommand` and `TargetQueryResult`.
+- [ ] Separate unit, tower and projectile-splash producers.
+- [ ] Preserve existing-target retention as an explicit result.
+- [ ] Define equal-distance tie ordering.
+- [ ] Reject stale team indexes before combat mutation.
 
-### Phase 3: Frame proof
+### Phase 3: Work budget
 
-- [ ] Carry the accepted action generation into route, panel or settings state.
-- [ ] Publish a menu action frame digest.
-- [ ] Publish `FirstMenuPointerActionFrameAck`.
-- [ ] Keep rejection frames state-stable except for an explicitly authored feedback cue.
+- [ ] Count query requests, candidate inspections and retained-target fast paths.
+- [ ] Define source-owned counters separately from browser profiler observations.
+- [ ] Publish `TargetQueryBudgetResult`.
+- [ ] Define explicit degraded/rejected behavior before imposing a hard cap.
+- [ ] Lease and retire reusable query scratch through the campaign lifecycle.
 
-### Phase 4: Fixtures
+### Phase 4: Frame proof
 
-- [ ] Main-menu background click fixture for every retained selection.
-- [ ] CRT letterbox/outside-source click fixture.
-- [ ] Disabled Continue fixture.
-- [ ] Valid main-row exact-action fixture.
-- [ ] Settings background no-mutation fixture.
-- [ ] Valid settings-row exact-mutation fixture.
-- [ ] Keyboard Enter/Space compatibility fixture.
+- [ ] Publish `CombatTargetQueryDigest`.
+- [ ] Bind units, projectiles, HUD and minimap to the accepted combat generation.
+- [ ] Publish `FirstTargetQueryBoundFrameAck`.
+
+### Phase 5: Fixtures
+
+- [ ] Six-player pre-wave idle query fixture.
+- [ ] One, ten and maximum-supported tower fixtures.
+- [ ] Equal-distance deterministic target fixture.
+- [ ] Target death and same-tick retarget fixture.
+- [ ] Splash candidate parity fixture.
 - [ ] Source, built-artifact and Pages parity fixtures.
 
 ## Recommended file cut
 
 ```txt
-src/menu/graveyard-menu.js
-src/menu/menu-pointer-target.js
-scripts/check-menu.mjs
-tests/browser/menu-pointer-target.html
+src/campaign/campaign-scene.js
+src/campaign/combat-team-index.js
+src/campaign/target-query.js
+scripts/check-campaign.mjs
+tests/browser/campaign-target-query.html
 ```
 
 ## Compatibility constraints
 
-Preserve procedural menu art, current row geometry, keyboard navigation, enabled Continue behavior, settings semantics, audio unlock behavior, transition timing, CRT presentation, campaign runtime and deployment unless the pointer-target contract explicitly requires otherwise.
+Preserve wave composition, unit and tower statistics, range gates, nearest-target semantics, cooldowns, projectile behavior, rewards, camera, controls, CRT presentation and deployment unless a separately admitted gameplay change requires otherwise.
 
 ## Claim boundary
 
-Do not claim accidental-action prevention or menu pointer correctness until executable source, artifact and Pages fixtures prove exact target admission and matching visible state.
+Do not claim lower allocation, better frame time, deterministic parity or deployment readiness until executable observations and parity fixtures pass.
