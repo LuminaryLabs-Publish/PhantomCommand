@@ -1,61 +1,61 @@
 # Next Steps
 
-**Generated:** `2026-07-17T11-39-49-04-00`  
-**Status:** `campaign-camera-coverage-bounds-authority-audited`
+**Generated:** `2026-07-17T23-41-44-04-00`  
+**Status:** `menu-pointer-target-admission-authority-audited`
 
 ## Intent
 
-Replace the implicit square camera clamp with one explicit, zoom-aware camera-coverage policy shared by every camera producer.
+Require a valid pointer target before pointer input can activate a main-menu item, mutate a setting or dismiss a panel, while preserving keyboard selection behavior.
 
 ## Checklist
 
-### Phase 1: Manifest and policy
+### Phase 1: Target model
 
-- [ ] Publish arena center, outer radius and authored overscan.
-- [ ] Publish source viewport, projection origin and isometric coefficients.
-- [ ] Choose explicit invariants for camera center, sanctum, selection and minimum arena coverage.
-- [ ] Version the arena, viewport, projection, zoom and policy inputs.
+- [ ] Define `MenuPointerTargetResult` classifications: outside-source, background, disabled-item, main-item, settings-item and dismiss-target.
+- [ ] Bind target decisions to source-mapping, panel, row-layout and enablement generations.
+- [ ] Keep keyboard selection activation as a separate explicit producer.
+- [ ] Define whether Credits intentionally dismisses anywhere inside the panel or only on an authored target.
 
-### Phase 2: Visible footprint
+### Phase 2: Admission
 
-- [ ] Inverse-project all four source corners at the requested zoom.
-- [ ] Represent the visible world footprint as a deterministic quadrilateral.
-- [ ] Compile a zoom-aware admissible camera envelope.
-- [ ] Define behavior when the requested invariant is impossible at a given zoom.
+- [ ] Return immediately on outside-source and background pointer results.
+- [ ] Reject disabled items with a typed reason.
+- [ ] Activate the exact main-menu row under the pointer.
+- [ ] Mutate the exact settings row under the pointer.
+- [ ] Never consume stale `menu.selected` or `state.panel.selected` after a pointer miss.
+- [ ] Publish `MenuActionResult`.
 
-### Phase 3: Camera admission and settlement
+### Phase 3: Frame proof
 
-- [ ] Normalize keyboard pan, middle pan, wheel-anchor zoom, focus and public-host mutations.
-- [ ] Reject stale route, viewport, projection, zoom and camera revisions.
-- [ ] Preserve requested anchors where compatible with coverage policy.
-- [ ] Publish `CameraCoverageResult` with requested and accepted values.
-- [ ] Commit the accepted generation before rendering.
-- [ ] Publish `FirstCameraBoundsFrameAck`.
+- [ ] Carry the accepted action generation into route, panel or settings state.
+- [ ] Publish a menu action frame digest.
+- [ ] Publish `FirstMenuPointerActionFrameAck`.
+- [ ] Keep rejection frames state-stable except for an explicitly authored feedback cue.
 
 ### Phase 4: Fixtures
 
-- [ ] Cardinal and diagonal keyboard boundary fixtures.
-- [ ] Middle-pan edge and corner fixtures.
-- [ ] Wheel-anchor fixtures at center and all source corners.
-- [ ] Minimum/default/maximum zoom coverage fixtures.
-- [ ] Focus-to-selection and focus-to-sanctum fixtures.
-- [ ] Public-host out-of-envelope mutation fixture.
-- [ ] Resize/DPR stale-envelope rejection fixture.
+- [ ] Main-menu background click fixture for every retained selection.
+- [ ] CRT letterbox/outside-source click fixture.
+- [ ] Disabled Continue fixture.
+- [ ] Valid main-row exact-action fixture.
+- [ ] Settings background no-mutation fixture.
+- [ ] Valid settings-row exact-mutation fixture.
+- [ ] Keyboard Enter/Space compatibility fixture.
 - [ ] Source, built-artifact and Pages parity fixtures.
 
 ## Recommended file cut
 
 ```txt
-src/campaign/campaign-scene.js
-src/campaign/camera-coverage-policy.js
-src/campaign/camera-coverage-authority.js
-tests/browser/campaign-camera-bounds.html
+src/menu/graveyard-menu.js
+src/menu/menu-pointer-target.js
+scripts/check-menu.mjs
+tests/browser/menu-pointer-target.html
 ```
 
 ## Compatibility constraints
 
-Preserve the 640×360 source surface, isometric transforms, CRT presentation, current camera control feel, zoom range, campaign simulation, selection, orders, saves, audio and deployment unless an explicit camera-policy change requires otherwise.
+Preserve procedural menu art, current row geometry, keyboard navigation, enabled Continue behavior, settings semantics, audio unlock behavior, transition timing, CRT presentation, campaign runtime and deployment unless the pointer-target contract explicitly requires otherwise.
 
 ## Claim boundary
 
-Do not claim camera-boundary correctness until source, artifact and Pages fixtures prove one deterministic result and one matching rendered frame for every camera producer.
+Do not claim accidental-action prevention or menu pointer correctness until executable source, artifact and Pages fixtures prove exact target admission and matching visible state.
