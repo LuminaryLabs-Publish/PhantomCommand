@@ -1,72 +1,70 @@
 # Known Gaps
 
-**Generated:** `2026-07-17T11-39-49-04-00`  
-**Status:** `campaign-camera-coverage-bounds-authority-audited`
+**Generated:** `2026-07-17T23-41-44-04-00`  
+**Status:** `menu-pointer-target-admission-authority-audited`
 
 ## Current priority
 
-The circular grave-ring arena has an outer radius of `147`, while the runtime admits camera centers inside a square `[-147,147] × [-147,147]`. The camera constraint does not account for zoom, the visible isometric source footprint or a declared minimum-coverage policy.
+Pointer activation is not bound to the row under the pointer. Main-menu and settings-panel hit-test misses leave the selected row unchanged, after which activation runs unconditionally.
 
 ## Confirmed by inspection
 
 ```txt
-fixed 640x360 source surface: present
-isometric world/source transforms: present
-camera projection origin at (320,210): present
-zoom range 0.34..2.45: present
-keyboard pan: present
-middle pan: present
-wheel-anchor zoom: present
-focus command: present
-public mutable camera reference: present
-independent x/z frame clamp: present
+CRT browser-to-source mapping: present
+inside-source flag: present
+main-menu row hit test: present
+settings-row hit test: present
+enabled-state check inside activateMain: present
+keyboard selection activation: present
+pointer-down calls activateMain after main hit-test miss: present
+pointer-down calls activatePanel after settings hit-test miss: present
 ```
 
-## Camera-coverage gaps
+## Menu pointer-target gaps
 
 ```txt
-circular camera-center policy: absent
-explicit aesthetic overscan policy: absent
-zoom-aware visible-footprint envelope: absent
-minimum arena-coverage invariant: absent
-sanctum visibility invariant: absent
-selection-focus visibility invariant: absent
-shared admission for all camera producers: absent
-pre-render camera-boundary settlement: absent
-stale viewport/projection/zoom rejection: absent
-CameraCoverageResult: absent
-FirstCameraBoundsFrameAck: absent
+outside-source pointer rejection before action: absent
+main-menu background rejection before action: absent
+settings-panel background rejection before mutation: absent
+stale selection rejection for pointer input: absent
+explicit pointer/keyboard producer separation: absent
+typed disabled-target result: absent
+MenuPointerTargetResult: absent
+MenuActionResult: absent
+FirstMenuPointerActionFrameAck: absent
 ```
 
-## Quantified boundary row
+## Source pattern
 
 ```txt
-outer ring radius: 147
-square-clamp corner radius: 207.89
-excess beyond outer ring: 60.89
-excess ratio: 41.42%
-```
+main:
+  index = menuHitIndex(point)
+  if hit: selected = index
+  activateMain(selected)  // executes after miss
 
-The current source-corner footprint also ranges from approximately `1525.18` world units at minimum zoom to `211.66` at maximum zoom. A strict whole-frame-inside-arena policy is therefore not achievable and should not be assumed.
+settings:
+  index = panelHitIndex(point)
+  if hit: selected = index
+  activatePanel()         // executes after miss
+```
 
 ## Validation gaps
 
 ```txt
-keyboard edge fixture: absent
-middle-pan edge fixture: absent
-wheel-anchor boundary fixture: absent
-focus boundary fixture: absent
-public-host mutation fixture: absent
-minimum/default/maximum zoom fixture: absent
-resize/DPR stale-envelope fixture: absent
+menu background fixture: absent
+letterbox/outside-source fixture: absent
+disabled Continue fixture: absent
+settings background fixture: absent
+exact-row action fixture: absent
+keyboard compatibility fixture: absent
 built artifact parity: not run
 Pages parity: not run
 ```
 
 ## Risk boundary
 
-No specific production incident was reproduced. The source-backed risk is that camera reachability and tactical arena visibility are determined by incidental axis clamps rather than a named, observable gameplay and render policy.
+No production incident was reproduced. The source-backed risk is that pointer location alone does not determine the action: retained keyboard or hover selection can become the pointer action after a miss.
 
 ## Claim boundary
 
-Do not claim camera-boundary correctness, anchor preservation, coverage guarantees, artifact parity, Pages parity or production readiness until executable fixtures pass.
+Do not claim pointer-target correctness, accidental-action prevention, artifact parity, Pages parity or production readiness until executable fixtures pass.
