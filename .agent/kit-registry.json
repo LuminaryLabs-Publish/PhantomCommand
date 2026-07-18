@@ -1,20 +1,20 @@
 {
   "schema": "nexus.agent.kit-registry.v1",
   "repo": "LuminaryLabs-Publish/PhantomCommand",
-  "updatedAt": "2026-07-17T11-39-49-04-00",
-  "status": "campaign-camera-coverage-bounds-authority-audited",
-  "repositoryRevisionReviewed": "8a773ba4c6a954759d47564611153fed02696f94",
+  "updatedAt": "2026-07-17T23-41-44-04-00",
+  "status": "menu-pointer-target-admission-authority-audited",
+  "repositoryRevisionReviewed": "3ec991ec08f3ccf520ea983a5bbd971e8b45bb7c",
   "runtimeSourceRevisionReviewed": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
-  "sourceTracker": ".agent/trackers/2026-07-17T11-39-49-04-00/project-breakdown.md",
-  "latestTurnLedger": ".agent/turn-ledger/2026-07-17T11-39-49-04-00.md",
+  "sourceTracker": ".agent/trackers/2026-07-17T23-41-44-04-00/project-breakdown.md",
+  "latestTurnLedger": ".agent/turn-ledger/2026-07-17T23-41-44-04-00.md",
   "audits": {
-    "architecture": ".agent/architecture-audit/2026-07-17T11-39-49-04-00-campaign-camera-coverage-bounds-dsk-map.md",
-    "render": ".agent/render-audit/2026-07-17T11-39-49-04-00-square-center-clamp-visible-coverage-gap.md",
-    "gameplay": ".agent/gameplay-audit/2026-07-17T11-39-49-04-00-camera-coverage-gameplay-loop.md",
-    "interaction": ".agent/interaction-audit/2026-07-17T11-39-49-04-00-camera-intent-boundary-result-map.md",
-    "cameraBounds": ".agent/camera-bounds-audit/2026-07-17T11-39-49-04-00-visible-footprint-envelope-contract.md",
-    "deploy": ".agent/deploy-audit/2026-07-17T11-39-49-04-00-camera-bounds-browser-fixture-gate.md",
-    "centralSync": ".agent/central-sync-audit/2026-07-17T11-39-49-04-00-oldest-selection-camera-bounds-reconciliation.md"
+    "architecture": ".agent/architecture-audit/2026-07-17T23-41-44-04-00-menu-pointer-target-admission-dsk-map.md",
+    "render": ".agent/render-audit/2026-07-17T23-41-44-04-00-background-click-visible-action-gap.md",
+    "gameplay": ".agent/gameplay-audit/2026-07-17T23-41-44-04-00-menu-pointer-action-loop.md",
+    "interaction": ".agent/interaction-audit/2026-07-17T23-41-44-04-00-pointer-target-command-result-map.md",
+    "menuInput": ".agent/menu-input-audit/2026-07-17T23-41-44-04-00-background-and-letterbox-admission-contract.md",
+    "deploy": ".agent/deploy-audit/2026-07-17T23-41-44-04-00-menu-pointer-browser-fixture-gate.md",
+    "centralSync": ".agent/central-sync-audit/2026-07-17T23-41-44-04-00-oldest-selection-menu-pointer-reconciliation.md"
   },
   "selection": {
     "accessibleRepoCount": 11,
@@ -26,35 +26,36 @@
     "undocumentedCount": 0,
     "runtimeAheadCount": 0,
     "selectedRepo": "LuminaryLabs-Publish/PhantomCommand",
-    "selectedRepositoryHead": "8a773ba4c6a954759d47564611153fed02696f94",
+    "selectedRepositoryHead": "3ec991ec08f3ccf520ea983a5bbd971e8b45bb7c",
     "selectedRuntimeSourceHead": "e92f61c79ed20998fdb4edfb962cac3754d3a651",
-    "selectedPriorCentralTimestamp": "2026-07-17T06-38-14-04-00",
+    "selectedPriorCentralTimestamp": "2026-07-17T11-39-49-04-00",
     "excludedRepo": "LuminaryLabs-Publish/TheCavalryOfRome",
     "reason": "PhantomCommand had the oldest synchronized eligible central timestamp."
   },
   "census": {
     "implementedSurfaceCount": 20,
-    "plannedCameraCoverageSurfaceCount": 19
+    "plannedMenuPointerTargetSurfaceCount": 17
   },
   "interactionLoop": [
     "restore menu settings and save presence",
     "render the procedural menu through Canvas2D WebAudio and WebGL CRT",
-    "route into the fixed-step isometric campaign",
-    "admit keyboard middle-pointer wheel focus or public-host camera intent",
-    "mutate camera center zoom or anchor",
-    "clamp camera x and z independently without a zoom-aware visible-footprint policy",
-    "advance gameplay and render Canvas2D and CRT frames without a camera-boundary result or acknowledgement"
+    "map browser pointer evidence into CRT source coordinates",
+    "run main-menu or settings-panel hit testing",
+    "allow hit-test misses to retain the selected row and still execute activation",
+    "navigate mutate settings or change panel state without a typed pointer-target result",
+    "route into the fixed-step isometric campaign and render Canvas2D and CRT frames"
   ],
   "domainsInUse": [
     "static HTML routes and ES modules",
     "browser document RAF focus blur pointer keyboard wheel and storage lifecycle",
     "procedural menu settings save presence audio and routing",
+    "CRT browser-screen containment source-coordinate mapping and visible presentation",
+    "main-menu rows settings rows credits panel enabled state and selection state",
+    "pointer target classification action admission result settlement and visible-frame proof",
     "Canvas2D world HUD controls minimap overlays and pixel typography",
-    "WebGL context shaders source texture upload viewport CRT and source mapping",
+    "WebGL context shaders source texture upload viewport and CRT",
     "campaign units towers waves combat resources selection orders and terminal state",
     "fixed-step scheduling movement targeting projectiles rewards effects and outcomes",
-    "camera position velocity zoom source-world transforms pan focus and clamping",
-    "circular arena extent visible isometric footprint coverage policy and frame proof",
     "persistence diagnostics static checks build Pages and audit governance"
   ],
   "implementedKits": {
@@ -80,28 +81,26 @@
     "construct-sequence-update-kit": ["construction sequence advancement", "settlement"]
   },
   "authority": {
-    "parentDomain": "phantom-command-campaign-camera-coverage-bounds-authority-domain",
-    "mainFinding": "The circular arena radius is 147, while independent x and z clamps admit camera centers up to 207.89 world units from the origin and do not account for zoom, the asymmetric visible source footprint or an explicit coverage policy.",
+    "parentDomain": "phantom-command-menu-pointer-target-admission-authority-domain",
+    "mainFinding": "Main-menu and settings-panel hit-test misses return -1, but pointer-down still executes the retained selected row through activateMain or activatePanel.",
     "plannedSurfaces": [
-      "phantom-command-campaign-camera-coverage-bounds-authority-domain",
-      "circular-playfield-extent-kit",
-      "source-viewport-footprint-kit",
-      "isometric-visible-world-footprint-kit",
-      "camera-coverage-policy-kit",
-      "zoom-aware-camera-envelope-kit",
-      "camera-target-admission-kit",
-      "keyboard-pan-camera-constraint-kit",
-      "middle-pan-camera-constraint-kit",
-      "wheel-anchor-camera-constraint-kit",
-      "focus-camera-constraint-kit",
-      "public-host-camera-constraint-kit",
-      "camera-boundary-settlement-kit",
-      "stale-camera-revision-rejection-kit",
-      "camera-coverage-result-kit",
-      "first-camera-bounds-frame-ack-kit",
-      "camera-bounds-browser-fixture-kit",
-      "built-artifact-camera-bounds-parity-kit",
-      "pages-camera-bounds-parity-kit"
+      "phantom-command-menu-pointer-target-admission-authority-domain",
+      "crt-source-pointer-evidence-kit",
+      "menu-main-hit-region-kit",
+      "menu-panel-hit-region-kit",
+      "menu-visible-layer-order-kit",
+      "menu-item-enablement-admission-kit",
+      "menu-background-click-rejection-kit",
+      "menu-stale-selection-pointer-rejection-kit",
+      "keyboard-selection-activation-separation-kit",
+      "menu-pointer-target-result-kit",
+      "menu-action-admission-kit",
+      "menu-action-result-kit",
+      "first-menu-pointer-action-frame-ack-kit",
+      "menu-pointer-browser-fixture-kit",
+      "built-artifact-menu-pointer-parity-kit",
+      "pages-menu-pointer-parity-kit",
+      "menu-pointer-static-policy-check-kit"
     ]
   },
   "validation": {
