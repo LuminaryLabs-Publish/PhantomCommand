@@ -1,11 +1,11 @@
 # Validation
 
-**Timestamp:** `2026-07-17T11-39-49-04-00`  
-**Status:** `campaign-camera-coverage-bounds-authority-audited`
+**Timestamp:** `2026-07-17T23-41-44-04-00`  
+**Status:** `menu-pointer-target-admission-authority-audited`
 
 ## Summary
 
-This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and camera-boundary policy gaps only. It does not validate camera-boundary behavior because no runtime authority or executable fixture was added.
+This pass validates repository selection, documentation scope, source evidence, interaction loops, domains, kit inventory and menu pointer-target gaps only. It does not validate corrected pointer behavior because no runtime authority or executable fixture was added.
 
 ## Checklist
 
@@ -14,20 +14,20 @@ This pass validates repository selection, documentation scope, source evidence, 
 - [x] Confirm ten eligible central ledgers and root `.agent` records.
 - [x] Confirm synchronized documented heads.
 - [x] Select PhantomCommand through the oldest documented-selection rule.
-- [x] Inspect arena geometry, camera producers, source/world projection and frame clamping.
+- [x] Inspect CRT source mapping, menu/panel hit tests and pointer-down activation.
 - [x] Preserve all 20 implemented kits and services.
-- [x] Add the timestamped camera-coverage audit family.
+- [x] Add the timestamped menu pointer-target audit family.
 - [x] Refresh required root `.agent` files and machine registry.
 - [ ] Execute browser, artifact and Pages fixtures.
 
 ## Source inspection completed
 
 ```txt
-src/campaign/campaign-scene.js
+index.html
+src/menu/graveyard-menu.js
 src/menu/crt-renderer.js
-game.html
+scripts/check-menu.mjs
 package.json
-scripts/check-campaign.mjs
 scripts/build-static.mjs
 current repo-local trackers and kit registry
 central PhantomCommand ledger
@@ -37,16 +37,14 @@ full Publish repository inventory and eligible heads
 ## Confirmed by inspection
 
 ```txt
-outer ring radius 147: present
-camera x/z independent clamp: present
-square corner radius 207.89: derived from source constants
-source viewport 640x360: present
-projection origin (320,210): present
-zoom range 0.34..2.45: present
-zoom-aware visible-footprint envelope: absent
-shared camera producer admission: absent
-CameraCoverageResult: absent
-FirstCameraBoundsFrameAck: absent
+menuHitIndex outside/background rejection: present as -1
+panelHitIndex outside/background rejection: present as -1
+pointer-down main action requires successful hit: no
+pointer-down settings mutation requires successful hit: no
+keyboard selection activation: present
+MenuPointerTargetResult: absent
+MenuActionResult: absent
+FirstMenuPointerActionFrameAck: absent
 ```
 
 ## Changed
@@ -55,9 +53,9 @@ FirstCameraBoundsFrameAck: absent
 documentation: yes
 runtime JavaScript: no
 HTML or CSS: no
+menu or pointer behavior: no
 gameplay or simulation: no
 camera or rendering behavior: no
-pointer behavior: no
 audio or persistence: no
 packages or dependencies: no
 tests or workflows: no
@@ -71,15 +69,14 @@ pull request creation: no
 ```txt
 npm run check
 npm run build
-keyboard camera-boundary fixture
-middle-pan boundary fixture
-wheel-anchor boundary fixture
-focus boundary fixture
-public-host camera mutation fixture
-minimum/default/maximum zoom coverage fixture
-resize/DPR stale-envelope fixture
+menu background browser fixture
+outside-source/letterbox fixture
+disabled Continue fixture
+settings background fixture
+exact-row pointer fixture
+keyboard compatibility fixture
 built-output smoke
-Pages-origin camera-boundary smoke
+Pages-origin menu pointer smoke
 ```
 
-No camera-boundary correctness, minimum-coverage guarantee, anchor-preservation correctness, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
+No pointer-target correctness, accidental-action prevention, browser fixture success, artifact parity, Pages parity or production readiness is claimed.
