@@ -2,18 +2,18 @@
 
 **Repository:** `LuminaryLabs-Publish/PhantomCommand`  
 **Branch:** `main`  
-**Latest audit:** `2026-07-17T11-39-49-04-00`  
-**Status:** `campaign-camera-coverage-bounds-authority-audited`
+**Latest audit:** `2026-07-17T23-41-44-04-00`  
+**Status:** `menu-pointer-target-admission-authority-audited`
 
 ## Summary
 
 PhantomCommand combines a procedural Canvas2D menu, WebAudio, a fixed-step isometric campaign, Canvas2D world/HUD/minimap rendering, WebGL CRT presentation, persistence, static validation, build and Pages delivery.
 
-The current audit isolates camera-boundary ownership. The circular arena has an outer radius of `147`, while the frame independently clamps camera `x` and `z` to `[-147,147]`. That square admits camera centers up to `207.89` units from the arena origin and does not account for zoom, the asymmetric isometric source footprint or an explicit arena-coverage policy.
+The current audit isolates menu pointer-target admission. Main-menu and settings-panel hit-test helpers correctly return `-1` for background or outside-source presses, but the pointer-down handler still activates the retained selected row. Keyboard activation is intentionally selection-based; pointer activation currently uses selection state even when no pointer target exists.
 
 ## Intent
 
-Make one camera-coverage authority settle keyboard pan, middle drag, wheel-anchor zoom, focus commands and public host mutations against the same accepted arena, viewport, projection, zoom and policy revisions before rendering.
+Make one pointer-target authority classify CRT containment, visible layer, row identity and enablement before pointer input can navigate, mutate settings or dismiss a panel.
 
 ## Checklist
 
@@ -23,59 +23,57 @@ Make one camera-coverage authority settle keyboard pan, middle drag, wheel-ancho
 - [x] Select only PhantomCommand through the oldest documented-selection rule.
 - [x] Identify the complete interaction loop and active domains.
 - [x] Preserve all 20 implemented kits and offered services.
-- [x] Define 19 camera-coverage authority surfaces.
+- [x] Define 17 menu pointer-target product/runtime/fixture surfaces plus central reconciliation.
 - [x] Add the timestamped audit family.
-- [ ] Implement the camera envelope and source/artifact/Pages fixtures.
+- [ ] Implement pointer-target admission and source/artifact/Pages fixtures.
 
 ## Complete interaction loop
 
 ```txt
 menu
-  -> settings, save presence, procedural Canvas2D and WebAudio
+  -> restore settings and save presence
+  -> procedural Canvas2D and WebAudio
   -> WebGL CRT presentation
-  -> campaign route
+  -> keyboard selection or pointer evidence
+  -> main action, settings mutation, panel change or campaign route
+
+pointer path today
+  -> screenToSource
+  -> menuHitIndex or panelHitIndex may return -1
+  -> selected row remains retained
+  -> activateMain or activatePanel still executes
+  -> no MenuPointerTargetResult or FirstMenuPointerActionFrameAck
 
 campaign
-  -> keyboard, pointer and wheel evidence
-  -> camera intent and fixed-step simulation
-  -> selection, construction, orders, waves, combat and outcomes
-  -> world, HUD, controls, minimap and overlays
-  -> CRT presentation
-
-camera path
-  -> keyboard, middle-pan, wheel, focus or public-host mutation
-  -> camera center/zoom changes
-  -> independent x/z center clamp
-  -> no circular or visible-footprint policy result
-  -> source frame and CRT frame commit
-  -> no FirstCameraBoundsFrameAck
+  -> fixed-step selection, construction, orders, waves, combat and outcomes
+  -> Canvas2D source render and CRT presentation
 ```
 
 ## Inventory
 
 ```txt
 implemented source-backed kits: 20
-planned camera-coverage authority surfaces: 19
+planned menu pointer-target authority surfaces: 17
 ```
 
 ## Required parent domain
 
-`phantom-command-campaign-camera-coverage-bounds-authority-domain`
+`phantom-command-menu-pointer-target-admission-authority-domain`
 
 ## Read this pass first
 
 ```txt
-.agent/trackers/2026-07-17T11-39-49-04-00/project-breakdown.md
-.agent/turn-ledger/2026-07-17T11-39-49-04-00.md
-.agent/architecture-audit/2026-07-17T11-39-49-04-00-campaign-camera-coverage-bounds-dsk-map.md
-.agent/render-audit/2026-07-17T11-39-49-04-00-square-center-clamp-visible-coverage-gap.md
-.agent/gameplay-audit/2026-07-17T11-39-49-04-00-camera-coverage-gameplay-loop.md
-.agent/interaction-audit/2026-07-17T11-39-49-04-00-camera-intent-boundary-result-map.md
-.agent/camera-bounds-audit/2026-07-17T11-39-49-04-00-visible-footprint-envelope-contract.md
-.agent/deploy-audit/2026-07-17T11-39-49-04-00-camera-bounds-browser-fixture-gate.md
-.agent/central-sync-audit/2026-07-17T11-39-49-04-00-oldest-selection-camera-bounds-reconciliation.md
+.agent/trackers/2026-07-17T23-41-44-04-00/project-breakdown.md
+.agent/turn-ledger/2026-07-17T23-41-44-04-00.md
+.agent/architecture-audit/2026-07-17T23-41-44-04-00-menu-pointer-target-admission-dsk-map.md
+.agent/render-audit/2026-07-17T23-41-44-04-00-background-click-visible-action-gap.md
+.agent/gameplay-audit/2026-07-17T23-41-44-04-00-menu-pointer-action-loop.md
+.agent/interaction-audit/2026-07-17T23-41-44-04-00-pointer-target-command-result-map.md
+.agent/menu-input-audit/2026-07-17T23-41-44-04-00-background-and-letterbox-admission-contract.md
+.agent/deploy-audit/2026-07-17T23-41-44-04-00-menu-pointer-browser-fixture-gate.md
+.agent/central-sync-audit/2026-07-17T23-41-44-04-00-oldest-selection-menu-pointer-reconciliation.md
 ```
 
 ## Retained authorities
 
-Campaign input-region arbitration, middle-pan anchor convergence, marquee geometry, wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separate retained authorities.
+Camera coverage, campaign input-region arbitration, middle-pan anchor convergence, marquee geometry, wheel zoom, motion preference, campaign audio, pointer capture/cancellation, pointer feedback, menu audio lifecycle, diagnostics, device coverage, render order, pause input, terminal settlement, startup readiness, settings adoption, victory persistence, route retirement, fixed-step scheduling, WebGL recovery, accessibility, combat modifiers, campaign bootstrap, keyboard commands and broad spatial input remain separate retained authorities.
